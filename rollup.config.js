@@ -10,16 +10,38 @@ import sveltePreprocess from 'svelte-preprocess';
 import typescript from '@rollup/plugin-typescript';
 import config from 'sapper/config/rollup.js';
 import pkg from './package.json';
+import colors from "kleur";
+import { performance } from "perf_hooks";
+import { spawn } from "child_process";
 
 const mode = process.env.NODE_ENV;
 const dev = mode === 'development';
+const sourcemap = dev ? "inline" : false;
 const legacy = !!process.env.SAPPER_LEGACY_BUILD;
+
+// Changes in these files will trigger a rebuild of the global CSS
+const globalCSSWatchFiles = ["postcss.config.js", "tailwind.config.js", "src/tailwind.pcss"];
 
 const onwarn = (warning, onwarn) =>
     (warning.code === 'MISSING_EXPORT' && /'preload'/.test(warning.message)) ||
     (warning.code === 'CIRCULAR_DEPENDENCY' && /[/\\]@sapper[/\\]/.test(warning.message)) ||
     (warning.code === 'THIS_IS_UNDEFINED') ||
     onwarn(warning);
+
+const preprocessOptions = {
+    sourceMap: dev,
+    postcss: {
+        plugins: [
+            require('postcss-import'),
+            require("tailwindcss"),
+            require('postcss-preset-env')({
+                stage: 0,
+                browsers: 'last 2 versions',
+                autoprefixer: { grid: true }
+            }),
+        ]
+    }
+};
 
 export default {
     client: {
@@ -34,7 +56,7 @@ export default {
                 },
             }),
             svelte({
-                preprocess: sveltePreprocess({sourceMap: dev}),
+                preprocess: sveltePreprocess(preprocessOptions),
                 compilerOptions: {
                     dev,
                     hydratable: true
@@ -70,7 +92,60 @@ export default {
 
             !dev && terser({
                 module: true
-            })
+            }),
+
+            (() => {
+                let builder;
+                let rebuildNeeded = false;
+                const start = performance.now();
+
+                const buildTailwindCSS = () => {
+                    if (builder) {
+                        rebuildNeeded = true;
+                        return;
+                    }
+                    rebuildNeeded = false;
+
+                    try {
+                        builder = spawn("node", ["--experimental-modules", "--unhandled-rejections=strict", "build-tailwind-css.mjs", sourcemap]);
+                        builder.stdout.pipe(process.stdout);
+                        builder.stderr.pipe(process.stderr);
+
+                        builder.on("close", (code) => {
+                            if (code === 0) {
+                                const elapsed = parseInt(performance.now() - start, 10);
+                                console.log(`${colors.bold().green("✔ tailwind css")} (src/tailwind.pcss → static/tailwind.css${sourcemap === true ? " + static/global.css.map" : ""}) ${colors.gray(`(${elapsed}ms)`)}`);
+                            } else if (code !== null) {
+                                if (dev) {
+                                    console.error(`tailwind css builder exited with code ${code}`);
+                                    console.log(colors.bold().red("✗ tailwind css"));
+                                } else {
+                                    throw new Error(`tailwind css builder exited with code ${code}`);
+                                }
+                            }
+
+                            builder = undefined;
+
+                            if (rebuildNeeded) {
+                                console.log(`\n${colors.bold().italic().cyan("something")} changed. rebuilding...`);
+                                buildTailwindCSS();
+                            }
+                        });
+                    } catch (err) {
+                        console.log(colors.bold().red("✗ tailwind css"));
+                        console.error(err);
+                    }
+                };
+
+                return {
+                    name: "build-global-css",
+                    buildStart() {
+                        buildTailwindCSS();
+                        globalCSSWatchFiles.forEach((file) => this.addWatchFile(file));
+                    },
+                    generateBundle: buildTailwindCSS,
+                };
+            })(),
         ],
 
         preserveEntrySignatures: false,
@@ -89,7 +164,7 @@ export default {
                 },
             }),
             svelte({
-                preprocess: sveltePreprocess({sourceMap: dev}),
+                preprocess: sveltePreprocess(preprocessOptions),
                 compilerOptions: {
                     dev,
                     generate: 'ssr',

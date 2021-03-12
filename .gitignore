@@ -5,3 +5,5 @@
 /src/node_modules/@sapper/
 yarn-error.log
 /__sapper__/
+/static/tailwind.css
+/static/tailwind.css.map
