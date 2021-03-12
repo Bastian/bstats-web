@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1.0">
-    <meta name="theme-color" content="#333333">
+    <meta name="theme-color" content="#1D4ED8">
 
     %sapper.base%
 
@@ -14,6 +14,20 @@
     %sapper.scripts%
     %sapper.styles%
     %sapper.head%
+
+    <script>
+        // Dark mode
+        if (typeof window !== "undefined") {
+            var metaThemeColor = document.querySelector("meta[name=theme-color]");
+            if (localStorage.theme === "dark" || (!("theme" in localStorage) && window.matchMedia("(prefers-color-scheme: dark)").matches)) {
+                document.documentElement.classList.add("dark");
+                metaThemeColor.setAttribute("content", "#111827");
+            } else {
+                document.documentElement.classList.remove("dark");
+                metaThemeColor.setAttribute("content", "#1D4ED8");
+            }
+        }
+    </script>
 </head>
 <body>
 <div id="sapper">%sapper.html%</div>

@@ -1,6 +1,6 @@
 {
-    "background_color": "#ffffff",
-    "theme_color": "#333333",
+    "background_color": "#FFFFFF",
+    "theme_color": "#1D4ED8",
     "name": "bStats",
     "short_name": "bStats",
     "display": "minimal-ui",
