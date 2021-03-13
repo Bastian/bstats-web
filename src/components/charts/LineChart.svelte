@@ -4,29 +4,32 @@
     import type {SingleLineChart} from "../../definitions/single-line-chart.interface";
     import {findChartData} from "../../api/findChartData";
     import type {SingleLineChartData} from "../../definitions/chart-data/single-line-chart-data.interface";
-    import { stores } from '@sapper/app';
+    import {stores} from '@sapper/app';
     import {renderOrUpdateLineChart} from "./_renderOrUpdateLineChart";
+    import Spinner from "../Spinner.svelte";
 
     export let chart: SingleLineChart;
     export let data: SingleLineChartData = [];
 
+    let loadingData = true;
+
     type RangeOption = { label: string, maxElements: number; }
 
     const rangeOptions: RangeOption[] = [
-        { label: "1d", maxElements: 2 * 24 },
-        { label: "3d", maxElements: 2 * 24 * 3 },
-        { label: "1w", maxElements: 2 * 24 * 7 },
-        { label: "1m", maxElements: 2 * 24 * 30 },
-        { label: "6m", maxElements: 2 * 24 * 182.5 },
-        { label: "1y", maxElements: 2 * 24 * 365 },
-        { label: "2y", maxElements: 2 * 24 * 365 * 2 },
-        { label: "5y", maxElements: 2 * 24 * 365 * 5 },
+        {label: "1d", maxElements: 2 * 24},
+        {label: "3d", maxElements: 2 * 24 * 3},
+        {label: "1w", maxElements: 2 * 24 * 7},
+        {label: "1m", maxElements: 2 * 24 * 30},
+        {label: "6m", maxElements: 2 * 24 * 182.5},
+        {label: "1y", maxElements: 2 * 24 * 365},
+        {label: "2y", maxElements: 2 * 24 * 365 * 2},
+        {label: "5y", maxElements: 2 * 24 * 365 * 5},
     ];
 
     let selectedRangeOption: RangeOption = rangeOptions[2];
 
-    const { session } = stores();
-    const { API_BASE_URL } = $session;
+    const {session} = stores();
+    const {API_BASE_URL} = $session;
 
     const handleRangeOptionChange = (rangeOption: RangeOption) => {
         if (selectedRangeOption === rangeOption) {
@@ -37,7 +40,9 @@
     }
 
     const updateData = async () => {
+        loadingData = true;
         data = await findChartData(API_BASE_URL, chart.id, selectedRangeOption.maxElements) as SingleLineChartData;
+        loadingData = false;
         chartJsChart = renderOrUpdateLineChart(chartDom, chartJsChart, chart, data);
     }
 
@@ -91,6 +96,9 @@
     </div>
 </div>
 
-<div class="p-0 pt-4 mt-4 bg-white rounded-md shadow-sm chart-container dark:bg-gray-800">
-    <canvas bind:this={chartDom}></canvas>
+<div class="relative p-0 pt-4 mt-4 bg-white rounded-md shadow-sm chart-container dark:bg-gray-800">
+    {#if loadingData}
+        <Spinner class="absolute m-auto left-1/2 top-1/3 h-16 w-16"/>
+    {/if}
+    <canvas class:hidden={loadingData} bind:this={chartDom}></canvas>
 </div>
