@@ -12,11 +12,22 @@ export const renderOrUpdateLineChart = (chartDom, chartJsChart: Chart, chart: Si
         return label;
     };
     const chartData = data.map(([x, y]) => ({x: new Date(x), y}));
+    let unit = "hour";
+    if (data.length > 2 * 24 * 182.5) {
+        unit = "quarter"
+    } else if (data.length > 2 * 24 * 30) {
+        unit = "month"
+    } else if (data.length > 2 * 24 * 7) {
+        unit = "week"
+    } else if (data.length > 2 * 24) {
+        unit = "day"
+    }
 
     if (chartJsChart) {
         chartJsChart.data.datasets[0].data = chartData;
         chartJsChart.options.scales.yAxes[0].ticks.callback = labelCallback;
-        chartJsChart.update();
+        chartJsChart.options.scales.xAxes[0].time.unit = unit;
+        chartJsChart.update(0);
         return chartJsChart;
     } else {
         return new Chart(chartDom, {
@@ -74,7 +85,7 @@ export const renderOrUpdateLineChart = (chartDom, chartJsChart: Chart, chart: Si
                         {
                             type: "time",
                             time: {
-                                unit: "day",
+                                unit: unit,
                             },
                             gridLines: {
                                 display: false,
