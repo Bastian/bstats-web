@@ -73,10 +73,10 @@
                     </div>
                     <div class="pt-2">
                         <span class="pr-1 text-4xl">
-                            {currentServers ?? "???"}
+                            {currentServers?.toLocaleString("en-US") ?? "???"}
                         </span>
                         <span class="text-gray-700 dark:text-gray-200">
-                            / {maxServers ?? "???"}
+                            / {maxServers?.toLocaleString("en-US") ?? "???"}
                         </span>
                     </div>
                 </div>
@@ -87,10 +87,10 @@
                     </div>
                     <div class="pt-2">
                         <span class="pr-1 text-4xl">
-                            {currentPlayers ?? "???"}
+                            {currentPlayers?.toLocaleString("en-US") ?? "???"}
                         </span>
                         <span class="text-gray-700 dark:text-gray-200">
-                            / {maxPlayers ?? "???"}
+                            / {maxPlayers?.toLocaleString("en-US") ?? "???"}
                         </span>
                     </div>
                 </div>
