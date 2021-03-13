@@ -2,6 +2,28 @@
 
 The frontend for the bStats website.
 
+## Installation
+
+```bash
+$ npm install
+```
+
+## Running the app
+
+```bash
+# development
+$ npm run dev
+
+# production
+$ npm run build
+$ npm run start
+```
+
+## Docker Compose
+
+The Docker Compose file allows you to start the bStats web frontend.
+You can simply run `docker-compose up` to start it.
+
 ## TODOs
 
 Svelte and Sapper are a very new technology and there's a lot of stuff that not working perfectly.
