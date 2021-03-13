@@ -98,7 +98,7 @@
 
 <div class="relative p-0 pt-4 mt-4 bg-white rounded-md shadow-sm chart-container dark:bg-gray-800">
     {#if loadingData}
-        <Spinner class="absolute m-auto left-1/2 top-1/3 h-16 w-16"/>
+        <Spinner center class="h-16 w-16"/>
     {/if}
     <canvas class:hidden={loadingData} bind:this={chartDom}></canvas>
 </div>
