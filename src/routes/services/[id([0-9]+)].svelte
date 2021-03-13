@@ -99,7 +99,7 @@
     </div>
 </div>
 
-<div class="pt-28 bg-gray-100 dark:bg-gray-900 md:pt-12">
+<div class="pt-28 bg-gray-100 dark:bg-gray-900 md:pt-12 flex-grow">
     <div class="container pt-4 pb-16 mx-auto">
         {#each service.charts as chart}
             {#if isSingleLineChart(chart) && chart.idCustom === "servers"}
