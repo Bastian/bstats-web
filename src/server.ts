@@ -11,7 +11,15 @@ const dev = NODE_ENV === 'development';
 polka()
     .use(
         compression({threshold: 0}),
-        sirv('static', {dev}),
+        sirv('static', {
+            dev,
+            setHeaders: (res, pathname, stats) => {
+                if (pathname.startsWith("/fonts/")) {
+                    // Cache fonts for one year
+                    res.setHeader("Cache-Control", "max-age=31536000")
+                }
+            }
+        }),
         sapper.middleware({
             session: () => ({
                 API_BASE_URL
