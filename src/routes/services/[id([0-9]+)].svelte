@@ -111,11 +111,13 @@
     </div>
 </div>
 
-<div class="pt-28 bg-gray-100 dark:bg-gray-900 md:pt-12 flex-grow">
-    <div class="container pt-4 pb-16 mx-auto">
+<div class="pt-28 bg-gray-100 dark:bg-gray-900 md:pt-24 flex-grow">
+    <div class="container pt-12 pb-16 mx-auto space-y-8">
         {#each chartsWithData as {chart, data}}
             {#if isSingleLineChart(chart)}
-                <LineChart chart={chart} bind:data={data}/>
+                <div>
+                    <LineChart chart={chart} bind:data={data}/>
+                </div>
             {/if}
         {/each}
     </div>

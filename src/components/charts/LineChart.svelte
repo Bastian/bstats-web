@@ -75,7 +75,7 @@
     }
 </style>
 
-<div class="mt-8 sm:flex sm:flex-row sm:justify-between">
+<div class="sm:flex sm:flex-row sm:justify-between">
     <div class="inline-block text-2xl border-b-2 border-blue-800 dark:border-blue-400 dark:text-white">
         {#if chart.idCustom === "players"}
             Players
@@ -86,11 +86,11 @@
         {/if}
     </div>
 
-    <div class="flex flex-wrap mr-0 sm:justify-end">
+    <div class="flex flex-wrap mr-0 sm:justify-end space-x-2">
         {#each rangeOptions as rangeOption}
             <button
                 class:font-semibold={rangeOption === selectedRangeOption}
-                class="p-2 mt-2 mr-2 bg-white rounded-md sm:w-10 sm:mt-0 sm:mr-0 sm:ml-2 dark:hover:bg-gray-800 dark:text-gray-50 dark:bg-gray-700 hover:bg-gray-200 focus:outline-none focus:ring focus:border-blue-300"
+                class="p-2 mt-2 bg-white rounded-md sm:w-10 sm:mt-0 dark:hover:bg-gray-800 dark:text-gray-50 dark:bg-gray-700 hover:bg-gray-200 focus:outline-none focus:ring focus:border-blue-300"
                 on:click={() => handleRangeOptionChange(rangeOption)}
             >
                 {rangeOption.label}

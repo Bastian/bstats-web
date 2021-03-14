@@ -1,9 +1,10 @@
 <script lang="ts">
-    import { fade, fly } from "svelte/transition";
+    import {fade, fly} from "svelte/transition";
     import Label from "../Label.svelte";
     import MapIcon from "../hero-icons/MapIcon.svelte";
     import GlobeIcon from "../hero-icons/GlobeIcon.svelte";
     import CollectionIcon from "../hero-icons/CollectionIcon.svelte";
+    import MobileDrawerSection from "./MobileDrawerSection.svelte";
 
     export let open = false;
 
@@ -40,52 +41,42 @@
             bStats
         </div>
         <div class="py-2 mx-8 border-t-2 border-gray-200"></div>
-        <div class="p-8 py-4 w-full">
-            <div class="flex items-center">
-                <MapIcon class="w-8 h-8 text-blue-500 dark:text-blue-400"/>
-                <span class="ml-2 font-semibold text-gray-800 dark:text-gray-200">
-                    Navigation
-                </span>
-            </div>
-            <a href="/" class="block p-4 my-4 w-full bg-gray-100 hover:bg-gray-200 dark:bg-gray-800 dark:hover:bg-gray-700">Plugin List</a>
-        </div>
 
-        <div class="p-8 py-4 w-full">
-            <div class="flex items-center">
-                <GlobeIcon class="w-8 h-8 text-blue-500 dark:text-blue-40"/>
-                <span class="ml-2 font-semibold text-gray-800 dark:text-gray-200">
-                    Global Stats
-                </span>
-            </div>
-            <a href="/" class="block p-4 my-4 w-full bg-gray-100 hover:bg-gray-200 dark:bg-gray-800 dark:hover:bg-gray-700">Bukkit / Spigot</a>
-            <a href="/" class="block p-4 my-4 w-full bg-gray-100 hover:bg-gray-200 dark:bg-gray-800 dark:hover:bg-gray-700">Bungeecord</a>
-            <a href="/" class="block p-4 my-4 w-full bg-gray-100 hover:bg-gray-200 dark:bg-gray-800 dark:hover:bg-gray-700">Sponge</a>
-            <a href="/" class="block p-4 my-4 w-full bg-gray-100 hover:bg-gray-200 dark:bg-gray-800 dark:hover:bg-gray-700">Velocity</a>
-        </div>
+        <div class="m-8 mt-4 space-y-12">
+            <MobileDrawerSection
+                title="Navigation"
+                links={[
+                    { text: "Plugin List", href: "/" },
+                ]}
+            >
+                <MapIcon slot="icon"/>
+            </MobileDrawerSection>
 
-        <div class="p-8 py-4 w-full">
-            <div class="flex items-center">
-                <CollectionIcon class="w-8 h-8 text-blue-500 dark:text-blue-40"/>
-                <span class="ml-2 font-semibold text-gray-800 dark:text-gray-200">
-                    My Plugins
-                </span>
-            </div>
-            <a href="/" class="flex flex-row flex-nowrap items-center py-3 px-4 my-4 w-full bg-gray-100 hover:bg-gray-200 dark:bg-gray-800 dark:hover:bg-gray-700">
-                <span class="min-w-0 truncate">
-                    SafeTrade
-                </span>
-                <Label class="ml-2">
-                    Bukkit / Spigot
+
+            <MobileDrawerSection
+                title="Global Stats"
+                links={[
+                    { text: "Bukkit / Spigot", href: "/" },
+                    { text: "Bungeecord", href: "/" },
+                    { text: "Sponge", href: "/" },
+                    { text: "Velocity", href: "/" }
+                ]}
+            >
+                <GlobeIcon slot="icon"/>
+            </MobileDrawerSection>
+
+            <MobileDrawerSection
+                title="My Plugins"
+                links={[
+                    { text: "SafeTrade", href: "/", software: "Bukkit / Spigot" },
+                    { text: "Super Duper Spleef", href: "/", software: "Bungeecord" },
+                ]}
+            >
+                <CollectionIcon slot="icon"/>
+                <Label slot="link-appendix" class="ml-2" let:link>
+                    {link.software}
                 </Label>
-            </a>
-            <a href="/" class="flex flex-row flex-nowrap items-center py-3 px-4 my-4 w-full bg-gray-100 hover:bg-gray-200 dark:bg-gray-800 dark:hover:bg-gray-700">
-                <span class="min-w-0 truncate">
-                    Super Duper Spleef
-                </span>
-                <Label class="ml-2">
-                    Bungeecord
-                </Label>
-            </a>
+            </MobileDrawerSection>
         </div>
     </div>
 
