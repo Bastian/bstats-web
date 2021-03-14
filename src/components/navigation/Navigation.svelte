@@ -33,7 +33,7 @@
         <div class="inline-block" use:clickOutside={handleDropdownClickOutside}>
             <button class="inline-flex items-center mx-4 mr-2 text-base focus:outline-none" on:click={handleDropdownOpenChange}>
                 <span>My Plugins</span>
-                <ChevronDownIcon class="ml-2 w-5 h-5 text-white" small/>
+                <ChevronDownIcon class="ml-2 w-5 h-5" small/>
             </button>
 
             <MyPluginsDropdown bind:open={dropdownOpen}/>

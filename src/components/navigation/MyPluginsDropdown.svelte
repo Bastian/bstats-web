@@ -16,7 +16,7 @@
 
 {#if open}
     <div transition:fade={{ duration: 100 }} class="absolute z-50 mt-2 ml-4">
-        <div class="overflow-hidden text-black bg-white rounded-lg ring-1 ring-black ring-opacity-5 shadow-lg dark:bg-gray-800 dark:text-gray-200">
+        <div class="overflow-hidden text-black bg-white rounded-lg ring-1 ring-black ring-opacity-5 shadow-lg dark:ring-opacity-10 dark:ring-white dark:bg-gray-800 dark:text-gray-200">
             {#each plugins as plugin}
                 <a href="/" class="block p-5 w-full hover:bg-gray-200 dark:hover:bg-gray-700">
                     {plugin.name}
