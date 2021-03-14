@@ -1,6 +1,7 @@
 <script context="module" lang="ts">
     import type { Preload } from "@sapper/common";
     import {findService} from "../../api/findService";
+    import {findChartData} from "../../api/findChartData";
 
     export const preload: Preload = async function(this, page, session) {
         const { id } = page.params;
@@ -8,7 +9,13 @@
 
         const service = await findService(API_BASE_URL, id, true, this.fetch);
 
-        return { service };
+        // Prefetch all data
+        const chartsWithData = await Promise.all(service.charts.map(async chart => ({
+            chart,
+            data: await findChartData(API_BASE_URL, chart.id, 2 * 24 * 7, this.fetch)
+        })));
+
+        return { service, chartsWithData };
     }
 </script>
 
@@ -19,11 +26,12 @@
     import LineChart from "../../components/charts/LineChart.svelte";
     import UsersIcon from "../../components/hero-icons/UsersIcon.svelte";
     import type {Service} from "../../definitions/service.interface";
+    import type {Chart} from "../../definitions/chart.interface";
+    import type {ChartData} from "../../definitions/chart-data/chart-data.interface";
     import type {SingleLineChartData} from "../../definitions/chart-data/single-line-chart-data.interface";
 
     export let service: Service;
-    let serversData: SingleLineChartData | null = null;
-    let playersData: SingleLineChartData | null = null;
+    export let chartsWithData: { chart: Chart, data: ChartData}[]
 
     let currentServers: number | null;
     let maxServers: number | null;
@@ -32,6 +40,10 @@
     let maxPlayers: number | null;
 
     $: {
+        let serversData: SingleLineChartData | null =
+            chartsWithData.find(({chart}) => chart.idCustom === "servers")?.data;
+        let playersData: SingleLineChartData | null =
+            chartsWithData.find(({chart}) => chart.idCustom === "servers")?.data;
         if (serversData) {
             currentServers = serversData[0][1];
             maxServers = serversData.reduce((prev, [, y]) => Math.max(prev, y), 0);
@@ -101,13 +113,9 @@
 
 <div class="pt-28 bg-gray-100 dark:bg-gray-900 md:pt-12 flex-grow">
     <div class="container pt-4 pb-16 mx-auto">
-        {#each service.charts as chart}
-            {#if isSingleLineChart(chart) && chart.idCustom === "servers"}
-                <LineChart chart={chart} bind:data={serversData}/>
-            {:else if isSingleLineChart(chart) && chart.idCustom === "players"}
-                <LineChart chart={chart} bind:data={playersData}/>
-            {:else if isSingleLineChart(chart)}
-                <LineChart chart={chart}/>
+        {#each chartsWithData as {chart, data}}
+            {#if isSingleLineChart(chart)}
+                <LineChart chart={chart} bind:data={data}/>
             {/if}
         {/each}
     </div>

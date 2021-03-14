@@ -9,7 +9,7 @@
     import Spinner from "../Spinner.svelte";
 
     export let chart: SingleLineChart;
-    export let data: SingleLineChartData = [];
+    export let data: SingleLineChartData;
 
     let loadingData = true;
 
@@ -36,12 +36,14 @@
             return;
         }
         selectedRangeOption = rangeOption;
-        updateData();
+        updateData(true);
     }
 
-    const updateData = async () => {
+    const updateData = async (refreshData: boolean) => {
         loadingData = true;
-        data = await findChartData(API_BASE_URL, chart.id, selectedRangeOption.maxElements) as SingleLineChartData;
+        if (refreshData) {
+            data = await findChartData(API_BASE_URL, chart.id, selectedRangeOption.maxElements) as SingleLineChartData;
+        }
         loadingData = false;
         chartJsChart = renderOrUpdateLineChart(chartDom, chartJsChart, chart, data);
     }
@@ -49,7 +51,8 @@
     let chartDom;
     let chartJsChart: Chart;
 
-    onMount(() => updateData());
+    // Only refresh the data, if there was no data given to the chart
+    onMount(() => updateData(data === null));
 </script>
 
 <style>
