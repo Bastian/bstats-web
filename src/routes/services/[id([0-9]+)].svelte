@@ -43,7 +43,7 @@
         let serversData: SingleLineChartData | null =
             chartsWithData.find(({chart}) => chart.idCustom === "servers")?.data;
         let playersData: SingleLineChartData | null =
-            chartsWithData.find(({chart}) => chart.idCustom === "servers")?.data;
+            chartsWithData.find(({chart}) => chart.idCustom === "players")?.data;
         if (serversData) {
             currentServers = serversData[0][1];
             maxServers = serversData.reduce((prev, [, y]) => Math.max(prev, y), 0);
