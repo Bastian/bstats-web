@@ -4,6 +4,7 @@
     import MobileDrawer from "./MobileDrawer.svelte";
     import MenuIcon from "../hero-icons/MenuIcon.svelte";
     import ChevronDownIcon from "../hero-icons/ChevronDownIcon.svelte";
+    import UserCircleIcon from "../hero-icons/UserCircleIcon.svelte";
 
     let mobileNavOpen = false;
     let dropdownOpen = false;
@@ -41,7 +42,7 @@
         <a class="mx-4" href="/">Plugin List</a>
     </div>
     <a href="/">
-        <img alt="User Icon" height="48" width="48" src="avatar.png"/>
+        <UserCircleIcon class="h-12 w-12"/>
     </a>
 </nav>
 
