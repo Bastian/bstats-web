@@ -41,6 +41,13 @@ So I assume that this is a bug in IntelliJ...
 It's not a supper big deal, but I would prefer to not have to pass them as a parameter for every
 single api method.
 
+### Load fonts from npm
+
+Currently, the fonts reside in the `/static/fonts` folder and are manually
+imported in the `template.html` file. I would prefer to use npm to download
+and serve the fonts, however this does not work properly 
+(see https://github.com/fontsource/fontsource/issues/133).
+
 ## License
 
 This project is licensed under the [MIT License](/LICENSE).
