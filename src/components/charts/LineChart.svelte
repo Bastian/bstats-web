@@ -51,7 +51,6 @@
     let chartDom;
     let chartJsChart: Chart;
 
-    // Only refresh the data, if there was no data given to the chart
     onMount(() => updateData(data === null));
 </script>
 
@@ -103,5 +102,5 @@
     {#if loadingData}
         <Spinner center class="h-16 w-16"/>
     {/if}
-    <canvas class:hidden={loadingData} bind:this={chartDom}></canvas>
+    <canvas bind:this={chartDom}></canvas>
 </div>

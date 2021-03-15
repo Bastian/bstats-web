@@ -29,9 +29,11 @@
     import type {Chart} from "../../definitions/chart.interface";
     import type {ChartData} from "../../definitions/chart-data/chart-data.interface";
     import type {SingleLineChartData} from "../../definitions/chart-data/single-line-chart-data.interface";
+    import {isSimplePieChart} from "../../definitions/simple-pie-chart.interface";
+    import PieChart from "../../components/charts/PieChart.svelte";
 
     export let service: Service;
-    export let chartsWithData: { chart: Chart, data: ChartData}[]
+    export let chartsWithData: { chart: Chart, data: ChartData }[]
 
     let currentServers: number | null;
     let maxServers: number | null;
@@ -62,6 +64,10 @@
         }
     }
 </style>
+
+<svelte:head>
+    <title>{service.name}</title>
+</svelte:head>
 
 <div class="text-white bg-gradient-to-r from-purple-900 via-blue-900 to-blue-400 dark:from-purple-900 dark:via-blue-900 dark:to-indigo-700">
     <div class="container py-4 mx-auto">
@@ -112,11 +118,16 @@
 </div>
 
 <div class="pt-28 bg-gray-100 dark:bg-gray-900 md:pt-24 flex-grow">
-    <div class="container pt-12 pb-16 mx-auto space-y-8">
+    <div class="container grid grid-cols-1 lg:grid-cols-2 2xl:grid-cols-3 gap-x-4 pt-12 pb-16 mx-auto space-y-8">
         {#each chartsWithData as {chart, data}}
             {#if isSingleLineChart(chart)}
-                <div>
+                <div class="lg:col-span-2 2xl:col-span-3">
                     <LineChart chart={chart} bind:data={data}/>
+                </div>
+            {/if}
+            {#if isSimplePieChart(chart)}
+                <div>
+                    <PieChart chart={chart} bind:data={data}/>
                 </div>
             {/if}
         {/each}
