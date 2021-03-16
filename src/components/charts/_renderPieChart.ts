@@ -23,8 +23,6 @@ export const renderPieChart = (chartDom, chart: SimplePieChart, data: SimplePieC
             datasets: [{
                 data: data.map(({y}) => y),
                 backgroundColor: PIE_COLORS,
-                // TODO: Dark mode
-                // borderColor: "#1E293B",
             }],
 
             // These labels appear in the legend and in the tooltips when hovering different arcs
@@ -33,6 +31,70 @@ export const renderPieChart = (chartDom, chart: SimplePieChart, data: SimplePieC
         options: {
             maintainAspectRatio: false,
             legend: { display: false },
+            tooltips: {
+                enabled: false,
+                custom: function(tooltipModel) {
+                    const tooltipId = `chart-tooltip-${chart.id}`;
+
+                    // Tooltip Element
+                    let tooltipEl = document.getElementById(tooltipId);
+
+                    // Create element on first render
+                    if (!tooltipEl) {
+                        tooltipEl = document.createElement('div');
+                        tooltipEl.id = tooltipId;
+                        document.body.appendChild(tooltipEl);
+                    }
+
+                    tooltipEl.classList.add("transition-all");
+
+                    // Hide if no tooltip
+                    if (tooltipModel.opacity === 0) {
+                        tooltipEl.classList.add("hidden");
+                        return;
+                    }
+                    tooltipEl.classList.remove("hidden");
+
+                    if (!tooltipModel.body) {
+                        return;
+                    }
+
+                    const data: {
+                        label: string,
+                        currentData: number,
+                        percentage: number
+                    } = tooltipModel.body[0].lines[0];
+
+                    const innerHtml = `
+                        <div class="flex flex-row text-gray-900 dark:text-gray-200 dark:bg-gray-700 shadow-lg bg-white p-2 rounded items-center ring-2 ring-gray-500 dark:ring-gray-200 ring-opacity-25 dark:ring-opacity-25">
+                            <div class="px-4 py-2 rounded-full mr-2" style="background-color: ${tooltipModel.labelColors[0].backgroundColor}"></div>
+                            <div class="flex flex-row items-baseline">
+                                <span class="font-bold mr-1 text-lg">${data.label}:</span>
+                                <span class="text-lg">${data.currentData} (${data.percentage}%)</span>
+                            </div>
+                        </div>
+                    `;
+
+
+                    const position = this._chart.canvas.getBoundingClientRect();
+
+                    tooltipEl.innerHTML = innerHtml;
+                    tooltipEl.style.position = 'absolute';
+                    tooltipEl.style.left = position.left + window.pageXOffset + tooltipModel.caretX + 'px';
+                    tooltipEl.style.top = position.top + window.pageYOffset + tooltipModel.caretY + 'px';
+                    tooltipEl.style.pointerEvents = 'none';
+                },
+                callbacks: {
+                    label: function(tooltipItem, data, x) {
+                        const label = data.labels[tooltipItem.index];
+                        const totalData = data.datasets[tooltipItem.datasetIndex].data.reduce((prev, curr) => prev + curr);
+                        const currentData = data.datasets[tooltipItem.datasetIndex].data[tooltipItem.index];
+                        const percentage = Math.round(currentData * 1000 / totalData) / 10;
+
+                        return {label, currentData, percentage};
+                    }
+                }
+            },
         }
     });
 }
