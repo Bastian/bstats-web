@@ -69,12 +69,11 @@ export const renderPieChart = (chartDom, chart: SimplePieChart, data: SimplePieC
                         <div class="flex flex-row text-gray-900 dark:text-gray-200 dark:bg-gray-700 shadow-lg bg-white p-2 rounded items-center ring-2 ring-gray-500 dark:ring-gray-200 ring-opacity-25 dark:ring-opacity-25">
                             <div class="px-4 py-2 rounded-full mr-2" style="background-color: ${tooltipModel.labelColors[0].backgroundColor}"></div>
                             <div class="flex flex-row items-baseline">
-                                <span class="font-bold mr-1 text-lg">${data.label}:</span>
-                                <span class="text-lg">${data.currentData} (${data.percentage}%)</span>
+                                <span class="font-bold mr-1">${data.label}:</span>
+                                <span>${data.currentData} (${data.percentage}%)</span>
                             </div>
                         </div>
                     `;
-
 
                     const position = this._chart.canvas.getBoundingClientRect();
 
