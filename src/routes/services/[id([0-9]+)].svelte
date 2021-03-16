@@ -15,6 +15,8 @@
             data: await findChartData(API_BASE_URL, chart.id, 2 * 24 * 7, this.fetch)
         })));
 
+        chartsWithData.sort((a, b) => a.chart.position - b.chart.position);
+
         return { service, chartsWithData };
     }
 </script>
