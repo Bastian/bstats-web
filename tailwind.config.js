@@ -3,6 +3,7 @@ module.exports = {
         './src/**/*.html',
         './src/**/*.js',
         "./src/**/*.svelte",
+        "./src/**/*.ts",
     ],
     darkMode: 'class',
     theme: {
