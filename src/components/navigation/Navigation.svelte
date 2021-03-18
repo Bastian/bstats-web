@@ -23,10 +23,10 @@
 </script>
 
 <nav class="flex items-center w-full">
-    <button class="ml-2" on:click={handleMobileNavOpen}>
+    <button on:click={handleMobileNavOpen}>
         <MenuIcon class="w-8 h-8 sm:hidden"/>
     </button>
-    <div class="flex-grow p-2 text-center md:flex-grow-0">
+    <div class="flex-grow py-2 text-center md:flex-grow-0">
         <a class="text-2xl font-bold" href="/">bStats</a>
     </div>
     <div class="hidden flex-grow p-4 sm:block md:pl-32">
