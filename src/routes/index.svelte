@@ -24,34 +24,34 @@
     </div>
 </div>
 
-<div class="pt-24 bg-gray-50 dark:bg-gray-900 flex justify-center flex-col items-center background">
-    <h1 class="mb-4 text-7xl font-bold text-blue-900 dark:text-blue-500">
+<div class="flex flex-col justify-center items-center pt-24 bg-gray-50 dark:bg-gray-900 background">
+    <h1 class="mb-4 text-6xl font-bold text-blue-900 dark:text-blue-500">
         bStats
     </h1>
-    <span class="flex items-center text-3xl text-gray-800 dark:text-gray-200">
-        Plugin Metrics made with
-        <HeartIcon small class="text-red-600 h-8 ml-2 -mt-1"/>
+    <span class="flex flex-wrap justify-center items-center px-4 text-2xl text-gray-800 dark:text-gray-200">
+        Plugin Metrics made
+        <span class="flex items-center ml-1">with <HeartIcon small class="ml-2 -mt-1 h-8 text-red-600"/></span>
     </span>
 </div>
 
-<div class="flex-grow bg-gray-50 dark:bg-gray-900 background pb-24">
+<div class="flex-grow pb-24 bg-gray-50 dark:bg-gray-900 background">
     <div class="container mx-auto md:pt-24">
         <div class="flex flex-col-reverse md:flex-row">
-            <div class="mx-12 md:mx-0 md:w-2/5 flex flex-col justify-center leading-loose 2xl:pr-24 lg:pl-8">
+            <div class="flex flex-col justify-center mx-12 leading-loose md:mx-0 md:w-2/5 2xl:pr-24 lg:pl-8 xl:pl-16">
                 <div class="mt-4">
-                    <span class="text-3xl mr-1 font-bold text-blue-900 dark:text-blue-500">
+                    <span class="mr-1 text-3xl font-bold text-blue-900 dark:text-blue-500">
                         bStats
                     </span>
                     <span class="text-xl text-gray-800 dark:text-gray-200">
                         is the all-in-one solution to tracking and analyzing your Minecraft plugin's usage across a wide range of multiplayer networks.
                     </span>
-                    <button class="block mt-4 py-2 px-4 bg-blue-800 rounded text-white focus:outline-none focus:ring focus:border-blue-300">
+                    <button class="block py-2 px-4 mt-4 text-white bg-blue-800 rounded focus:outline-none focus:ring focus:border-blue-300">
                         Learn More
                     </button>
                 </div>
             </div>
-            <div class="md:w-3/5 shadow-xl rounded m-12 md:m-0 md:ml-8 xl:mr-8">
-                <img class="h-full w-full rounded-lg" src="/img/landing-page.png" alt="Website Screenshot">
+            <div class="m-12 rounded shadow-xl md:w-3/5 md:m-0 md:ml-8 xl:mr-16">
+                <img class="w-full h-full rounded-lg" src="/img/landing-page.png" alt="Website Screenshot">
             </div>
         </div>
     </div>
