@@ -50,8 +50,14 @@
                     </button>
                 </div>
             </div>
-            <div class="m-12 rounded shadow-xl md:w-3/5 md:m-0 md:ml-8 xl:mr-16">
-                <img class="w-full h-full rounded-lg" src="/img/landing-page.png" alt="Website Screenshot">
+            <div class="m-12 rounded md:w-3/5 md:m-0 md:ml-8 xl:mr-16">
+                <div class="h-6 bg-gray-200 flex items-center rounded-t-lg">
+                    <div class="bg-white ml-2 h-2 w-2 rounded-full bg-red-500"></div>
+                    <div class="bg-white ml-1 h-2 w-2 rounded-full bg-yellow-500"></div>
+                    <div class="bg-white ml-1 h-2 w-2 rounded-full bg-green-500"></div>
+                    <div class="bg-white ml-4 mr-12 h-3 flex-grow rounded-sm"></div>
+                </div>
+                <img class="w-full h-full shadow-xl rounded-b-lg" src="/img/landing-page.png" alt="Website Screenshot">
             </div>
         </div>
     </div>
