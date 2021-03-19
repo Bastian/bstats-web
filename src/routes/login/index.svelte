@@ -28,7 +28,12 @@
             <KeyIcon slot="icon"/>
         </TextField>
 
-        <Checkbox id="remember-me" label="Remember me" class="mt-4" />
+        <div class="flex flex-col-reverse sm:flex-row justify-between mt-2 sm:mt-4">
+            <Checkbox id="remember-me" label="Remember me" class="mt-4 sm:mt-0" />
+            <a href="/forgot-password" class="text-blue-900 dark:text-blue-200 text-sm">
+                Forgot your password?
+            </a>
+        </div>
 
         <Button class="mt-4 w-full">Login</Button>
 
