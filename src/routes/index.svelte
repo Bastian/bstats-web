@@ -1,6 +1,6 @@
 <script>
-    import Navigation from "../components/navigation/Navigation.svelte";
     import HeartIcon from "../components/hero-icons/HeartIcon.svelte";
+    import StandardNavigation from "../components/navigation/StandardNavigation.svelte";
 </script>
 
 <svelte:head>
@@ -18,11 +18,7 @@
     }
 </style>
 
-<div class="text-white bg-gradient-to-r from-purple-900 via-blue-900 to-blue-400 dark:from-purple-900 dark:via-blue-900 dark:to-indigo-700">
-    <div class="container py-4 mx-auto border-blue-700">
-        <Navigation/>
-    </div>
-</div>
+<StandardNavigation/>
 
 <div class="flex flex-col justify-center items-center pt-24 bg-gray-50 dark:bg-gray-900 background">
     <h1 class="mb-4 text-6xl font-bold text-blue-900 dark:text-blue-500">
