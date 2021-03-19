@@ -6,7 +6,7 @@
     export let link: { text: string; href: string; }
 </script>
 
-<div class="flex flex-col items-center my-24 mx-8 w-full max-w-xl {className}">
+<div class="flex flex-col items-center w-full max-w-xl {className}">
     {#if title}
         <span class="text-3xl font-bold text-blue-900 dark:text-blue-400">
             {title}
