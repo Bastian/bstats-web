@@ -26,10 +26,10 @@
     <button on:click={handleMobileNavOpen}>
         <MenuIcon class="w-8 h-8 sm:hidden"/>
     </button>
-    <div class="flex-grow py-2 text-center md:flex-grow-0">
+    <div class="flex-grow text-center md:flex-grow-0">
         <a class="text-2xl font-bold" href="/">bStats</a>
     </div>
-    <div class="hidden flex-grow p-4 sm:block md:pl-32">
+    <div class="hidden flex-grow p-2 sm:block md:pl-32">
         <div class="inline-block" use:clickOutside={handleDropdownClickOutside}>
             <button class="inline-flex items-center mx-4 mr-2 text-base focus:outline-none" on:click={handleDropdownOpenChange}>
                 <span>My Plugins</span>
@@ -42,7 +42,7 @@
         <a class="mx-4" href="/">Plugin List</a>
     </div>
     <a href="/">
-        <UserCircleIcon class="h-12 w-12"/>
+        <UserCircleIcon class="h-10 w-10"/>
     </a>
 </nav>
 

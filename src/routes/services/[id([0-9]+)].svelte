@@ -72,10 +72,10 @@
 </svelte:head>
 
 <div class="text-white bg-gradient-to-r from-purple-900 via-blue-900 to-blue-400 dark:from-purple-900 dark:via-blue-900 dark:to-indigo-700">
-    <div class="container py-4 mx-auto">
+    <div class="container py-3 mx-auto">
         <Navigation/>
 
-        <div class="pt-12">
+        <div class="pt-16">
             <div class="text-5xl sm:text-6xl py-4 font-semibold truncate">
                 {service.name}
             </div>
