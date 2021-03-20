@@ -3,7 +3,6 @@
     export { className as class };
 
     export let text: string | null
-    export let thin = false;
 </script>
 
 <div class="flex relative justify-center w-full h-6 {className}">
