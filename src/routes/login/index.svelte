@@ -20,7 +20,7 @@
 <StandardNavigation/>
 
 <div class="flex flex-grow justify-center items-center bg-gray-100 dark:bg-gray-900">
-    <Card class="animate-fade-in my-12 sm:my-24 mx-4 sm:mx-8" title="Login to your account" link={{ text: "Create new account", href: "/register" }}>
+    <Card class="my-12 sm:my-24 mx-4 sm:mx-8" title="Login to your account" link={{ text: "Create new account", href: "/register" }}>
         <TextField id="email" label="Email or Username">
             <MailIcon slot="icon"/>
         </TextField>
