@@ -51,7 +51,7 @@
     let chartDom;
     let chartJsChart: Chart;
 
-    onMount(() => updateData(data === null));
+    $: updateData(data === null);
 </script>
 
 <style>

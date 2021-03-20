@@ -8,7 +8,7 @@
 
     export let chart: SimplePieChart;
     export let data: SimplePieChartData;
-    prepareData();
+    $: if (data) prepareData();
 
     let chartDom;
 
