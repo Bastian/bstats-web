@@ -3,7 +3,7 @@
 
     export let open: boolean;
 
-    export let actionLabel: string | null;
+    export let actionLabel: string | null = null;
     export let links: { text: string; href: string; }
 </script>
 

@@ -2,7 +2,7 @@
     export let id: string;
     export let label: string;
 
-    let className: string | null;
+    let className: string = "";
     export { className as class };
 </script>
 
