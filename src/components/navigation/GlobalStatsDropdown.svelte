@@ -11,7 +11,7 @@
         .filter(software => !!software.globalPlugin)
         .map(software => ({
             text: software.name,
-            href: `/services/${software.globalPlugin}`
+            href: `/global/${software.url}`
         }));
 </script>
 

@@ -2,12 +2,18 @@
     import type { Preload } from "@sapper/common";
     import {findService} from "../../api/findService";
     import {findChartData} from "../../api/findChartData";
+    import {findSoftwareById} from "../../api/findSoftwareById";
 
     export const preload: Preload = async function(this, page, session) {
         const { id } = page.params;
         const { API_BASE_URL } = session;
 
         const service = await findService(API_BASE_URL, id, true, this.fetch);
+
+        if (service.isGlobal) {
+            const software = await findSoftwareById(API_BASE_URL, service.software.id, this.fetch);
+            return this.redirect(301, `/global/${software.url}`);
+        }
 
         // Prefetch all data
         const chartsWithData = await Promise.all(service.charts.map(async chart => ({
@@ -33,9 +39,20 @@
     import type {SingleLineChartData} from "../../definitions/chart-data/single-line-chart-data.interface";
     import {isSimplePieChart} from "../../definitions/simple-pie-chart.interface";
     import PieChart from "../../components/charts/PieChart.svelte";
+    import {stores} from '@sapper/app';
 
     export let service: Service;
     export let chartsWithData: { chart: Chart, data: ChartData }[]
+
+    const { session } = stores();
+    let serviceName;
+    $: if (service.isGlobal) {
+        serviceName = $session.softwareList
+            .find(software => software.id === service.software.id)
+            ?.name ?? service.name;
+    } else {
+        serviceName = service.name
+    }
 
     let currentServers: number | null;
     let maxServers: number | null;
@@ -68,7 +85,7 @@
 </style>
 
 <svelte:head>
-    <title>{service.name}</title>
+    <title>{serviceName}</title>
 </svelte:head>
 
 <div class="text-white bg-gradient-to-r from-purple-900 via-blue-900 to-blue-400 dark:from-purple-900 dark:via-blue-900 dark:to-indigo-700">
@@ -77,10 +94,14 @@
 
         <div class="pt-16">
             <div class="text-5xl sm:text-6xl py-4 font-semibold truncate">
-                {service.name}
+                {serviceName}
             </div>
             <div class="mb-4">
-                by <a href="/" class="font-semibold">{service.owner.name}</a>
+                {#if service.isGlobal}
+                    Global Stats
+                {:else}
+                    by <a href="/" class="font-semibold">{service.owner.name}</a>
+                {/if}
             </div>
         </div>
 

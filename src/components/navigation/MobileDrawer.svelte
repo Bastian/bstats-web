@@ -6,6 +6,8 @@
     import CollectionIcon from "../hero-icons/CollectionIcon.svelte";
     import MobileDrawerSection from "./MobileDrawerSection.svelte";
 
+    import {stores} from '@sapper/app';
+
     export let open = false;
 
     const handleClose = () => {
@@ -22,6 +24,16 @@
             }
         }
     }
+
+    const { session } = stores();
+
+    let globalStatsLinks: {text: string, href: string}[];
+    $: globalStatsLinks = $session.softwareList
+        .filter(software => !!software.globalPlugin)
+        .map(software => ({
+            text: software.name,
+            href: `/global/${software.url}`
+        }));
 </script>
 
 <style>
@@ -53,15 +65,7 @@
             </MobileDrawerSection>
 
 
-            <MobileDrawerSection
-                title="Global Stats"
-                links={[
-                    { text: "Bukkit / Spigot", href: "/" },
-                    { text: "Bungeecord", href: "/" },
-                    { text: "Sponge", href: "/" },
-                    { text: "Velocity", href: "/" }
-                ]}
-            >
+            <MobileDrawerSection title="Global Stats" links={globalStatsLinks}>
                 <GlobeIcon slot="icon"/>
             </MobileDrawerSection>
 

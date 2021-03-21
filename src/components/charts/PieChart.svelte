@@ -26,7 +26,7 @@
         }, []);
     }
 
-    onMount(() => renderPieChart(chartDom, chart, data));
+    $: if (chartDom) renderPieChart(chartDom, chart, data)
 </script>
 
 <style>

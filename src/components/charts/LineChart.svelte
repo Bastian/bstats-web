@@ -40,6 +40,9 @@
     }
 
     const updateData = async (refreshData: boolean) => {
+        if (!chartDom) {
+            return;
+        }
         loadingData = true;
         if (refreshData) {
             data = await findChartData(API_BASE_URL, chart.id, selectedRangeOption.maxElements) as SingleLineChartData;
