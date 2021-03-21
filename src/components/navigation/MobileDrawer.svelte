@@ -44,7 +44,6 @@
 </style>
 
 {#if open}
-    <!-- Mobile Drawer -->
     <div
         transition:fly={{ x: -200, duration: 200 }}
         class="overflow-y-auto fixed top-0 bottom-0 left-0 z-50 text-black bg-white drawer dark:bg-gray-900 dark:text-white"
@@ -57,15 +56,14 @@
         <div class="m-8 mt-4 space-y-12">
             <MobileDrawerSection
                 title="Navigation"
-                links={[
-                    { text: "Plugin List", href: "/" },
-                ]}
+                links={[{ text: "Plugin List", href: "/" }]}
+                bind:drawerOpen={open}
             >
                 <MapIcon slot="icon"/>
             </MobileDrawerSection>
 
 
-            <MobileDrawerSection title="Global Stats" links={globalStatsLinks}>
+            <MobileDrawerSection title="Global Stats" links={globalStatsLinks} bind:drawerOpen={open}>
                 <GlobeIcon slot="icon"/>
             </MobileDrawerSection>
 
@@ -75,6 +73,7 @@
                     { text: "SafeTrade", href: "/", software: "Bukkit / Spigot" },
                     { text: "Super Duper Spleef", href: "/", software: "Bungeecord" },
                 ]}
+                bind:drawerOpen={open}
             >
                 <CollectionIcon slot="icon"/>
                 <Label slot="link-appendix" class="ml-2" let:link>
