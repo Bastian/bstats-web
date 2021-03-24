@@ -7,3 +7,6 @@ The following changes were applied to the original images:
  * All images have been minimized with https://tinypng.com/.
  * geometry-low-contrast.png is a slightly modified version of
    geometry.png with reduced contrast.
+ * geometry-low-contrast-darker.png is a slightly modified
+   version of geometry.png with reduced contrast and a darker
+   background
