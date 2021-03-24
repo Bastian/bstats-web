@@ -142,7 +142,7 @@
 
 <div class="pt-28 bg-gray-100 dark:bg-gray-900 md:pt-24 flex-grow">
     <div class="container grid grid-cols-1 lg:grid-cols-2 2xl:grid-cols-3 gap-x-4 pt-12 pb-16 mx-auto space-y-8">
-        {#each chartsWithData as {chart, data}}
+        {#each chartsWithData as {chart, data} (chart.id)}
             {#if isSingleLineChart(chart)}
                 <div class="lg:col-span-2 2xl:col-span-3">
                     <LineChart chart={chart} bind:data={data}/>
