@@ -4,7 +4,7 @@
     import {findSoftwareById} from "../../api/findSoftwareById";
     import type {Load} from "@sveltejs/kit"
 
-    export const load: Load = async ({ page, session }) => {
+    export const load: Load = async ({ page, fetch, session }) => {
         const { id } = page.params;
         const { API_BASE_URL } = session;
 

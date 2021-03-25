@@ -1,1 +1,3 @@
-export type FetchFunction = (input: RequestInfo, init?: RequestInit) => Promise<Response>;
+import type {Load} from "@sveltejs/kit"
+
+export type FetchFunction = Parameters<Load>[0]["fetch"];
