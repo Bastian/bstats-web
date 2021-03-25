@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html class="h-full" lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <link rel="icon" type="image/png" href="/favicon.png" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <meta name="theme-color" content="#1D4ED8">
+
+        <style>
+            @font-face {
+                font-family: 'Roboto';
+                font-style: normal;
+                font-display: swap;
+                font-weight: 400;
+                src: url('/fonts/roboto/roboto-latin-400-normal.woff2') format('woff2'), url('./files/roboto-all-400-normal.woff') format('woff');
+                unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+            }
+
+            @font-face {
+                font-family: 'Roboto';
+                font-style: normal;
+                font-display: swap;
+                font-weight: 500;
+                src: url('/fonts/roboto/roboto-latin-500-normal.woff2') format('woff2'), url('./files/roboto-all-500-normal.woff') format('woff');
+                unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+            }
+
+            @font-face {
+                font-family: 'Roboto';
+                font-style: normal;
+                font-display: swap;
+                font-weight: 700;
+                src: url('/fonts/roboto/roboto-latin-700-normal.woff2') format('woff2'), url('./files/roboto-all-700-normal.woff') format('woff');
+                unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+            }
+        </style>
+
+        <script>
+            // Dark mode
+            if (typeof window !== "undefined") {
+                var metaThemeColor = document.querySelector("meta[name=theme-color]");
+                if (localStorage.theme === "dark" || (!("theme" in localStorage) && window.matchMedia("(prefers-color-scheme: dark)").matches)) {
+                    document.documentElement.classList.add("dark");
+                    metaThemeColor.setAttribute("content", "#111827");
+                } else {
+                    document.documentElement.classList.remove("dark");
+                    metaThemeColor.setAttribute("content", "#1D4ED8");
+                }
+            }
+        </script>
+
+        %svelte.head%
+    </head>
+    <body class="h-full">
+        <div id="svelte" class="h-full">%svelte.body%</div>
+    </body>
+</html>

@@ -1,5 +1,5 @@
 <script lang="ts">
-    import clickOutside from "svelte-outside-click";
+    import clickOutside from "../../helpers/clickOutside";
     import MobileDrawer from "./MobileDrawer.svelte";
     import MenuIcon from "../hero-icons/MenuIcon.svelte";
     import ChevronDownIcon from "../hero-icons/ChevronDownIcon.svelte";

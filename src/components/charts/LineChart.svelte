@@ -1,10 +1,9 @@
 <script lang="ts">
     import Chart from "chart.js";
-    import {onMount} from "svelte";
     import type {SingleLineChart} from "../../definitions/single-line-chart.interface";
     import {findChartData} from "../../api/findChartData";
     import type {SingleLineChartData} from "../../definitions/chart-data/single-line-chart-data.interface";
-    import {stores} from '@sapper/app';
+    import { session } from '$app/stores';
     import {renderOrUpdateLineChart} from "./_renderOrUpdateLineChart";
     import Spinner from "../Spinner.svelte";
 
@@ -28,7 +27,6 @@
 
     let selectedRangeOption: RangeOption = rangeOptions[2];
 
-    const {session} = stores();
     const {API_BASE_URL} = $session;
 
     const handleRangeOptionChange = (rangeOption: RangeOption) => {

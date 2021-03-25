@@ -1,10 +1,11 @@
 <script context="module" lang="ts">
-    import type {Preload} from "@sapper/common";
     import {findAllSoftware} from "../api/findAllSoftware";
+    import type {Load} from "@sveltejs/kit";
+    import "../global.css";
 
-    export const preload: Preload = async function(this, page, session) {
+    export const load: Load = async ({ fetch, session }) => {
         const { API_BASE_URL } = session;
-        session.softwareList = await findAllSoftware(API_BASE_URL, this.fetch);
+        session.softwareList = await findAllSoftware(API_BASE_URL, fetch);
         return { };
     }
 </script>

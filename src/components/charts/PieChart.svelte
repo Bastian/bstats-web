@@ -1,5 +1,4 @@
 <script lang="ts">
-    import {onMount} from "svelte";
     import type {SimplePieChart} from "../../definitions/simple-pie-chart.interface";
     import type {SimplePieChartData} from "../../definitions/chart-data/simple-pie-chart-data.interface";
     import {renderPieChart} from "./_renderPieChart";

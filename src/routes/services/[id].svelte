@@ -1,24 +1,24 @@
 <script context="module" lang="ts">
-    import type { Preload } from "@sapper/common";
     import {findService} from "../../api/findService";
     import {findChartData} from "../../api/findChartData";
     import {findSoftwareById} from "../../api/findSoftwareById";
+    import type {Load} from "@sveltejs/kit"
 
-    export const preload: Preload = async function(this, page, session) {
+    export const load: Load = async ({ page, session }) => {
         const { id } = page.params;
         const { API_BASE_URL } = session;
 
-        const service = await findService(API_BASE_URL, id, true, this.fetch);
+        const service = await findService(API_BASE_URL, parseInt(id), true, fetch);
 
         if (service.isGlobal) {
-            const software = await findSoftwareById(API_BASE_URL, service.software.id, this.fetch);
+            const software = await findSoftwareById(API_BASE_URL, service.software.id, fetch);
             return this.redirect(301, `/global/${software.url}`);
         }
 
         // Prefetch all data
         const chartsWithData = await Promise.all(service.charts.map(async chart => ({
             chart,
-            data: await findChartData(API_BASE_URL, chart.id, 2 * 24 * 7, this.fetch)
+            data: await findChartData(API_BASE_URL, chart.id, 2 * 24 * 7, fetch)
         })));
 
         chartsWithData.sort((a, b) => a.chart.position - b.chart.position);
@@ -39,12 +39,11 @@
     import type {SingleLineChartData} from "../../definitions/chart-data/single-line-chart-data.interface";
     import {isSimplePieChart} from "../../definitions/simple-pie-chart.interface";
     import PieChart from "../../components/charts/PieChart.svelte";
-    import {stores} from '@sapper/app';
+    import { session } from '$app/stores';
 
     export let service: Service;
     export let chartsWithData: { chart: Chart, data: ChartData }[]
 
-    const { session } = stores();
     let serviceName;
     $: if (service.isGlobal) {
         serviceName = $session.softwareList

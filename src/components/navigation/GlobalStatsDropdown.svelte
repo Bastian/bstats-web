@@ -1,10 +1,8 @@
 <script lang="ts">
     import Dropdown from "./Dropdown.svelte";
-    import {stores} from '@sapper/app';
+    import { session } from '$app/stores';
 
     export let open: boolean;
-
-    const { session } = stores();
 
     let links: {text: string, href: string}[];
     $: links = $session.softwareList

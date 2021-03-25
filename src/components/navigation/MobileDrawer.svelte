@@ -6,7 +6,7 @@
     import CollectionIcon from "../hero-icons/CollectionIcon.svelte";
     import MobileDrawerSection from "./MobileDrawerSection.svelte";
 
-    import {stores} from '@sapper/app';
+    import { session } from '$app/stores';
 
     export let open = false;
 
@@ -24,8 +24,6 @@
             }
         }
     }
-
-    const { session } = stores();
 
     let globalStatsLinks: {text: string, href: string}[];
     $: globalStatsLinks = $session.softwareList
