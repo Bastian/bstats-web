@@ -29,10 +29,8 @@
 </script>
 
 <script lang="ts">
+    // @ts-ignore no-default-export
     import ServicePage from "../services/[id].svelte";
-    import type {Service} from "../../definitions/service.interface";
-    import type {Chart} from "../../definitions/chart.interface";
-    import type {ChartData} from "../../definitions/chart-data/chart-data.interface";
 
     export let service: Service;
     export let chartsWithData: { chart: Chart, data: ChartData }[]

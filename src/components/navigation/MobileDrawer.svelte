@@ -7,6 +7,7 @@
     import MobileDrawerSection from "./MobileDrawerSection.svelte";
 
     import { session } from '$app/stores';
+    import type {Software} from "../../definitions/software/software.interface";
 
     export let open = false;
 
@@ -26,7 +27,7 @@
     }
 
     let globalStatsLinks: {text: string, href: string}[];
-    $: globalStatsLinks = $session.softwareList
+    $: globalStatsLinks = ($session.softwareList as Software[])
         .filter(software => !!software.globalPlugin)
         .map(software => ({
             text: software.name,

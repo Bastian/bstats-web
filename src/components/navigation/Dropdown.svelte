@@ -4,7 +4,7 @@
     export let open: boolean;
 
     export let actionLabel: string | null = null;
-    export let links: { text: string; href: string; }
+    export let links: { text: string; href: string; [key: string]: any }[]
 </script>
 
 {#if open}

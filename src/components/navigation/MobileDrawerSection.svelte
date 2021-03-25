@@ -1,6 +1,6 @@
 <script lang="ts">
     export let title: string;
-    export let links: { text: string, href: string }[];
+    export let links: { text: string, href: string, [key: string]: any }[];
 
     export let drawerOpen: boolean;
 </script>

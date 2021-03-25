@@ -9,7 +9,7 @@
     export let data: SimplePieChartData;
     $: if (data) prepareData();
 
-    let chartDom;
+    let chartDom: unknown;
 
     function prepareData() {
         data.sort((a, b) => b.y - a.y);

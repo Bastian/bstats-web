@@ -1,6 +1,6 @@
 <script lang="ts">
-    export let name;
-    export let color;
+    export let name: string;
+    export let color: string;
 </script>
 
 <style>

@@ -12,7 +12,10 @@
 
         if (service.isGlobal) {
             const software = await findSoftwareById(API_BASE_URL, service.software.id, fetch);
-            return this.redirect(301, `/global/${software.url}`);
+            return {
+                status: 301,
+                redirect: `/global/${software.url}`
+            };
         }
 
         // Prefetch all data
@@ -38,15 +41,18 @@
     import type {ChartData} from "../../definitions/chart-data/chart-data.interface";
     import type {SingleLineChartData} from "../../definitions/chart-data/single-line-chart-data.interface";
     import {isSimplePieChart} from "../../definitions/simple-pie-chart.interface";
+    import {isSimplePieChartData} from "../../definitions/chart-data/simple-pie-chart-data.interface";
+    import {isSingleLineChartData} from "../../definitions/chart-data/single-line-chart-data.interface";
     import PieChart from "../../components/charts/PieChart.svelte";
     import { session } from '$app/stores';
+    import type {Software} from "../../definitions/software/software.interface";
 
     export let service: Service;
     export let chartsWithData: { chart: Chart, data: ChartData }[]
 
-    let serviceName;
+    let serviceName: string;
     $: if (service.isGlobal) {
-        serviceName = $session.softwareList
+        serviceName = ($session.softwareList as Software[])
             .find(software => software.id === service.software.id)
             ?.name ?? service.name;
     } else {
@@ -60,10 +66,10 @@
     let maxPlayers: number | null;
 
     $: {
-        let serversData: SingleLineChartData | null =
-            chartsWithData.find(({chart}) => chart.idCustom === "servers")?.data;
-        let playersData: SingleLineChartData | null =
-            chartsWithData.find(({chart}) => chart.idCustom === "players")?.data;
+        let serversData: SingleLineChartData | undefined =
+            chartsWithData.find(({chart}) => chart.idCustom === "servers")?.data as SingleLineChartData;
+        let playersData: SingleLineChartData | undefined =
+            chartsWithData.find(({chart}) => chart.idCustom === "players")?.data as SingleLineChartData;
         if (serversData) {
             currentServers = serversData[0][1];
             maxServers = serversData.reduce((prev, [, y]) => Math.max(prev, y), 0);
@@ -151,12 +157,13 @@
 <div class="pt-28 bg-gray-100 dark:bg-gray-900 md:pt-24 flex-grow background">
     <div class="container grid grid-cols-1 lg:grid-cols-2 2xl:grid-cols-3 gap-x-4 pt-12 pb-16 mx-auto space-y-8">
         {#each chartsWithData as {chart, data} (chart.id)}
-            {#if isSingleLineChart(chart)}
+            {#if isSingleLineChart(chart) && isSingleLineChartData(data)}
                 <div class="lg:col-span-2 2xl:col-span-3">
                     <LineChart chart={chart} bind:data={data}/>
                 </div>
             {/if}
-            {#if isSimplePieChart(chart)}
+
+            {#if isSimplePieChart(chart) && isSimplePieChartData(data)}
                 <div>
                     <PieChart chart={chart} bind:data={data}/>
                 </div>

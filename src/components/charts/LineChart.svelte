@@ -1,5 +1,5 @@
 <script lang="ts">
-    import Chart from "chart.js";
+    import type Chart from "chart.js";
     import type {SingleLineChart} from "../../definitions/single-line-chart.interface";
     import {findChartData} from "../../api/findChartData";
     import type {SingleLineChartData} from "../../definitions/chart-data/single-line-chart-data.interface";
@@ -49,7 +49,7 @@
         chartJsChart = renderOrUpdateLineChart(chartDom, chartJsChart, chart, data);
     }
 
-    let chartDom;
+    let chartDom: unknown;
     let chartJsChart: Chart;
 
     $: updateData(data === null);
