@@ -26,7 +26,9 @@
 
         chartsWithData.sort((a, b) => a.chart.position - b.chart.position);
 
-        return { service, chartsWithData };
+        return {
+            props: { service, chartsWithData }
+        };
     }
 </script>
 
