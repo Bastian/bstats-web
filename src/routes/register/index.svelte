@@ -1,3 +1,15 @@
+<script context="module" lang="ts">
+    import type {Load} from "@sveltejs/kit"
+
+    export const load: Load = async ({ session }) => {
+        // The user is already logged in, so let's redirect them to the landing page
+        if (session.user) {
+            return { status: 307,  redirect: `/` }
+        }
+        return { };
+    }
+</script>
+
 <script lang="ts">
     import StandardNavigation from "../../components/navigation/StandardNavigation.svelte";
     import TextField from "../../components/forms/TextField.svelte";
@@ -11,12 +23,14 @@
     import Divider from "../../components/Divider.svelte";
     import Card from "../../components/Card.svelte";
     import LightButton from "../../components/forms/LightButton.svelte";
+    import Auth from "../../components/Auth.svelte";
 </script>
 
 <svelte:head>
     <title>Create Account</title>
 </svelte:head>
 
+<Auth/>
 <StandardNavigation/>
 
 <div class="flex flex-grow justify-center items-center bg-gray-100 dark:bg-gray-900">

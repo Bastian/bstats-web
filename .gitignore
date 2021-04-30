@@ -4,4 +4,7 @@ node_modules
 /build
 /functions
 
+lsp
 .idea
+service-account-file.json
+firebase-config.json

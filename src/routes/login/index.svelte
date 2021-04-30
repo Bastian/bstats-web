@@ -1,3 +1,15 @@
+<script context="module" lang="ts">
+    import type {Load} from "@sveltejs/kit"
+
+    export const load: Load = async ({ session }) => {
+        // The user is already logged in, so let's redirect them to the landing page
+        if (session.user) {
+            return { status: 307,  redirect: `/` }
+        }
+        return { };
+    }
+</script>
+
 <script lang="ts">
     import StandardNavigation from "../../components/navigation/StandardNavigation.svelte";
     import TextField from "../../components/forms/TextField.svelte";
@@ -11,12 +23,41 @@
     import Divider from "../../components/Divider.svelte";
     import Card from "../../components/Card.svelte";
     import LightButton from "../../components/forms/LightButton.svelte";
+    import {loginWithProvider} from "../../helpers/auth/loginWithProvider";
+    import type {LoginProvider} from "../../helpers/auth/loginWithProvider";
+    import Auth from "../../components/Auth.svelte";
+
+    async function handleLoginWithProvider(provider: LoginProvider) {
+        try {
+            await loginWithProvider(provider);
+        } catch (error) {
+            switch (error.code) {
+                case "auth/account-exists-with-different-credential":
+                    // TODO Render nicely in the UI
+                    alert("Your E-Mail address is already in use with another authentication method. " +
+                        "If you want to link your existing account with another third-party provider, " +
+                        "please login first with your existing provider and then link your account in " +
+                        "your profile settings");
+                    break;
+                case "auth/cancelled-popup-request":
+                case "auth/popup-closed-by-user":
+                    // Can be ignored
+                    break;
+                default:
+                    if (error.message) {
+                        alert(error.message);
+                    }
+                    console.log(error);
+            }
+        }
+    }
 </script>
 
 <svelte:head>
     <title>Login</title>
 </svelte:head>
 
+<Auth/>
 <StandardNavigation/>
 
 <div class="flex flex-grow justify-center items-center bg-gray-100 dark:bg-gray-900">
@@ -40,13 +81,13 @@
         <Divider text="or continue with" class="my-8"/>
 
         <div class="grid gap-y-2 gap-x-4 sm:space-y-0 sm:grid-cols-3">
-            <LightButton>
+            <LightButton on:click={() => handleLoginWithProvider("google")}>
                 <GoogleIcon slot="icon"/> Google
             </LightButton>
-            <LightButton>
+            <LightButton on:click={() => handleLoginWithProvider("github")}>
                 <GithubIcon class="fill-current" slot="icon"/> GitHub
             </LightButton>
-            <LightButton>
+            <LightButton on:click={() => handleLoginWithProvider("twitter")}>
                 <TwitterIcon slot="icon"/> Twitter
             </LightButton>
         </div>

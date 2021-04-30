@@ -6,8 +6,9 @@
     import CollectionIcon from "../hero-icons/CollectionIcon.svelte";
     import MobileDrawerSection from "./MobileDrawerSection.svelte";
 
-    import { session } from '$app/stores';
+    import {session} from '$app/stores';
     import type {Software} from "../../definitions/software/software.interface";
+    import KeyIcon from "../hero-icons/KeyIcon.svelte";
 
     export let open = false;
 
@@ -26,7 +27,7 @@
         }
     }
 
-    let globalStatsLinks: {text: string, href: string}[];
+    let globalStatsLinks: { text: string, href: string }[];
     $: globalStatsLinks = ($session.softwareList as Software[])
         .filter(software => !!software.globalPlugin)
         .map(software => ({
@@ -53,6 +54,19 @@
         <div class="py-2 mx-8 border-t-2 border-gray-200"></div>
 
         <div class="m-8 mt-4 space-y-12">
+            {#if !$session.user}
+                <MobileDrawerSection
+                    title="Account"
+                    links={[
+                        { text: "Login", href: "/login" },
+                        { text: "Register", href: "/register" }
+                    ]}
+                    bind:drawerOpen={open}
+                >
+                    <KeyIcon slot="icon"/>
+                </MobileDrawerSection>
+            {/if}
+
             <MobileDrawerSection
                 title="Navigation"
                 links={[{ text: "Plugin List", href: "/" }]}

@@ -2,5 +2,8 @@ version: "3.2"
 services:
   app:
     build: "."
+    volumes:
+      - "./service-account-file.json:/app/service-account-file.json"
+      - "./firebase-config.json:/app/firebase-config.json"
     ports:
       - "3000:3000"
