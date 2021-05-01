@@ -1,4 +1,5 @@
 import firebase from "firebase/app/dist/index.cjs.js";
+import { performSessionLogin } from "./performSessionLogin";
 
 export type LoginProvider = "google" | "github" | "twitter";
 
@@ -15,26 +16,7 @@ export async function loginWithProvider(providerName: LoginProvider): Promise<vo
         provider = new firebase.auth.TwitterAuthProvider();
         break;
     }
-    const result = await firebase.auth().signInWithPopup(provider);
+    const userCredential = await firebase.auth().signInWithPopup(provider);
 
-    const idToken = await result.user.getIdToken();
-    const csrfToken = getCookie("csrfToken");
-
-    await fetch("/sessionLogin", {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-            idToken, csrfToken
-        })
-    });
-
-    await firebase.auth().signOut();
-    window.location.assign("/");
-}
-
-function getCookie(name) {
-    const v = document.cookie.match("(^|;) ?" + name + "=([^;]*)(;|$)");
-    return v ? v[2] : null;
+    await performSessionLogin(userCredential);
 }

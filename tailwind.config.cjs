@@ -1,4 +1,5 @@
 const { tailwindExtractor } = require("tailwindcss/lib/lib/purgeUnusedStyles");
+const colors = require("tailwindcss/colors");
 
 module.exports = {
     purge: {
@@ -15,7 +16,7 @@ module.exports = {
             keyframes: true,
         },
     },
-    darkMode: 'class',
+    darkMode: "class",
     theme: {
         extend: {
             fontFamily: {
@@ -31,6 +32,10 @@ module.exports = {
                     "2xl": "6rem",
                 },
             },
+            colors: {
+                orange: colors.orange,
+                lime: colors.lime,
+            }
         },
         container: {
             padding: {
@@ -46,6 +51,6 @@ module.exports = {
         extend: {},
     },
     plugins: [
-        require('@tailwindcss/forms'),
+        require("@tailwindcss/forms"),
     ],
 };

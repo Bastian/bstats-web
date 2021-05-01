@@ -12,6 +12,13 @@
 
 <script lang="ts">
     import Footer from "../components/Footer.svelte";
+    import {session} from "$app/stores";
+    import { browser } from "$app/env";
+
+    if ($session.user && !$session.user.email_verified && browser) {
+        // TODO Do not use alert
+        alert("Your email is not yet verified. Please verify your email!");
+    }
 </script>
 
 <main class="flex h-full flex-col">
