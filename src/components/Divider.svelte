@@ -1,8 +1,8 @@
 <script lang="ts">
-    let className: string = "";
+    let className = "";
     export { className as class };
 
-    export let text: string | null
+    export let text: string | null;
 </script>
 
 <div class="flex relative justify-center w-full h-6 {className}">

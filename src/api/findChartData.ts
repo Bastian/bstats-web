@@ -10,4 +10,4 @@ export const findChartData = async (
     const queryParams = maxElements ? `?maxElements=${maxElements}` : "";
     const res = await f(`${API_BASE_URL}/charts/${id}/data${queryParams}`);
     return res.json();
-}
+};

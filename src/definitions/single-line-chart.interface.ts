@@ -1,8 +1,8 @@
-import type { Chart } from './chart.interface';
-import type { DefaultChart } from './default-chart.interface';
+import type { Chart } from "./chart.interface";
+import type { DefaultChart } from "./default-chart.interface";
 
 export interface SingleLineChart extends Chart {
-  type: 'single_linechart';
+  type: "single_linechart";
   data: {
     lineName: string;
     filter?: {
@@ -14,7 +14,7 @@ export interface SingleLineChart extends Chart {
 }
 
 export function isSingleLineChart(
-  chart: Chart | DefaultChart,
+    chart: Chart | DefaultChart,
 ): chart is SingleLineChart {
-  return (chart as SingleLineChart).type === 'single_linechart';
+    return (chart as SingleLineChart).type === "single_linechart";
 }

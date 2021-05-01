@@ -1,13 +1,13 @@
 <script context="module" lang="ts">
-    import type {Load} from "@sveltejs/kit"
+    import type {Load} from "@sveltejs/kit";
 
     export const load: Load = async ({ session }) => {
         // The user is already logged in, so let's redirect them to the landing page
         if (session.user) {
-            return { status: 307,  redirect: `/` }
+            return { status: 307,  redirect: "/" };
         }
         return { };
-    }
+    };
 </script>
 
 <script lang="ts">
@@ -32,22 +32,22 @@
             await loginWithProvider(provider);
         } catch (error) {
             switch (error.code) {
-                case "auth/account-exists-with-different-credential":
-                    // TODO Render nicely in the UI
-                    alert("Your E-Mail address is already in use with another authentication method. " +
-                        "If you want to link your existing account with another third-party provider, " +
-                        "please login first with your existing provider and then link your account in " +
-                        "your profile settings");
-                    break;
-                case "auth/cancelled-popup-request":
-                case "auth/popup-closed-by-user":
-                    // Can be ignored
-                    break;
-                default:
-                    if (error.message) {
-                        alert(error.message);
-                    }
-                    console.log(error);
+            case "auth/account-exists-with-different-credential":
+                // TODO Render nicely in the UI
+                alert("Your E-Mail address is already in use with another authentication method. " +
+                      "If you want to link your existing account with another third-party provider, " +
+                      "please login first with your existing provider and then link your account in " +
+                      "your profile settings");
+                break;
+            case "auth/cancelled-popup-request":
+            case "auth/popup-closed-by-user":
+                // Can be ignored
+                break;
+            default:
+                if (error.message) {
+                    alert(error.message);
+                }
+                console.log(error);
             }
         }
     }
@@ -61,7 +61,11 @@
 <StandardNavigation/>
 
 <div class="flex flex-grow justify-center items-center bg-gray-100 dark:bg-gray-900">
-    <Card class="my-12 sm:my-24 mx-4 sm:mx-8" title="Login to your account" link={{ text: "Create new account", href: "/register" }}>
+    <Card
+        class="my-12 sm:my-24 mx-4 sm:mx-8"
+        title="Login to your account" 
+        link={{ text: "Create new account", href: "/register" }}
+    >
         <TextField id="email" label="Email or Username">
             <MailIcon slot="icon"/>
         </TextField>

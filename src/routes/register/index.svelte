@@ -1,13 +1,13 @@
 <script context="module" lang="ts">
-    import type {Load} from "@sveltejs/kit"
+    import type {Load} from "@sveltejs/kit";
 
     export const load: Load = async ({ session }) => {
         // The user is already logged in, so let's redirect them to the landing page
         if (session.user) {
-            return { status: 307,  redirect: `/` }
+            return { status: 307,  redirect: "/" };
         }
         return { };
-    }
+    };
 </script>
 
 <script lang="ts">

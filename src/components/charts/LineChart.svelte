@@ -3,7 +3,7 @@
     import type {SingleLineChart} from "../../definitions/single-line-chart.interface";
     import {findChartData} from "../../api/findChartData";
     import type {SingleLineChartData} from "../../definitions/chart-data/single-line-chart-data.interface";
-    import { session } from '$app/stores';
+    import { session } from "$app/stores";
     import {renderOrUpdateLineChart} from "./_renderOrUpdateLineChart";
     import Spinner from "../Spinner.svelte";
 
@@ -35,7 +35,7 @@
         }
         selectedRangeOption = rangeOption;
         updateData(true);
-    }
+    };
 
     const updateData = async (refreshData: boolean) => {
         if (!chartDom) {
@@ -43,13 +43,17 @@
         }
         loadingData = true;
         if (refreshData) {
-            data = await findChartData(API_BASE_URL, chart.id, selectedRangeOption.maxElements) as SingleLineChartData;
+            data = await findChartData(
+                API_BASE_URL,
+                chart.id,
+                selectedRangeOption.maxElements
+            ) as SingleLineChartData;
         }
         loadingData = false;
         chartJsChart = renderOrUpdateLineChart(chartDom, chartJsChart, chart, data);
-    }
+    };
 
-    let chartDom: unknown;
+    let chartDom: HTMLCanvasElement;
     let chartJsChart: Chart;
 
     $: updateData(data === null);

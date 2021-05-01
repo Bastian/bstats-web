@@ -16,8 +16,12 @@ export const PIE_COLORS = [
     "#64748B",
 ];
 
-export const renderPieChart = (chartDom, chart: SimplePieChart, data: SimplePieChartData): Chart => {
-    new Chart(chartDom, {
+export const renderPieChart = (
+    chartDom: HTMLCanvasElement,
+    chart: SimplePieChart,
+    data: SimplePieChartData
+): Chart => {
+    return new Chart(chartDom, {
         type: "pie",
         data: {
             datasets: [{
@@ -33,7 +37,7 @@ export const renderPieChart = (chartDom, chart: SimplePieChart, data: SimplePieC
             legend: { display: false },
             tooltips: {
                 enabled: false,
-                custom: function(tooltipModel) {
+                custom: function(tooltipModel: any) {
                     const tooltipId = `chart-tooltip-${chart.id}`;
 
                     // Tooltip Element
@@ -41,7 +45,7 @@ export const renderPieChart = (chartDom, chart: SimplePieChart, data: SimplePieC
 
                     // Create element on first render
                     if (!tooltipEl) {
-                        tooltipEl = document.createElement('div');
+                        tooltipEl = document.createElement("div");
                         tooltipEl.id = tooltipId;
                         document.body.appendChild(tooltipEl);
                     }
@@ -65,6 +69,7 @@ export const renderPieChart = (chartDom, chart: SimplePieChart, data: SimplePieC
                         percentage: number
                     } = tooltipModel.body[0].lines[0];
 
+                    /* eslint max-len: ["off"] */
                     const innerHtml = `
                         <div class="flex flex-row text-gray-900 dark:text-gray-200 dark:bg-gray-700 shadow-lg bg-white p-2 rounded items-center ring-2 ring-gray-500 dark:ring-gray-200 ring-opacity-25 dark:ring-opacity-25">
                             <div class="px-4 py-2 rounded-full mr-2" style="background-color: ${tooltipModel.labelColors[0].backgroundColor}"></div>
@@ -78,13 +83,13 @@ export const renderPieChart = (chartDom, chart: SimplePieChart, data: SimplePieC
                     const position = this._chart.canvas.getBoundingClientRect();
 
                     tooltipEl.innerHTML = innerHtml;
-                    tooltipEl.style.position = 'absolute';
-                    tooltipEl.style.left = position.left + window.pageXOffset + tooltipModel.caretX + 'px';
-                    tooltipEl.style.top = position.top + window.pageYOffset + tooltipModel.caretY + 'px';
-                    tooltipEl.style.pointerEvents = 'none';
+                    tooltipEl.style.position = "absolute";
+                    tooltipEl.style.left = position.left + window.pageXOffset + tooltipModel.caretX + "px";
+                    tooltipEl.style.top = position.top + window.pageYOffset + tooltipModel.caretY + "px";
+                    tooltipEl.style.pointerEvents = "none";
                 },
                 callbacks: {
-                    label: function(tooltipItem, data, x) {
+                    label: function(tooltipItem: any, data: any): any {
                         const label = data.labels[tooltipItem.index];
                         const totalData = data.datasets[tooltipItem.datasetIndex].data.reduce((prev, curr) => prev + curr);
                         const currentData = data.datasets[tooltipItem.datasetIndex].data[tooltipItem.index];
@@ -96,4 +101,4 @@ export const renderPieChart = (chartDom, chart: SimplePieChart, data: SimplePieC
             },
         }
     });
-}
+};

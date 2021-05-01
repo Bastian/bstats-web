@@ -1,8 +1,8 @@
-import type { Chart } from './chart.interface';
-import type { DefaultChart } from './default-chart.interface';
+import type { Chart } from "./chart.interface";
+import type { DefaultChart } from "./default-chart.interface";
 
 export interface SimpleMapDataChart extends Chart {
-  type: 'simple_map';
+  type: "simple_map";
   data: {
     valueName: string;
     filter?: {
@@ -15,7 +15,7 @@ export interface SimpleMapDataChart extends Chart {
 }
 
 export function isSimpleMapDataChart(
-  chart: Chart | DefaultChart,
+    chart: Chart | DefaultChart,
 ): chart is SimpleMapDataChart {
-  return (chart as SimpleMapDataChart).type === 'simple_map';
+    return (chart as SimpleMapDataChart).type === "simple_map";
 }

@@ -6,7 +6,7 @@
             localStorage.setItem("theme", "light");
             metaThemeColor.setAttribute("content", "#1D4ED8");
         } else {
-            document.documentElement.classList.add("dark");
+            document.documentElement.classList.add("dark");  
             localStorage.setItem("theme", "dark");
             metaThemeColor.setAttribute("content", "#111827");
         }

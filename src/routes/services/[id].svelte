@@ -2,7 +2,7 @@
     import {findService} from "../../api/findService";
     import {findChartData} from "../../api/findChartData";
     import {findSoftwareById} from "../../api/findSoftwareById";
-    import type {Load} from "@sveltejs/kit"
+    import type {Load} from "@sveltejs/kit";
 
     export const load: Load = async ({ page, fetch, session }) => {
         const { id } = page.params;
@@ -11,7 +11,11 @@
         const service = await findService(API_BASE_URL, parseInt(id), true, fetch);
 
         if (service.isGlobal) {
-            const software = await findSoftwareById(API_BASE_URL, service.software.id, fetch);
+            const software = await findSoftwareById(
+                API_BASE_URL,
+                service.software.id,
+                fetch
+            );
             return {
                 status: 301,
                 redirect: `/global/${software.url}`
@@ -19,17 +23,24 @@
         }
 
         // Prefetch all data
-        const chartsWithData = await Promise.all(service.charts.map(async chart => ({
-            chart,
-            data: await findChartData(API_BASE_URL, chart.id, 2 * 24 * 7, fetch)
-        })));
+        const chartsWithData = await Promise.all(
+            service.charts.map(async chart => ({
+                chart,
+                data: await findChartData(
+                    API_BASE_URL,
+                    chart.id,
+                    2 * 24 * 7,
+                    fetch
+                )
+            }))
+        );
 
         chartsWithData.sort((a, b) => a.chart.position - b.chart.position);
 
         return {
             props: { service, chartsWithData }
         };
-    }
+    };
 </script>
 
 <script lang="ts">
@@ -46,11 +57,11 @@
     import {isSimplePieChartData} from "../../definitions/chart-data/simple-pie-chart-data.interface";
     import {isSingleLineChartData} from "../../definitions/chart-data/single-line-chart-data.interface";
     import PieChart from "../../components/charts/PieChart.svelte";
-    import { session } from '$app/stores';
+    import { session } from "$app/stores";
     import type {Software} from "../../definitions/software/software.interface";
 
     export let service: Service;
-    export let chartsWithData: { chart: Chart, data: ChartData }[]
+    export let chartsWithData: { chart: Chart, data: ChartData }[];
 
     let serviceName: string;
     $: if (service.isGlobal) {
@@ -58,7 +69,7 @@
             .find(software => software.id === service.software.id)
             ?.name ?? service.name;
     } else {
-        serviceName = service.name
+        serviceName = service.name;
     }
 
     let currentServers: number | null;

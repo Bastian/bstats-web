@@ -21,5 +21,5 @@ export const get: RequestHandler = async (req) => {
             "Location": "/"
         },
         body: ""
-    }
-}
+    };
+};

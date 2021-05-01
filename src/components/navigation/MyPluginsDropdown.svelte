@@ -8,7 +8,7 @@
     const links = [
         { text: "SafeTrade", href: "/", software: "Bukkit / Spigot" },
         { text: "Super Duper Spleef", href: "/", software: "Bungeecord" },
-    ]
+    ];
 </script>
 
 <Dropdown {open} {links} actionLabel="Add Plugin">

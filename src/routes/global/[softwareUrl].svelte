@@ -5,7 +5,7 @@
     import type {Chart} from "../../definitions/chart.interface";
     import type {ChartData} from "../../definitions/chart-data/chart-data.interface";
     import {findSoftwareByUrl} from "../../api/findSoftwareByUrl";
-    import type {Load} from "@sveltejs/kit"
+    import type {Load} from "@sveltejs/kit";
 
     export const load: Load = async ({ page, fetch, session }) => {
         const { softwareUrl } = page.params;
@@ -25,7 +25,7 @@
         return {
             props: { service, chartsWithData }
         };
-    }
+    };
 </script>
 
 <script lang="ts">
@@ -33,7 +33,7 @@
     import ServicePage from "../services/[id].svelte";
 
     export let service: Service;
-    export let chartsWithData: { chart: Chart, data: ChartData }[]
+    export let chartsWithData: { chart: Chart, data: ChartData }[];
 </script>
 
 

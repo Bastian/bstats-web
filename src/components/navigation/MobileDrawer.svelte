@@ -6,7 +6,7 @@
     import CollectionIcon from "../hero-icons/CollectionIcon.svelte";
     import MobileDrawerSection from "./MobileDrawerSection.svelte";
 
-    import {session} from '$app/stores';
+    import {session} from "$app/stores";
     import type {Software} from "../../definitions/software/software.interface";
     import KeyIcon from "../hero-icons/KeyIcon.svelte";
 

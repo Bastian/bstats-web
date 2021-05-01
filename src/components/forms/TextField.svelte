@@ -3,7 +3,7 @@
     export let id: string;
     export let type: "text" | "password" = "text";
 
-    let className: string = "";
+    let className = "";
     export { className as class };
 </script>
 

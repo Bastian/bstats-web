@@ -1,3 +1,4 @@
+
 const firebasePromise: Promise<any> =
     import("firebase/app/dist/index.cjs.js")
         .then(async (firebase) => {
@@ -5,4 +6,4 @@ const firebasePromise: Promise<any> =
             return firebase;
         });
 
-export { firebasePromise }
+export { firebasePromise };

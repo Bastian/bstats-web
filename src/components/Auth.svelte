@@ -1,8 +1,8 @@
 <script lang="ts">
     import firebase from "firebase/app/dist/index.cjs.js";
     import "firebase/auth/dist/index.cjs.js";
-    import { browser } from '$app/env';
-    import { session } from '$app/stores';
+    import { browser } from "$app/env";
+    import { session } from "$app/stores";
 
     const { firebaseConfig } = $session;
 

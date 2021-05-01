@@ -1,1 +1,1 @@
-declare module 'firebase/app/dist/index.cjs.js';
+declare module "firebase/app/dist/index.cjs.js";

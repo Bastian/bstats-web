@@ -1,11 +1,11 @@
-export default function clickOutside(node, onEventFunction) {
+export default function clickOutside(node: unknown, onEventFunction: () => void): unknown {
     const handleClick = event => {
-        var path = event.composedPath();
+        const path = event.composedPath();
 
         if (!path.includes(node)) {
             onEventFunction();
         }
-    }
+    };
 
     document.addEventListener("click", handleClick);
 
@@ -13,5 +13,5 @@ export default function clickOutside(node, onEventFunction) {
         destroy() {
             document.removeEventListener("click", handleClick);
         }
-    }
+    };
 }

@@ -5,7 +5,7 @@
     import ChevronDownIcon from "../hero-icons/ChevronDownIcon.svelte";
     import GlobalStatsDropdown from "./GlobalStatsDropdown.svelte";
     import MyPluginsDropdown from "./MyPluginsDropdown.svelte";
-    import {session} from '$app/stores';
+    import {session} from "$app/stores";
     import AccountDropdown from "./AccountDropdown.svelte";
 
     let mobileNavOpen = false;

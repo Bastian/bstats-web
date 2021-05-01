@@ -1,9 +1,14 @@
-import Chart from "chart.js";
+import Chart, { TimeUnit } from "chart.js";
 
 import type {SingleLineChartData} from "../../definitions/chart-data/single-line-chart-data.interface";
 import type {SingleLineChart} from "../../definitions/single-line-chart.interface";
 
-export const renderOrUpdateLineChart = (chartDom, chartJsChart: Chart, chart: SingleLineChart, data: SingleLineChartData): Chart => {
+export const renderOrUpdateLineChart = (
+    chartDom: HTMLCanvasElement,
+    chartJsChart: Chart,
+    chart: SingleLineChart, 
+    data: SingleLineChartData
+): Chart => {
     const maxValue = data.reduce((prev, [, y]) => Math.max(prev, y), 0);
     const labelCallback = (label) => {
         if (maxValue > 5000) {
@@ -12,22 +17,22 @@ export const renderOrUpdateLineChart = (chartDom, chartJsChart: Chart, chart: Si
         return label;
     };
     const chartData = data.map(([x, y]) => ({x: new Date(x), y}));
-    let unit = "hour";
+    let unit: TimeUnit = "hour";
     if (data.length > 2 * 24 * 182.5) {
-        unit = "quarter"
+        unit = "quarter";
     } else if (data.length > 2 * 24 * 30) {
-        unit = "month"
+        unit = "month";
     } else if (data.length > 2 * 24 * 7) {
-        unit = "week"
+        unit = "week";
     } else if (data.length > 2 * 24) {
-        unit = "day"
+        unit = "day";
     }
 
     if (chartJsChart) {
         chartJsChart.data.datasets[0].data = chartData;
         chartJsChart.options.scales.yAxes[0].ticks.callback = labelCallback;
         chartJsChart.options.scales.xAxes[0].time.unit = unit;
-        chartJsChart.update(0);
+        chartJsChart.update({duration: 0});
         return chartJsChart;
     } else {
         return new Chart(chartDom, {
@@ -60,7 +65,7 @@ export const renderOrUpdateLineChart = (chartDom, chartJsChart: Chart, chart: Si
 
                         // Create element on first render
                         if (!tooltipEl) {
-                            tooltipEl = document.createElement('div');
+                            tooltipEl = document.createElement("div");
                             tooltipEl.id = tooltipId;
                             document.body.appendChild(tooltipEl);
                         }
@@ -82,6 +87,7 @@ export const renderOrUpdateLineChart = (chartDom, chartJsChart: Chart, chart: Si
                             currentData: number,
                         } = tooltipModel.body[0].lines[0];
 
+                        /* eslint max-len: ["off"] */
                         const innerHtml = `
                             <div class="text-gray-900 dark:text-gray-200 dark:bg-gray-700 shadow-lg bg-white p-2 rounded ring-2 ring-gray-500 dark:ring-gray-200 ring-opacity-25 dark:ring-opacity-25">
                                 <div class="text-sm mb-2 border-b border-gray-500">
@@ -99,22 +105,22 @@ export const renderOrUpdateLineChart = (chartDom, chartJsChart: Chart, chart: Si
                         const position = this._chart.canvas.getBoundingClientRect();
 
                         tooltipEl.innerHTML = innerHtml;
-                        tooltipEl.style.position = 'absolute';
+                        tooltipEl.style.position = "absolute";
                         const left = position.left + window.pageXOffset + tooltipModel.caretX;
-                        tooltipEl.style.left = left + 'px';
-                        tooltipEl.style.top = position.top + window.pageYOffset + tooltipModel.caretY + 'px';
-                        tooltipEl.style.pointerEvents = 'none';
+                        tooltipEl.style.left = left + "px";
+                        tooltipEl.style.top = position.top + window.pageYOffset + tooltipModel.caretY + "px";
+                        tooltipEl.style.pointerEvents = "none";
 
                         // Prevent the item from flowing out of the window
                         if (left + tooltipEl.clientWidth >= window.innerWidth - 20) {
                             // Apply the style multiple times because the first update might change the bounding client rect
                             for (let i = 0; i < 4; i++) {
-                                tooltipEl.style.left = position.left - window.pageXOffset - tooltipEl.getBoundingClientRect().width + tooltipModel.caretX + 'px';
+                                tooltipEl.style.left = position.left - window.pageXOffset - tooltipEl.getBoundingClientRect().width + tooltipModel.caretX + "px";
                             }
                         }
                     },
                     callbacks: {
-                        label: function(tooltipItem, data, x) {
+                        label: function(tooltipItem, data): any {
                             const title = tooltipItem.label;
                             const label = data.datasets[tooltipItem.datasetIndex].label;
                             const currentData = parseInt(tooltipItem.value);
@@ -165,4 +171,4 @@ export const renderOrUpdateLineChart = (chartDom, chartJsChart: Chart, chart: Si
             },
         });
     }
-}
+};

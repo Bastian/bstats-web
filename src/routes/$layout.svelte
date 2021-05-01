@@ -7,7 +7,7 @@
         const { API_BASE_URL } = session;
         session.softwareList = await findAllSoftware(API_BASE_URL, fetch);
         return { };
-    }
+    };
 </script>
 
 <script lang="ts">

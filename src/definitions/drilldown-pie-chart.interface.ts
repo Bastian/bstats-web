@@ -1,7 +1,7 @@
-import type { Chart } from './chart.interface';
+import type { Chart } from "./chart.interface";
 
 export interface DrilldownPieChart extends Chart {
-  type: 'drilldown_pie';
+  type: "drilldown_pie";
   data: {
     filter?: {
       enabled: boolean;
@@ -13,5 +13,5 @@ export interface DrilldownPieChart extends Chart {
 }
 
 export function isDrilldownPieChart(chart: Chart): chart is DrilldownPieChart {
-  return (chart as DrilldownPieChart).type === 'drilldown_pie';
+    return (chart as DrilldownPieChart).type === "drilldown_pie";
 }

@@ -1,7 +1,7 @@
-import type { Chart } from './chart.interface';
+import type { Chart } from "./chart.interface";
 
 export interface AdvancedPieChart extends Chart {
-  type: 'advanced_pie';
+  type: "advanced_pie";
   data: {
     filter?: {
       enabled: boolean;
@@ -13,5 +13,5 @@ export interface AdvancedPieChart extends Chart {
 }
 
 export function isAdvancedPieChart(chart: Chart): chart is AdvancedPieChart {
-  return (chart as AdvancedPieChart).type === 'advanced_pie';
+    return (chart as AdvancedPieChart).type === "advanced_pie";
 }

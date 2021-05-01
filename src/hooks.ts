@@ -1,11 +1,11 @@
-import * as dotenv from 'dotenv';
+import * as dotenv from "dotenv";
 dotenv.config();
 
 import "./global.css";
 import type {GetContext, GetSession, Handle} from "@sveltejs/kit";
-import * as cookie from 'cookie';
-import * as crypto from 'crypto';
-import * as fs from 'fs';
+import * as cookie from "cookie";
+import * as crypto from "crypto";
+import * as fs from "fs";
 import { auth } from "./firebaseAdmin";
 
 const {API_BASE_URL} = process.env;
@@ -19,7 +19,7 @@ async function getFirebaseConfig() {
 }
 
 export const getContext: GetContext = async (req) => {
-    const cookies = cookie.parse(req.headers.cookie || '');
+    const cookies = cookie.parse(req.headers.cookie || "");
     const sessionCookie = cookies.session;
 
     let decodedClaims = null;
@@ -32,8 +32,8 @@ export const getContext: GetContext = async (req) => {
         }
     }
 
-    return { decodedClaims }
-}
+    return { decodedClaims };
+};
 
 export const getSession: GetSession = async ({ context }) => {
     return {
@@ -41,24 +41,24 @@ export const getSession: GetSession = async ({ context }) => {
         firebaseConfig: await getFirebaseConfig(),
         user: context.decodedClaims
     };
-}
+};
 
 export const handle: Handle = async ({request, render}) => {
     const response = await render(request);
     if (!response) {
         return undefined;
     }
-    const cookies = cookie.parse(request.headers.cookie || '');
+    const cookies = cookie.parse(request.headers.cookie || "");
 
     const headers = { ...response.headers };
 
     // If no csrf token is set, we create one and set it as a cookie
     if (!cookies.csrfToken) {
-        headers['Set-Cookie'] = cookie.serialize(
+        headers["Set-Cookie"] = cookie.serialize(
             "csrfToken",
             crypto.randomBytes(64).toString("hex")
-        )
+        );
     }
 
     return { ...response, headers };
-}
+};

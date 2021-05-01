@@ -1,6 +1,6 @@
 <script lang="ts">
     import Dropdown from "./Dropdown.svelte";
-    import { session } from '$app/stores';
+    import { session } from "$app/stores";
     import type {Software} from "../../definitions/software/software.interface";
 
     export let open: boolean;

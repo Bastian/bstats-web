@@ -6,7 +6,7 @@
     const links = [
         { text: "Edit Profile", href: "/" },
         { text: "Logout", href: "/sessionLogout" },
-    ]
+    ];
 </script>
 
 <Dropdown {open} {links} direction="left" />

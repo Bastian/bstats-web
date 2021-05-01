@@ -8,4 +8,4 @@ export const findChart = async (
 ): Promise<Chart> => {
     const res = await f(`${API_BASE_URL}/charts/${id}`);
     return res.json();
-}
+};
