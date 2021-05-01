@@ -57,7 +57,7 @@ export const renderOrUpdateLineChart = (
                     axis: "x",
                     intersect: false,
                     enabled: false,
-                    custom: function(tooltipModel) {
+                    custom: function(tooltipModel: any) {
                         const tooltipId = `chart-tooltip-${chart.id}`;
 
                         // Tooltip Element
