@@ -1,3 +1,7 @@
+<script context="module" lang="ts">
+    let initialized = false;
+</script>
+
 <script lang="ts">
     import firebase from "firebase/app/dist/index.cjs.js";
     import "firebase/auth/dist/index.cjs.js";
@@ -6,12 +10,13 @@
 
     const { firebaseConfig } = $session;
 
-    if (browser) {
+    if (browser && !initialized) {
         initFirebase();
     }
 
     async function initFirebase() {
         firebase.initializeApp(firebaseConfig);
+        initialized = true;
         await (firebase as any).auth().setPersistence(firebase.auth.Auth.Persistence.NONE);
     }
 </script>
