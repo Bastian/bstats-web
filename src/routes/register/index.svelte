@@ -18,6 +18,7 @@
     import PasswordStengthIndicator from "../../components/PasswordStengthIndicator.svelte";
     import { handleAuthError } from "../../helpers/auth/handleAuthError";
     import { registerWithEmailAndPassword } from "../../helpers/auth/registerWithEmailAndPassword";
+    import MailAlreadyInUseDialog from "../../components/dialogs/MailAlreadyInUseDialog.svelte";
 
     export const load: Load = async ({ session }) => {
         // The user is already logged in, so let's redirect them to the landing page
@@ -29,6 +30,8 @@
 </script>
 
 <script lang="ts">
+    let mailAlreadyInUseDialogOpen = false;
+
     const { form, errors, handleChange, handleSubmit } = createForm({
         initialValues: {
             email: "",
@@ -54,6 +57,11 @@
             try {
                 await registerWithEmailAndPassword(values.email, values.password);
             } catch (error) {
+                switch (error["code"]) {
+                case "auth/email-already-in-use":
+                    mailAlreadyInUseDialogOpen = true;
+                    return;
+                }
                 handleAuthError(error);
             }
         }
@@ -66,6 +74,8 @@
 
 <Auth/>
 <StandardNavigation/>
+
+<MailAlreadyInUseDialog bind:open={mailAlreadyInUseDialogOpen} />
 
 <div class="flex flex-grow justify-center items-center bg-gray-100 dark:bg-gray-900">
     <Card 
