@@ -10,7 +10,7 @@
 
     const { firebaseConfig } = $session;
 
-    if (browser && !initialized) {
+    if (browser && !initialized && firebaseConfig) {
         initFirebase();
     }
 
