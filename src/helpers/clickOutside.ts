@@ -1,4 +1,4 @@
-export default function clickOutside(node: unknown, onEventFunction: () => void): unknown {
+export default function clickOutside(node: HTMLElement, onEventFunction: () => void): unknown {
     const handleClick = event => {
         const path = event.composedPath();
 
