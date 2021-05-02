@@ -21,7 +21,7 @@
         "chart.js": "^2.9.4",
         "firebase": "^8.3.1",
         "firebase-admin": "^9.5.0",
-        "svelte-forms-lib": "^1.10.2",
+        "svelte-forms-lib": "^1.10.3",
         "yup": "^0.32.9"
     },
     "devDependencies": {

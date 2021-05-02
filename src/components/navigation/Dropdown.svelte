@@ -17,7 +17,7 @@
         >
             <div class="overflow-hidden whitespace-nowrap text-black bg-white rounded-lg ring-1 ring-black ring-opacity-5 shadow-lg dark:ring-opacity-10 dark:ring-white dark:bg-gray-800 dark:text-gray-200">
                 {#each links as link}
-                    <a href={link.href} class="block p-4 w-full hover:bg-gray-200 dark:hover:bg-gray-700">
+                    <a sveltekit:prefetch href={link.href} class="block p-4 w-full hover:bg-gray-200 dark:hover:bg-gray-700">
                         {link.text}
                         <slot name="link-appendix" {link}/>
                     </a>
