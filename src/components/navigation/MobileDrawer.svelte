@@ -48,7 +48,7 @@
         transition:fly={{ x: -200, duration: 200 }}
         class="overflow-y-auto fixed top-0 bottom-0 left-0 z-50 text-black bg-white drawer dark:bg-gray-900 dark:text-white"
     >
-        <div class="my-12 text-4xl font-bold text-center text-white text-blue-800 dark:text-blue-400">
+        <div class="my-12 text-4xl font-bold text-center text-blue-800 dark:text-blue-400">
             bStats
         </div>
         <div class="py-2 mx-8 border-t-2 border-gray-200"></div>
