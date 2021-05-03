@@ -15,7 +15,7 @@
     import GoogleIcon from "../../components/icons/GoogleIcon.svelte";
     import TwitterIcon from "../../components/icons/TwitterIcon.svelte";
     import StandardNavigation from "../../components/navigation/StandardNavigation.svelte";
-    import PasswordStengthIndicator from "../../components/PasswordStengthIndicator.svelte";
+    import PasswordStrengthIndicator from "../../components/PasswordStrengthIndicator.svelte";
     import { handleAuthError } from "../../helpers/auth/handleAuthError";
     import { registerWithEmailAndPassword } from "../../helpers/auth/registerWithEmailAndPassword";
     import MailAlreadyInUseDialog from "../../components/dialogs/MailAlreadyInUseDialog.svelte";
@@ -37,7 +37,7 @@
             email: "",
             password: "",
             passwordRepeat: "",
-            acceptTemsOfUseChecked: false
+            acceptTermsOfUseChecked: false
         },
         validationSchema: yup.object().shape({
             email: yup
@@ -108,7 +108,7 @@
                 <KeyIcon slot="icon"/>
             </TextField>
             {#if $form.password.length > 0}
-                <PasswordStengthIndicator password={$form.password} />
+                <PasswordStrengthIndicator password={$form.password} />
             {/if}
 
             <TextField 
@@ -125,13 +125,13 @@
             </TextField>
 
             <Checkbox 
-                bind:checked={$form.acceptTemsOfUseChecked}
+                bind:checked={$form.acceptTermsOfUseChecked}
                 on:change={handleChange}
                 id="accept-terms-of-use"
                 label="Accept Terms of Use"
                 class="mt-4" 
-                name="acceptTemsOfUseChecked"
-                error={$errors.acceptTemsOfUseChecked}
+                name="acceptTermsOfUseChecked"
+                error={$errors.acceptTermsOfUseChecked}
             />
 
             <Button class="mt-4 w-full" type="submit">
