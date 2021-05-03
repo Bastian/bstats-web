@@ -3,6 +3,7 @@
     import { fade } from "svelte/transition";
     import { cubicInOut } from "svelte/easing";
     import clickOutside from "../../helpers/clickOutside";
+    import DisabledBackgroundScroll from "../DisabledBackgroundScroll.svelte";
     
     export let open = false;
 
@@ -96,6 +97,7 @@
 <svelte:window on:keydown={handleKeydown}/>
 
 {#if open}
+    <DisabledBackgroundScroll/>
     <div 
         bind:this={dialogElement}
         use:handleDialogOpen
