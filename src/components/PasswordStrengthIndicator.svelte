@@ -37,27 +37,27 @@
     let backgroundClass: string;
     let progressClass: string;
     $: switch (passwordQuality) {
-    case 0:
-    case 1:
-    case 2:
-        backgroundClass = "bg-red-200 dark:bg-red-300";
-        progressClass = "bg-red-500";
-        break;
-    case 3:
-        backgroundClass = "bg-orange-200";
-        progressClass = "bg-orange-500";
-        break;
-    case 4:
-        backgroundClass = "bg-yellow-200";
-        progressClass = "bg-yellow-500";
-        break;
-    case 5:
-    case 6:
-        backgroundClass = "bg-green-200";
-        progressClass = "bg-green-500";
-        break;
-    default:
-        break;
+        case 0:
+        case 1:
+        case 2:
+            backgroundClass = "bg-red-200 dark:bg-red-300";
+            progressClass = "bg-red-500";
+            break;
+        case 3:
+            backgroundClass = "bg-orange-200";
+            progressClass = "bg-orange-500";
+            break;
+        case 4:
+            backgroundClass = "bg-yellow-200";
+            progressClass = "bg-yellow-500";
+            break;
+        case 5:
+        case 6:
+            backgroundClass = "bg-green-200";
+            progressClass = "bg-green-500";
+            break;
+        default:
+            break;
     }
 </script>
 

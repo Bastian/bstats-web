@@ -58,9 +58,9 @@
                 await registerWithEmailAndPassword(values.email, values.password);
             } catch (error) {
                 switch (error["code"]) {
-                case "auth/email-already-in-use":
-                    mailAlreadyInUseDialogOpen = true;
-                    return;
+                    case "auth/email-already-in-use":
+                        mailAlreadyInUseDialogOpen = true;
+                        return;
                 }
                 handleAuthError(error);
             }
