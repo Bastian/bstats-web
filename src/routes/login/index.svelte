@@ -15,10 +15,10 @@
     import GoogleIcon from "../../components/icons/GoogleIcon.svelte";
     import TwitterIcon from "../../components/icons/TwitterIcon.svelte";
     import StandardNavigation from "../../components/navigation/StandardNavigation.svelte";
-    import { handleAuthError } from "../../helpers/auth/handleAuthError";
     import { loginWithEmailAndPassword } from "../../helpers/auth/loginWithEmailAndPassword";
     import type { LoginProvider } from "../../helpers/auth/loginWithProvider";
     import { loginWithProvider } from "../../helpers/auth/loginWithProvider";
+    import ErrorHandler from "../../helpers/ErrorHandler.svelte";
 
     export const load: Load = async ({ session }) => {
         // The user is already logged in, so let's redirect them to the landing page
@@ -30,6 +30,8 @@
 </script>
 
 <script lang="ts">
+    let error = null;
+
     const { form, errors, handleChange, handleSubmit } = createForm({
         initialValues: {
             emailOrUsername: "",
@@ -45,8 +47,8 @@
         onSubmit: async (values) => {
             try {
                 await loginWithEmailAndPassword(values.emailOrUsername, values.password);
-            } catch (error) {
-                handleAuthError(error);
+            } catch (e) {
+                error = e;
             }
         }
     });
@@ -54,8 +56,8 @@
     async function handleLoginWithProvider(provider: LoginProvider) {
         try {
             await loginWithProvider(provider);
-        } catch (error) {
-            handleAuthError(error);
+        } catch (e) {
+            error = e;
         }
     }
 </script>
@@ -66,6 +68,8 @@
 
 <Auth/>
 <StandardNavigation/>
+
+<ErrorHandler bind:error={error} />
 
 <div class="flex flex-grow justify-center items-center bg-gray-100 dark:bg-gray-900">
     <Card

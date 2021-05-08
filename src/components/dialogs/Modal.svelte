@@ -106,7 +106,7 @@
         role="dialog"
         aria-modal="true"
     >
-        <div class="text-center">
+        <div class="text-center mx-8 max-w-full">
             <div
                 transition:fade={{duration: 200}}
                 class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity"
