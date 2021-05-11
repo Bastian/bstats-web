@@ -13,6 +13,8 @@
     import TwitterIcon from "$components/icons/TwitterIcon.svelte";
     import StandardNavigation from "$components/navigation/StandardNavigation.svelte";
     import PasswordStrengthIndicator from "$components/PasswordStrengthIndicator.svelte";
+    import type { LoginProvider } from "$helpers/auth/loginWithEmailAndPassword";
+    import { loginWithProvider } from "$helpers/auth/loginWithProvider";
     import { registerWithEmailAndPassword } from "$helpers/auth/registerWithEmailAndPassword";
     import ErrorHandler from "$helpers/ErrorHandler.svelte";
     import type { Load } from "@sveltejs/kit";
@@ -60,6 +62,14 @@
             }
         }
     });
+
+    async function handleLoginWithProvider(provider: LoginProvider) {
+        try {
+            await loginWithProvider(provider);
+        } catch (e) {
+            error = e;
+        }
+    }
 </script>
 
 <svelte:head>
@@ -136,13 +146,13 @@
         <Divider text="or login with" class="my-8"/>
 
         <div class="grid gap-y-2 gap-x-4 sm:space-y-0 sm:grid-cols-3">
-            <LightButton>
+            <LightButton on:click={() => handleLoginWithProvider("google")}>
                 <GoogleIcon slot="icon"/> Google
             </LightButton>
-            <LightButton>
+            <LightButton on:click={() => handleLoginWithProvider("github")}>
                 <GithubIcon class="fill-current" slot="icon"/> GitHub
             </LightButton>
-            <LightButton>
+            <LightButton on:click={() => handleLoginWithProvider("twitter")}>
                 <TwitterIcon slot="icon"/> Twitter
             </LightButton>
         </div>
