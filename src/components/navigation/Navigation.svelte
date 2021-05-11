@@ -2,7 +2,8 @@
     import { session } from "$app/stores";
     import ChevronDownIcon from "$components/hero-icons/ChevronDownIcon.svelte";
     import MenuIcon from "$components/hero-icons/MenuIcon.svelte";
-    import clickOutside from "$helpers/clickOutside";
+    import UserCircleIcon from "$components/hero-icons/UserCircleIcon.svelte";
+    import dropdownToggle from "$helpers/dropdownToggle";
     import AccountDropdown from "./AccountDropdown.svelte";
     import GlobalStatsDropdown from "./GlobalStatsDropdown.svelte";
     import MobileDrawer from "./MobileDrawer.svelte";
@@ -12,6 +13,30 @@
     let myPluginsDropdownOpen = false;
     let globalStatsDropdownOpen = false;
     let accountDropdownOpen = false;
+
+    function handleMyPluginDropdownOpen(open: boolean) {
+        myPluginsDropdownOpen = open;
+        if (open) {
+            globalStatsDropdownOpen = false;
+            accountDropdownOpen = false;
+        }
+    }
+    
+    function handleGlobalStatsDropdownOpen(open: boolean) {
+        globalStatsDropdownOpen = open;
+        if (open) {
+            myPluginsDropdownOpen = false;
+            accountDropdownOpen = false;
+        }
+    }
+    
+    function handleAccountDropdownOpen(open: boolean) {
+        accountDropdownOpen = open;
+        if (open) {
+            myPluginsDropdownOpen = false;
+            globalStatsDropdownOpen = false;
+        }
+    }
 </script>
 
 <nav class="flex justify-between items-center w-full">
@@ -19,12 +44,20 @@
         <MenuIcon class="w-8 h-8"/>
     </button>
     <div class="flex-grow text-center md:flex-grow-0">
-        <a class="text-2xl font-bold" href="/">bStats</a>
+        <a class="text-2xl font-bold p-1 -ml-1 focus:outline-none focus:ring-1 ring-blue-200 rounded" href="/">bStats</a>
     </div>
-    <div class="hidden flex-grow p-2 sm:block md:ml-16">
+    <div class="hidden flex-grow sm:block md:ml-16">
         {#if $session.user}
-            <div class="inline-block" use:clickOutside={() => myPluginsDropdownOpen = false}>
-                <button on:click={() => myPluginsDropdownOpen = !myPluginsDropdownOpen} class="inline-flex items-center mx-4 mr-2 text-base focus:outline-none">
+            <div
+                class="inline-block mx-2"
+                use:dropdownToggle={handleMyPluginDropdownOpen}
+            >
+                <button 
+                    on:click={() => handleMyPluginDropdownOpen(!myPluginsDropdownOpen)} 
+                    class="inline-flex items-center p-2 text-base focus:outline-none focus:ring-1 ring-blue-200 rounded"
+                    aria-haspopup="true"
+                    aria-expanded="{myPluginsDropdownOpen}"
+                >
                     <span>My Plugins</span>
                     <ChevronDownIcon class="ml-2 w-5 h-5" small/>
                 </button>
@@ -32,29 +65,38 @@
                 <MyPluginsDropdown bind:open={myPluginsDropdownOpen}/>
             </div>
         {/if}
-        <div class="inline-block" use:clickOutside={() => globalStatsDropdownOpen = false}>
-            <button on:click={() => globalStatsDropdownOpen = !globalStatsDropdownOpen}  class="inline-flex items-center mx-4 mr-2 text-base focus:outline-none">
+        <div 
+            class="inline-block mx-2"
+            use:dropdownToggle={handleGlobalStatsDropdownOpen}
+        >
+            <button 
+                on:click={() => handleGlobalStatsDropdownOpen(!globalStatsDropdownOpen)}
+                class="inline-flex items-center p-2 text-base focus:outline-none focus:ring-1 ring-blue-200 rounded"
+                aria-haspopup="true"
+                aria-expanded="{globalStatsDropdownOpen}"
+            >
                 <span>Global Stats</span>
                 <ChevronDownIcon class="ml-2 w-5 h-5" small/>
             </button>
 
             <GlobalStatsDropdown bind:open={globalStatsDropdownOpen}/>
         </div>
-        <a class="mx-4" href="/">Plugin List</a>
+        <a class="mx-4 p-2 focus:outline-none focus:ring-1 ring-blue-200 rounded" href="/">Plugin List</a>
     </div>
     {#if $session.user}
         <button
-            on:click={() => accountDropdownOpen = !accountDropdownOpen}
-            use:clickOutside={() => accountDropdownOpen = false}
-            class="focus:outline-none"
+            use:dropdownToggle={handleAccountDropdownOpen}
+            class="focus:outline-none focus:ring-1 ring-blue-200 rounded-full"
+            aria-haspopup="true"
+            aria-expanded="{accountDropdownOpen}"
         >
-            <img alt="User Avatar" src={$session.user?.picture} class="w-9 h-9 rounded-full shadow-inner">
+            <UserCircleIcon class="w-10 h-10 rounded-full shadow-inner"/>
             <AccountDropdown bind:open={accountDropdownOpen}/>
         </button>
     {:else}
         <div class="hidden sm:block">
-            <a href="/login" class="mx-4">Login</a>
-            <a href="/register" class="ml-2">Register</a>
+            <a href="/login" class="mx-4 p-2 focus:outline-none focus:ring-1 ring-blue-200 rounded">Login</a>
+            <a href="/register" class="ml-2 p-2 focus:outline-none focus:ring-1 ring-blue-200 rounded">Register</a>
         </div>
     {/if}
 
