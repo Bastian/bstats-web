@@ -80,7 +80,10 @@
 </style>
 
 <div class="sm:flex sm:flex-row sm:justify-between">
-    <div class="inline-block text-2xl border-b-2 border-blue-800 dark:border-blue-400 dark:text-white">
+    <div
+        id="chart-title-{chart.id}"
+        class="inline-block text-2xl border-b-2 border-blue-800 dark:border-blue-400 dark:text-white"
+    >
         {#if chart.idCustom === "players"}
             Players
         {:else if chart.idCustom === "servers"}
@@ -107,5 +110,30 @@
     {#if loadingData}
         <Spinner center class="h-16 w-16"/>
     {/if}
-    <canvas bind:this={chartDom}></canvas>
+    <canvas 
+        bind:this={chartDom}
+        aria-labelledby="chart-title-{chart.id}"
+        aria-label="Linechart {chart.title}."
+        role="img"
+    >
+        <table summary="This is the text alternative for the canvas graphic. Only includes the latest data of the line chart.">
+            <caption>
+                {chart.title}
+            </caption>
+            <tbody>
+                <tr>
+                    <th scope="col">{chart.data.lineName}</th>
+                </tr>
+                <tr>
+                    <th scope="row">
+                        {#if loadingData}
+                            Data is still loading.
+                        {:else}
+                            {data[0][1]}
+                        {/if}
+                    </th>
+                </tr>
+            </tbody>
+        </table>
+    </canvas>
 </div>
