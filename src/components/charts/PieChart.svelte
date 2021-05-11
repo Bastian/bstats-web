@@ -7,6 +7,7 @@
     export let chart: SimplePieChart;
     export let data: SimplePieChartData;
     $: if (data) prepareData();
+    let dataValueSum = 0;
 
     let chartDom: HTMLCanvasElement;
 
@@ -22,6 +23,8 @@
             }
             return previousValue;
         }, []);
+
+        dataValueSum = data.reduce((acc, cur) => acc + cur.y, 0);
     }
 
     $: if (chartDom) renderPieChart(chartDom, chart, data);
@@ -49,14 +52,51 @@
 
 <div class="flex flex-col h-full">
     <div class="sm:flex sm:flex-row sm:justify-between">
-        <div class="inline-block text-2xl border-b-2 border-blue-800 dark:border-blue-400 dark:text-white">
+        <div 
+            id="chart-title-{chart.id}"
+            class="inline-block text-2xl border-b-2 border-blue-800 dark:border-blue-400 dark:text-white"
+        >
             {chart.title}
         </div>
     </div>
 
     <div class="relative flex-grow p-4 mt-4 bg-white rounded-md shadow-sm dark:bg-gray-800 text-gray-900 dark:text-gray-200">
         <div class="chart-container p-2">
-            <canvas bind:this={chartDom}></canvas>
+            <canvas 
+                bind:this={chartDom}
+                aria-labelledby="chart-title-{chart.id}"
+                aria-label="Pie Chart {chart.title}."
+                role="img"
+            >
+                {#if !data}
+                    Data is still loading.
+                {:else}
+                    <table summary="This is the text alternative for the canvas graphic.">
+                        <caption>
+                            {chart.title}
+                        </caption>
+                        <tbody>
+                            <tr>
+                                <th scope="col">Field</th>
+                                <th scope="col">Total Value</th>
+                                <th scope="col">Percentage Value</th>
+                            </tr>
+                            <tr>
+                                <th scope="row">Sum of all values</th>
+                                <td>{dataValueSum}</td>
+                                <td>100%</td>
+                            </tr>
+                            {#each data as dataPoint}
+                                <tr>
+                                    <th scope="row">{dataPoint.name}</th>
+                                    <td>{dataPoint.y}</td>
+                                    <td>{Math.round(dataPoint.y * 100 / dataValueSum)}%</td>
+                                </tr>
+                            {/each}
+                        </tbody>
+                    </table>
+                {/if}
+            </canvas>
         </div>
         <div class="p-4 flex flex-wrap justify-center">
             {#each data as dataPoint, index}
