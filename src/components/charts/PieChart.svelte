@@ -65,7 +65,6 @@
             <canvas 
                 bind:this={chartDom}
                 aria-labelledby="chart-title-{chart.id}"
-                aria-label="Pie Chart {chart.title}."
                 role="img"
             >
                 {#if !data}

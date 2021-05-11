@@ -113,7 +113,6 @@
     <canvas 
         bind:this={chartDom}
         aria-labelledby="chart-title-{chart.id}"
-        aria-label="Linechart {chart.title}."
         role="img"
     >
         {#if loadingData}
