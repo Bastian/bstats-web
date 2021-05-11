@@ -77,7 +77,7 @@
                         </caption>
                         <tbody>
                             <tr>
-                                <th scope="col">Field</th>
+                                <th scope="col">Field Name</th>
                                 <th scope="col">Total Value</th>
                                 <th scope="col">Percentage Value</th>
                             </tr>

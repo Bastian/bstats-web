@@ -116,24 +116,24 @@
         aria-label="Linechart {chart.title}."
         role="img"
     >
-        <table summary="This is the text alternative for the canvas graphic. Only includes the latest data of the line chart.">
-            <caption>
-                {chart.title}
-            </caption>
-            <tbody>
-                <tr>
-                    <th scope="col">{chart.data.lineName}</th>
-                </tr>
-                <tr>
-                    <th scope="row">
-                        {#if loadingData}
-                            Data is still loading.
-                        {:else}
-                            {data[0][1]}
-                        {/if}
-                    </th>
-                </tr>
-            </tbody>
-        </table>
+        {#if loadingData}
+            Data is still loading.
+        {:else}
+            <table summary="This is the text alternative for the canvas graphic. Only includes the latest data of the line chart.">
+                <caption>
+                    {chart.title}
+                </caption>
+                <tbody>
+                    <tr>
+                        <th scope="col">Line Name</th>
+                        <th scope="col">Value</th>
+                    </tr>
+                    <tr>
+                        <th scope="col">{chart.data.lineName}</th>
+                        <td>{data[0][1]}</td>
+                    </tr>
+                </tbody>
+            </table>
+        {/if}
     </canvas>
 </div>
