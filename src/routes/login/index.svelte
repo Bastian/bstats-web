@@ -1,24 +1,24 @@
 <script context="module" lang="ts">
+    import Auth from "$components/Auth.svelte";
+    import Card from "$components/Card.svelte";
+    import Divider from "$components/Divider.svelte";
+    import Button from "$components/forms/Button.svelte";
+    import Checkbox from "$components/forms/Checkbox.svelte";
+    import LightButton from "$components/forms/LightButton.svelte";
+    import TextField from "$components/forms/TextField.svelte";
+    import KeyIcon from "$components/hero-icons/KeyIcon.svelte";
+    import MailIcon from "$components/hero-icons/MailIcon.svelte";
+    import GithubIcon from "$components/icons/GithubIcon.svelte";
+    import GoogleIcon from "$components/icons/GoogleIcon.svelte";
+    import TwitterIcon from "$components/icons/TwitterIcon.svelte";
+    import StandardNavigation from "$components/navigation/StandardNavigation.svelte";
+    import { loginWithEmailAndPassword } from "$helpers/auth/loginWithEmailAndPassword";
+    import { loginWithProvider } from "$helpers/auth/loginWithProvider";
+    import type { LoginProvider } from "$helpers/auth/registerWithEmailAndPassword";
+    import ErrorHandler from "$helpers/ErrorHandler.svelte";
     import type { Load } from "@sveltejs/kit";
     import { createForm } from "svelte-forms-lib";
     import * as yup from "yup";
-    import Auth from "../../components/Auth.svelte";
-    import Card from "../../components/Card.svelte";
-    import Divider from "../../components/Divider.svelte";
-    import Button from "../../components/forms/Button.svelte";
-    import Checkbox from "../../components/forms/Checkbox.svelte";
-    import LightButton from "../../components/forms/LightButton.svelte";
-    import TextField from "../../components/forms/TextField.svelte";
-    import KeyIcon from "../../components/hero-icons/KeyIcon.svelte";
-    import MailIcon from "../../components/hero-icons/MailIcon.svelte";
-    import GithubIcon from "../../components/icons/GithubIcon.svelte";
-    import GoogleIcon from "../../components/icons/GoogleIcon.svelte";
-    import TwitterIcon from "../../components/icons/TwitterIcon.svelte";
-    import StandardNavigation from "../../components/navigation/StandardNavigation.svelte";
-    import { loginWithEmailAndPassword } from "../../helpers/auth/loginWithEmailAndPassword";
-    import type { LoginProvider } from "../../helpers/auth/loginWithProvider";
-    import { loginWithProvider } from "../../helpers/auth/loginWithProvider";
-    import ErrorHandler from "../../helpers/ErrorHandler.svelte";
 
     export const load: Load = async ({ session }) => {
         // The user is already logged in, so let's redirect them to the landing page

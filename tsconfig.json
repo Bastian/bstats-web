@@ -21,9 +21,31 @@
         "allowJs": true,
         "checkJs": true,
         "paths": {
-            "$app/*": [".svelte/dev/runtime/app/*", ".svelte/build/runtime/app/*"],
-            "$lib/*": ["src/lib/*"]
+            "$app/*": [
+                ".svelte/dev/runtime/app/*",
+                ".svelte/build/runtime/app/*"
+            ],
+            "$lib/*": [
+                "src/lib/*"
+            ],
+            "$components/*": [
+                "src/components/*"
+            ],
+            "$helpers/*": [
+                "src/helpers/*"
+            ],
+            "$defs/*": [
+                "src/definitions/*"
+            ],
+            "$api/*": [
+                "src/api/*"
+            ]
         }
     },
-    "include": ["src/**/*.d.ts", "src/**/*.js", "src/**/*.ts", "src/**/*.svelte"]
+    "include": [
+        "src/**/*.d.ts",
+        "src/**/*.js",
+        "src/**/*.ts",
+        "src/**/*.svelte"
+    ]
 }

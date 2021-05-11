@@ -1,6 +1,6 @@
 <script>
-    import HeartIcon from "../components/hero-icons/HeartIcon.svelte";
-    import StandardNavigation from "../components/navigation/StandardNavigation.svelte";
+    import HeartIcon from "$components/hero-icons/HeartIcon.svelte";
+    import StandardNavigation from "$components/navigation/StandardNavigation.svelte";
 </script>
 
 <svelte:head>

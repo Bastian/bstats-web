@@ -1,4 +1,4 @@
-import type {DefaultChart} from "../default-chart.interface";
+import type { DefaultChart } from "$defs/default-chart.interface";
 
 export interface Software {
     id: number;

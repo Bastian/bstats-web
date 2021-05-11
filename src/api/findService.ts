@@ -1,5 +1,5 @@
-import type {FetchFunction} from "./FetchFunction.type";
-import type {Service} from "../definitions/service.interface";
+import type { Service } from "$defs/service.interface";
+import type { FetchFunction } from "./FetchFunction.type";
 
 export const findService = async (
     API_BASE_URL: string,

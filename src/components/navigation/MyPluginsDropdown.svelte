@@ -1,6 +1,6 @@
 <script lang="ts">
-    import Label from "../Label.svelte";
-    import PlusIcon from "../hero-icons/PlusIcon.svelte";
+    import PlusIcon from "$components/hero-icons/PlusIcon.svelte";
+    import Label from "$components/Label.svelte";
     import Dropdown from "./Dropdown.svelte";
 
     export let open: boolean;

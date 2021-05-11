@@ -1,9 +1,9 @@
 <script lang="ts">
+    import DisabledBackgroundScroll from "$components/DisabledBackgroundScroll.svelte";
+    import clickOutside from "$helpers/clickOutside";
     import { createEventDispatcher } from "svelte";
-    import { fade } from "svelte/transition";
     import { cubicInOut } from "svelte/easing";
-    import clickOutside from "../../helpers/clickOutside";
-    import DisabledBackgroundScroll from "../DisabledBackgroundScroll.svelte";
+    import { fade } from "svelte/transition";
     
     export let open = false;
 

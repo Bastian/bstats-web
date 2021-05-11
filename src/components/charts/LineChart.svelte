@@ -1,11 +1,11 @@
 <script lang="ts">
-    import type Chart from "chart.js";
-    import type {SingleLineChart} from "../../definitions/single-line-chart.interface";
-    import {findChartData} from "../../api/findChartData";
-    import type {SingleLineChartData} from "../../definitions/chart-data/single-line-chart-data.interface";
+    import { findChartData } from "$api/findChartData";
     import { session } from "$app/stores";
-    import {renderOrUpdateLineChart} from "./_renderOrUpdateLineChart";
-    import Spinner from "../Spinner.svelte";
+    import Spinner from "$components/Spinner.svelte";
+    import type { SingleLineChartData } from "$defs/chart-data/single-line-chart-data.interface";
+    import type { SingleLineChart } from "$defs/single-line-chart.interface";
+    import type Chart from "chart.js";
+    import { renderOrUpdateLineChart } from "./_renderOrUpdateLineChart";
 
     export let chart: SingleLineChart;
     export let data: SingleLineChartData;

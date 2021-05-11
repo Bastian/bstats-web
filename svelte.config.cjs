@@ -1,6 +1,7 @@
-const sveltePreprocess = require('svelte-preprocess');
-const node = require('@sveltejs/adapter-node');
-const pkg = require('./package.json');
+const sveltePreprocess = require("svelte-preprocess");
+const node = require("@sveltejs/adapter-node");
+const pkg = require("./package.json");
+const path = require("path");
 
 /** @type {import('@sveltejs/kit').Config} */
 module.exports = {
@@ -25,13 +26,21 @@ module.exports = {
         },
 
         // hydrate the <div id="svelte"> element in src/app.html
-        target: '#svelte',
+        target: "#svelte",
 
         vite: {
             optimizeDeps: {
                 include: [
-                    'firebase/app',
+                    "firebase/app",
                 ]
+            },
+            resolve: {
+                alias: {
+                    "$components": path.resolve("./src/components"),
+                    "$helpers": path.resolve("./src/helpers"),
+                    "$defs": path.resolve("./src/definitions"),
+                    "$api": path.resolve("./src/api")
+                }
             }
         }
     }

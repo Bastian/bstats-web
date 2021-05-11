@@ -1,5 +1,5 @@
-import type {FetchFunction} from "./FetchFunction.type";
-import type {Software} from "../definitions/software/software.interface";
+import type { Software } from "$defs/software/software.interface";
+import type { FetchFunction } from "./FetchFunction.type";
 
 export const findSoftwareById = async (
     API_BASE_URL: string,

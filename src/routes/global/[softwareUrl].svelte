@@ -1,11 +1,12 @@
 <script context="module" lang="ts">
-    import {findService} from "../../api/findService";
-    import {findChartData} from "../../api/findChartData";
-    import type {Service} from "../../definitions/service.interface";
-    import type {Chart} from "../../definitions/chart.interface";
-    import type {ChartData} from "../../definitions/chart-data/chart-data.interface";
-    import {findSoftwareByUrl} from "../../api/findSoftwareByUrl";
-    import type {Load} from "@sveltejs/kit";
+    import { findChartData } from "$api/findChartData";
+    import { findService } from "$api/findService";
+    import { findSoftwareByUrl } from "$api/findSoftwareByUrl";
+    import type { ChartData } from "$defs/chart-data/chart-data.interface";
+    import type { Chart } from "$defs/chart.interface";
+    import type { Service } from "$defs/service.interface";
+    import type { Load } from "@sveltejs/kit";
+    import ServicePage from "../services/[id].svelte";
 
     export const load: Load = async ({ page, fetch, session }) => {
         const { softwareUrl } = page.params;
@@ -29,9 +30,6 @@
 </script>
 
 <script lang="ts">
-    // @ts-ignore no-default-export
-    import ServicePage from "../services/[id].svelte";
-
     export let service: Service;
     export let chartsWithData: { chart: Chart, data: ChartData }[];
 </script>

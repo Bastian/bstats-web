@@ -1,12 +1,12 @@
 <script lang="ts">
-    import clickOutside from "../../helpers/clickOutside";
-    import MobileDrawer from "./MobileDrawer.svelte";
-    import MenuIcon from "../hero-icons/MenuIcon.svelte";
-    import ChevronDownIcon from "../hero-icons/ChevronDownIcon.svelte";
-    import GlobalStatsDropdown from "./GlobalStatsDropdown.svelte";
-    import MyPluginsDropdown from "./MyPluginsDropdown.svelte";
-    import {session} from "$app/stores";
+    import { session } from "$app/stores";
+    import ChevronDownIcon from "$components/hero-icons/ChevronDownIcon.svelte";
+    import MenuIcon from "$components/hero-icons/MenuIcon.svelte";
+    import clickOutside from "$helpers/clickOutside";
     import AccountDropdown from "./AccountDropdown.svelte";
+    import GlobalStatsDropdown from "./GlobalStatsDropdown.svelte";
+    import MobileDrawer from "./MobileDrawer.svelte";
+    import MyPluginsDropdown from "./MyPluginsDropdown.svelte";
 
     let mobileNavOpen = false;
     let myPluginsDropdownOpen = false;

@@ -1,7 +1,6 @@
+import type { SingleLineChartData } from "$defs/chart-data/single-line-chart-data.interface";
+import type { SingleLineChart } from "$defs/single-line-chart.interface";
 import Chart, { TimeUnit } from "chart.js";
-
-import type {SingleLineChartData} from "../../definitions/chart-data/single-line-chart-data.interface";
-import type {SingleLineChart} from "../../definitions/single-line-chart.interface";
 
 export const renderOrUpdateLineChart = (
     chartDom: HTMLCanvasElement,

@@ -1,6 +1,9 @@
 <script context="module" lang="ts">
-    import {findAllSoftware} from "../api/findAllSoftware";
-    import type {Load} from "@sveltejs/kit";
+    import { findAllSoftware } from "$api/findAllSoftware";
+    import { browser } from "$app/env";
+    import { session } from "$app/stores";
+    import Footer from "$components/Footer.svelte";
+    import type { Load } from "@sveltejs/kit";
     import "../global.css";
 
     export const load: Load = async ({ fetch, session }) => {
@@ -11,10 +14,6 @@
 </script>
 
 <script lang="ts">
-    import Footer from "../components/Footer.svelte";
-    import {session} from "$app/stores";
-    import { browser } from "$app/env";
-
     if ($session.user && !$session.user.email_verified && browser) {
         // TODO Do not use alert
         alert("Your email is not yet verified. Please verify your email!");

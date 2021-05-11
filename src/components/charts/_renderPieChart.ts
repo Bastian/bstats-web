@@ -1,7 +1,6 @@
+import type { SimplePieChartData } from "$defs/chart-data/simple-pie-chart-data.interface";
+import type { SimplePieChart } from "$defs/simple-pie-chart.interface";
 import Chart from "chart.js";
-
-import type {SimplePieChart} from "../../definitions/simple-pie-chart.interface";
-import type {SimplePieChartData} from "../../definitions/chart-data/simple-pie-chart-data.interface";
 
 export const PIE_COLORS = [
     "#3B82F6",

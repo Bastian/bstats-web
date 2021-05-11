@@ -1,5 +1,5 @@
+import { getCookie } from "$helpers/getCookie";
 import type firebase from "firebase/app";
-import { getCookie } from "../getCookie";
 
 export async function performSessionLogin(
     userCredential: firebase.auth.UserCredential

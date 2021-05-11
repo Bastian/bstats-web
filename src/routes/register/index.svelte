@@ -1,23 +1,23 @@
 <script context="module" lang="ts">
+    import Auth from "$components/Auth.svelte";
+    import Card from "$components/Card.svelte";
+    import Divider from "$components/Divider.svelte";
+    import Button from "$components/forms/Button.svelte";
+    import Checkbox from "$components/forms/Checkbox.svelte";
+    import LightButton from "$components/forms/LightButton.svelte";
+    import TextField from "$components/forms/TextField.svelte";
+    import KeyIcon from "$components/hero-icons/KeyIcon.svelte";
+    import MailIcon from "$components/hero-icons/MailIcon.svelte";
+    import GithubIcon from "$components/icons/GithubIcon.svelte";
+    import GoogleIcon from "$components/icons/GoogleIcon.svelte";
+    import TwitterIcon from "$components/icons/TwitterIcon.svelte";
+    import StandardNavigation from "$components/navigation/StandardNavigation.svelte";
+    import PasswordStrengthIndicator from "$components/PasswordStrengthIndicator.svelte";
+    import { registerWithEmailAndPassword } from "$helpers/auth/registerWithEmailAndPassword";
+    import ErrorHandler from "$helpers/ErrorHandler.svelte";
     import type { Load } from "@sveltejs/kit";
     import { createForm } from "svelte-forms-lib";
     import * as yup from "yup";
-    import Auth from "../../components/Auth.svelte";
-    import Card from "../../components/Card.svelte";
-    import Divider from "../../components/Divider.svelte";
-    import Button from "../../components/forms/Button.svelte";
-    import Checkbox from "../../components/forms/Checkbox.svelte";
-    import LightButton from "../../components/forms/LightButton.svelte";
-    import TextField from "../../components/forms/TextField.svelte";
-    import KeyIcon from "../../components/hero-icons/KeyIcon.svelte";
-    import MailIcon from "../../components/hero-icons/MailIcon.svelte";
-    import GithubIcon from "../../components/icons/GithubIcon.svelte";
-    import GoogleIcon from "../../components/icons/GoogleIcon.svelte";
-    import TwitterIcon from "../../components/icons/TwitterIcon.svelte";
-    import StandardNavigation from "../../components/navigation/StandardNavigation.svelte";
-    import PasswordStrengthIndicator from "../../components/PasswordStrengthIndicator.svelte";
-    import { registerWithEmailAndPassword } from "../../helpers/auth/registerWithEmailAndPassword";
-    import ErrorHandler from "../../helpers/ErrorHandler.svelte";
 
     export const load: Load = async ({ session }) => {
         // The user is already logged in, so let's redirect them to the landing page
@@ -29,7 +29,6 @@
 </script>
 
 <script lang="ts">
-
     let error = null;
 
     const { form, errors, handleChange, handleSubmit } = createForm({
@@ -73,13 +72,13 @@
 <ErrorHandler bind:error={error} />
 
 <div class="flex flex-grow justify-center items-center bg-gray-100 dark:bg-gray-900">
-    <Card 
+    <Card
         class="my-12 sm:my-24 mx-4 sm:mx-8"
         title="Create account"
         link={{ text: "Login with existing account", href: "/login" }}
     >
         <form on:submit={handleSubmit}>
-            <TextField 
+            <TextField
                 bind:value={$form.email}
                 on:change={handleChange}
                 id="email"
@@ -119,7 +118,7 @@
                 <KeyIcon slot="icon"/>
             </TextField>
 
-            <Checkbox 
+            <Checkbox
                 bind:checked={$form.acceptTermsOfUseChecked}
                 on:change={handleChange}
                 id="accept-terms-of-use"

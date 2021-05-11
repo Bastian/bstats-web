@@ -1,7 +1,7 @@
 <script lang="ts">
+    import Button from "$components/forms/Button.svelte";
+    import Exclamation from "$components/hero-icons/Exclamation.svelte";
     import { createEventDispatcher } from "svelte";
-    import Button from "../forms/Button.svelte";
-    import Exclamation from "../hero-icons/Exclamation.svelte";
     import Modal from "./Modal.svelte";
 
     export let open = false;

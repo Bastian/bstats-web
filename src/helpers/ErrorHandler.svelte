@@ -5,9 +5,9 @@ It has some special handling for commonly encountered errors (e.g., from
 firebase) and general-purpose handling for unknown errors.
 -->
 <script lang="ts">
-    import UnknownErrorDialog from "../components/dialogs/UnknownErrorDialog.svelte";
-    import MailAlreadyInUseDialog from "../components/dialogs/MailAlreadyInUseDialog.svelte";
-    import Dialog from "../components/dialogs/Dialog.svelte";
+    import Dialog from "$components/dialogs/Dialog.svelte";
+    import MailAlreadyInUseDialog from "$components/dialogs/MailAlreadyInUseDialog.svelte";
+    import UnknownErrorDialog from "$components/dialogs/UnknownErrorDialog.svelte";
 
     export let error: unknown;
     let lastKnownError: unknown;

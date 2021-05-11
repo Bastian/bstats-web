@@ -1,9 +1,8 @@
 <script lang="ts">
-    import type {SimplePieChart} from "../../definitions/simple-pie-chart.interface";
-    import type {SimplePieChartData} from "../../definitions/chart-data/simple-pie-chart-data.interface";
-    import {renderPieChart} from "./_renderPieChart";
+    import type { SimplePieChartData } from "$defs/chart-data/simple-pie-chart-data.interface";
+    import type { SimplePieChart } from "$defs/simple-pie-chart.interface";
     import ChartLabel from "./ChartLabel.svelte";
-    import {PIE_COLORS} from "./_renderPieChart";
+    import { PIE_COLORS,renderPieChart } from "./_renderPieChart";
 
     export let chart: SimplePieChart;
     export let data: SimplePieChartData;

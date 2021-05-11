@@ -1,5 +1,5 @@
-import type {ChartData} from "../definitions/chart-data/chart-data.interface";
-import type {FetchFunction} from "./FetchFunction.type";
+import type { ChartData } from "$defs/chart-data/chart-data.interface";
+import type { FetchFunction } from "./FetchFunction.type";
 
 export const findChartData = async (
     API_BASE_URL: string,

@@ -1,14 +1,13 @@
 <script lang="ts">
-    import {fade, fly} from "svelte/transition";
-    import Label from "../Label.svelte";
-    import MapIcon from "../hero-icons/MapIcon.svelte";
-    import GlobeIcon from "../hero-icons/GlobeIcon.svelte";
-    import CollectionIcon from "../hero-icons/CollectionIcon.svelte";
+    import { session } from "$app/stores";
+    import CollectionIcon from "$components/hero-icons/CollectionIcon.svelte";
+    import GlobeIcon from "$components/hero-icons/GlobeIcon.svelte";
+    import KeyIcon from "$components/hero-icons/KeyIcon.svelte";
+    import MapIcon from "$components/hero-icons/MapIcon.svelte";
+    import Label from "$components/Label.svelte";
+    import type { Software } from "$defs/software/software.interface";
+    import { fade,fly } from "svelte/transition";
     import MobileDrawerSection from "./MobileDrawerSection.svelte";
-
-    import {session} from "$app/stores";
-    import type {Software} from "../../definitions/software/software.interface";
-    import KeyIcon from "../hero-icons/KeyIcon.svelte";
 
     export let open = false;
 

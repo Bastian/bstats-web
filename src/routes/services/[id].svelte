@@ -1,8 +1,23 @@
 <script context="module" lang="ts">
-    import {findService} from "../../api/findService";
-    import {findChartData} from "../../api/findChartData";
-    import {findSoftwareById} from "../../api/findSoftwareById";
-    import type {Load} from "@sveltejs/kit";
+    import { findChartData } from "$api/findChartData";
+    import { findService } from "$api/findService";
+    import { findSoftwareById } from "$api/findSoftwareById";
+    import { session } from "$app/stores";
+    import LineChart from "$components/charts/LineChart.svelte";
+    import PieChart from "$components/charts/PieChart.svelte";
+    import ServerIcon from "$components/hero-icons/ServerIcon.svelte";
+    import UsersIcon from "$components/hero-icons/UsersIcon.svelte";
+    import Navigation from "$components/navigation/Navigation.svelte";
+    import type { ChartData } from "$defs/chart-data/chart-data.interface";
+    import { isSimplePieChartData } from "$defs/chart-data/simple-pie-chart-data.interface";
+    import { isSingleLineChartData } from "$defs/chart-data/single-line-chart-data.interface";
+    import type { SingleLineChartData } from "$defs/chart-data/single-line-chart-data.interface";
+    import type { Chart } from "$defs/chart.interface";
+    import type { Service } from "$defs/service.interface";
+    import { isSimplePieChart } from "$defs/simple-pie-chart.interface";
+    import { isSingleLineChart } from "$defs/single-line-chart.interface";
+    import type { Software } from "$defs/software/software.interface";
+    import type { Load } from "@sveltejs/kit";
 
     export const load: Load = async ({ page, fetch, session }) => {
         const { id } = page.params;
@@ -44,22 +59,6 @@
 </script>
 
 <script lang="ts">
-    import {isSingleLineChart} from "../../definitions/single-line-chart.interface";
-    import Navigation from "../../components/navigation/Navigation.svelte";
-    import ServerIcon from "../../components/hero-icons/ServerIcon.svelte";
-    import LineChart from "../../components/charts/LineChart.svelte";
-    import UsersIcon from "../../components/hero-icons/UsersIcon.svelte";
-    import type {Service} from "../../definitions/service.interface";
-    import type {Chart} from "../../definitions/chart.interface";
-    import type {ChartData} from "../../definitions/chart-data/chart-data.interface";
-    import type {SingleLineChartData} from "../../definitions/chart-data/single-line-chart-data.interface";
-    import {isSimplePieChart} from "../../definitions/simple-pie-chart.interface";
-    import {isSimplePieChartData} from "../../definitions/chart-data/simple-pie-chart-data.interface";
-    import {isSingleLineChartData} from "../../definitions/chart-data/single-line-chart-data.interface";
-    import PieChart from "../../components/charts/PieChart.svelte";
-    import { session } from "$app/stores";
-    import type {Software} from "../../definitions/software/software.interface";
-
     export let service: Service;
     export let chartsWithData: { chart: Chart, data: ChartData }[];
 
