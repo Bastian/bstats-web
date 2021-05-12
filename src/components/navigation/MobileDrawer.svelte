@@ -6,7 +6,7 @@
     import MapIcon from "$components/hero-icons/MapIcon.svelte";
     import Label from "$components/Label.svelte";
     import type { Software } from "$defs/software/software.interface";
-    import { fade,fly } from "svelte/transition";
+    import { fade, fly } from "svelte/transition";
     import MobileDrawerSection from "./MobileDrawerSection.svelte";
 
     export let open = false;
@@ -26,31 +26,26 @@
         }
     }
 
-    let globalStatsLinks: { text: string, href: string }[];
+    let globalStatsLinks: { text: string; href: string }[];
     $: globalStatsLinks = ($session.softwareList as Software[])
-        .filter(software => !!software.globalPlugin)
-        .map(software => ({
+        .filter((software) => !!software.globalPlugin)
+        .map((software) => ({
             text: software.name,
-            href: `/global/${software.url}`
+            href: `/global/${software.url}`,
         }));
 </script>
-
-<style>
-    .drawer {
-        max-width: 22rem;
-        width: 80vw;
-    }
-</style>
 
 {#if open}
     <div
         transition:fly={{ x: -200, duration: 200 }}
         class="overflow-y-auto fixed top-0 bottom-0 left-0 z-50 text-black bg-white drawer dark:bg-gray-900 dark:text-white"
     >
-        <div class="my-12 text-4xl font-bold text-center text-blue-800 dark:text-blue-400">
+        <div
+            class="my-12 text-4xl font-bold text-center text-blue-800 dark:text-blue-400"
+        >
             bStats
         </div>
-        <div class="py-2 mx-8 border-t-2 border-gray-200"></div>
+        <div class="py-2 mx-8 border-t-2 border-gray-200" />
 
         <div class="m-8 mt-4 space-y-12">
             {#if !$session.user}
@@ -58,11 +53,11 @@
                     title="Account"
                     links={[
                         { text: "Login", href: "/login" },
-                        { text: "Register", href: "/register" }
+                        { text: "Register", href: "/register" },
                     ]}
                     bind:drawerOpen={open}
                 >
-                    <KeyIcon slot="icon"/>
+                    <KeyIcon slot="icon" />
                 </MobileDrawerSection>
             {/if}
 
@@ -71,23 +66,34 @@
                 links={[{ text: "Plugin List", href: "/" }]}
                 bind:drawerOpen={open}
             >
-                <MapIcon slot="icon"/>
+                <MapIcon slot="icon" />
             </MobileDrawerSection>
 
-
-            <MobileDrawerSection title="Global Stats" links={globalStatsLinks} bind:drawerOpen={open}>
-                <GlobeIcon slot="icon"/>
+            <MobileDrawerSection
+                title="Global Stats"
+                links={globalStatsLinks}
+                bind:drawerOpen={open}
+            >
+                <GlobeIcon slot="icon" />
             </MobileDrawerSection>
 
             <MobileDrawerSection
                 title="My Plugins"
                 links={[
-                    { text: "SafeTrade", href: "/", software: "Bukkit / Spigot" },
-                    { text: "Super Duper Spleef", href: "/", software: "Bungeecord" },
+                    {
+                        text: "SafeTrade",
+                        href: "/",
+                        software: "Bukkit / Spigot",
+                    },
+                    {
+                        text: "Super Duper Spleef",
+                        href: "/",
+                        software: "Bungeecord",
+                    },
                 ]}
                 bind:drawerOpen={open}
             >
-                <CollectionIcon slot="icon"/>
+                <CollectionIcon slot="icon" />
                 <Label slot="link-appendix" class="ml-2" let:link>
                     {link.software}
                 </Label>
@@ -100,5 +106,12 @@
         on:click={handleClose}
         transition:fade={{ duration: 200 }}
         class="fixed top-0 right-0 bottom-0 left-0 z-40 bg-black bg-opacity-60"
-    ></div>
+    />
 {/if}
+
+<style>
+    .drawer {
+        max-width: 22rem;
+        width: 80vw;
+    }
+</style>

@@ -12,6 +12,6 @@ export async function registerWithEmailAndPassword(
         .createUserWithEmailAndPassword(email, password);
 
     userCredential.user.sendEmailVerification();
-        
+
     await performSessionLogin(userCredential);
 }

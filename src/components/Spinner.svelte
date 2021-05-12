@@ -5,9 +5,15 @@
     export let center = false;
 </script>
 
+<div class:center>
+    <div
+        class="animate-spin rounded-full border-8 border-gray-200 border-t-8 {className}"
+    />
+</div>
+
 <style>
     div {
-        border-top-color: #1E3A8A;
+        border-top-color: #1e3a8a;
     }
 
     .center {
@@ -17,7 +23,3 @@
         transform: translate(-50%, -50%);
     }
 </style>
-
-<div class:center>
-    <div class="animate-spin rounded-full border-8 border-gray-200 border-t-8 {className}"></div>
-</div>

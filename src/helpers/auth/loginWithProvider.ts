@@ -3,7 +3,9 @@ import { performSessionLogin } from "./performSessionLogin";
 
 export type LoginProvider = "google" | "github" | "twitter";
 
-export async function loginWithProvider(providerName: LoginProvider): Promise<void> {
+export async function loginWithProvider(
+    providerName: LoginProvider
+): Promise<void> {
     let provider = null;
     switch (providerName) {
         case "google":

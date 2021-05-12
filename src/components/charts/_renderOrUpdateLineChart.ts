@@ -5,7 +5,7 @@ import Chart, { TimeUnit } from "chart.js";
 export const renderOrUpdateLineChart = (
     chartDom: HTMLCanvasElement,
     chartJsChart: Chart,
-    chart: SingleLineChart, 
+    chart: SingleLineChart,
     data: SingleLineChartData
 ): Chart => {
     const maxValue = data.reduce((prev, [, y]) => Math.max(prev, y), 0);
@@ -15,7 +15,7 @@ export const renderOrUpdateLineChart = (
         }
         return label;
     };
-    const chartData = data.map(([x, y]) => ({x: new Date(x), y}));
+    const chartData = data.map(([x, y]) => ({ x: new Date(x), y }));
     let unit: TimeUnit = "hour";
     if (data.length > 2 * 24 * 182.5) {
         unit = "quarter";
@@ -31,7 +31,7 @@ export const renderOrUpdateLineChart = (
         chartJsChart.data.datasets[0].data = chartData;
         chartJsChart.options.scales.yAxes[0].ticks.callback = labelCallback;
         chartJsChart.options.scales.xAxes[0].time.unit = unit;
-        chartJsChart.update({duration: 0});
+        chartJsChart.update({ duration: 0 });
         return chartJsChart;
     } else {
         return new Chart(chartDom, {
@@ -56,7 +56,7 @@ export const renderOrUpdateLineChart = (
                     axis: "x",
                     intersect: false,
                     enabled: false,
-                    custom: function(tooltipModel: any) {
+                    custom: function (tooltipModel: any) {
                         const tooltipId = `chart-tooltip-${chart.id}`;
 
                         // Tooltip Element
@@ -81,9 +81,9 @@ export const renderOrUpdateLineChart = (
                         }
 
                         const data: {
-                            title: string,
-                            label: string,
-                            currentData: number,
+                            title: string;
+                            label: string;
+                            currentData: number;
                         } = tooltipModel.body[0].lines[0];
 
                         /* eslint max-len: ["off"] */
@@ -101,32 +101,49 @@ export const renderOrUpdateLineChart = (
                                 </div>
                             </div>
                         `;
-                        const position = this._chart.canvas.getBoundingClientRect();
+                        const position =
+                            this._chart.canvas.getBoundingClientRect();
 
                         tooltipEl.innerHTML = innerHtml;
                         tooltipEl.style.position = "absolute";
-                        const left = position.left + window.pageXOffset + tooltipModel.caretX;
+                        const left =
+                            position.left +
+                            window.pageXOffset +
+                            tooltipModel.caretX;
                         tooltipEl.style.left = left + "px";
-                        tooltipEl.style.top = position.top + window.pageYOffset + tooltipModel.caretY + "px";
+                        tooltipEl.style.top =
+                            position.top +
+                            window.pageYOffset +
+                            tooltipModel.caretY +
+                            "px";
                         tooltipEl.style.pointerEvents = "none";
 
                         // Prevent the item from flowing out of the window
-                        if (left + tooltipEl.clientWidth >= window.innerWidth - 20) {
+                        if (
+                            left + tooltipEl.clientWidth >=
+                            window.innerWidth - 20
+                        ) {
                             // Apply the style multiple times because the first update might change the bounding client rect
                             for (let i = 0; i < 4; i++) {
-                                tooltipEl.style.left = position.left - window.pageXOffset - tooltipEl.getBoundingClientRect().width + tooltipModel.caretX + "px";
+                                tooltipEl.style.left =
+                                    position.left -
+                                    window.pageXOffset -
+                                    tooltipEl.getBoundingClientRect().width +
+                                    tooltipModel.caretX +
+                                    "px";
                             }
                         }
                     },
                     callbacks: {
-                        label: function(tooltipItem, data): any {
+                        label: function (tooltipItem, data): any {
                             const title = tooltipItem.label;
-                            const label = data.datasets[tooltipItem.datasetIndex].label;
+                            const label =
+                                data.datasets[tooltipItem.datasetIndex].label;
                             const currentData = parseInt(tooltipItem.value);
 
-                            return {title, label, currentData};
-                        }
-                    }
+                            return { title, label, currentData };
+                        },
+                    },
                 },
                 hover: {
                     axis: "x",

@@ -17,6 +17,8 @@
     async function initFirebase() {
         firebase.initializeApp(firebaseConfig);
         initialized = true;
-        await (firebase as any).auth().setPersistence(firebase.auth.Auth.Persistence.NONE);
+        await (firebase as any)
+            .auth()
+            .setPersistence(firebase.auth.Auth.Persistence.NONE);
     }
 </script>

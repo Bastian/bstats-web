@@ -10,11 +10,12 @@
         "preview": "svelte-kit preview",
         "check": "svelte-check --fail-on-warnings --fail-on-hints",
         "lint": "eslint --max-warnings 0 --ext .js,.ts,.svelte src",
-        "lint-fix": "eslint --fix --ext .js,.ts,.svelte src"
+        "lint-fix": "eslint --fix --ext .js,.ts,.svelte src",
+        "prettier": "prettier --write --ignore-unknown ."
     },
     "husky": {
         "hooks": {
-            "pre-commit": "npm run check"
+            "pre-commit": "npm run check && npm run prettier && npm run lint"
         }
     },
     "dependencies": {
@@ -38,10 +39,13 @@
         "cssnano": "^4.1.10",
         "dotenv": "^8.2.0",
         "eslint": "^7.25.0",
+        "eslint-config-prettier": "^8.3.0",
         "eslint-plugin-svelte3": "^3.2.0",
         "husky": "^4.3.8",
         "postcss": "^8.2.7",
         "postcss-load-config": "^3.0.1",
+        "prettier": "^2.3.0",
+        "prettier-plugin-svelte": "^2.3.0",
         "sass": "^1.0.0",
         "svelte": "^3.29.0",
         "svelte-check": "^1.3.0",

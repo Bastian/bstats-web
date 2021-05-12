@@ -24,9 +24,9 @@
     export const load: Load = async ({ session }) => {
         // The user is already logged in, so let's redirect them to the landing page
         if (session.user) {
-            return { status: 307,  redirect: "/" };
+            return { status: 307, redirect: "/" };
         }
-        return { };
+        return {};
     };
 </script>
 
@@ -38,29 +38,33 @@
             email: "",
             password: "",
             passwordRepeat: "",
-            acceptTermsOfUseChecked: false
+            acceptTermsOfUseChecked: false,
         },
         validationSchema: yup.object().shape({
             email: yup
                 .string()
                 .email("Please enter an valid email")
                 .required("Please enter an valid email"),
-            password: yup.string()
+            password: yup
+                .string()
                 .min(8, "Password must have at least 8 chars")
                 .required("Please enter a password"),
             passwordRepeat: yup
                 .string()
                 .oneOf([yup.ref("password"), null], "Passwords must match")
                 .required("Please repeat your password"),
-            acceptTemsOfUseChecked: yup.boolean().isTrue("Please accept")
+            acceptTemsOfUseChecked: yup.boolean().isTrue("Please accept"),
         }),
         onSubmit: async (values) => {
             try {
-                await registerWithEmailAndPassword(values.email, values.password);
+                await registerWithEmailAndPassword(
+                    values.email,
+                    values.password
+                );
             } catch (e) {
                 error = e;
             }
-        }
+        },
     });
 
     async function handleLoginWithProvider(provider: LoginProvider) {
@@ -76,12 +80,14 @@
     <title>Create Account</title>
 </svelte:head>
 
-<Auth/>
-<StandardNavigation/>
+<Auth />
+<StandardNavigation />
 
-<ErrorHandler bind:error={error} />
+<ErrorHandler bind:error />
 
-<div class="flex flex-grow justify-center items-center bg-gray-100 dark:bg-gray-900">
+<div
+    class="flex flex-grow justify-center items-center bg-gray-100 dark:bg-gray-900"
+>
     <Card
         class="my-12 sm:my-24 mx-4 sm:mx-8"
         title="Create account"
@@ -96,10 +102,10 @@
                 label="Email"
                 error={$errors.email}
             >
-                <MailIcon slot="icon"/>
+                <MailIcon slot="icon" />
             </TextField>
 
-            <TextField 
+            <TextField
                 bind:value={$form.password}
                 on:change={handleChange}
                 id="password"
@@ -109,13 +115,13 @@
                 class="mt-4"
                 error={$errors.password}
             >
-                <KeyIcon slot="icon"/>
+                <KeyIcon slot="icon" />
             </TextField>
             {#if $form.password.length > 0}
                 <PasswordStrengthIndicator password={$form.password} />
             {/if}
 
-            <TextField 
+            <TextField
                 bind:value={$form.passwordRepeat}
                 on:change={handleChange}
                 id="password-repeat"
@@ -125,7 +131,7 @@
                 class="mt-4"
                 error={$errors.passwordRepeat}
             >
-                <KeyIcon slot="icon"/>
+                <KeyIcon slot="icon" />
             </TextField>
 
             <Checkbox
@@ -133,27 +139,25 @@
                 on:change={handleChange}
                 id="accept-terms-of-use"
                 label="Accept Terms of Use"
-                class="mt-4" 
+                class="mt-4"
                 name="acceptTermsOfUseChecked"
                 error={$errors.acceptTermsOfUseChecked}
             />
 
-            <Button class="mt-4 w-full" type="submit">
-                Create Account
-            </Button>
+            <Button class="mt-4 w-full" type="submit">Create Account</Button>
         </form>
 
-        <Divider text="or login with" class="my-8"/>
+        <Divider text="or login with" class="my-8" />
 
         <div class="grid gap-y-2 gap-x-4 sm:space-y-0 sm:grid-cols-3">
             <LightButton on:click={() => handleLoginWithProvider("google")}>
-                <GoogleIcon slot="icon"/> Google
+                <GoogleIcon slot="icon" /> Google
             </LightButton>
             <LightButton on:click={() => handleLoginWithProvider("github")}>
-                <GithubIcon class="fill-current" slot="icon"/> GitHub
+                <GithubIcon class="fill-current" slot="icon" /> GitHub
             </LightButton>
             <LightButton on:click={() => handleLoginWithProvider("twitter")}>
-                <TwitterIcon slot="icon"/> Twitter
+                <TwitterIcon slot="icon" /> Twitter
             </LightButton>
         </div>
     </Card>

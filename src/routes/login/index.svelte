@@ -23,9 +23,9 @@
     export const load: Load = async ({ session }) => {
         // The user is already logged in, so let's redirect them to the landing page
         if (session.user) {
-            return { status: 307,  redirect: "/" };
+            return { status: 307, redirect: "/" };
         }
-        return { };
+        return {};
     };
 </script>
 
@@ -41,16 +41,18 @@
             emailOrUsername: yup
                 .string()
                 .required("Please enter your Email or Username"),
-            password: yup.string()
-                .required("Please enter a password"),
+            password: yup.string().required("Please enter a password"),
         }),
         onSubmit: async (values) => {
             try {
-                await loginWithEmailAndPassword(values.emailOrUsername, values.password);
+                await loginWithEmailAndPassword(
+                    values.emailOrUsername,
+                    values.password
+                );
             } catch (e) {
                 error = e;
             }
-        }
+        },
     });
 
     async function handleLoginWithProvider(provider: LoginProvider) {
@@ -66,19 +68,21 @@
     <title>Login</title>
 </svelte:head>
 
-<Auth/>
-<StandardNavigation/>
+<Auth />
+<StandardNavigation />
 
-<ErrorHandler bind:error={error} />
+<ErrorHandler bind:error />
 
-<div class="flex flex-grow justify-center items-center bg-gray-100 dark:bg-gray-900">
+<div
+    class="flex flex-grow justify-center items-center bg-gray-100 dark:bg-gray-900"
+>
     <Card
         class="my-12 sm:my-24 mx-4 sm:mx-8"
-        title="Login to your account" 
+        title="Login to your account"
         link={{ text: "Create new account", href: "/register" }}
     >
         <form on:submit={handleSubmit}>
-            <TextField 
+            <TextField
                 bind:value={$form.emailOrUsername}
                 on:change={handleChange}
                 id="email"
@@ -86,10 +90,10 @@
                 label="Email or Username"
                 error={$errors.emailOrUsername}
             >
-                <MailIcon slot="icon"/>
+                <MailIcon slot="icon" />
             </TextField>
 
-            <TextField 
+            <TextField
                 bind:value={$form.password}
                 on:change={handleChange}
                 id="password"
@@ -99,31 +103,38 @@
                 class="mt-4"
                 error={$errors.password}
             >
-                <KeyIcon slot="icon"/>
+                <KeyIcon slot="icon" />
             </TextField>
 
-            <div class="flex flex-col-reverse sm:flex-row justify-between mt-2 sm:mt-4">
-                <Checkbox id="remember-me" label="Remember me" class="mt-4 sm:mt-0" />
-                <a href="/forgot-password" class="text-blue-900 dark:text-blue-200 text-sm">
+            <div
+                class="flex flex-col-reverse sm:flex-row justify-between mt-2 sm:mt-4"
+            >
+                <Checkbox
+                    id="remember-me"
+                    label="Remember me"
+                    class="mt-4 sm:mt-0"
+                />
+                <a
+                    href="/forgot-password"
+                    class="text-blue-900 dark:text-blue-200 text-sm"
+                >
                     Forgot your password?
                 </a>
             </div>
 
-            <Button class="mt-4 w-full" type="submit">
-                Login
-            </Button>
+            <Button class="mt-4 w-full" type="submit">Login</Button>
         </form>
-        <Divider text="or continue with" class="my-8"/>
+        <Divider text="or continue with" class="my-8" />
 
         <div class="grid gap-y-2 gap-x-4 sm:space-y-0 sm:grid-cols-3">
             <LightButton on:click={() => handleLoginWithProvider("google")}>
-                <GoogleIcon slot="icon"/> Google
+                <GoogleIcon slot="icon" /> Google
             </LightButton>
             <LightButton on:click={() => handleLoginWithProvider("github")}>
-                <GithubIcon class="fill-current" slot="icon"/> GitHub
+                <GithubIcon class="fill-current" slot="icon" /> GitHub
             </LightButton>
             <LightButton on:click={() => handleLoginWithProvider("twitter")}>
-                <TwitterIcon slot="icon"/> Twitter
+                <TwitterIcon slot="icon" /> Twitter
             </LightButton>
         </div>
     </Card>

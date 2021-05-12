@@ -9,7 +9,7 @@
     export const load: Load = async ({ fetch, session }) => {
         const { API_BASE_URL } = session;
         session.softwareList = await findAllSoftware(API_BASE_URL, fetch);
-        return { };
+        return {};
     };
 </script>
 
@@ -21,6 +21,6 @@
 </script>
 
 <main class="flex h-full flex-col">
-    <slot></slot>
-    <Footer/>
+    <slot />
+    <Footer />
 </main>

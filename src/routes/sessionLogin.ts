@@ -1,4 +1,4 @@
-import type {RequestHandler} from "@sveltejs/kit";
+import type { RequestHandler } from "@sveltejs/kit";
 import * as cookie from "cookie";
 import { auth } from "../firebaseAdmin";
 
@@ -8,15 +8,15 @@ export const post: RequestHandler = async (req) => {
 
     // Get the ID token passed and the CSRF token.
     const { idToken, csrfToken } = req.body as unknown as {
-        idToken?: string,
-        csrfToken?: string
+        idToken?: string;
+        csrfToken?: string;
     };
 
     // Guard against CSRF attacks.
     if (csrfToken !== cookies.csrfToken) {
         return {
             status: 401,
-            body: "UNAUTHORIZED REQUEST!"
+            body: "UNAUTHORIZED REQUEST!",
         };
     }
 
@@ -30,21 +30,22 @@ export const post: RequestHandler = async (req) => {
         // cookie. To guard against ID token theft, require re-authentication.
         return {
             status: 401,
-            body: "Recent sign in required!"
+            body: "Recent sign in required!",
         };
     }
 
     // Create the session cookie. This will also verify the ID token in the
     // process. The session cookie will have the same claims as the ID token.
-    const sessionCookie = await auth
-        .createSessionCookie(idToken, { expiresIn });
+    const sessionCookie = await auth.createSessionCookie(idToken, {
+        expiresIn,
+    });
 
     const options = { maxAge: expiresIn, httpOnly: true, secure: true };
     return {
         status: 200,
         headers: {
-            "Set-Cookie": cookie.serialize("session", sessionCookie, options)
+            "Set-Cookie": cookie.serialize("session", sessionCookie, options),
         },
-        body: { status: "success" }
+        body: { status: "success" },
     };
 };

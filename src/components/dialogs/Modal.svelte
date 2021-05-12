@@ -4,19 +4,16 @@
     import { createEventDispatcher } from "svelte";
     import { cubicInOut } from "svelte/easing";
     import { fade } from "svelte/transition";
-    
+
     export let open = false;
 
     let dialogElement: HTMLElement;
-    
+
     const dispatch = createEventDispatcher();
-    
-    function dialogTransition(node: Element, {
-        delay = 0,
-        duration = 400
-    }) {
+
+    function dialogTransition(node: Element, { delay = 0, duration = 400 }) {
         const o = +getComputedStyle(node).opacity;
-        
+
         return {
             delay,
             duration,
@@ -27,10 +24,10 @@
                     opacity: ${t * o};
                     transform: scale(${eased * 0.05 + 0.95})
                 `;
-            }
+            },
         };
     }
-    
+
     function close() {
         open = false;
         dispatch("close");
@@ -41,7 +38,7 @@
     $: {
         if (open) {
             openedRecently = true;
-            setTimeout(() => openedRecently = false, 200);
+            setTimeout(() => (openedRecently = false), 200);
         } else {
             openedRecently = false;
         }
@@ -49,9 +46,9 @@
 
     function handleClickOutside() {
         // We only close the modal when it was not opened recently.
-        // This is mainly to prevent the dialog from closing immediately 
+        // This is mainly to prevent the dialog from closing immediately
         // because the click-outside is also triggered by the action that
-        // caused the modal to open. 
+        // caused the modal to open.
         if (!openedRecently) {
             close();
         }
@@ -66,9 +63,9 @@
         // while it is open
         if (open && event.key === "Tab") {
             const nodes = dialogElement.querySelectorAll("*");
-            const tabable = Array
-                .from(nodes)
-                .filter((node: HTMLElement) => node.tabIndex >= 0);
+            const tabable = Array.from(nodes).filter(
+                (node: HTMLElement) => node.tabIndex >= 0
+            );
 
             let index = tabable.indexOf(document.activeElement);
             if (index === -1 && event.shiftKey) index = 0;
@@ -84,21 +81,20 @@
     function handleDialogOpen(el: HTMLElement) {
         // Focus the first tabable element in the modal when if opens
         const nodes = el.querySelectorAll("*");
-        const tabable = Array
-            .from(nodes)
-            .filter((node: HTMLElement) => node.tabIndex >= 0);
+        const tabable = Array.from(nodes).filter(
+            (node: HTMLElement) => node.tabIndex >= 0
+        );
         if (tabable.length > 0) {
             (tabable[0] as HTMLElement).focus();
         }
-        
     }
 </script>
 
-<svelte:window on:keydown={handleKeydown}/>
+<svelte:window on:keydown={handleKeydown} />
 
 {#if open}
-    <DisabledBackgroundScroll/>
-    <div 
+    <DisabledBackgroundScroll />
+    <div
         bind:this={dialogElement}
         use:handleDialogOpen
         class="fixed z-50 inset-0 overflow-y-auto flex justify-center items-center"
@@ -108,17 +104,17 @@
     >
         <div class="text-center mx-8 max-w-full">
             <div
-                transition:fade={{duration: 200}}
+                transition:fade={{ duration: 200 }}
                 class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity"
                 aria-hidden="true"
             />
-            
-            <div 
-                transition:dialogTransition={{duration: 200}}
+
+            <div
+                transition:dialogTransition={{ duration: 200 }}
                 use:clickOutside={handleClickOutside}
                 class="inline-block rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 align-middle sm:max-w-lg sm:w-full"
             >
-                <slot></slot>
+                <slot />
             </div>
         </div>
     </div>

@@ -10,6 +10,6 @@ export async function loginWithEmailAndPassword(
     const userCredential = await firebase
         .auth()
         .signInWithEmailAndPassword(email, password);
-        
+
     await performSessionLogin(userCredential);
 }

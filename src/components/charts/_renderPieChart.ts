@@ -23,20 +23,22 @@ export const renderPieChart = (
     return new Chart(chartDom, {
         type: "pie",
         data: {
-            datasets: [{
-                data: data.map(({y}) => y),
-                backgroundColor: PIE_COLORS,
-            }],
+            datasets: [
+                {
+                    data: data.map(({ y }) => y),
+                    backgroundColor: PIE_COLORS,
+                },
+            ],
 
             // These labels appear in the legend and in the tooltips when hovering different arcs
-            labels: data.map(({name}) => name)
+            labels: data.map(({ name }) => name),
         },
         options: {
             maintainAspectRatio: false,
             legend: { display: false },
             tooltips: {
                 enabled: false,
-                custom: function(tooltipModel: any) {
+                custom: function (tooltipModel: any) {
                     const tooltipId = `chart-tooltip-${chart.id}`;
 
                     // Tooltip Element
@@ -63,9 +65,9 @@ export const renderPieChart = (
                     }
 
                     const data: {
-                        label: string,
-                        currentData: number,
-                        percentage: number
+                        label: string;
+                        currentData: number;
+                        percentage: number;
                     } = tooltipModel.body[0].lines[0];
 
                     /* eslint max-len: ["off"] */
@@ -83,21 +85,35 @@ export const renderPieChart = (
 
                     tooltipEl.innerHTML = innerHtml;
                     tooltipEl.style.position = "absolute";
-                    tooltipEl.style.left = position.left + window.pageXOffset + tooltipModel.caretX + "px";
-                    tooltipEl.style.top = position.top + window.pageYOffset + tooltipModel.caretY + "px";
+                    tooltipEl.style.left =
+                        position.left +
+                        window.pageXOffset +
+                        tooltipModel.caretX +
+                        "px";
+                    tooltipEl.style.top =
+                        position.top +
+                        window.pageYOffset +
+                        tooltipModel.caretY +
+                        "px";
                     tooltipEl.style.pointerEvents = "none";
                 },
                 callbacks: {
-                    label: function(tooltipItem: any, data: any): any {
+                    label: function (tooltipItem: any, data: any): any {
                         const label = data.labels[tooltipItem.index];
-                        const totalData = data.datasets[tooltipItem.datasetIndex].data.reduce((prev, curr) => prev + curr);
-                        const currentData = data.datasets[tooltipItem.datasetIndex].data[tooltipItem.index];
-                        const percentage = Math.round(currentData * 1000 / totalData) / 10;
+                        const totalData = data.datasets[
+                            tooltipItem.datasetIndex
+                        ].data.reduce((prev, curr) => prev + curr);
+                        const currentData =
+                            data.datasets[tooltipItem.datasetIndex].data[
+                                tooltipItem.index
+                            ];
+                        const percentage =
+                            Math.round((currentData * 1000) / totalData) / 10;
 
-                        return {label, currentData, percentage};
-                    }
-                }
+                        return { label, currentData, percentage };
+                    },
+                },
             },
-        }
+        },
     });
 };

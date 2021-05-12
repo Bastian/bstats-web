@@ -6,9 +6,9 @@ import type { SimpleMapChartData } from "./simple-map-chart-data.interface";
 import type { BarChartData } from "./bar-chart-data.interface";
 
 export type ChartData =
-  | SimplePieChartData
-  | AdvancedPieChartData
-  | DrilldownPieChartData
-  | SingleLineChartData
-  | SimpleMapChartData
-  | BarChartData;
+    | SimplePieChartData
+    | AdvancedPieChartData
+    | DrilldownPieChartData
+    | SingleLineChartData
+    | SimpleMapChartData
+    | BarChartData;

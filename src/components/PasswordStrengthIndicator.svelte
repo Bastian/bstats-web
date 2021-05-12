@@ -4,7 +4,7 @@
     export let password = "";
 
     function getPasswordQuality(pw: string): number {
-        const boolToNumber = (b: boolean) => b ? 1 : 0;
+        const boolToNumber = (b: boolean) => (b ? 1 : 0);
 
         const has8OrMoreChars = boolToNumber(/.{8,}/.test(pw));
         const has12OrMoreChars = boolToNumber(/.{12,}/.test(pw));
@@ -16,16 +16,16 @@
         const hasDigit = boolToNumber(/\d/.test(pw));
         const hasSpecialChar = boolToNumber(/[^A-Za-z0-9]/.test(pw));
 
-        const score = has8OrMoreChars * (
-            has12OrMoreChars 
-            + has16OrMoreChars 
-            + has24OrMoreChars
-            + has32OrMoreChars
-            + hasLowerLetter 
-            + hasUpperLetter 
-            + hasDigit
-            + hasSpecialChar
-        );
+        const score =
+            has8OrMoreChars *
+            (has12OrMoreChars +
+                has16OrMoreChars +
+                has24OrMoreChars +
+                has32OrMoreChars +
+                hasLowerLetter +
+                hasUpperLetter +
+                hasDigit +
+                hasSpecialChar);
 
         return Math.min(6, score);
     }
@@ -63,19 +63,19 @@
 
 <div class="mt-1">
     <ProgressBar {progress} {backgroundClass} {progressClass} />
-        <div class="text-sm mt-1 text-gray-600 dark:text-gray-200">
-            {#if passwordQuality <= 1}
-                Even my mother has a better password...
-            {:else if passwordQuality <= 2}
-                You can do better. I believe in you!
-            {:else if passwordQuality <= 3}
-                Almost not bad
-            {:else if passwordQuality <= 4}
-                Good enough
-            {:else if passwordQuality <= 5}
-                Pretty good
-            {:else if passwordQuality <= 6}
-                You either use a password manager or are Chuck Norris
-            {/if}
-        </div>
+    <div class="text-sm mt-1 text-gray-600 dark:text-gray-200">
+        {#if passwordQuality <= 1}
+            Even my mother has a better password...
+        {:else if passwordQuality <= 2}
+            You can do better. I believe in you!
+        {:else if passwordQuality <= 3}
+            Almost not bad
+        {:else if passwordQuality <= 4}
+            Good enough
+        {:else if passwordQuality <= 5}
+            Pretty good
+        {:else if passwordQuality <= 6}
+            You either use a password manager or are Chuck Norris
+        {/if}
+    </div>
 </div>

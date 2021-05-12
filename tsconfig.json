@@ -25,21 +25,11 @@
                 ".svelte/dev/runtime/app/*",
                 ".svelte/build/runtime/app/*"
             ],
-            "$lib/*": [
-                "src/lib/*"
-            ],
-            "$components/*": [
-                "src/components/*"
-            ],
-            "$helpers/*": [
-                "src/helpers/*"
-            ],
-            "$defs/*": [
-                "src/definitions/*"
-            ],
-            "$api/*": [
-                "src/api/*"
-            ]
+            "$lib/*": ["src/lib/*"],
+            "$components/*": ["src/components/*"],
+            "$helpers/*": ["src/helpers/*"],
+            "$defs/*": ["src/definitions/*"],
+            "$api/*": ["src/api/*"]
         }
     },
     "include": [

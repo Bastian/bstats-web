@@ -27,9 +27,9 @@ firebase) and general-purpose handling for unknown errors.
                     mailAlreadyInUseDialogOpen = true;
                     break;
                 case "auth/account-exists-with-different-credential":
-                    generalPurposeDialogTitle = 
+                    generalPurposeDialogTitle =
                         "E-Mail already linked with other auth provider";
-                    generalPurposeDialogContent = 
+                    generalPurposeDialogContent =
                         "Your E-Mail address is already in use with another authentication " +
                         "method.If you want to link your existing account with another " +
                         "third-party provider, please login first with your existing provider " +

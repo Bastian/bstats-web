@@ -20,10 +20,10 @@ $ npm run dev
 bStats uses Firebase Auth for authentication.
 Thus, you have to create a [Firebase](https://firebase.google.com/) project and set the following environment variables:
 
-| Variable                       | Default Value               | Description |
-| ------------------------------ | --------------------------- | ----------- |
+| Variable                       | Default Value               | Description                                                                         |
+| ------------------------------ | --------------------------- | ----------------------------------------------------------------------------------- |
 | GOOGLE_APPLICATION_CREDENTIALS | ./service-account-file.json | The path to your service account file (Can be downloaded from the Firebase Console) |
-| FIREBASE_DATABASE_NAME         | bstats-testing              | The id of your firebase project |
+| FIREBASE_DATABASE_NAME         | bstats-testing              | The id of your firebase project                                                     |
 
 Additionally, you need to create a `firebase-config.json` file with the content of the firebase config in JSON format.
 To obtain this config file, you have to create a web project first.

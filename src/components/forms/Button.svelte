@@ -6,11 +6,11 @@
     export let type: string = undefined;
 </script>
 
-<button 
+<button
     on:click
     {type}
     class:text-sm={small}
     class="bg-blue-800 text-white py-2 px-6 rounded focus:outline-none focus:ring focus:border-blue-300 {className}"
 >
-    <slot></slot>
+    <slot />
 </button>

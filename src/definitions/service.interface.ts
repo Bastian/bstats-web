@@ -1,4 +1,4 @@
-import type {Chart} from "./chart.interface";
+import type { Chart } from "./chart.interface";
 
 export interface Service {
     id: number;

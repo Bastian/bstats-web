@@ -23,7 +23,8 @@ export default function dropdownToggle(
     };
 
     const handleClick = () => {
-        if (Date.now() - lastAction > 200) { // Prevent double triggering with mouse-over
+        if (Date.now() - lastAction > 200) {
+            // Prevent double triggering with mouse-over
             open = !open;
             onEventFunction(open);
         }
@@ -59,6 +60,6 @@ export default function dropdownToggle(
             node.removeEventListener("click", handleClick);
             node.removeEventListener("mouseover", handleMouseOver);
             node.removeEventListener("mouseleave", handleMouseLeave);
-        }
+        },
     };
 }

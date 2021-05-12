@@ -5,12 +5,12 @@
 
     export let open: boolean;
 
-    let links: {text: string, href: string}[];
+    let links: { text: string; href: string }[];
     $: links = ($session.softwareList as Software[])
-        .filter(software => !!software.globalPlugin)
-        .map(software => ({
+        .filter((software) => !!software.globalPlugin)
+        .map((software) => ({
             text: software.name,
-            href: `/global/${software.url}`
+            href: `/global/${software.url}`,
         }));
 </script>
 

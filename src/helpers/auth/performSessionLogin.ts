@@ -10,11 +10,12 @@ export async function performSessionLogin(
     await fetch("/sessionLogin", {
         method: "POST",
         headers: {
-            "Content-Type": "application/json"
+            "Content-Type": "application/json",
         },
         body: JSON.stringify({
-            idToken, csrfToken
-        })
+            idToken,
+            csrfToken,
+        }),
     });
     window.location.assign("/");
 }

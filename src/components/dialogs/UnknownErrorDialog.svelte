@@ -12,19 +12,19 @@ to the user.
 </script>
 
 <Dialog bind:open>
-    <span slot="title">
-        Oops, something went wrong
-    </span>
+    <span slot="title"> Oops, something went wrong </span>
     <div slot="content">
         Welp, this should not have happened. You found an unknown error and we
         don't know what to do with it.
         {#if error}
             Please try again and report the following error to someone: <!-- TODO Tell to whom -->
-            <code class="mt-2 p-2 bg-gray-100 dark:bg-gray-900 block w-full max-h-32 overflow-auto select-all break-all ">
+            <code
+                class="mt-2 p-2 bg-gray-100 dark:bg-gray-900 block w-full max-h-32 overflow-auto select-all break-all "
+            >
                 {JSON.stringify(error)}
             </code>
         {:else}
             Please try again.
-        {/if }
+        {/if}
     </div>
 </Dialog>
