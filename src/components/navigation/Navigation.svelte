@@ -53,7 +53,6 @@
                 use:dropdownToggle={handleMyPluginDropdownOpen}
             >
                 <button 
-                    on:click={() => handleMyPluginDropdownOpen(!myPluginsDropdownOpen)} 
                     class="inline-flex items-center p-2 text-base focus:outline-none focus:ring-1 ring-blue-200 rounded"
                     aria-haspopup="true"
                     aria-expanded="{myPluginsDropdownOpen}"
@@ -70,7 +69,6 @@
             use:dropdownToggle={handleGlobalStatsDropdownOpen}
         >
             <button 
-                on:click={() => handleGlobalStatsDropdownOpen(!globalStatsDropdownOpen)}
                 class="inline-flex items-center p-2 text-base focus:outline-none focus:ring-1 ring-blue-200 rounded"
                 aria-haspopup="true"
                 aria-expanded="{globalStatsDropdownOpen}"
@@ -84,15 +82,16 @@
         <a class="mx-4 p-2 focus:outline-none focus:ring-1 ring-blue-200 rounded" href="/">Plugin List</a>
     </div>
     {#if $session.user}
-        <button
-            use:dropdownToggle={handleAccountDropdownOpen}
-            class="focus:outline-none focus:ring-1 ring-blue-200 rounded-full"
-            aria-haspopup="true"
-            aria-expanded="{accountDropdownOpen}"
-        >
-            <UserCircleIcon class="w-10 h-10 rounded-full shadow-inner"/>
+        <div use:dropdownToggle={handleAccountDropdownOpen}>
+            <button
+                class="block focus:outline-none focus:ring-1 ring-blue-200 rounded-full"
+                aria-haspopup="true"
+                aria-expanded="{accountDropdownOpen}"
+            >
+                <UserCircleIcon class="w-10 h-10 rounded-full shadow-inner"/>
+            </button>
             <AccountDropdown bind:open={accountDropdownOpen}/>
-        </button>
+        </div>
     {:else}
         <div class="hidden sm:block">
             <a href="/login" class="mx-4 p-2 focus:outline-none focus:ring-1 ring-blue-200 rounded">Login</a>

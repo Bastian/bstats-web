@@ -3,29 +3,34 @@
  * user-friendly dropdown menu. This hook should be applied to the
  * button (or its wrapper) that controls the dropdown.
  */
-export default function clickOutside(
+export default function dropdownToggle(
     node: HTMLElement,
     onEventFunction: (open: boolean) => void
 ): unknown {
     let open = false;
 
+    let lastAction = 0;
     let timer: NodeJS.Timeout;
 
     const handleGlobalClick = (event: MouseEvent) => {
         const path = event.composedPath();
 
         if (!path.includes(node)) {
+            lastAction = Date.now();
             open = false;
             onEventFunction(open);
         }
     };
 
     const handleClick = () => {
-        open = !open;
-        onEventFunction(open);
+        if (Date.now() - lastAction > 200) { // Prevent double triggering with mouse-over
+            open = !open;
+            onEventFunction(open);
+        }
     };
 
     const handleMouseOver = () => {
+        lastAction = Date.now();
         open = true;
         clearTimeout(timer);
         onEventFunction(open);
@@ -37,6 +42,7 @@ export default function clickOutside(
         // "overshot". This is recommended by
         // https://www.w3.org/WAI/tutorials/menus/flyout/#mouse-users
         timer = setTimeout(() => {
+            lastAction = Date.now();
             open = false;
             onEventFunction(open);
         }, 350);

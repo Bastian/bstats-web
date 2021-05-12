@@ -12,7 +12,7 @@
     <div class="relative">
         <div
             transition:fade={{ duration: 100 }}
-            class="absolute z-50 pt-1   "
+            class="absolute z-50 pt-1"
             class:right-0={direction === "left"}
         >
             <div class="overflow-hidden whitespace-nowrap text-black bg-white rounded-lg ring-1 ring-black ring-opacity-5 shadow-lg dark:ring-opacity-10 dark:ring-white dark:bg-gray-800 dark:text-gray-200">
