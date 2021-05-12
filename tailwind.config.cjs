@@ -36,6 +36,19 @@ module.exports = {
         orange: colors.orange,
         lime: colors.lime,
       },
+      animation: {
+        heartbeat: "8s ease 5s infinite normal running heartbeat",
+      },
+      keyframes: {
+        heartbeat: {
+          "0%": { transform: "scale(1)" },
+          "4%": { transform: "scale(1.15)" },
+          "8%": { transform: "scale(1)" },
+          "12%": { transform: "scale(1.15)" },
+          "16%": { transform: "scale(1)" },
+          "100%": { transform: "scale(1)" },
+        },
+      },
     },
     container: {
       padding: {

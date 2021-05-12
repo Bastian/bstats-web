@@ -20,7 +20,10 @@
     >
         Plugin Metrics made
         <span class="flex items-center ml-1"
-            >with <HeartIcon small class="ml-2 -mt-1 h-8 text-red-600" /></span
+            >with <HeartIcon
+                small
+                class="ml-2 -mt-1 h-10 w-10 text-red-600 animate-heartbeat"
+            /></span
         >
     </span>
 </div>
