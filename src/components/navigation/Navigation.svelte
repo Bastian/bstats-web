@@ -7,7 +7,7 @@
     import AccountDropdown from "./AccountDropdown.svelte";
     import GlobalStatsDropdown from "./GlobalStatsDropdown.svelte";
     import MobileDrawer from "./MobileDrawer.svelte";
-    import MyPluginsDropdown from "./MyPluginsDropdown.svelte";
+    import MyServicesDropdown from "./MyServicesDropdown.svelte";
 
     let mobileNavOpen = false;
     let myPluginsDropdownOpen = false;
@@ -60,11 +60,11 @@
                     aria-haspopup="true"
                     aria-expanded={myPluginsDropdownOpen}
                 >
-                    <span>My Plugins</span>
+                    <span>My Services</span>
                     <ChevronDownIcon class="ml-2 w-5 h-5" small />
                 </button>
 
-                <MyPluginsDropdown bind:open={myPluginsDropdownOpen} />
+                <MyServicesDropdown bind:open={myPluginsDropdownOpen} />
             </div>
         {/if}
         <div
@@ -84,7 +84,7 @@
         </div>
         <a
             class="mx-4 p-2 focus:outline-none focus:ring-1 ring-blue-200 rounded"
-            href="/">Plugin List</a
+            href="/">Service List</a
         >
     </div>
     {#if $session.user}

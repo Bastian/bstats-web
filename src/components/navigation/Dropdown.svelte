@@ -4,7 +4,7 @@
     export let open: boolean;
     export let direction: "left" | "right" = "right";
 
-    export let actionLabel: string | null = null;
+    export let actionLabel: { text: string; href: string } | null = null;
     export let links: { text: string; href: string; [key: string]: any }[];
 </script>
 
@@ -30,7 +30,7 @@
                 {/each}
                 {#if actionLabel}
                     <a
-                        href="/"
+                        href={actionLabel.href}
                         class="inline-flex justify-center focus:outline-none focus:bg-gray-200 dark:focus:bg-gray-700 items-center p-3 w-full text-gray-900 bg-gray-100 hover:bg-gray-200 dark:bg-gray-900 dark:hover:bg-gray-700"
                     >
                         {#if $$slots["action-icon"]}
@@ -43,7 +43,7 @@
                         <span
                             class="ml-1 pt-0.5 font-semibold text-gray-800 dark:text-gray-200"
                         >
-                            {actionLabel}
+                            {actionLabel.text}
                         </span>
                     </a>
                 {/if}
