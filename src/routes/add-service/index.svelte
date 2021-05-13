@@ -23,11 +23,19 @@
     import Button from "$components/forms/Button.svelte";
     import Select from "$components/forms/Select.svelte";
     import TerminalIcon from "$components/hero-icons/TerminalIcon.svelte";
+    import { session } from "$app/stores";
+    import type { Software } from "$defs/software/software.interface";
+
+    let platforms: { label: string; value: any }[] = [];
+    $: platforms = ($session.softwareList as Software[]).map((software) => ({
+        label: software.name,
+        value: software.id,
+    }));
 
     const { form, errors, handleChange, handleSubmit } = createForm({
         initialValues: {
             serviceName: "",
-            platform: "bukkit",
+            platform: platforms[0]?.value,
         },
         validationSchema: yup.object().shape({
             serviceName: yup.string().required("Please enter a name"),
@@ -63,16 +71,7 @@
 
             <Select
                 bind:value={$form.platform}
-                options={[
-                    {
-                        label: "Bukkit / Spigot",
-                        value: "bukkit",
-                    },
-                    {
-                        label: "Sponge",
-                        value: "sponge",
-                    },
-                ]}
+                options={platforms}
                 on:change={handleChange}
                 id="platform"
                 name="platform"
