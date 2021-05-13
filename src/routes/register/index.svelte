@@ -61,6 +61,7 @@
                     values.email,
                     values.password
                 );
+                window.location.assign("/");
             } catch (e) {
                 error = e;
             }
@@ -70,6 +71,7 @@
     async function handleLoginWithProvider(provider: LoginProvider) {
         try {
             await loginWithProvider(provider);
+            window.location.assign("/");
         } catch (e) {
             error = e;
         }

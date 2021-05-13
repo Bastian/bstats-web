@@ -20,16 +20,23 @@
     import { createForm } from "svelte-forms-lib";
     import * as yup from "yup";
 
-    export const load: Load = async ({ session }) => {
+    export const load: Load = async ({ session, page }) => {
         // The user is already logged in, so let's redirect them to the landing page
         if (session.user) {
             return { status: 307, redirect: "/" };
         }
-        return {};
+        return {
+            props: {
+                redirectUrl: page.query.has("redirect")
+                    ? page.query.get("redirect")
+                    : "/",
+            },
+        };
     };
 </script>
 
 <script lang="ts">
+    export let redirectUrl: string;
     let error = null;
 
     const { form, errors, handleChange, handleSubmit } = createForm({
@@ -49,6 +56,7 @@
                     values.emailOrUsername,
                     values.password
                 );
+                redirect();
             } catch (e) {
                 error = e;
             }
@@ -58,8 +66,21 @@
     async function handleLoginWithProvider(provider: LoginProvider) {
         try {
             await loginWithProvider(provider);
+            redirect();
         } catch (e) {
             error = e;
+        }
+    }
+
+    function redirect() {
+        // We don't want to be vulnerable to a "Unvalidated Redirection Attack".
+        // Since we only have to redirect on the page itself and not to external
+        // sites, we can easily validate the url by just checking if it starts
+        // with a "/".
+        if (redirectUrl && redirectUrl.startsWith("/")) {
+            window.location.assign(redirectUrl);
+        } else {
+            window.location.assign("/");
         }
     }
 </script>

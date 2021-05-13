@@ -17,5 +17,4 @@ export async function performSessionLogin(
             csrfToken,
         }),
     });
-    window.location.assign("/");
 }
