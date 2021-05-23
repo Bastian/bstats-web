@@ -53,7 +53,7 @@
         {/if}
     </div>
 
-    <div class="flex flex-col max-w-full pr-8">
+    <div class="flex flex-col max-w-full overflow-hidden pr-1">
         <!-- Title -->
         <h2
             class:text-gray-700={!inactive}
