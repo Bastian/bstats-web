@@ -10,7 +10,7 @@
     export { className as class };
 </script>
 
-<div class="flex {className}">
+<article aria-disabled={inactive} class="flex {className}">
     <!-- Step -->
     <div class="flex flex-col">
         <!-- ring-yellow-300 dark:ring-blue-500 bg-yellow-500 dark:bg-gray-700 -->
@@ -76,4 +76,4 @@
             <slot />
         </div>
     </div>
-</div>
+</article>
