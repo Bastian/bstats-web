@@ -2,9 +2,17 @@
     import InputBase from "./InputBase.svelte";
 
     export let label: string;
+    /**
+     * Hides the label. Please note that your still have to provide a label for
+     * accessibility concerns. It will just not be displayed in the UI.
+     */
+    export let hideLabel = false;
     export let id: string;
     export let name: string = undefined;
     export let type: "text" | "password" = "text";
+    export let placeholder: string = undefined;
+
+    export let disabled = false;
 
     export let value = "";
 
@@ -21,14 +29,20 @@
     };
 </script>
 
-<InputBase {id} {label} {helpText} {error} class={className}>
+<InputBase {id} {label} {hideLabel} {helpText} {error} class={className}>
     <slot name="icon" slot="icon" />
     <input
         {id}
         {type}
         {name}
-        class="w-full text-gray-700 rounded border-gray-300 dark:border-gray-600 dark:text-gray-200 dark:bg-gray-700"
+        class:text-gray-700={!disabled}
+        class:text-gray-500={disabled}
+        class:dark:text-gray-200={!disabled}
+        class:dark:text-gray-400={disabled}
+        class="w-full placeholder-gray-500 dark:placeholder-gray-400 placeholder-opacity-50 rounded border-gray-300 dark:border-gray-600 dark:bg-gray-700"
         {value}
+        {placeholder}
+        {disabled}
         on:change
         on:input={handleInput}
     />

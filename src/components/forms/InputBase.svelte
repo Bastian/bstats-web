@@ -4,6 +4,11 @@ A wrapper for inputs to prevent code duplication.
 -->
 <script lang="ts">
     export let label: string;
+    /**
+     * Hides the label. Please note that your still have to provide a label for
+     * accessibility concerns. It will just not be displayed in the UI.
+     */
+    export let hideLabel = false;
     export let id: string;
 
     export let helpText: string | undefined = undefined;
@@ -17,6 +22,7 @@ A wrapper for inputs to prevent code duplication.
     <label
         for={id}
         class="flex items-center mb-1 text-sm font-medium text-gray-500 dark:text-gray-200"
+        class:hidden={hideLabel}
     >
         {#if $$slots.icon}
             <span

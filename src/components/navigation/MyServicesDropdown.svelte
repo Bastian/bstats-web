@@ -14,7 +14,7 @@
 <Dropdown
     {open}
     {links}
-    actionLabel={{ text: "Add Service", href: "/add-service" }}
+    actionLabel={{ text: "Add Service", href: "/include-metrics" }}
 >
     <PlusIcon slot="action-icon" />
     <Label slot="link-appendix" class="ml-1" let:link>

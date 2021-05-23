@@ -63,7 +63,7 @@
 
             <MobileDrawerSection
                 title="Navigation"
-                links={[{ text: "Plugin List", href: "/" }]}
+                links={[{ text: "Service List", href: "/" }]}
                 bind:drawerOpen={open}
             >
                 <MapIcon slot="icon" />
@@ -78,7 +78,7 @@
             </MobileDrawerSection>
 
             <MobileDrawerSection
-                title="My Plugins"
+                title="My Services"
                 links={[
                     {
                         text: "SafeTrade",

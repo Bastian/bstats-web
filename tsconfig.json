@@ -20,6 +20,7 @@
         "baseUrl": ".",
         "allowJs": true,
         "checkJs": true,
+        "lib": ["webworker", "es6", "scripthost"],
         "paths": {
             "$app/*": [
                 ".svelte/dev/runtime/app/*",
