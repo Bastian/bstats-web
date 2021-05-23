@@ -33,14 +33,14 @@
     $: if (chartDom) renderPieChart(chartDom, chart, data);
 </script>
 
-<div class="flex flex-col h-full">
+<article class="flex flex-col h-full">
     <div class="sm:flex sm:flex-row sm:justify-between">
-        <div
+        <h3
             id="chart-title-{chart.id}"
             class="inline-block text-2xl border-b-2 border-blue-800 dark:border-blue-400 dark:text-white"
         >
             {chart.title}
-        </div>
+        </h3>
     </div>
 
     <div
@@ -97,7 +97,7 @@
             {/each}
         </div>
     </div>
-</div>
+</article>
 
 <style>
     .chart-container {

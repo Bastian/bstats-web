@@ -64,67 +64,69 @@
     $: updateData(data === null);
 </script>
 
-<div class="sm:flex sm:flex-row sm:justify-between">
+<article>
+    <div class="sm:flex sm:flex-row sm:justify-between">
+        <h3
+            id="chart-title-{chart.id}"
+            class="inline-block text-2xl border-b-2 border-blue-800 dark:border-blue-400 dark:text-white"
+        >
+            {#if chart.idCustom === "players"}
+                Players
+            {:else if chart.idCustom === "servers"}
+                Servers
+            {:else}
+                {chart.title}
+            {/if}
+        </h3>
+
+        <div class="flex flex-wrap mr-0 sm:justify-end space-x-2">
+            {#each rangeOptions as rangeOption}
+                <button
+                    class:font-semibold={rangeOption === selectedRangeOption}
+                    class="p-2 mt-2 bg-white rounded-md sm:w-10 sm:mt-0 dark:hover:bg-gray-800 dark:text-gray-50 dark:bg-gray-700 hover:bg-gray-200 focus:outline-none focus:ring focus:border-blue-300"
+                    on:click={() => handleRangeOptionChange(rangeOption)}
+                >
+                    {rangeOption.label}
+                </button>
+            {/each}
+        </div>
+    </div>
+
     <div
-        id="chart-title-{chart.id}"
-        class="inline-block text-2xl border-b-2 border-blue-800 dark:border-blue-400 dark:text-white"
-    >
-        {#if chart.idCustom === "players"}
-            Players
-        {:else if chart.idCustom === "servers"}
-            Servers
-        {:else}
-            {chart.title}
-        {/if}
-    </div>
-
-    <div class="flex flex-wrap mr-0 sm:justify-end space-x-2">
-        {#each rangeOptions as rangeOption}
-            <button
-                class:font-semibold={rangeOption === selectedRangeOption}
-                class="p-2 mt-2 bg-white rounded-md sm:w-10 sm:mt-0 dark:hover:bg-gray-800 dark:text-gray-50 dark:bg-gray-700 hover:bg-gray-200 focus:outline-none focus:ring focus:border-blue-300"
-                on:click={() => handleRangeOptionChange(rangeOption)}
-            >
-                {rangeOption.label}
-            </button>
-        {/each}
-    </div>
-</div>
-
-<div
-    class="relative p-0 pt-4 mt-4 bg-white rounded-md shadow-sm chart-container dark:bg-gray-800"
->
-    {#if loadingData}
-        <Spinner center class="h-16 w-16" />
-    {/if}
-    <canvas
-        bind:this={chartDom}
-        aria-labelledby="chart-title-{chart.id}"
-        role="img"
+        class="relative p-0 pt-4 mt-4 bg-white rounded-md shadow-sm chart-container dark:bg-gray-800"
     >
         {#if loadingData}
-            Data is still loading.
-        {:else}
-            <table
-                summary="This is the text alternative for the canvas graphic. Only includes the latest data of the line chart."
-            >
-                <caption>
-                    {chart.title}
-                </caption>
-                <tbody>
-                    <tr>
-                        <th scope="col">Line Name</th>
-                        <th scope="col">Value</th>
-                    </tr>
-                    <tr>
-                        <th scope="col">{chart.data.lineName}</th>
-                        <td>{data[0][1]}</td>
-                    </tr>
-                </tbody>
-            </table>
+            <Spinner center class="h-16 w-16" />
         {/if}
-    </canvas>
-</div>
+        <canvas
+            bind:this={chartDom}
+            aria-labelledby="chart-title-{chart.id}"
+            role="img"
+        >
+            {#if loadingData}
+                Data is still loading.
+            {:else}
+                <table
+                    summary="This is the text alternative for the canvas graphic. Only includes the latest data of the line chart."
+                >
+                    <caption>
+                        {chart.title}
+                    </caption>
+                    <tbody>
+                        <tr>
+                            <th scope="col">Line Name</th>
+                            <th scope="col">Value</th>
+                        </tr>
+                        <tr>
+                            <th scope="col">{chart.data.lineName}</th>
+                            <td>{data[0][1]}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            {/if}
+        </canvas>
+    </div>
+</article>
 
 <style>
     .chart-container {

@@ -116,9 +116,9 @@
         <Navigation />
 
         <div class="pt-16">
-            <div class="text-5xl sm:text-6xl py-4 font-semibold truncate">
+            <h1 class="block text-5xl sm:text-6xl py-4 font-semibold truncate">
                 {serviceName}
-            </div>
+            </h1>
             <div class="mb-4">
                 {#if service.isGlobal}
                     Global Stats
@@ -133,12 +133,12 @@
             <div
                 class="grid z-10 grid-cols-1 self-end p-6 w-full text-black bg-white rounded-md shadow-md md:grid-cols-2 dark:bg-gray-800 sm:p-8 servers-players-box dark:text-white"
             >
-                <div class="pb-4 sm:pl-4 md:pb-0">
+                <article class="pb-4 sm:pl-4 md:pb-0">
                     <div
                         class="inline-flex items-center text-gray-500 dark:text-gray-200"
                     >
                         <ServerIcon class="h-5 stroke-current" />
-                        <span class="pl-2 pt-0.5">Servers</span>
+                        <h3 class="pl-2 pt-0.5">Servers</h3>
                     </div>
                     <div class="pt-2">
                         <span class="pr-1 text-4xl">
@@ -148,15 +148,15 @@
                             / {maxServers?.toLocaleString("en-US") ?? "???"}
                         </span>
                     </div>
-                </div>
-                <div
+                </article>
+                <article
                     class="pt-4 border-t sm:pl-4 md:pt-0 md:pl-8 md:border-l md:border-t-0"
                 >
                     <div
                         class="inline-flex items-center text-gray-500 dark:text-gray-200"
                     >
                         <UsersIcon class="h-5 stroke-current" />
-                        <span class="pl-2 pt-0.5">Players</span>
+                        <h3 class="pl-2 pt-0.5">Players</h3>
                     </div>
                     <div class="pt-2">
                         <span class="pr-1 text-4xl">
@@ -166,7 +166,7 @@
                             / {maxPlayers?.toLocaleString("en-US") ?? "???"}
                         </span>
                     </div>
-                </div>
+                </article>
             </div>
         </div>
     </div>
