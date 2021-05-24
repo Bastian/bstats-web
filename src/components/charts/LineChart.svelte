@@ -4,7 +4,6 @@
     import Spinner from "$components/Spinner.svelte";
     import type { SingleLineChartData } from "$defs/chart-data/single-line-chart-data.interface";
     import type { SingleLineChart } from "$defs/single-line-chart.interface";
-    import type Chart from "chart.js";
     import { renderOrUpdateLineChart } from "./_renderOrUpdateLineChart";
 
     export let chart: SingleLineChart;
@@ -59,7 +58,7 @@
     };
 
     let chartDom: HTMLCanvasElement;
-    let chartJsChart: Chart;
+    let chartJsChart: unknown;
 
     $: updateData(data === null);
 </script>

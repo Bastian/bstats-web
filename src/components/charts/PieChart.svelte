@@ -30,7 +30,10 @@
         dataValueSum = data.reduce((acc, cur) => acc + cur.y, 0);
     }
 
-    $: if (chartDom) renderPieChart(chartDom, chart, data);
+    let chartJsChart: unknown = null;
+    $: if (chartDom && !chartJsChart) {
+        chartJsChart = renderPieChart(chartDom, chart, data);
+    }
 </script>
 
 <article class="flex flex-col h-full">

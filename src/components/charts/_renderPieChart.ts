@@ -1,6 +1,6 @@
 import type { SimplePieChartData } from "$defs/chart-data/simple-pie-chart-data.interface";
 import type { SimplePieChart } from "$defs/simple-pie-chart.interface";
-import Chart from "chart.js";
+import Chart from "chart.js/auto"; // TODO Use tree-shakeable imports
 
 export const PIE_COLORS = [
     "#3B82F6",
@@ -35,45 +35,46 @@ export const renderPieChart = (
         },
         options: {
             maintainAspectRatio: false,
-            legend: { display: false },
-            tooltips: {
-                enabled: false,
-                custom: function (tooltipModel: any) {
-                    const tooltipId = `chart-tooltip-${chart.id}`;
+            plugins: {
+                legend: { display: false },
+                tooltip: {
+                    enabled: false,
+                    external: function (context) {
+                        const tooltipId = `chart-tooltip-${chart.id}`;
 
-                    // Tooltip Element
-                    let tooltipEl = document.getElementById(tooltipId);
+                        // Tooltip Element
+                        let tooltipEl = document.getElementById(tooltipId);
 
-                    // Create element on first render
-                    if (!tooltipEl) {
-                        tooltipEl = document.createElement("div");
-                        tooltipEl.id = tooltipId;
-                        document.body.appendChild(tooltipEl);
-                    }
+                        // Create element on first render
+                        if (!tooltipEl) {
+                            tooltipEl = document.createElement("div");
+                            tooltipEl.id = tooltipId;
+                            document.body.appendChild(tooltipEl);
+                        }
 
-                    tooltipEl.classList.add("transition-all");
+                        tooltipEl.classList.add("transition-all");
 
-                    // Hide if no tooltip
-                    if (tooltipModel.opacity === 0) {
-                        tooltipEl.classList.add("hidden");
-                        return;
-                    }
-                    tooltipEl.classList.remove("hidden");
+                        // Hide if no tooltip
+                        if (context.tooltip.opacity === 0) {
+                            tooltipEl.classList.add("hidden");
+                            return;
+                        }
+                        tooltipEl.classList.remove("hidden");
 
-                    if (!tooltipModel.body) {
-                        return;
-                    }
+                        if (!context.tooltip.body) {
+                            return;
+                        }
 
-                    const data: {
-                        label: string;
-                        currentData: number;
-                        percentage: number;
-                    } = tooltipModel.body[0].lines[0];
+                        const data: {
+                            label: string;
+                            currentData: number;
+                            percentage: number;
+                        } = context.tooltip.body[0].lines[0];
 
-                    /* eslint max-len: ["off"] */
-                    const innerHtml = `
+                        /* eslint max-len: ["off"] */
+                        const innerHtml = `
                         <div class="flex flex-row text-gray-900 dark:text-gray-200 dark:bg-gray-700 shadow-lg bg-white p-2 rounded items-center ring-2 ring-gray-500 dark:ring-gray-200 ring-opacity-25 dark:ring-opacity-25">
-                            <div class="px-4 py-2 rounded-full mr-2" style="background-color: ${tooltipModel.labelColors[0].backgroundColor}"></div>
+                            <div class="px-4 py-2 rounded-full mr-2" style="background-color: ${context.tooltip.labelColors[0].backgroundColor}"></div>
                             <div class="flex flex-row items-baseline">
                                 <span class="font-bold mr-1">${data.label}:</span>
                                 <span>${data.currentData} (${data.percentage}%)</span>
@@ -81,36 +82,36 @@ export const renderPieChart = (
                         </div>
                     `;
 
-                    const position = this._chart.canvas.getBoundingClientRect();
+                        const position =
+                            this._chart.canvas.getBoundingClientRect();
 
-                    tooltipEl.innerHTML = innerHtml;
-                    tooltipEl.style.position = "absolute";
-                    tooltipEl.style.left =
-                        position.left +
-                        window.pageXOffset +
-                        tooltipModel.caretX +
-                        "px";
-                    tooltipEl.style.top =
-                        position.top +
-                        window.pageYOffset +
-                        tooltipModel.caretY +
-                        "px";
-                    tooltipEl.style.pointerEvents = "none";
-                },
-                callbacks: {
-                    label: function (tooltipItem: any, data: any): any {
-                        const label = data.labels[tooltipItem.index];
-                        const totalData = data.datasets[
-                            tooltipItem.datasetIndex
-                        ].data.reduce((prev, curr) => prev + curr);
-                        const currentData =
-                            data.datasets[tooltipItem.datasetIndex].data[
-                                tooltipItem.index
-                            ];
-                        const percentage =
-                            Math.round((currentData * 1000) / totalData) / 10;
+                        tooltipEl.innerHTML = innerHtml;
+                        tooltipEl.style.position = "absolute";
+                        tooltipEl.style.left =
+                            position.left +
+                            window.pageXOffset +
+                            context.tooltip.caretX +
+                            "px";
+                        tooltipEl.style.top =
+                            position.top +
+                            window.pageYOffset +
+                            context.tooltip.caretY +
+                            "px";
+                        tooltipEl.style.pointerEvents = "none";
+                    },
+                    callbacks: {
+                        label: function (context) {
+                            const label = context.label || "";
+                            const totalData = context.dataset.data.reduce(
+                                (prev, curr) => prev + curr
+                            );
+                            const currentData = context.raw;
+                            const percentage =
+                                Math.round((currentData * 1000) / totalData) /
+                                10;
 
-                        return { label, currentData, percentage };
+                            return { label, currentData, percentage };
+                        },
                     },
                 },
             },

@@ -2,7 +2,7 @@ import * as dotenv from "dotenv";
 dotenv.config();
 
 import "./global.css";
-import type { GetContext, GetSession, Handle } from "@sveltejs/kit";
+import type { GetSession, Handle } from "@sveltejs/kit";
 import * as cookie from "cookie";
 import * as crypto from "crypto";
 import * as fs from "fs";
@@ -21,7 +21,7 @@ async function getFirebaseConfig() {
     return firebaseConfig;
 }
 
-export const getContext: GetContext = async (req) => {
+export const getSession: GetSession = async (req) => {
     const cookies = cookie.parse(req.headers.cookie || "");
     const sessionCookie = cookies.session;
 
@@ -34,14 +34,10 @@ export const getContext: GetContext = async (req) => {
         }
     }
 
-    return { decodedClaims };
-};
-
-export const getSession: GetSession = async ({ context }) => {
     return {
         API_BASE_URL,
         firebaseConfig: await getFirebaseConfig(),
-        user: context.decodedClaims,
+        user: decodedClaims,
     };
 };
 
