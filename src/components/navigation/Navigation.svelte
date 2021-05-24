@@ -40,7 +40,7 @@
 </script>
 
 <nav class="flex justify-between items-center w-full">
-    <button class="sm:hidden" on:click={() => (mobileNavOpen = true)}>
+    <button class="sm:hidden z-10" on:click={() => (mobileNavOpen = true)}>
         <MenuIcon class="w-8 h-8" />
     </button>
     <div
@@ -53,7 +53,7 @@
             bStats
         </a>
     </div>
-    <div class="hidden flex-grow sm:block md:ml-16">
+    <div class="hidden flex-grow sm:block md:ml-16 z-10">
         {#if $session.user}
             <div
                 class="inline-block mx-2"
@@ -94,7 +94,7 @@
     {#if $session.user}
         <div use:dropdownToggle={handleAccountDropdownOpen}>
             <button
-                class="block focus:outline-none focus:ring-1 ring-blue-200 rounded-full"
+                class="block focus:outline-none focus:ring-1 ring-blue-200 rounded-full z-10"
                 aria-haspopup="true"
                 aria-expanded={accountDropdownOpen}
             >
