@@ -43,11 +43,15 @@
     <button class="sm:hidden" on:click={() => (mobileNavOpen = true)}>
         <MenuIcon class="w-8 h-8" />
     </button>
-    <div class="flex-grow text-center md:flex-grow-0">
+    <div
+        class="flex-grow text-center absolute left-0 right-0 sm:static md:flex-grow-0"
+    >
         <a
             class="text-2xl font-bold p-1 -ml-1 focus:outline-none focus:ring-1 ring-blue-200 rounded"
-            href="/">bStats</a
+            href="/"
         >
+            bStats
+        </a>
     </div>
     <div class="hidden flex-grow sm:block md:ml-16">
         {#if $session.user}
