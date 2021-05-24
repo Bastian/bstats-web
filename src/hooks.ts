@@ -18,6 +18,7 @@ async function getFirebaseConfig() {
     firebaseConfig = JSON.parse(
         fs.readFileSync("firebase-config.json", "utf8")
     );
+    return firebaseConfig;
 }
 
 export const getContext: GetContext = async (req) => {
