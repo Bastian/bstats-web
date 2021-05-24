@@ -34,7 +34,7 @@
 
 <div class={className}>
     <pre
-        class="text-sm w-full overflow-x bg-white dark:bg-gray-800 ring-2 ring-gray-100 dark:ring-gray-700 rounded p-2">
+        class="w-full p-2 text-sm bg-white rounded overflow-x dark:bg-gray-800 ring-2 ring-gray-100 dark:ring-gray-700">
         <code class="rounded-lg hljs">
             {#if highlighted}
                 {@html highlighted}

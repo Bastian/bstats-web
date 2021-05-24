@@ -35,12 +35,12 @@ A wrapper for inputs to prevent code duplication.
     </label>
     <slot />
     {#if error}
-        <span class="text-red-800 dark:text-red-400 text-sm">
+        <span class="text-sm text-red-800 dark:text-red-400">
             {error}
         </span>
     {/if}
     {#if !error && helpText}
-        <span class="text-gray-400 text-sm">
+        <span class="text-sm text-gray-400">
             {helpText}
         </span>
     {/if}

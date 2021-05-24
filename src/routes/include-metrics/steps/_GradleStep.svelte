@@ -63,7 +63,7 @@
     <CodeBlock language="kotlin" class="mt-2" code={dependency} />
 
     <span
-        class="block mt-2 text-md text-gray-500 dark:text-gray-400 max-w-prose"
+        class="block mt-2 text-gray-500 text-md dark:text-gray-400 max-w-prose"
     >
         Next, you have to make sure that bStats in included in your software
         when building it. The easiest way to do this is by adding the
@@ -81,7 +81,7 @@
     <CodeBlock language="kotlin" class="mt-2" code={shadowPlugin} />
 
     <span
-        class="block mt-2 text-md text-gray-500 dark:text-gray-400 max-w-prose"
+        class="block mt-2 text-gray-500 text-md dark:text-gray-400 max-w-prose"
     >
         and then configure the
         <code class="text-gray-700 dark:text-gray-200">shadowJar</code>
@@ -91,7 +91,7 @@
     <CodeBlock language="kotlin" class="mt-2" code={shadowJar} />
 
     <span
-        class="block mt-2 text-md text-gray-500 dark:text-gray-400 max-w-prose"
+        class="block mt-2 text-gray-500 text-md dark:text-gray-400 max-w-prose"
     >
         Executing
         <code class="text-gray-700 dark:text-gray-200">

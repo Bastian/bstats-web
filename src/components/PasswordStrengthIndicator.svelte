@@ -63,7 +63,7 @@
 
 <div class="mt-1">
     <ProgressBar {progress} {backgroundClass} {progressClass} />
-    <div class="text-sm mt-1 text-gray-600 dark:text-gray-200">
+    <div class="mt-1 text-sm text-gray-600 dark:text-gray-200">
         {#if passwordQuality <= 1}
             Even my mother has a better password...
         {:else if passwordQuality <= 2}

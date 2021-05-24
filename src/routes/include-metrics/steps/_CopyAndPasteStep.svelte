@@ -20,11 +20,11 @@
                 target="_blank"
                 rel="noopener noreferrer"
             >
-                <code class="text-gray-700 font-bold dark:text-gray-200">
+                <code class="font-bold text-gray-700 dark:text-gray-200">
                     Metrics.java
                 </code>
             </a>
-            <ExternalLinkIcon class="ml-1 h-5 w-5" small />
+            <ExternalLinkIcon class="w-5 h-5 ml-1" small />
         </span>
         file into your project. Then update the package to match the package to which
         your copied it. Do not modify anything else of the file.

@@ -47,9 +47,9 @@
     </div>
 
     <div
-        class="relative flex-grow p-4 mt-4 bg-white rounded-md shadow-sm dark:bg-gray-800 text-gray-900 dark:text-gray-200"
+        class="relative flex-grow p-4 mt-4 text-gray-900 bg-white rounded-md shadow-sm dark:bg-gray-800 dark:text-gray-200"
     >
-        <div class="chart-container p-2">
+        <div class="p-2 chart-container">
             <canvas
                 bind:this={chartDom}
                 aria-labelledby="chart-title-{chart.id}"
@@ -91,7 +91,7 @@
                 {/if}
             </canvas>
         </div>
-        <div class="p-4 flex flex-wrap justify-center">
+        <div class="flex flex-wrap justify-center p-4">
             {#each data as dataPoint, index}
                 <ChartLabel
                     name={dataPoint.name}

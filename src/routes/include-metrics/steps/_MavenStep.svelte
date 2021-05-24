@@ -53,7 +53,7 @@
     <CodeBlock language="xml" class="mt-2" code={mavenDependency} />
 
     <span
-        class="block mt-2 text-md text-gray-500 dark:text-gray-400 max-w-prose"
+        class="block mt-2 text-gray-500 text-md dark:text-gray-400 max-w-prose"
     >
         and then shade bStats into your service. Shading copies bStats into your
         service and relocates it into its own package. Make sure to change

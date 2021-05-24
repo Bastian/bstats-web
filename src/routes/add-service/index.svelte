@@ -54,9 +54,9 @@
 <StandardNavigation />
 
 <div
-    class="flex flex-grow justify-center items-center bg-gray-100 dark:bg-gray-900"
+    class="flex items-center justify-center flex-grow bg-gray-100 dark:bg-gray-900"
 >
-    <Card title="Add Service" class="my-12 sm:my-24 mx-4 sm:mx-8">
+    <Card title="Add Service" class="mx-4 my-12 sm:my-24 sm:mx-8">
         <form on:submit={handleSubmit}>
             <TextField
                 bind:value={$form.serviceName}
@@ -83,7 +83,7 @@
                 <TerminalIcon slot="icon" />
             </Select>
 
-            <Button class="mt-4 w-full" type="submit">Add Service</Button>
+            <Button class="w-full mt-4" type="submit">Add Service</Button>
         </form>
     </Card>
 </div>

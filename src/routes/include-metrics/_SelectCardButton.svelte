@@ -32,7 +32,7 @@
         />
     {/if}
     {#if logoSrcDark}
-        <img alt="" src={logoSrcDark} class="hidden dark:block h-16 p-1" />
+        <img alt="" src={logoSrcDark} class="hidden h-16 p-1 dark:block" />
     {/if}
     <span class="text-lg font-bold text-gray-600 dark:text-gray-200">
         {text}

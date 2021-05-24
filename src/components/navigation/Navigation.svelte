@@ -39,33 +39,33 @@
     }
 </script>
 
-<nav class="flex justify-between items-center w-full">
-    <button class="sm:hidden z-10" on:click={() => (mobileNavOpen = true)}>
+<nav class="flex items-center justify-between w-full">
+    <button class="z-10 sm:hidden" on:click={() => (mobileNavOpen = true)}>
         <MenuIcon class="w-8 h-8" />
     </button>
     <div
-        class="flex-grow text-center absolute left-0 right-0 sm:static md:flex-grow-0"
+        class="absolute left-0 right-0 flex-grow text-center sm:static md:flex-grow-0"
     >
         <a
-            class="text-2xl font-bold p-1 -ml-1 focus:outline-none focus:ring-1 ring-blue-200 rounded"
+            class="p-1 -ml-1 text-2xl font-bold rounded focus:outline-none focus:ring-1 ring-blue-200"
             href="/"
         >
             bStats
         </a>
     </div>
-    <div class="hidden flex-grow sm:block md:ml-16 z-10">
+    <div class="z-10 flex-grow hidden sm:block md:ml-16">
         {#if $session.user}
             <div
                 class="inline-block mx-2"
                 use:dropdownToggle={handleMyPluginDropdownOpen}
             >
                 <button
-                    class="inline-flex items-center p-2 text-base focus:outline-none focus:ring-1 ring-blue-200 rounded"
+                    class="inline-flex items-center p-2 text-base rounded focus:outline-none focus:ring-1 ring-blue-200"
                     aria-haspopup="true"
                     aria-expanded={myPluginsDropdownOpen}
                 >
                     <span>My Services</span>
-                    <ChevronDownIcon class="ml-2 w-5 h-5" small />
+                    <ChevronDownIcon class="w-5 h-5 ml-2" small />
                 </button>
 
                 <MyServicesDropdown bind:open={myPluginsDropdownOpen} />
@@ -76,25 +76,27 @@
             use:dropdownToggle={handleGlobalStatsDropdownOpen}
         >
             <button
-                class="inline-flex items-center p-2 text-base focus:outline-none focus:ring-1 ring-blue-200 rounded"
+                class="inline-flex items-center p-2 text-base rounded focus:outline-none focus:ring-1 ring-blue-200"
                 aria-haspopup="true"
                 aria-expanded={globalStatsDropdownOpen}
             >
                 <span>Global Stats</span>
-                <ChevronDownIcon class="ml-2 w-5 h-5" small />
+                <ChevronDownIcon class="w-5 h-5 ml-2" small />
             </button>
 
             <GlobalStatsDropdown bind:open={globalStatsDropdownOpen} />
         </div>
         <a
-            class="mx-4 p-2 focus:outline-none focus:ring-1 ring-blue-200 rounded"
-            href="/">Service List</a
+            class="p-2 mx-4 rounded focus:outline-none focus:ring-1 ring-blue-200"
+            href="/"
         >
+            Service List
+        </a>
     </div>
     {#if $session.user}
         <div use:dropdownToggle={handleAccountDropdownOpen}>
             <button
-                class="block focus:outline-none focus:ring-1 ring-blue-200 rounded-full z-10"
+                class="z-10 block rounded-full focus:outline-none focus:ring-1 ring-blue-200"
                 aria-haspopup="true"
                 aria-expanded={accountDropdownOpen}
             >
@@ -106,14 +108,16 @@
         <div class="hidden sm:block">
             <a
                 href="/login"
-                class="mx-4 p-2 focus:outline-none focus:ring-1 ring-blue-200 rounded"
-                >Login</a
+                class="p-2 mx-4 rounded focus:outline-none focus:ring-1 ring-blue-200"
             >
+                Login
+            </a>
             <a
                 href="/register"
-                class="ml-2 p-2 focus:outline-none focus:ring-1 ring-blue-200 rounded"
-                >Register</a
+                class="p-2 ml-2 rounded focus:outline-none focus:ring-1 ring-blue-200"
             >
+                Register
+            </a>
         </div>
     {/if}
 </nav>

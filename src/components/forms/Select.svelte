@@ -23,7 +23,7 @@
     <slot name="icon" slot="icon" />
     <select
         {id}
-        class="w-full text-gray-700 rounded border-gray-300 dark:border-gray-600 dark:text-gray-200 dark:bg-gray-700"
+        class="w-full text-gray-700 border-gray-300 rounded dark:border-gray-600 dark:text-gray-200 dark:bg-gray-700"
         {name}
         bind:value
     >

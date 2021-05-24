@@ -16,13 +16,13 @@
             class:right-0={direction === "left"}
         >
             <div
-                class="overflow-hidden whitespace-nowrap text-black bg-white rounded-lg ring-1 ring-black ring-opacity-5 shadow-lg dark:ring-opacity-10 dark:ring-white dark:bg-gray-800 dark:text-gray-200"
+                class="overflow-hidden text-black bg-white rounded-lg shadow-lg whitespace-nowrap ring-1 ring-black ring-opacity-5 dark:ring-opacity-10 dark:ring-white dark:bg-gray-800 dark:text-gray-200"
             >
                 {#each links as link}
                     <a
                         sveltekit:prefetch
                         href={link.href}
-                        class="block p-4 w-full hover:bg-gray-200 dark:hover:bg-gray-700 focus:outline-none focus:bg-gray-200 dark:focus:bg-gray-700"
+                        class="block w-full p-4 hover:bg-gray-200 dark:hover:bg-gray-700 focus:outline-none focus:bg-gray-200 dark:focus:bg-gray-700"
                     >
                         {link.text}
                         <slot name="link-appendix" {link} />
@@ -31,7 +31,7 @@
                 {#if actionLabel}
                     <a
                         href={actionLabel.href}
-                        class="inline-flex justify-center focus:outline-none focus:bg-gray-200 dark:focus:bg-gray-700 items-center p-3 w-full text-gray-900 bg-gray-100 hover:bg-gray-200 dark:bg-gray-900 dark:hover:bg-gray-700"
+                        class="inline-flex items-center justify-center w-full p-3 text-gray-900 bg-gray-100 focus:outline-none focus:bg-gray-200 dark:focus:bg-gray-700 hover:bg-gray-200 dark:bg-gray-900 dark:hover:bg-gray-700"
                     >
                         {#if $$slots["action-icon"]}
                             <span

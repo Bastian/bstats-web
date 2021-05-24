@@ -88,10 +88,10 @@
 <ErrorHandler bind:error />
 
 <div
-    class="flex flex-grow justify-center items-center bg-gray-100 dark:bg-gray-900"
+    class="flex items-center justify-center flex-grow bg-gray-100 dark:bg-gray-900"
 >
     <Card
-        class="my-12 sm:my-24 mx-4 sm:mx-8"
+        class="mx-4 my-12 sm:my-24 sm:mx-8"
         title="Create account"
         link={{ text: "Login with existing account", href: "/login" }}
     >
@@ -146,7 +146,7 @@
                 error={$errors.acceptTermsOfUseChecked}
             />
 
-            <Button class="mt-4 w-full" type="submit">Create Account</Button>
+            <Button class="w-full mt-4" type="submit">Create Account</Button>
         </form>
 
         <Divider text="or login with" class="my-8" />

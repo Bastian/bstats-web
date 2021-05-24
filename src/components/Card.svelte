@@ -12,7 +12,7 @@
             {title}
         </span>
     {/if}
-    <div class="p-8 mt-4 w-full bg-white rounded shadow dark:bg-gray-800">
+    <div class="w-full p-8 mt-4 bg-white rounded shadow dark:bg-gray-800">
         <slot />
     </div>
     {#if link}

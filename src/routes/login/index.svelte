@@ -95,10 +95,10 @@
 <ErrorHandler bind:error />
 
 <div
-    class="flex flex-grow justify-center items-center bg-gray-100 dark:bg-gray-900"
+    class="flex items-center justify-center flex-grow bg-gray-100 dark:bg-gray-900"
 >
     <Card
-        class="my-12 sm:my-24 mx-4 sm:mx-8"
+        class="mx-4 my-12 sm:my-24 sm:mx-8"
         title="Login to your account"
         link={{ text: "Create new account", href: "/register" }}
     >
@@ -128,7 +128,7 @@
             </TextField>
 
             <div
-                class="flex flex-col-reverse sm:flex-row justify-between mt-2 sm:mt-4"
+                class="flex flex-col-reverse justify-between mt-2 sm:flex-row sm:mt-4"
             >
                 <Checkbox
                     id="remember-me"
@@ -137,13 +137,13 @@
                 />
                 <a
                     href="/forgot-password"
-                    class="text-blue-900 dark:text-blue-200 text-sm"
+                    class="text-sm text-blue-900 dark:text-blue-200"
                 >
                     Forgot your password?
                 </a>
             </div>
 
-            <Button class="mt-4 w-full" type="submit">Login</Button>
+            <Button class="w-full mt-4" type="submit">Login</Button>
         </form>
         <Divider text="or continue with" class="my-8" />
 

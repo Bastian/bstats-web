@@ -17,28 +17,28 @@
 </script>
 
 <Modal {open} on:close={close}>
-    <div class="bg-white dark:bg-gray-800 px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+    <div class="px-4 pt-5 pb-4 bg-white dark:bg-gray-800 sm:p-6 sm:pb-4">
         <div class="sm:flex sm:items-start">
             <div
                 class:bg-red-100={type == "error"}
                 class:dark:bg-red-900={type == "error"}
                 class:bg-yellow-50={type == "warn"}
                 class:dark:bg-yellow-600={type == "warn"}
-                class="mx-auto flex-shrink-0 flex items-center justify-center h-12 w-12 rounded-full sm:mx-0 sm:h-10 sm:w-10"
+                class="flex items-center justify-center flex-shrink-0 w-12 h-12 mx-auto rounded-full sm:mx-0 sm:h-10 sm:w-10"
             >
                 {#if type == "error"}
                     <Exclamation
-                        class="h-6 w-6 text-red-600 dark:text-red-100"
+                        class="w-6 h-6 text-red-600 dark:text-red-100"
                     />
                 {:else if type == "warn"}
                     <Exclamation
-                        class="h-6 w-6 text-yellow-500 dark:text-yellow-100"
+                        class="w-6 h-6 text-yellow-500 dark:text-yellow-100"
                     />
                 {/if}
             </div>
             <div class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left">
                 <h3
-                    class="text-lg leading-6 font-medium text-gray-900 dark:text-gray-100"
+                    class="text-lg font-medium leading-6 text-gray-900 dark:text-gray-100"
                     id="modal-title"
                 >
                     <slot name="title" />
@@ -52,7 +52,7 @@
         </div>
     </div>
     <div
-        class="bg-gray-50 dark:bg-gray-900 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse"
+        class="px-4 py-3 bg-gray-50 dark:bg-gray-900 sm:px-6 sm:flex sm:flex-row-reverse"
     >
         <Button on:click={close} class="w-full sm:w-auto">Okay</Button>
     </div>

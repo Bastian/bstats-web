@@ -23,7 +23,7 @@
             class:bg-gray-200={inactive}
             class:dark:ring-gray-500={inactive}
             class:dark:bg-gray-400={inactive}
-            class="w-7 h-7 flex items-center justify-center ring  ring-opacity-75 rounded-full"
+            class="flex items-center justify-center rounded-full w-7 h-7 ring ring-opacity-75"
         >
             <div class="clear-both " />
             {#if step}
@@ -37,7 +37,7 @@
                 </span>
             {:else}
                 <span class="text-xl font-bold text-white">
-                    <DotsHorizontalIcon class="h-8 w-8 p-1" />
+                    <DotsHorizontalIcon class="w-8 h-8 p-1" />
                 </span>
             {/if}
         </div>
@@ -53,7 +53,7 @@
         {/if}
     </div>
 
-    <div class="flex flex-col max-w-full overflow-hidden pr-1">
+    <div class="flex flex-col max-w-full pr-1 overflow-hidden">
         <!-- Title -->
         <h2
             class:text-gray-700={!inactive}
@@ -65,10 +65,10 @@
             {title}
         </h2>
         <!-- Content -->
-        <div class="ml-4 mt-2 mb-6">
+        <div class="mt-2 mb-6 ml-4">
             {#if $$slots.description}
                 <span
-                    class="block mt-1 text-md text-gray-500 dark:text-gray-400 max-w-prose"
+                    class="block mt-1 text-gray-500 text-md dark:text-gray-400 max-w-prose"
                 >
                     <slot name="description" />
                 </span>

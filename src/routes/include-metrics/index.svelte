@@ -45,7 +45,7 @@
             This page guides you through the process of integrating bStats into
             your service.
         </span>
-        <div class="mt-4 h-1 w-full bg-gray-200 dark:bg-gray-700 mb-8" />
+        <div class="w-full h-1 mt-4 mb-8 bg-gray-200 dark:bg-gray-700" />
 
         <SelectPlatformStep
             bind:selectedPlatform

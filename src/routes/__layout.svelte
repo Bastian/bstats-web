@@ -20,7 +20,7 @@
     }
 </script>
 
-<main class="flex h-full flex-col">
+<main class="flex flex-col h-full">
     <slot />
     <Footer />
 </main>

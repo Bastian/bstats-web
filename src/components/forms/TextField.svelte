@@ -39,7 +39,7 @@
         class:text-gray-500={disabled}
         class:dark:text-gray-200={!disabled}
         class:dark:text-gray-400={disabled}
-        class="w-full placeholder-gray-500 dark:placeholder-gray-400 placeholder-opacity-50 rounded border-gray-300 dark:border-gray-600 dark:bg-gray-700"
+        class="w-full placeholder-gray-500 placeholder-opacity-50 border-gray-300 rounded dark:placeholder-gray-400 dark:border-gray-600 dark:bg-gray-700"
         {value}
         {placeholder}
         {disabled}

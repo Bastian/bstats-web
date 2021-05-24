@@ -17,7 +17,7 @@
         using a build tool, select it below. If you have no experience with
         Gradle or Maven, select "Copy & Paste".
     </span>
-    <div class="flex flex-wrap -ml-2 mt-2">
+    <div class="flex flex-wrap mt-2 -ml-2">
         <SelectCardButton
             text="Gradle"
             logoSrc="/logos/gradle-elephant-icon-dark-green.svg"
@@ -38,7 +38,7 @@
         >
             <ClipboardCopyIcon
                 slot="logo"
-                class="h-11 w-11 mt-3 dark:text-gray-200 text-gray-700"
+                class="mt-3 text-gray-700 h-11 w-11 dark:text-gray-200"
             />
         </SelectCardButton>
     </div>

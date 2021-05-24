@@ -78,7 +78,7 @@
             {/if}
         </h3>
 
-        <div class="flex flex-wrap mr-0 sm:justify-end space-x-2">
+        <div class="flex flex-wrap mr-0 space-x-2 sm:justify-end">
             {#each rangeOptions as rangeOption}
                 <button
                     class:font-semibold={rangeOption === selectedRangeOption}
@@ -95,7 +95,7 @@
         class="relative p-0 pt-4 mt-4 bg-white rounded-md shadow-sm chart-container dark:bg-gray-800"
     >
         {#if loadingData}
-            <Spinner center class="h-16 w-16" />
+            <Spinner center class="w-16 h-16" />
         {/if}
         <canvas
             bind:this={chartDom}

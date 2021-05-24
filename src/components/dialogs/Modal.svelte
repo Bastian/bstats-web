@@ -97,22 +97,22 @@
     <div
         bind:this={dialogElement}
         use:handleDialogOpen
-        class="fixed z-50 inset-0 overflow-y-auto flex justify-center items-center"
+        class="fixed inset-0 z-50 flex items-center justify-center overflow-y-auto"
         aria-labelledby="modal-title"
         role="dialog"
         aria-modal="true"
     >
-        <div class="text-center mx-8 max-w-full">
+        <div class="max-w-full mx-8 text-center">
             <div
                 transition:fade={{ duration: 200 }}
-                class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity"
+                class="fixed inset-0 transition-opacity bg-gray-500 bg-opacity-75"
                 aria-hidden="true"
             />
 
             <div
                 transition:dialogTransition={{ duration: 200 }}
                 use:clickOutside={handleClickOutside}
-                class="inline-block rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 align-middle sm:max-w-lg sm:w-full"
+                class="inline-block overflow-hidden text-left align-middle transition-all transform rounded-lg shadow-xl sm:my-8 sm:max-w-lg sm:w-full"
             >
                 <slot />
             </div>

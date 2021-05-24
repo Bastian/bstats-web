@@ -19,7 +19,7 @@ to the user.
         {#if error}
             Please try again and report the following error to someone: <!-- TODO Tell to whom -->
             <code
-                class="mt-2 p-2 bg-gray-100 dark:bg-gray-900 block w-full max-h-32 overflow-auto select-all break-all "
+                class="block w-full p-2 mt-2 overflow-auto break-all bg-gray-100 select-all dark:bg-gray-900 max-h-32 "
             >
                 {JSON.stringify(error)}
             </code>

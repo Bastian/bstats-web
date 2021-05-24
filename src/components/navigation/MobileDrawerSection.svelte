@@ -19,7 +19,7 @@
             <a
                 href={link.href}
                 sveltekit:prefetch
-                class="inline-block p-4 w-full bg-gray-100 hover:bg-gray-200 dark:bg-gray-800 dark:hover:bg-gray-700"
+                class="inline-block w-full p-4 bg-gray-100 hover:bg-gray-200 dark:bg-gray-800 dark:hover:bg-gray-700"
                 on:click={() => (drawerOpen = false)}
             >
                 {link.text}

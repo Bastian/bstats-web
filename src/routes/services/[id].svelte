@@ -116,7 +116,7 @@
         <Navigation />
 
         <div class="pt-16">
-            <h1 class="block text-5xl sm:text-6xl py-4 font-semibold truncate">
+            <h1 class="block py-4 text-5xl font-semibold truncate sm:text-6xl">
                 {serviceName}
             </h1>
             <div class="mb-4">
@@ -131,7 +131,7 @@
 
         <div class="flex justify-end pt-4 -mb-32 md:-mb-16">
             <div
-                class="grid z-10 grid-cols-1 self-end p-6 w-full text-black bg-white rounded-md shadow-md md:grid-cols-2 dark:bg-gray-800 sm:p-8 servers-players-box dark:text-white"
+                class="z-10 grid self-end w-full grid-cols-1 p-6 text-black bg-white rounded-md shadow-md md:grid-cols-2 dark:bg-gray-800 sm:p-8 servers-players-box dark:text-white"
             >
                 <article class="pb-4 sm:pl-4 md:pb-0">
                     <div
@@ -172,9 +172,9 @@
     </div>
 </div>
 
-<div class="pt-28 bg-gray-100 dark:bg-gray-900 md:pt-24 flex-grow background">
+<div class="flex-grow bg-gray-100 pt-28 dark:bg-gray-900 md:pt-24 background">
     <div
-        class="container grid grid-cols-1 lg:grid-cols-2 2xl:grid-cols-3 gap-x-4 pt-12 pb-16 mx-auto space-y-8"
+        class="container grid grid-cols-1 pt-12 pb-16 mx-auto space-y-8 lg:grid-cols-2 2xl:grid-cols-3 gap-x-4"
     >
         {#each chartsWithData as { chart, data } (chart.id)}
             {#if isSingleLineChart(chart) && isSingleLineChartData(data)}
