@@ -1,6 +1,13 @@
 import type { SimplePieChartData } from "$defs/chart-data/simple-pie-chart-data.interface";
 import type { SimplePieChart } from "$defs/simple-pie-chart.interface";
-import Chart from "chart.js/auto"; // TODO Use tree-shakeable imports
+import {
+    Chart,
+    PieController,
+    ArcElement,
+    Tooltip,
+} from "chart.js/dist/chart.esm";
+
+Chart.register(PieController, ArcElement, Tooltip);
 
 export const PIE_COLORS = [
     "#3B82F6",

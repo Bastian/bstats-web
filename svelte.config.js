@@ -2,11 +2,6 @@ import sveltePreprocess from "svelte-preprocess";
 import node from "@sveltejs/adapter-node";
 import path from "path";
 
-// const sveltePreprocess = require("svelte-preprocess");
-// const node = require("@sveltejs/adapter-node");
-// const pkg = require("./package.json");
-// const path = require("path");
-
 /** @type {import('@sveltejs/kit').Config} */
 const config = {
     // Consult https://github.com/sveltejs/svelte-preprocess
@@ -34,7 +29,7 @@ const config = {
 
         vite: {
             optimizeDeps: {
-                include: ["firebase/app"],
+                include: ["firebase/app", "chart.js"],
             },
             resolve: {
                 alias: {

@@ -1,8 +1,29 @@
 import type { SingleLineChartData } from "$defs/chart-data/single-line-chart-data.interface";
 import type { SingleLineChart } from "$defs/single-line-chart.interface";
-import type { TimeUnit } from "chart.js";
-import Chart from "chart.js/auto"; // TODO Use tree-shakeable imports
+import type { TimeUnit } from "chart.js/dist/chart.esm";
+import {
+    Chart,
+    TimeScale,
+    LinearScale,
+    ArcElement,
+    LineController,
+    PointElement,
+    LineElement,
+    Tooltip,
+    Filler,
+} from "chart.js/dist/chart.esm";
 import "chartjs-adapter-date-fns";
+
+Chart.register(
+    TimeScale,
+    LinearScale,
+    ArcElement,
+    LineController,
+    PointElement,
+    LineElement,
+    Tooltip,
+    Filler
+);
 
 export const renderOrUpdateLineChart = (
     chartDom: HTMLCanvasElement,
