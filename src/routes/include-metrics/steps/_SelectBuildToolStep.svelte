@@ -17,7 +17,7 @@
         using a build tool, select it below. If you have no experience with
         Gradle or Maven, select "Copy & Paste".
     </span>
-    <div class="flex flex-wrap -ml-2">
+    <div class="flex flex-wrap -ml-2 mt-2">
         <SelectCardButton
             text="Gradle"
             logoSrc="/logos/gradle-elephant-icon-dark-green.svg"

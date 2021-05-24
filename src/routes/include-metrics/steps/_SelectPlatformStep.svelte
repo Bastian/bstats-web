@@ -18,7 +18,7 @@
         service supports multiple platforms, please choose one. After finishing
         the complete process, start again and select the next platform.
     </span>
-    <div class="flex flex-wrap -ml-2">
+    <div class="flex flex-wrap -ml-2 mt-2">
         <SelectCardButton
             text="Bukkit / Spigot"
             logoSrc="/logos/spigot.png"
