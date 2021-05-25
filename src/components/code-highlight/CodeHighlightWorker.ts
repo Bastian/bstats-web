@@ -1,11 +1,11 @@
 import hljs from "highlight.js/lib/core";
 import xml from "highlight.js/lib/languages/xml";
 import java from "highlight.js/lib/languages/java";
-import gradle from "highlight.js/lib/languages/gradle";
+import kotlin from "highlight.js/lib/languages/kotlin";
 
 hljs.registerLanguage("xml", xml);
 hljs.registerLanguage("java", java);
-hljs.registerLanguage("gradle", gradle);
+hljs.registerLanguage("kotlin", kotlin);
 
 addEventListener(
     "message",
