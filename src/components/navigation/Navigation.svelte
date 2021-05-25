@@ -94,9 +94,9 @@
         </a>
     </div>
     {#if $session.user}
-        <div use:dropdownToggle={handleAccountDropdownOpen}>
+        <div class="z-10" use:dropdownToggle={handleAccountDropdownOpen}>
             <button
-                class="z-10 block rounded-full focus:outline-none focus:ring-1 ring-blue-200"
+                class="block rounded-full focus:outline-none focus:ring-1 ring-blue-200"
                 aria-haspopup="true"
                 aria-expanded={accountDropdownOpen}
             >
