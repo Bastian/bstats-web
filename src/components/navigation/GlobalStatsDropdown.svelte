@@ -2,6 +2,7 @@
     import { session } from "$app/stores";
     import type { Software } from "$defs/software/software.interface";
     import Dropdown from "./Dropdown.svelte";
+    import DropdownLinks from "./DropdownLinks.svelte";
 
     export let open: boolean;
 
@@ -14,4 +15,6 @@
         }));
 </script>
 
-<Dropdown {open} {links} />
+<Dropdown {open}>
+    <DropdownLinks {links} />
+</Dropdown>
