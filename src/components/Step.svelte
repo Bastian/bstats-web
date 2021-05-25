@@ -12,7 +12,7 @@
 
 <article aria-disabled={inactive} class="flex {className}">
     <!-- Step -->
-    <div class="flex flex-col">
+    <div class="flex flex-col items-center">
         <!-- ring-yellow-300 dark:ring-blue-500 bg-yellow-500 dark:bg-gray-700 -->
         <div
             class:ring-yellow-300={!inactive}
@@ -48,7 +48,7 @@
                 class:dark:bg-blue-500={!inactive}
                 class:bg-gray-300={inactive}
                 class:dark:bg-gray-500={inactive}
-                class="w-1 h-full ml-3"
+                class="w-1 h-full"
             />
         {/if}
     </div>
