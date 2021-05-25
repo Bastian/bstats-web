@@ -60,7 +60,7 @@
         shown below.
     </span>
 
-    <CodeBlock language="kotlin" class="mt-2" code={dependency} />
+    <CodeBlock language="gradle" class="mt-2" code={dependency} />
 
     <span
         class="block mt-2 text-gray-500 text-md dark:text-gray-400 max-w-prose"
@@ -78,7 +78,7 @@
         plugin
     </span>
 
-    <CodeBlock language="kotlin" class="mt-2" code={shadowPlugin} />
+    <CodeBlock language="gradle" class="mt-2" code={shadowPlugin} />
 
     <span
         class="block mt-2 text-gray-500 text-md dark:text-gray-400 max-w-prose"
@@ -88,7 +88,7 @@
         task as shown below.
     </span>
 
-    <CodeBlock language="kotlin" class="mt-2" code={shadowJar} />
+    <CodeBlock language="gradle" class="mt-2" code={shadowJar} />
 
     <span
         class="block mt-2 text-gray-500 text-md dark:text-gray-400 max-w-prose"
@@ -101,5 +101,5 @@
         should now look similar to the one shown below.
     </span>
 
-    <CodeBlock language="kotlin" class="mt-2" code={fullBuildScript} />
+    <CodeBlock language="gradle" class="mt-2" code={fullBuildScript} />
 </Step>
