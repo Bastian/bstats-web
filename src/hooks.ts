@@ -6,7 +6,7 @@ import type { GetSession, Handle } from "@sveltejs/kit";
 import * as cookie from "cookie";
 import * as crypto from "crypto";
 import * as fs from "fs";
-import { auth } from "./firebaseAdmin";
+// import { auth } from "./firebaseAdmin";
 
 const { API_BASE_URL } = process.env;
 
@@ -25,10 +25,10 @@ export const getSession: GetSession = async (req) => {
     const cookies = cookie.parse(req.headers.cookie || "");
     const sessionCookie = cookies.session;
 
-    let decodedClaims = null;
+    const decodedClaims = null;
     if (sessionCookie) {
         try {
-            decodedClaims = await auth.verifySessionCookie(sessionCookie, true);
+            // decodedClaims = await auth.verifySessionCookie(sessionCookie, true);
         } catch (e) {
             console.log(e);
         }
