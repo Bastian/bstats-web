@@ -1,17 +1,22 @@
-import firebase from "firebase/app/dist/index.cjs.js";
+import {
+    getAuth,
+    createUserWithEmailAndPassword,
+    sendEmailVerification,
+} from "firebase/auth";
 import { performSessionLogin } from "./performSessionLogin";
-
-export type LoginProvider = "google" | "github" | "twitter";
 
 export async function registerWithEmailAndPassword(
     email: string,
     password: string
 ): Promise<void> {
-    const userCredential = await firebase
-        .auth()
-        .createUserWithEmailAndPassword(email, password);
+    const auth = getAuth();
+    const userCredential = await createUserWithEmailAndPassword(
+        auth,
+        email,
+        password
+    );
 
-    userCredential.user.sendEmailVerification();
+    sendEmailVerification(userCredential.user);
 
     await performSessionLogin(userCredential);
 }

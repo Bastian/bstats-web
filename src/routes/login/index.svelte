@@ -14,7 +14,7 @@
     import StandardNavigation from "$components/navigation/StandardNavigation.svelte";
     import { loginWithEmailAndPassword } from "$helpers/auth/loginWithEmailAndPassword";
     import { loginWithProvider } from "$helpers/auth/loginWithProvider";
-    import type { LoginProvider } from "$helpers/auth/registerWithEmailAndPassword";
+    import type { LoginProvider } from "$helpers/auth/loginWithProvider";
     import ErrorHandler from "$helpers/ErrorHandler.svelte";
     import type { Load } from "@sveltejs/kit";
     import { createForm } from "svelte-forms-lib";

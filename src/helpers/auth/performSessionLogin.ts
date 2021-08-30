@@ -1,8 +1,8 @@
 import { getCookie } from "$helpers/getCookie";
-import type firebase from "firebase/app";
+import type { UserCredential } from "firebase/auth";
 
 export async function performSessionLogin(
-    userCredential: firebase.auth.UserCredential
+    userCredential: UserCredential
 ): Promise<void> {
     const idToken = await userCredential.user.getIdToken();
     const csrfToken = getCookie("csrfToken");

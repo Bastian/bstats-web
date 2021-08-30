@@ -1,10 +1,18 @@
 <script context="module" lang="ts">
     let initialized = false;
+    import { writable } from "svelte/store";
+    import type { FirebaseApp } from "firebase/app";
+
+    export const firebaseApp = writable<FirebaseApp>(null);
 </script>
 
 <script lang="ts">
-    import firebase from "firebase/app/dist/index.cjs.js";
-    import "firebase/auth/dist/index.cjs.js";
+    import { initializeApp } from "firebase/app";
+    import {
+        getAuth,
+        setPersistence,
+        inMemoryPersistence,
+    } from "firebase/auth";
     import { browser } from "$app/env";
     import { session } from "$app/stores";
 
@@ -15,10 +23,9 @@
     }
 
     async function initFirebase() {
-        firebase.initializeApp(firebaseConfig);
+        $firebaseApp = initializeApp(firebaseConfig);
         initialized = true;
-        await (firebase as any)
-            .auth()
-            .setPersistence(firebase.auth.Auth.Persistence.NONE);
+        const auth = getAuth();
+        setPersistence(auth, inMemoryPersistence);
     }
 </script>

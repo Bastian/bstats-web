@@ -1,4 +1,10 @@
-import firebase from "firebase/app/dist/index.cjs.js";
+import {
+    getAuth,
+    signInWithPopup,
+    GoogleAuthProvider,
+    GithubAuthProvider,
+    TwitterAuthProvider,
+} from "firebase/auth";
 import { performSessionLogin } from "./performSessionLogin";
 
 export type LoginProvider = "google" | "github" | "twitter";
@@ -9,16 +15,17 @@ export async function loginWithProvider(
     let provider = null;
     switch (providerName) {
         case "google":
-            provider = new firebase.auth.GoogleAuthProvider();
+            provider = new GoogleAuthProvider();
             break;
         case "github":
-            provider = new firebase.auth.GithubAuthProvider();
+            provider = new GithubAuthProvider();
             break;
         case "twitter":
-            provider = new firebase.auth.TwitterAuthProvider();
+            provider = new TwitterAuthProvider();
             break;
     }
-    const userCredential = await firebase.auth().signInWithPopup(provider);
+    const auth = getAuth();
+    const userCredential = await signInWithPopup(auth, provider);
 
     await performSessionLogin(userCredential);
 }
