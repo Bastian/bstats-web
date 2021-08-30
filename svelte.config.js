@@ -1,16 +1,18 @@
-import sveltePreprocess from "svelte-preprocess";
+import preprocess from "svelte-preprocess";
 import node from "@sveltejs/adapter-node";
 import path from "path";
+
+// https://github.com/svelte-add/svelte-add/issues/67
+const mode = process.env.NODE_ENV;
+const dev = mode === "development";
+process.env.TAILWIND_MODE = dev ? "watch" : "build";
 
 /** @type {import('@sveltejs/kit').Config} */
 const config = {
     // Consult https://github.com/sveltejs/svelte-preprocess
     // for more information about preprocessors
     preprocess: [
-        sveltePreprocess({
-            defaults: {
-                style: "postcss",
-            },
+        preprocess({
             postcss: true,
         }),
     ],

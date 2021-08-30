@@ -4,7 +4,7 @@
     import { session } from "$app/stores";
     import Footer from "$components/Footer.svelte";
     import type { Load } from "@sveltejs/kit";
-    import "../global.css";
+    import "../app.postcss";
 
     export const load: Load = async ({ fetch, session }) => {
         const { API_BASE_URL } = session;

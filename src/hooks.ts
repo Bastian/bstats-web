@@ -1,7 +1,6 @@
 import * as dotenv from "dotenv";
 dotenv.config();
 
-import "./global.css";
 import type { GetSession, Handle } from "@sveltejs/kit";
 import * as cookie from "cookie";
 import * as crypto from "crypto";
