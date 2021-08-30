@@ -8,11 +8,10 @@
 
     export let step: number;
 
-    const dispatch =
-        createEventDispatcher<{
-            skip: undefined;
-            addedService: Service;
-        }>();
+    const dispatch = createEventDispatcher<{
+        skip: undefined;
+        addedService: Service;
+    }>();
 
     function handleAddClick() {
         added = true;
