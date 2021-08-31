@@ -3,7 +3,7 @@
     export { className as class };
 
     export let title: string | null;
-    export let link: { text: string; href: string };
+    export let link: { text: string; href: string } = undefined;
 </script>
 
 <div class="flex flex-col items-center w-full max-w-xl {className}">

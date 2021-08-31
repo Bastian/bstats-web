@@ -88,7 +88,7 @@
         </div>
         <a
             class="p-2 mx-4 rounded focus:outline-none focus:ring-1 ring-blue-200"
-            href="/"
+            href="/service-list"
         >
             Service List
         </a>

@@ -23,13 +23,23 @@
     let className = "";
     export { className as class };
 
+    export let classLabel = "";
+
     // See https://stackoverflow.com/a/57393751 why we don't just bind value
     const handleInput = (event: any) => {
         value = event.target.value;
     };
 </script>
 
-<InputBase {id} {label} {hideLabel} {helpText} {error} class={className}>
+<InputBase
+    {id}
+    {label}
+    {hideLabel}
+    {helpText}
+    {error}
+    {classLabel}
+    class={className}
+>
     <slot name="icon" slot="icon" />
     <input
         {id}

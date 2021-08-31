@@ -16,12 +16,14 @@ A wrapper for inputs to prevent code duplication.
 
     let className = "";
     export { className as class };
+
+    export let classLabel = "";
 </script>
 
 <div class={className}>
     <label
         for={id}
-        class="flex items-center mb-1 text-sm font-medium text-gray-500 dark:text-gray-200"
+        class="flex items-center mb-1 text-sm font-medium text-gray-500 dark:text-gray-200 {classLabel}"
         class:hidden={hideLabel}
     >
         {#if $$slots.icon}

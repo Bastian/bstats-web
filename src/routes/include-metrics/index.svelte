@@ -36,7 +36,7 @@
 
 <StandardNavigation />
 
-<div class="flex-grow pb-24 bg-gray-50 dark:bg-gray-900 background">
+<div class="flex-grow pb-24 bg-gray-50 dark:bg-gray-900">
     <div class="container mx-auto mt-8 md:mt-16">
         <h1 class="block text-4xl font-bold text-blue-900 dark:text-gray-100">
             Include Metrics

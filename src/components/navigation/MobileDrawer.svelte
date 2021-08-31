@@ -63,7 +63,7 @@
 
             <MobileDrawerSection
                 title="Navigation"
-                links={[{ text: "Service List", href: "/" }]}
+                links={[{ text: "Service List", href: "/service-list" }]}
                 bind:drawerOpen={open}
             >
                 <MapIcon slot="icon" />
