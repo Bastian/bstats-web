@@ -27,7 +27,9 @@
             </span>
             <a class="mt-4" href="/">Getting Started</a>
             <a class="mt-4" href="/">Credits / Sponsor</a>
-            <a class="mt-4" href="/">What is my plugin id?</a>
+            <a class="mt-4" href="/what-is-my-plugin-id"
+                >What is my plugin id?</a
+            >
             <button class="mt-4 focus:outline-none" on:click={toggleDarkMode}
                 >Toggle Dark Mode</button
             >
