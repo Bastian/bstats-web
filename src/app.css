@@ -1,3 +1,6 @@
-@import 'tailwindcss';
-@plugin '@tailwindcss/forms';
-@plugin '@tailwindcss/typography';
+/* Tailwind CSS - commented out for legacy migration, will be used later for redesign */
+/* @import 'tailwindcss'; */
+/* @plugin '@tailwindcss/forms'; */
+/* @plugin '@tailwindcss/typography'; */
+
+/* App styles */

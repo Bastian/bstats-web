@@ -1,0 +1,91 @@
+<script lang="ts">
+	import type { PageData } from './$types';
+
+	let { data }: { data: PageData } = $props();
+</script>
+
+<svelte:head>
+	<title>bStats - Getting started</title>
+	<meta name="description" content="bStats collects data for plugin authors. Get started now!" />
+</svelte:head>
+
+<main>
+	<div class="container">
+	<br />
+	<div class="row">
+		<div class="col s12">
+			<div class="card">
+				<div class="card-content">
+					<span class="card-title">Getting started</span>
+					<p>
+						bStats is a free and open source website that helps you to collect usage data for
+						your Bukkit, Spigot, Bungeecord or Sponge plugin. Integrating bStats into your plugin
+						is straight forward and done in a matter of seconds. Detailed instructions can be
+						found on the <a href="/getting-started/include-metrics">Include Metrics</a> site.
+						<br />
+						After adding bStats to your plugin you have to create an account to register your
+						plugin. You can manage your plugins with this account, e.g. adding customs graphs, etc.
+					</p>
+				</div>
+				<div class="card-action">
+					<a href="/getting-started/include-metrics">Include Metrics</a>
+					{#if data.loggedIn}
+						<a href="/add-plugin">Add Plugin</a>
+					{:else}
+						<a href="/register">Registration</a>
+					{/if}
+				</div>
+			</div>
+		</div>
+		<div class="col s12 m6">
+			<div class="card">
+				<div class="card-content">
+					<span class="card-title">What data is collected?</span>
+					<p>
+						bStats does not collect any personal data. Most of the collected data is information
+						about the plugin's server like player count, online mode, Minecraft version, Java
+						version, and more. All data gets sent and stored completely anonymously. Server IPs
+						are only stored for ratelimiting and not linked to the data.
+						<br />
+						All data that is collected is publicly visible. If you are interested in what data is
+						collected for your Minecraft server, take a look at the pages for the plugins on your
+						server. Please note that plugin authors can also send data that is customized for
+						their plugin.
+					</p>
+				</div>
+			</div>
+		</div>
+		<div class="col s12 m6">
+			<div class="card">
+				<div class="card-content">
+					<span class="card-title">Custom Graphs</span>
+					<p>
+						bStats supports the creation of custom graphs. Take a look at the examples to get a
+						feel how creating custom graphs works. You may also like to check out our REST api.
+					</p>
+				</div>
+				<div class="card-action">
+					<a href="/help/custom-charts">Examples</a>
+					<a href="/help/rest-api">REST Api</a>
+				</div>
+			</div>
+		</div>
+		<div class="col s12 m6">
+			<div class="card">
+				<div class="card-content">
+					<span class="card-title">Disabling bStats</span>
+					<p>
+						If you don't want bStats to collect data from your server, you can disable it in the
+						bStats config file. This file can be found in the <i>/plugins/bStats/</i> folder.
+						<br />
+						bStats has nearly no effect on your server's performance and the sent data is
+						completely anonymous. The collected data is important information for plugin authors
+						to improve their plugins and keep motivated. To value their work and effort, please
+						keep bStats enabled.
+					</p>
+				</div>
+			</div>
+		</div>
+	</div>
+	</div>
+</main>

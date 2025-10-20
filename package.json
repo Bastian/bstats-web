@@ -13,6 +13,19 @@
 		"format": "prettier --write .",
 		"lint": "prettier --check . && eslint ."
 	},
+	"dependencies": {
+		"async": "^2.6.0",
+		"async-waterfall": "^0.1.5",
+		"bcryptjs": "^2.4.3",
+		"connect-redis": "^3.3.3",
+		"cookie-parser": "^1.4.3",
+		"express-session": "^1.15.6",
+		"geoip-lite": "^1.2.1",
+		"ioredis": "^3.2.2",
+		"passport": "^0.4.0",
+		"passport-local": "^1.0.0",
+		"uuid": "^3.2.1"
+	},
 	"devDependencies": {
 		"@eslint/compat": "^1.4.0",
 		"@eslint/js": "^9.36.0",
@@ -23,6 +36,13 @@
 		"@tailwindcss/typography": "^0.5.18",
 		"@tailwindcss/vite": "^4.1.13",
 		"@types/node": "^22",
+		"@types/bcryptjs": "^2",
+		"@types/cookie-parser": "^1",
+		"@types/express-session": "^1",
+		"@types/geoip-lite": "^1",
+		"@types/passport": "^1",
+		"@types/passport-local": "^1",
+		"@types/uuid": "^9",
 		"eslint": "^9.36.0",
 		"eslint-config-prettier": "^10.1.8",
 		"eslint-plugin-svelte": "^3.12.4",

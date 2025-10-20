@@ -1,2 +1,118 @@
-<h1>Welcome to SvelteKit</h1>
-<p>Visit <a href="https://svelte.dev/docs/kit">svelte.dev/docs/kit</a> to read the documentation</p>
+<script lang="ts">
+	let { data } = $props();
+</script>
+
+<svelte:head>
+	<!-- Twitter stuff -->
+	<meta name="twitter:card" content="summary" />
+	<meta name="twitter:site" content="@btobastian" />
+	<meta name="twitter:title" content="bStats - Plugin Metrics made with <3" />
+	<meta
+		name="twitter:description"
+		content="bStats collects data for plugin authors. It's free and easy to use!"
+	/>
+	<meta name="twitter:image" content="https://bstats.org/images/Twitter.jpg" />
+
+	<meta
+		name="description"
+		content="bStats collects data for plugin authors. It's free and easy to use!"
+	/>
+	<title>bStats</title>
+</svelte:head>
+
+<div class="section no-pad-bot" id="index-banner">
+	<div class="container">
+		<br /><br />
+		<h1 class="header center {data.customColor1}-text">bStats</h1>
+		<div class="row center">
+			<h5 class="header col s12 light">Plugin Metrics made with ❤</h5>
+		</div>
+		<div class="row center">
+			<a
+				href="/getting-started"
+				id="download-button"
+				class="btn-large waves-effect waves-light {data.customColor1}">Get Started</a
+			>
+		</div>
+		<br /><br />
+	</div>
+</div>
+
+<div class="container">
+	<!--   Icon Section   -->
+	<div class="row">
+		<div class="col s12 m6 l4">
+			<div class="icon-block">
+				<h2 class="center red-text"><i class="material-icons">assessment</i></h2>
+				<h5 class="center">Plugin Metrics</h5>
+
+				<p class="light">
+					bStats allows you to collect usage data for your Bukkit, Spigot, Bungeecord, Sponge and
+					Velocity plugins.
+				</p>
+			</div>
+		</div>
+
+		<div class="col s12 m6 l4">
+			<div class="icon-block">
+				<h2 class="center red-text"><i class="material-icons">storage</i></h2>
+				<h5 class="center">Hosted by GameHosting</h5>
+
+				<p class="light">
+					We are happy to be sponsored by <a href="https://www.gamehosting.it/">GameHosting</a>! You
+					should definitely check out their website!
+				</p>
+			</div>
+		</div>
+
+		<div class="col s12 m6 l4">
+			<div class="icon-block">
+				<h2 class="center red-text"><i class="material-icons">schedule</i></h2>
+				<h5 class="center">Integrated within seconds</h5>
+
+				<p class="light">
+					bStats is extremely easy to integrate into your plugin. Just add one class to your plugin
+					and you are done!
+				</p>
+			</div>
+		</div>
+
+		<div class="col s12 m6 l4">
+			<div class="icon-block">
+				<h2 class="center red-text"><i class="material-icons">trending_up</i></h2>
+				<h5 class="center">Lightning fast</h5>
+
+				<p class="light">
+					bStats is optimized for performance and stability. It's extremely reliable, scalable and
+					still super fast. Say goodbye to slow response times!
+				</p>
+			</div>
+		</div>
+
+		<div class="col s12 m6 l4">
+			<div class="icon-block">
+				<h2 class="center red-text"><i class="material-icons">code</i></h2>
+				<h5 class="center">Open source</h5>
+
+				<p class="light">
+					bStats is completely open source! Feel free to check out our <a
+						href="https://github.com/Bastian/bStats">GitHub page</a
+					>.
+				</p>
+			</div>
+		</div>
+
+		<div class="col s12 m6 l4">
+			<div class="icon-block">
+				<h2 class="center"><img alt="Discord" src="/images/discord.svg" /></h2>
+				<h5 class="center">Join our Discord</h5>
+
+				<p class="light">
+					Keep up to date with the development of bStats, get quick support or just chat with other
+					bStats users. Everything in one place: <a href="https://discord.gg/qTXtXuf">Invite</a>
+				</p>
+			</div>
+		</div>
+	</div>
+</div>
+<br /><br />

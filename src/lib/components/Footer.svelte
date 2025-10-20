@@ -1,0 +1,171 @@
+<script lang="ts">
+	let { customColor1 = 'teal', loggedIn = false } = $props<{
+		customColor1?: string;
+		loggedIn?: boolean;
+	}>();
+
+	function setCookie(name: string, value: string, exdays: number) {
+		const date = new Date();
+		date.setTime(date.getTime() + exdays * 24 * 60 * 60 * 1000);
+		const expires = 'expires=' + date.toUTCString();
+		document.cookie = name + '=' + value + ';' + expires + ';path=/';
+	}
+
+	function setColor(color: string) {
+		setCookie('custom-color1', color, 365);
+		location.reload();
+	}
+</script>
+
+<footer class="page-footer {customColor1} darken-2">
+	<div class="container">
+		<div class="row">
+			<div class="col l6 m4 s12">
+				<h5 class="white-text">About bStats</h5>
+				<p class="grey-text text-lighten-4">Made with ❤</p>
+			</div>
+			<div class="col l3 m4 s12">
+				<h5 class="white-text">Useful links</h5>
+				<ul>
+					<li><a class="white-text" href="/getting-started">Getting Started</a></li>
+					<br class="hide-on-med-and-up" />
+					{#if loggedIn}
+						<li><a class="white-text" href="/add-plugin">Add Plugin</a></li>
+					{:else}
+						<li><a class="white-text" href="/login">Login</a></li>
+						<br class="hide-on-med-and-up" />
+						<li><a class="white-text" href="/register">Create Account</a></li>
+					{/if}
+					<br class="hide-on-med-and-up" />
+					<li><a class="white-text" href="/credits">Credits / Sponsor</a></li>
+					<br class="hide-on-med-and-up" />
+					<li><a class="white-text" href="/faq">FAQ</a></li>
+					<br class="hide-on-med-and-up" />
+					<li><a class="white-text" href="#colorPickerModal">Change Color</a></li>
+					<br class="hide-on-med-and-up" />
+					<li><a class="white-text" href="/what-is-my-plugin-id">What is my plugin id?</a></li>
+				</ul>
+			</div>
+			<div class="col l3 m4 s12">
+				<h5 class="white-text">Legal notices</h5>
+				<ul>
+					<li><a class="white-text" href="/terms-of-use">Terms of Use</a></li>
+					<br class="hide-on-med-and-up" />
+					<li><a class="white-text" href="/privacy-policy">Privacy Policy</a></li>
+					<br class="hide-on-med-and-up" />
+					<li><a class="white-text" href="/imprint">Imprint</a></li>
+				</ul>
+			</div>
+		</div>
+	</div>
+	<div class="footer-copyright">
+		<div class="container">
+			Made with <a class="{customColor1}-text text-lighten-3" href="http://materializecss.com"
+				>Materialize</a
+			>
+		</div>
+	</div>
+</footer>
+
+<!-- Color picker modal -->
+<div id="colorPickerModal" class="modal">
+	<div class="modal-content">
+		<div class="{customColor1}-text" style="text-align: center;">
+			<h4><u><b>Pick a color</b></u></h4>
+		</div>
+		<div class="row">
+			<div class="col s12 m6 l4 xl3">
+				<div class="card-panel coloredBox truncate hoverable red" onclick={() => setColor('red')}>Red</div>
+			</div>
+			<div class="col s12 m6 l4 xl3">
+				<div class="card-panel coloredBox truncate hoverable teal" onclick={() => setColor('teal')}>Teal</div
+				>
+			</div>
+			<div class="col s12 m6 l4 xl3">
+				<div class="card-panel coloredBox truncate hoverable blue" onclick={() => setColor('blue')}>Blue</div
+				>
+			</div>
+			<div class="col s12 m6 l4 xl3">
+				<div class="card-panel coloredBox truncate hoverable pink" onclick={() => setColor('pink')}>
+					❤ Pink ❤
+				</div>
+			</div>
+			<div class="col s12 m6 l4 xl3">
+				<div class="card-panel coloredBox truncate hoverable brown" onclick={() => setColor('brown')}>
+					Brown
+				</div>
+			</div>
+			<div class="col s12 m6 l4 xl3">
+				<div class="card-panel coloredBox truncate hoverable green" onclick={() => setColor('green')}>
+					Green
+				</div>
+			</div>
+			<div class="col s12 m6 l4 xl3">
+				<div class="card-panel coloredBox truncate hoverable black" onclick={() => setColor('black')}>
+					Black
+				</div>
+			</div>
+			<div class="col s12 m6 l4 xl3">
+				<div class="card-panel coloredBox truncate hoverable purple" onclick={() => setColor('purple')}>
+					Purple
+				</div>
+			</div>
+			<div class="col s12 m6 l4 xl3">
+				<div class="card-panel coloredBox truncate hoverable deep-purple" onclick={() => setColor('deep-purple')}
+					>Deep Purple</div
+				>
+			</div>
+			<div class="col s12 m6 l4 xl3">
+				<div class="card-panel coloredBox truncate hoverable indigo" onclick={() => setColor('indigo')}>
+					Indigo
+				</div>
+			</div>
+			<div class="col s12 m6 l4 xl3">
+				<div class="card-panel coloredBox truncate hoverable light-blue" onclick={() => setColor('light-blue')}
+					>Light Blue</div
+				>
+			</div>
+			<div class="col s12 m6 l4 xl3">
+				<div class="card-panel coloredBox truncate hoverable cyan" onclick={() => setColor('cyan')}>Cyan</div>
+			</div>
+			<div class="col s12 m6 l4 xl3">
+				<div
+					class="card-panel coloredBox truncate hoverable light-green"
+					onclick={() => setColor('light-green')}>Light Green</div
+				>
+			</div>
+			<div class="col s12 m6 l4 xl3">
+				<div class="card-panel coloredBox truncate hoverable lime" onclick={() => setColor('lime')}>Lime</div>
+			</div>
+			<div class="col s12 m6 l4 xl3">
+				<div class="card-panel coloredBox truncate hoverable yellow" onclick={() => setColor('yellow')}>
+					Yellow
+				</div>
+			</div>
+			<div class="col s12 m6 l4 xl3">
+				<div class="card-panel coloredBox truncate hoverable amber" onclick={() => setColor('amber')}>
+					Amber
+				</div>
+			</div>
+			<div class="col s12 m6 l4 xl3">
+				<div class="card-panel coloredBox truncate hoverable orange" onclick={() => setColor('orange')}>
+					Orange
+				</div>
+			</div>
+			<div class="col s12 m6 l4 xl3">
+				<div
+					class="card-panel coloredBox truncate hoverable deep-orange"
+					onclick={() => setColor('deep-orange')}>Deep Orange</div
+				>
+			</div>
+			<div class="col s12 m6 l4 xl3">
+				<div class="card-panel coloredBox truncate hoverable grey" onclick={() => setColor('grey')}>Grey</div>
+			</div>
+			<div class="col s12 m6 l4 xl3">
+				<div class="card-panel coloredBox truncate hoverable blue-grey" onclick={() => setColor('blue-grey')}
+					>Blue Grey</div
+				>
+			</div>
+		</div>
+	</div>
+</div>
