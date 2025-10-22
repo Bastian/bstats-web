@@ -157,19 +157,6 @@ export async function getPluginBySoftwareUrlAndName(
 	return getPluginById(parseInt(pluginId), fields);
 }
 
-export async function getGlobalPluginBySoftwareUrl(
-	url: string,
-	fields: PluginField[] = DEFAULT_PLUGIN_FIELDS
-): Promise<Partial<Plugin> | null> {
-	const software = await getSoftwareByUrl(url, ['globalPlugin']);
-
-	if (software === null || software.globalPlugin === undefined) {
-		return null;
-	}
-
-	return getPluginById(software.globalPlugin, fields);
-}
-
 export async function getChartByUid(
 	uid: number,
 	fields: ChartField[] = DEFAULT_CHART_FIELDS
@@ -275,9 +262,7 @@ export async function getPluginsOfUser(
 		.getRedisCluster()
 		.smembers(`users.index.plugins.username:${normalizedUsername}`);
 
-	const plugins = await Promise.all(
-		pluginIds.map((id) => getPluginById(parseInt(id), fields))
-	);
+	const plugins = await Promise.all(pluginIds.map((id) => getPluginById(parseInt(id), fields)));
 
 	return plugins.filter((plugin): plugin is Partial<Plugin> => plugin !== null);
 }
@@ -314,179 +299,7 @@ export async function getLimitedLineChartData(
 	return data;
 }
 
-export async function getFullLineChartData(
-	chartUid: number,
-	line: string
-): Promise<Array<[number, number]>> {
-	const res = await databaseManager.getRedisCluster().hgetall(`data:${chartUid}.${line}`);
-
-	const data: Array<[number, number]> = [];
-	const maxTimestamp = timeUtil.tms2000ToDate(timeUtil.dateToTms2000(new Date()) - 1).getTime();
-
-	for (const [property, value] of Object.entries(res)) {
-		const timestamp = parseInt(property);
-		if (timestamp <= maxTimestamp && property !== 'ignored') {
-			data.push([timestamp, parseInt(value)]);
-		}
-	}
-
-	return data;
-}
-
-export async function getPieData(chartUid: number): Promise<Array<{ name: string; y: number }>> {
-	const tms2000 = timeUtil.dateToTms2000(new Date()) - 1;
-	const res = await databaseManager
-		.getRedisCluster()
-		.zrange(`data:${chartUid}.${tms2000}`, 0, -1, 'WITHSCORES');
-
-	const data: Array<{ name: string; y: number }> = [];
-	for (let i = 0; i < res.length; i += 2) {
-		data.push({ name: res[i], y: parseInt(res[i + 1]) });
-	}
-
-	return data;
-}
-
-export async function getDrilldownPieData(chartUid: number): Promise<DrilldownPieData> {
-	const tms2000 = timeUtil.dateToTms2000(new Date()) - 1;
-	const res = await databaseManager
-		.getRedisCluster()
-		.zrange(`data:${chartUid}.${tms2000}`, 0, -1, 'WITHSCORES');
-
-	const seriesData: Array<{ name: string; y: number; drilldown: string }> = [];
-	const drilldownPromises: Promise<{ name: string; id: string; data: Array<[string, number]> }>[] =
-		[];
-
-	for (let i = 0; i < res.length; i += 2) {
-		const name = res[i];
-		const value = parseInt(res[i + 1]);
-		seriesData.push({ name, y: value, drilldown: name });
-		drilldownPromises.push(getDrilldownPieDrilldownData(chartUid, name));
-	}
-
-	const drilldownData = await Promise.all(drilldownPromises);
-
-	return { seriesData, drilldownData };
-}
-
-async function getDrilldownPieDrilldownData(
-	chartUid: number,
-	name: string
-): Promise<{ name: string; id: string; data: Array<[string, number]> }> {
-	const tms2000 = timeUtil.dateToTms2000(new Date()) - 1;
-	const res = await databaseManager
-		.getRedisCluster()
-		.zrange(`data:${chartUid}.${tms2000}.${name}`, 0, -1, 'WITHSCORES');
-
-	const data: Array<[string, number]> = [];
-	for (let i = 0; i < res.length; i += 2) {
-		data.push([res[i], parseInt(res[i + 1])]);
-	}
-
-	return { name, id: name, data };
-}
-
-export async function getMapData(
-	chartUid: number
-): Promise<Array<{ code: string; value: number }>> {
-	const tms2000 = timeUtil.dateToTms2000(new Date()) - 1;
-	const res = await databaseManager
-		.getRedisCluster()
-		.zrange(`data:${chartUid}.${tms2000}`, 0, -1, 'WITHSCORES');
-
-	const data: Array<{ code: string; value: number }> = [];
-	for (let i = 0; i < res.length; i += 2) {
-		data.push({ code: res[i], value: parseInt(res[i + 1]) });
-	}
-
-	return data;
-}
-
-export async function updatePieData(
-	chartUid: number,
-	tms2000: number,
-	valueName: string,
-	value: number
-): Promise<void> {
-	try {
-		await databaseManager.getRedisCluster().zincrby(`data:${chartUid}.${tms2000}`, value, valueName);
-		await databaseManager.getRedisCluster().expire(`data:${chartUid}.${tms2000}`, 60 * 61);
-	} catch (err) {
-		console.error('Error updating pie data:', err);
-	}
-}
-
-export async function updateMapData(
-	chartUid: number,
-	tms2000: number,
-	valueName: string,
-	value: number
-): Promise<void> {
-	return updatePieData(chartUid, tms2000, valueName, value);
-}
-
-export async function updateLineChartData(
-	chartUid: number,
-	value: number,
-	line: string,
-	tms2000: number
-): Promise<void> {
-	try {
-		await databaseManager
-			.getRedisCluster()
-			.hincrby(
-				`data:${chartUid}.${line}`,
-				String(timeUtil.tms2000ToDate(tms2000).getTime()),
-				value
-			);
-	} catch (err) {
-		console.error('Error updating line chart data:', err);
-	}
-}
-
-export async function updateDrilldownPieData(
-	chartUid: number,
-	tms2000: number,
-	valueName: string,
-	values: Record<string, number>
-): Promise<void> {
-	try {
-		let totalValue = 0;
-
-		await Promise.all(
-			Object.entries(values).map(async ([key, value]) => {
-				totalValue += value;
-				await databaseManager
-					.getRedisCluster()
-					.zincrby(`data:${chartUid}.${tms2000}.${valueName}`, value, key);
-				await databaseManager
-					.getRedisCluster()
-					.expire(`data:${chartUid}.${tms2000}.${valueName}`, 60 * 61);
-			})
-		);
-
-		await databaseManager
-			.getRedisCluster()
-			.zincrby(`data:${chartUid}.${tms2000}`, totalValue, valueName);
-		await databaseManager.getRedisCluster().expire(`data:${chartUid}.${tms2000}`, 60 * 61);
-	} catch (err) {
-		console.error('Error updating drilldown pie data:', err);
-	}
-}
-
-export async function updateBarData(
-	chartUid: number,
-	tms2000: number,
-	category: string,
-	values: Record<string, number>
-): Promise<void> {
-	console.warn('updateBarData not yet implemented');
-}
-
-export async function addPlugin(
-	plugin: Omit<Plugin, 'id'>,
-	software: Software
-): Promise<number> {
+export async function addPlugin(plugin: Omit<Plugin, 'id'>, software: Software): Promise<number> {
 	const pluginId = await databaseManager.getRedisCluster().incr('plugins.id-increment');
 
 	await Promise.all([
@@ -506,18 +319,6 @@ export async function addPlugin(
 	]);
 
 	return pluginId;
-}
-
-export async function getCachedPage(url: string): Promise<string | null> {
-	const tms2000 = timeUtil.dateToTms2000(new Date()) - 1;
-	return databaseManager.getRedisCluster().get(`urlcache:${tms2000}.${url}`);
-}
-
-export async function addPageToCache(url: string, content: string): Promise<void> {
-	const tms2000 = timeUtil.dateToTms2000(new Date()) - 1;
-	await databaseManager
-		.getRedisCluster()
-		.set(`urlcache:${tms2000}.${url}`, content, 'EX', 60 * 31);
 }
 
 // ============================================================================
