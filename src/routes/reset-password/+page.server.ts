@@ -33,16 +33,7 @@ export const load: PageServerLoad = async ({ url }) => {
 
 	// Check if token exists and is valid
 	try {
-		const result = await new Promise<[string | null, string | null]>((resolve, reject) => {
-			redisCluster.hmget(
-				tokenKey,
-				['username', 'expiry'],
-				(err: Error | null, result: [string | null, string | null]) => {
-					if (err) reject(err);
-					else resolve(result);
-				}
-			);
-		});
+		const result = await redisCluster.hmget(tokenKey, 'username', 'expiry');
 
 		if (!result[0]) {
 			return {
@@ -58,12 +49,7 @@ export const load: PageServerLoad = async ({ url }) => {
 
 		if (Date.now() > expiry) {
 			// Token expired, clean it up
-			await new Promise<void>((resolve, reject) => {
-				redisCluster.del(tokenKey, (err: Error | null) => {
-					if (err) reject(err);
-					else resolve();
-				});
-			});
+			await redisCluster.del(tokenKey);
 			return {
 				error: 'Reset token has expired. Please request a new one.',
 				success: null,
@@ -126,16 +112,7 @@ export const actions = {
 
 		// Verify token
 		try {
-			const result = await new Promise<[string | null, string | null]>((resolve, reject) => {
-				redisCluster.hmget(
-					tokenKey,
-					['username', 'expiry'],
-					(err: Error | null, result: [string | null, string | null]) => {
-						if (err) reject(err);
-						else resolve(result);
-					}
-				);
-			});
+			const result = await redisCluster.hmget(tokenKey, 'username', 'expiry');
 
 			if (!result[0]) {
 				return fail(400, {
@@ -150,12 +127,7 @@ export const actions = {
 
 			if (Date.now() > expiry) {
 				// Token expired, clean it up
-				await new Promise<void>((resolve, reject) => {
-					redisCluster.del(tokenKey, (err: Error | null) => {
-						if (err) reject(err);
-						else resolve();
-					});
-				});
+				await redisCluster.del(tokenKey);
 				return fail(400, {
 					error: 'Reset token has expired. Please request a new one.',
 					success: null,
@@ -168,20 +140,10 @@ export const actions = {
 
 			// Update password in Redis
 			const userKey = `users:${username}`;
-			await new Promise<void>((resolve, reject) => {
-				redisCluster.hmset(userKey, 'password', newHash, (err: Error | null) => {
-					if (err) reject(err);
-					else resolve();
-				});
-			});
+			await redisCluster.hset(userKey, 'password', newHash);
 
 			// Delete the used token
-			await new Promise<void>((resolve, reject) => {
-				redisCluster.del(tokenKey, (err: Error | null) => {
-					if (err) reject(err);
-					else resolve();
-				});
-			});
+			await redisCluster.del(tokenKey);
 		} catch (error) {
 			console.error('Error resetting password:', error);
 			return fail(500, {

@@ -2,7 +2,6 @@ import type { PageServerLoad, Actions } from './$types';
 import type { RequestEvent } from '@sveltejs/kit';
 import { redirect, fail } from '@sveltejs/kit';
 import * as dataManager from '$lib/server/dataManager.js';
-import * as databaseManager from '$lib/server/databaseManager.js';
 import config from '$lib/server/config.js';
 
 export const load: PageServerLoad = async ({ locals }) => {
@@ -117,8 +116,7 @@ export const actions = {
 			}
 
 			// Update plugin with chart UIDs
-			const redis = databaseManager.getRedisCluster();
-			await redis.hset(`plugins:${pluginId}`, 'charts', JSON.stringify(chartUids));
+			await dataManager.updatePluginCharts(pluginId, chartUids);
 
 			trimmedNameForRedirect = trimmedName;
 		} catch (err) {
@@ -140,33 +138,17 @@ async function addChart(
 	chart: any,
 	position: number
 ): Promise<number> {
-	const redis = databaseManager.getRedisCluster();
-
-	// Increment chart UID
-	const chartUid = await redis.incr('charts.uid-increment');
-
 	// Replace %plugin.name% in chart title
 	const chartTitle = chart.title.replace('%plugin.name%', pluginName);
 
-	// Create chart data
-	const chartData = {
-		pluginId: pluginId.toString(),
+	const chartUid = await dataManager.createChart(pluginId, {
 		id: chart.id,
 		type: chart.type,
-		position: position.toString(),
+		position,
 		title: chartTitle,
-		default: '1',
-		data: JSON.stringify(chart.data)
-	};
-
-	// Store chart
-	await redis.hmset(`charts:${chartUid}`, chartData);
-
-	// Create index for quick lookup
-	await redis.set(`charts.index.uid.pluginId+chartId:${pluginId}.${chart.id}`, chartUid);
-
-	// Add to charts set
-	await redis.sadd('charts.uids', chartUid);
+		isDefault: true,
+		data: chart.data
+	});
 
 	return chartUid;
 }

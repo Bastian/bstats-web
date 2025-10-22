@@ -519,3 +519,128 @@ export async function addPageToCache(url: string, content: string): Promise<void
 		.getRedisCluster()
 		.set(`urlcache:${tms2000}.${url}`, content, 'EX', 60 * 31);
 }
+
+// ============================================================================
+// Chart Management Operations
+// ============================================================================
+
+export async function createChart(
+	pluginId: number,
+	chartData: {
+		id: string;
+		type: string;
+		position: number;
+		title: string;
+		isDefault?: boolean;
+		data: unknown;
+	}
+): Promise<number> {
+	const redis = databaseManager.getRedisCluster();
+
+	// Increment chart UID
+	const chartUid = await redis.incr('charts.uid-increment');
+
+	// Create chart data for Redis
+	const chartRedis: Record<string, string> = {
+		pluginId: pluginId.toString(),
+		id: chartData.id,
+		type: chartData.type,
+		position: chartData.position.toString(),
+		title: chartData.title,
+		data: JSON.stringify(chartData.data)
+	};
+
+	// Add default flag if specified
+	if (chartData.isDefault) {
+		chartRedis.default = '1';
+	}
+
+	// Store chart
+	await redis.hmset(`charts:${chartUid}`, chartRedis);
+
+	// Create index for quick lookup
+	await redis.set(`charts.index.uid.pluginId+chartId:${pluginId}.${chartData.id}`, chartUid);
+
+	// Add to charts set
+	await redis.sadd('charts.uids', chartUid);
+
+	return chartUid;
+}
+
+export async function deleteChart(chartUid: number): Promise<void> {
+	await databaseManager.getRedisCluster().del(`charts:${chartUid}`);
+}
+
+export async function updateChartPosition(chartUid: number, position: number): Promise<void> {
+	await databaseManager.getRedisCluster().hset(`charts:${chartUid}`, 'position', position);
+}
+
+export async function deleteChartIndex(pluginId: number, chartId: string): Promise<void> {
+	await databaseManager
+		.getRedisCluster()
+		.del(`charts.index.uid.pluginId+chartId:${pluginId}.${chartId}`);
+}
+
+export async function removeChartFromUids(chartUid: number): Promise<void> {
+	await databaseManager.getRedisCluster().srem('charts.uids', chartUid);
+}
+
+export async function deleteChartLineData(chartUid: number): Promise<void> {
+	await databaseManager.getRedisCluster().del(`data:${chartUid}.1`);
+}
+
+// ============================================================================
+// Plugin Management Operations
+// ============================================================================
+
+export async function updatePluginCharts(pluginId: number, charts: number[]): Promise<void> {
+	await databaseManager
+		.getRedisCluster()
+		.hset(`plugins:${pluginId}`, 'charts', JSON.stringify(charts));
+}
+
+export async function deletePlugin(pluginId: number): Promise<void> {
+	await databaseManager.getRedisCluster().del(`plugins:${pluginId}`);
+}
+
+export async function deletePluginIndex(softwareUrl: string, pluginName: string): Promise<void> {
+	const normalizedUrl = softwareUrl.toLowerCase();
+	const normalizedName = pluginName.toLowerCase();
+	await databaseManager
+		.getRedisCluster()
+		.del(`plugins.index.id.url+name:${normalizedUrl}.${normalizedName}`);
+}
+
+export async function removePluginFromPluginIds(pluginId: number): Promise<void> {
+	await databaseManager.getRedisCluster().srem('plugins.ids', pluginId);
+}
+
+export async function removePluginFromUser(username: string, pluginId: number): Promise<void> {
+	const normalizedUsername = username.toLowerCase();
+	await databaseManager
+		.getRedisCluster()
+		.srem(`users.index.plugins.username:${normalizedUsername}`, pluginId);
+}
+
+export async function addPluginToUser(username: string, pluginId: number): Promise<void> {
+	const normalizedUsername = username.toLowerCase();
+	await databaseManager
+		.getRedisCluster()
+		.sadd(`users.index.plugins.username:${normalizedUsername}`, pluginId);
+}
+
+export async function updatePluginOwner(pluginId: number, newOwner: string): Promise<void> {
+	await databaseManager.getRedisCluster().hset(`plugins:${pluginId}`, 'owner', newOwner);
+}
+
+export async function transferPluginOwnership(
+	pluginId: number,
+	oldOwner: string,
+	newOwner: string
+): Promise<void> {
+	await Promise.all([
+		removePluginFromUser(oldOwner, pluginId),
+		addPluginToUser(newOwner, pluginId),
+		updatePluginOwner(pluginId, newOwner)
+	]);
+}

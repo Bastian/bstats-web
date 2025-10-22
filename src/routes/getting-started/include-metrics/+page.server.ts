@@ -8,15 +8,7 @@ export const load: PageServerLoad = async ({ url }) => {
 	const pluginId = url.searchParams.get('pluginId') || '';
 
 	// Get all software to show Metrics.java and example links
-	const software = await new Promise<any[]>((resolve, reject) => {
-		dataManager.getAllSoftware(
-			['name', 'metricsClass', 'examplePlugin'],
-			(err: any, result: any[]) => {
-				if (err) reject(err);
-				else resolve(result || []);
-			}
-		);
-	});
+	const software = await dataManager.getAllSoftware(['name', 'metricsClass', 'examplePlugin']);
 
 	return {
 		software,

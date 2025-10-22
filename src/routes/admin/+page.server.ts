@@ -48,12 +48,7 @@ export const actions = {
 
 		// Check if user exists
 		try {
-			const exists = await new Promise<number>((resolve, reject) => {
-				redisCluster.hexists(userKey, 'name', (err: Error | null, result: number) => {
-					if (err) reject(err);
-					else resolve(result);
-				});
-			});
+			const exists = await redisCluster.hexists(userKey, 'name');
 
 			if (!exists) {
 				return fail(404, {
@@ -68,29 +63,15 @@ export const actions = {
 
 			// Store reset token in Redis
 			const tokenKey = `password_reset:${resetToken}`;
-			await new Promise<void>((resolve, reject) => {
-				redisCluster.hmset(
-					tokenKey,
-					{
-						username: username.toLowerCase(),
-						expiry: expiry.toString(),
-						created_by: locals.user!.username,
-						created_at: Date.now().toString()
-					},
-					(err: Error | null) => {
-						if (err) reject(err);
-						else resolve();
-					}
-				);
+			await redisCluster.hmset(tokenKey, {
+				username: username.toLowerCase(),
+				expiry: expiry.toString(),
+				created_by: locals.user!.username,
+				created_at: Date.now().toString()
 			});
 
 			// Set expiration on the token key
-			await new Promise<void>((resolve, reject) => {
-				redisCluster.expire(tokenKey, RESET_TOKEN_EXPIRY_SECONDS, (err: Error | null) => {
-					if (err) reject(err);
-					else resolve();
-				});
-			});
+			await redisCluster.expire(tokenKey, RESET_TOKEN_EXPIRY_SECONDS);
 
 			const resetLink = `${url.protocol}//${url.host}/reset-password?token=${resetToken}`;
 

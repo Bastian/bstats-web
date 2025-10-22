@@ -1,7 +1,6 @@
 import type { PageServerLoad, Actions } from './$types';
 import { redirect, fail, error } from '@sveltejs/kit';
 import * as dataManager from '$lib/server/dataManager.js';
-import * as databaseManager from '$lib/server/databaseManager.js';
 
 export const load: PageServerLoad = async ({ params, locals }) => {
 	if (!locals.loggedIn || !locals.user) {
@@ -227,17 +226,11 @@ export const actions = {
 			return fail(401, { error: 'You are not allowed to edit this plugin' });
 		}
 
-		const chart = await new Promise<any>((resolve, reject) => {
-			dataManager.getChartByPluginIdAndChartId(
-				pluginId,
-				chartId,
-				['default', 'position', 'type'],
-				(err: any, result: any) => {
-					if (err) reject(err);
-					else resolve(result);
-				}
-			);
-		});
+		const chart = await dataManager.getChartByPluginIdAndChartId(parseInt(pluginId), chartId, [
+			'default',
+			'position',
+			'type'
+		]);
 
 		if (!chart) {
 			return fail(404, { error: 'Unknown chart!' });
@@ -247,34 +240,33 @@ export const actions = {
 			return fail(403, { error: 'You are not allowed to delete default charts!' });
 		}
 
-		const redis = databaseManager.getRedisCluster();
-
 		// Delete chart
-		await redis.del(`charts:${chart.uid}`);
+		await dataManager.deleteChart(chart.uid);
 
 		// Remove from plugin's charts array
 		const index = plugin.charts.indexOf(chart.uid);
 		if (index !== -1) {
 			plugin.charts.splice(index, 1);
 		}
-		await redis.hset(`plugins:${pluginId}`, 'charts', JSON.stringify(plugin.charts));
+		await dataManager.updatePluginCharts(parseInt(pluginId), plugin.charts);
 
 		// Update positions of remaining charts
-		const allCharts = (await dataManager.getChartsByPluginId(parseInt(pluginId), ['position'])) || [];
+		const allCharts =
+			(await dataManager.getChartsByPluginId(parseInt(pluginId), ['position'])) || [];
 
 		for (const c of allCharts) {
-			if (c.position > chart.position) {
-				await redis.hset(`charts:${c.uid}`, 'position', c.position - 1);
+			if (c.position! > chart.position!) {
+				await dataManager.updateChartPosition(c.uid!, c.position! - 1);
 			}
 		}
 
 		// Delete chart indexes
-		await redis.del(`charts.index.uid.pluginId+chartId:${pluginId}.${chartId}`);
-		await redis.srem('charts.uids', chart.uid);
+		await dataManager.deleteChartIndex(parseInt(pluginId), chartId);
+		await dataManager.removeChartFromUids(chart.uid);
 
 		// Delete chart data if single_linechart
 		if (chart.type === 'single_linechart') {
-			await redis.del(`data:${chart.uid}.1`);
+			await dataManager.deleteChartLineData(chart.uid);
 		}
 
 		return { success: true };
@@ -306,21 +298,19 @@ export const actions = {
 
 		const charts = (await dataManager.getChartsByPluginId(parseInt(pluginId), ['position'])) || [];
 
-		const redis = databaseManager.getRedisCluster();
-
 		for (const chart of charts) {
 			if (oldIndex > newIndex) {
-				if (chart.position >= newIndex && chart.position < oldIndex) {
-					await redis.hset(`charts:${chart.uid}`, 'position', chart.position + 1);
+				if (chart.position! >= newIndex && chart.position! < oldIndex) {
+					await dataManager.updateChartPosition(chart.uid!, chart.position! + 1);
 				}
 			}
 			if (oldIndex < newIndex) {
-				if (chart.position > oldIndex && chart.position <= newIndex) {
-					await redis.hset(`charts:${chart.uid}`, 'position', chart.position - 1);
+				if (chart.position! > oldIndex && chart.position! <= newIndex) {
+					await dataManager.updateChartPosition(chart.uid!, chart.position! - 1);
 				}
 			}
 			if (chart.position === oldIndex) {
-				await redis.hset(`charts:${chart.uid}`, 'position', newIndex);
+				await dataManager.updateChartPosition(chart.uid!, newIndex);
 			}
 		}
 
@@ -334,11 +324,7 @@ export const actions = {
 
 		const { pluginId, software: softwareUrl } = params;
 
-		const plugin = await dataManager.getPluginById(parseInt(pluginId), [
-			'owner',
-			'charts',
-			'name'
-		]);
+		const plugin = await dataManager.getPluginById(parseInt(pluginId), ['owner', 'charts', 'name']);
 
 		if (!plugin) {
 			return fail(404, { error: 'Plugin not found' });
@@ -348,27 +334,23 @@ export const actions = {
 			return fail(401, { error: 'You are not allowed to delete this plugin' });
 		}
 
-		const redis = databaseManager.getRedisCluster();
-
 		// Delete plugin from sets and hashes
-		await redis.srem('plugins.ids', pluginId);
-		await redis.del(`plugins:${pluginId}`);
-		await redis.del(
-			`plugins.index.id.url+name:${softwareUrl.toLowerCase()}.${plugin.name.toLowerCase()}`
-		);
-		await redis.srem(`users.index.plugins.username:${plugin.owner.toLowerCase()}`, pluginId);
+		await dataManager.removePluginFromPluginIds(parseInt(pluginId));
+		await dataManager.deletePlugin(parseInt(pluginId));
+		await dataManager.deletePluginIndex(softwareUrl, plugin.name!);
+		await dataManager.removePluginFromUser(plugin.owner!, parseInt(pluginId));
 
 		// Delete all charts
 		for (const chartUid of plugin.charts as number[]) {
 			const chart = await dataManager.getChartByUid(chartUid, ['id', 'type']);
 
 			if (chart) {
-				await redis.del(`charts.index.uid.pluginId+chartId:${pluginId}.${chart.id}`);
-				await redis.del(`charts:${chartUid}`);
-				await redis.srem('charts.uids', chartUid);
+				await dataManager.deleteChartIndex(parseInt(pluginId), chart.id!);
+				await dataManager.deleteChart(chartUid);
+				await dataManager.removeChartFromUids(chartUid);
 
 				if (chart.type === 'single_linechart') {
-					await redis.del(`data:${chartUid}.1`);
+					await dataManager.deleteChartLineData(chartUid);
 				}
 			}
 		}
@@ -399,47 +381,24 @@ export const actions = {
 			return fail(404, { error: 'Plugin not found' });
 		}
 
-		const redis = databaseManager.getRedisCluster();
-
-		// Remove from old owner
-		await redis.srem(`users.index.plugins.username:${plugin.owner.toLowerCase()}`, pluginId);
-
-		// Add to new owner
-		await redis.sadd(`users.index.plugins.username:${newOwner.toLowerCase()}`, pluginId);
-
-		// Update owner field
-		await redis.hset(`plugins:${pluginId}`, 'owner', newOwner);
+		await dataManager.transferPluginOwnership(parseInt(pluginId), plugin.owner!, newOwner);
 
 		return { success: true, newOwner };
 	}
 } satisfies Actions;
 
 async function saveChart(plugin: any, chartData: any): Promise<void> {
-	const redis = databaseManager.getRedisCluster();
-
-	// Increment chart UID
-	const chartUid = await redis.incr('charts.uid-increment');
-
-	// Create chart data for Redis
-	const chartRedis: Record<string, string> = {
-		pluginId: plugin.id.toString(),
+	// Create chart and get its UID
+	const chartUid = await dataManager.createChart(plugin.id, {
 		id: chartData.id,
 		type: chartData.type,
-		position: chartData.position.toString(),
+		position: chartData.position,
 		title: chartData.title,
-		data: JSON.stringify(chartData.data)
-	};
-
-	// Store chart
-	await redis.hmset(`charts:${chartUid}`, chartRedis);
+		isDefault: chartData.isDefault,
+		data: chartData.data
+	});
 
 	// Update plugin's charts array
 	plugin.charts.push(chartUid);
-	await redis.hset(`plugins:${plugin.id}`, 'charts', JSON.stringify(plugin.charts));
-
-	// Create index
-	await redis.set(`charts.index.uid.pluginId+chartId:${plugin.id}.${chartData.id}`, chartUid);
-
-	// Add to charts set
-	await redis.sadd('charts.uids', chartUid);
+	await dataManager.updatePluginCharts(plugin.id, plugin.charts);
 }
