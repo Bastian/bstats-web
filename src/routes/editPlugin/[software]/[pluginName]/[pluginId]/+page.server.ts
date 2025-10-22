@@ -1,6 +1,25 @@
 import type { PageServerLoad, Actions } from './$types';
 import { redirect, fail, error } from '@sveltejs/kit';
-import * as dataManager from '$lib/server/dataManager.js';
+import {
+	getPluginById,
+	updatePluginCharts,
+	deletePlugin,
+	deletePluginIndex,
+	removePluginFromPluginIds,
+	removePluginFromUser,
+	transferPluginOwnership
+} from '$lib/server/redis/plugins.js';
+import {
+	getChartByUid,
+	getChartByPluginIdAndChartId,
+	deleteChart,
+	getChartsByPluginId,
+	updateChartPosition,
+	deleteChartIndex,
+	removeChartFromUids,
+	createChart
+} from '$lib/server/redis/charts.js';
+import { deleteChartLineData } from '$lib/server/redis/chart-data.js';
 
 export const load: PageServerLoad = async ({ params, locals }) => {
 	if (!locals.loggedIn || !locals.user) {
@@ -10,7 +29,7 @@ export const load: PageServerLoad = async ({ params, locals }) => {
 	const { software: softwareUrl, pluginName, pluginId } = params;
 
 	// Get plugin data
-	const plugin = await dataManager.getPluginById(parseInt(pluginId), ['owner', 'charts', 'name']);
+	const plugin = await getPluginById(parseInt(pluginId), ['owner', 'charts', 'name']);
 
 	if (!plugin) {
 		throw error(404, 'Plugin not found');
@@ -28,7 +47,7 @@ export const load: PageServerLoad = async ({ params, locals }) => {
 	// Get all charts for the plugin
 	const chartsArray = await Promise.all(
 		plugin.charts.map(async (chartUid: number) => {
-			const chart = await dataManager.getChartByUid(chartUid, [
+			const chart = await getChartByUid(chartUid, [
 				'id',
 				'type',
 				'position',
@@ -80,7 +99,7 @@ export const actions = {
 		const formData = await request.formData();
 
 		// Get plugin
-		const plugin = await dataManager.getPluginById(parseInt(pluginId), ['owner', 'charts', 'name']);
+		const plugin = await getPluginById(parseInt(pluginId), ['owner', 'charts', 'name']);
 
 		if (!plugin) {
 			return fail(404, { error: 'Plugin not found' });
@@ -112,7 +131,7 @@ export const actions = {
 		}
 
 		// Check if chart with this ID already exists
-		const existingChart = await dataManager.getChartByPluginIdAndChartId(
+		const existingChart = await getChartByPluginIdAndChartId(
 			parseInt(pluginId),
 			trimmedId
 		);
@@ -216,7 +235,7 @@ export const actions = {
 			return fail(400, { error: 'Missing or invalid chart id' });
 		}
 
-		const plugin = await dataManager.getPluginById(parseInt(pluginId), ['owner', 'charts']);
+		const plugin = await getPluginById(parseInt(pluginId), ['owner', 'charts']);
 
 		if (!plugin) {
 			return fail(404, { error: 'Plugin not found' });
@@ -226,7 +245,7 @@ export const actions = {
 			return fail(401, { error: 'You are not allowed to edit this plugin' });
 		}
 
-		const chart = await dataManager.getChartByPluginIdAndChartId(parseInt(pluginId), chartId, [
+		const chart = await getChartByPluginIdAndChartId(parseInt(pluginId), chartId, [
 			'default',
 			'position',
 			'type'
@@ -241,32 +260,32 @@ export const actions = {
 		}
 
 		// Delete chart
-		await dataManager.deleteChart(chart.uid);
+		await deleteChart(chart.uid);
 
 		// Remove from plugin's charts array
 		const index = plugin.charts.indexOf(chart.uid);
 		if (index !== -1) {
 			plugin.charts.splice(index, 1);
 		}
-		await dataManager.updatePluginCharts(parseInt(pluginId), plugin.charts);
+		await updatePluginCharts(parseInt(pluginId), plugin.charts);
 
 		// Update positions of remaining charts
 		const allCharts =
-			(await dataManager.getChartsByPluginId(parseInt(pluginId), ['position'])) || [];
+			(await getChartsByPluginId(parseInt(pluginId), ['position'])) || [];
 
 		for (const c of allCharts) {
 			if (c.position! > chart.position!) {
-				await dataManager.updateChartPosition(c.uid!, c.position! - 1);
+				await updateChartPosition(c.uid!, c.position! - 1);
 			}
 		}
 
 		// Delete chart indexes
-		await dataManager.deleteChartIndex(parseInt(pluginId), chartId);
-		await dataManager.removeChartFromUids(chart.uid);
+		await deleteChartIndex(parseInt(pluginId), chartId);
+		await removeChartFromUids(chart.uid);
 
 		// Delete chart data if single_linechart
 		if (chart.type === 'single_linechart') {
-			await dataManager.deleteChartLineData(chart.uid);
+			await deleteChartLineData(chart.uid);
 		}
 
 		return { success: true };
@@ -286,7 +305,7 @@ export const actions = {
 			return fail(400, { error: 'Invalid arguments' });
 		}
 
-		const plugin = await dataManager.getPluginById(parseInt(pluginId), ['owner']);
+		const plugin = await getPluginById(parseInt(pluginId), ['owner']);
 
 		if (!plugin) {
 			return fail(404, { error: 'Plugin not found' });
@@ -296,21 +315,21 @@ export const actions = {
 			return fail(401, { error: 'You are not allowed to edit this plugin' });
 		}
 
-		const charts = (await dataManager.getChartsByPluginId(parseInt(pluginId), ['position'])) || [];
+		const charts = (await getChartsByPluginId(parseInt(pluginId), ['position'])) || [];
 
 		for (const chart of charts) {
 			if (oldIndex > newIndex) {
 				if (chart.position! >= newIndex && chart.position! < oldIndex) {
-					await dataManager.updateChartPosition(chart.uid!, chart.position! + 1);
+					await updateChartPosition(chart.uid!, chart.position! + 1);
 				}
 			}
 			if (oldIndex < newIndex) {
 				if (chart.position! > oldIndex && chart.position! <= newIndex) {
-					await dataManager.updateChartPosition(chart.uid!, chart.position! - 1);
+					await updateChartPosition(chart.uid!, chart.position! - 1);
 				}
 			}
 			if (chart.position === oldIndex) {
-				await dataManager.updateChartPosition(chart.uid!, newIndex);
+				await updateChartPosition(chart.uid!, newIndex);
 			}
 		}
 
@@ -324,7 +343,7 @@ export const actions = {
 
 		const { pluginId, software: softwareUrl } = params;
 
-		const plugin = await dataManager.getPluginById(parseInt(pluginId), ['owner', 'charts', 'name']);
+		const plugin = await getPluginById(parseInt(pluginId), ['owner', 'charts', 'name']);
 
 		if (!plugin) {
 			return fail(404, { error: 'Plugin not found' });
@@ -335,22 +354,22 @@ export const actions = {
 		}
 
 		// Delete plugin from sets and hashes
-		await dataManager.removePluginFromPluginIds(parseInt(pluginId));
-		await dataManager.deletePlugin(parseInt(pluginId));
-		await dataManager.deletePluginIndex(softwareUrl, plugin.name!);
-		await dataManager.removePluginFromUser(plugin.owner!, parseInt(pluginId));
+		await removePluginFromPluginIds(parseInt(pluginId));
+		await deletePlugin(parseInt(pluginId));
+		await deletePluginIndex(softwareUrl, plugin.name!);
+		await removePluginFromUser(plugin.owner!, parseInt(pluginId));
 
 		// Delete all charts
 		for (const chartUid of plugin.charts as number[]) {
-			const chart = await dataManager.getChartByUid(chartUid, ['id', 'type']);
+			const chart = await getChartByUid(chartUid, ['id', 'type']);
 
 			if (chart) {
-				await dataManager.deleteChartIndex(parseInt(pluginId), chart.id!);
-				await dataManager.deleteChart(chartUid);
-				await dataManager.removeChartFromUids(chartUid);
+				await deleteChartIndex(parseInt(pluginId), chart.id!);
+				await deleteChart(chartUid);
+				await removeChartFromUids(chartUid);
 
 				if (chart.type === 'single_linechart') {
-					await dataManager.deleteChartLineData(chartUid);
+					await deleteChartLineData(chartUid);
 				}
 			}
 		}
@@ -375,13 +394,13 @@ export const actions = {
 			return fail(400, { error: 'Missing new owner' });
 		}
 
-		const plugin = await dataManager.getPluginById(parseInt(pluginId), ['owner']);
+		const plugin = await getPluginById(parseInt(pluginId), ['owner']);
 
 		if (!plugin) {
 			return fail(404, { error: 'Plugin not found' });
 		}
 
-		await dataManager.transferPluginOwnership(parseInt(pluginId), plugin.owner!, newOwner);
+		await transferPluginOwnership(parseInt(pluginId), plugin.owner!, newOwner);
 
 		return { success: true, newOwner };
 	}
@@ -389,7 +408,7 @@ export const actions = {
 
 async function saveChart(plugin: any, chartData: any): Promise<void> {
 	// Create chart and get its UID
-	const chartUid = await dataManager.createChart(plugin.id, {
+	const chartUid = await createChart(plugin.id, {
 		id: chartData.id,
 		type: chartData.type,
 		position: chartData.position,
@@ -400,5 +419,5 @@ async function saveChart(plugin: any, chartData: any): Promise<void> {
 
 	// Update plugin's charts array
 	plugin.charts.push(chartUid);
-	await dataManager.updatePluginCharts(plugin.id, plugin.charts);
+	await updatePluginCharts(plugin.id, plugin.charts);
 }

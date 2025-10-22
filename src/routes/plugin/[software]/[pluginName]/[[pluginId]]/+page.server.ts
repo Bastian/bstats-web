@@ -1,6 +1,13 @@
 import type { PageServerLoad } from './$types';
 import { redirect } from '@sveltejs/kit';
-import * as dataManager from '$lib/server/dataManager.js';
+import { getSoftwareById } from '$lib/server/redis/software.js';
+import {
+	getPluginBySoftwareUrlAndName,
+	getPluginById,
+	getAllPluginIds
+} from '$lib/server/redis/plugins.js';
+import { getChartUidByPluginIdAndChartId } from '$lib/server/redis/charts.js';
+import { getLimitedLineChartData } from '$lib/server/redis/chart-data.js';
 
 export const load: PageServerLoad = async ({ params, locals }) => {
 	const { software: softwareUrl, pluginName, pluginId } = params;
@@ -16,7 +23,7 @@ export const load: PageServerLoad = async ({ params, locals }) => {
 
 	// If no pluginId provided, try to get it by software and name
 	if (!pluginId) {
-		const plugin = await dataManager.getPluginBySoftwareUrlAndName(softwareUrl, pluginName, [
+		const plugin = await getPluginBySoftwareUrlAndName(softwareUrl, pluginName, [
 			'name',
 			'software',
 			'owner'
@@ -30,7 +37,7 @@ export const load: PageServerLoad = async ({ params, locals }) => {
 	}
 
 	// Get plugin by ID
-	const plugin = await dataManager.getPluginById(parseInt(pluginId), ['name', 'software', 'owner']);
+	const plugin = await getPluginById(parseInt(pluginId), ['name', 'software', 'owner']);
 
 	// Handle unknown plugin
 	if (plugin === null || plugin.name === null) {
@@ -46,7 +53,7 @@ export const load: PageServerLoad = async ({ params, locals }) => {
 	}
 
 	// Get software details
-	const software = await dataManager.getSoftwareById(plugin.software as number, ['name', 'url']);
+	const software = await getSoftwareById(plugin.software as number, ['name', 'url']);
 
 	// Redirect if software URL doesn't match
 	if (software.url !== softwareUrl) {
@@ -69,7 +76,7 @@ export const load: PageServerLoad = async ({ params, locals }) => {
 };
 
 async function getRandomPlugin() {
-	const pluginIds = await dataManager.getAllPluginIds();
+	const pluginIds = await getAllPluginIds();
 
 	// Get server count for 50 random plugins
 	const promises = [];
@@ -78,11 +85,11 @@ async function getRandomPlugin() {
 		promises.push(
 			(async () => {
 				try {
-					const chartUid = await dataManager.getChartUidByPluginIdAndChartId(randomId, 'servers');
+					const chartUid = await getChartUidByPluginIdAndChartId(randomId, 'servers');
 					if (!chartUid) {
 						return { pluginId: randomId, servers: 0 };
 					}
-					const data = await dataManager.getLimitedLineChartData(chartUid, '1', 1);
+					const data = await getLimitedLineChartData(chartUid, '1', 1);
 					const servers = data && data[0] ? data[0][1] : 0;
 					return { pluginId: randomId, servers };
 				} catch {
@@ -98,9 +105,9 @@ async function getRandomPlugin() {
 	const selected = results.find((r) => r.servers > 4) || results[results.length - 1];
 
 	// Get plugin details
-	const plugin = await dataManager.getPluginById(selected.pluginId, ['name', 'software']);
+	const plugin = await getPluginById(selected.pluginId, ['name', 'software']);
 
-	const software = await dataManager.getSoftwareById(plugin?.software as number, ['url']);
+	const software = await getSoftwareById(plugin?.software as number, ['url']);
 
 	return {
 		pluginId: plugin.id,

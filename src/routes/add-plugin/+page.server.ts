@@ -1,7 +1,13 @@
 import type { PageServerLoad, Actions } from './$types';
 import type { RequestEvent } from '@sveltejs/kit';
 import { redirect, fail } from '@sveltejs/kit';
-import * as dataManager from '$lib/server/dataManager.js';
+import { getAllSoftware, getSoftwareById } from '$lib/server/redis/software.js';
+import {
+	getPluginBySoftwareUrlAndName,
+	addPlugin,
+	updatePluginCharts
+} from '$lib/server/redis/plugins.js';
+import { createChart } from '$lib/server/redis/charts.js';
 import config from '$lib/server/config.js';
 
 export const load: PageServerLoad = async ({ locals }) => {
@@ -10,7 +16,7 @@ export const load: PageServerLoad = async ({ locals }) => {
 	}
 
 	// Get all software for the dropdown
-	const allSoftware = await dataManager.getAllSoftware([
+	const allSoftware = await getAllSoftware([
 		'name',
 		'url',
 		'globalPlugin',
@@ -75,7 +81,7 @@ export const actions = {
 			}
 
 			// Get software details
-			const software = await dataManager.getSoftwareById(parseInt(softwareId), [
+			const software = await getSoftwareById(parseInt(softwareId), [
 				'name',
 				'url',
 				'globalPlugin',
@@ -87,7 +93,7 @@ export const actions = {
 			}
 
 			// Check if plugin already exists
-			const existingPlugin = await dataManager.getPluginBySoftwareUrlAndName(
+			const existingPlugin = await getPluginBySoftwareUrlAndName(
 				software.url,
 				trimmedName.toLowerCase(),
 				['name']
@@ -106,7 +112,7 @@ export const actions = {
 			};
 
 			// Add plugin to database
-			pluginId = await dataManager.addPlugin(plugin as any, software as any);
+			pluginId = await addPlugin(plugin as any, software as any);
 
 			// Add default charts
 			const chartUids: number[] = [];
@@ -116,7 +122,7 @@ export const actions = {
 			}
 
 			// Update plugin with chart UIDs
-			await dataManager.updatePluginCharts(pluginId, chartUids);
+			await updatePluginCharts(pluginId, chartUids);
 
 			trimmedNameForRedirect = trimmedName;
 		} catch (err) {
@@ -141,7 +147,7 @@ async function addChart(
 	// Replace %plugin.name% in chart title
 	const chartTitle = chart.title.replace('%plugin.name%', pluginName);
 
-	const chartUid = await dataManager.createChart(pluginId, {
+	const chartUid = await createChart(pluginId, {
 		id: chart.id,
 		type: chart.type,
 		position,

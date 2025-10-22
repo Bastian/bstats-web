@@ -1,11 +1,12 @@
 import type { PageServerLoad } from './$types';
-import * as dataManager from '$lib/server/dataManager.js';
+import { getAllSoftware } from '$lib/server/redis/software.js';
+import { getPluginsOfUser } from '$lib/server/redis/plugins.js';
 
 export const load: PageServerLoad = async ({ params }) => {
 	const { username } = params;
 
 	// Get all plugins by the user
-	const pluginsRaw = await dataManager.getPluginsOfUser(username, [
+	const pluginsRaw = await getPluginsOfUser(username, [
 		'name',
 		'software',
 		'charts',
@@ -14,7 +15,7 @@ export const load: PageServerLoad = async ({ params }) => {
 	]);
 
 	// Get all software to map plugin software IDs to software objects
-	const allSoftware = await dataManager.getAllSoftware(['name', 'url', 'globalPlugin']);
+	const allSoftware = await getAllSoftware(['name', 'url', 'globalPlugin']);
 
 	// Replace software IDs with software objects
 	const plugins = pluginsRaw.map((plugin) => {

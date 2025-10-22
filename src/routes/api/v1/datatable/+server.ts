@@ -1,14 +1,17 @@
 import { json } from '@sveltejs/kit';
 import type { RequestHandler } from './$types';
-import * as dataManager from '$lib/server/dataManager.js';
+import { getAllSoftware } from '$lib/server/redis/software.js';
+import { getPluginById, getAllPluginIds } from '$lib/server/redis/plugins.js';
+import { getChartUidByPluginIdAndChartId } from '$lib/server/redis/charts.js';
+import { getLimitedLineChartData } from '$lib/server/redis/chart-data.js';
 
 export const GET: RequestHandler = async () => {
 	try {
 		// Get all plugin IDs
-		const pluginIds = await dataManager.getAllPluginIds();
+		const pluginIds = await getAllPluginIds();
 
 		// Get all software to map IDs to names
-		const allSoftware = await dataManager.getAllSoftware(['name', 'url']);
+		const allSoftware = await getAllSoftware(['name', 'url']);
 
 		// Create a map for quick lookups
 		const softwareMap = new Map();
@@ -20,7 +23,7 @@ export const GET: RequestHandler = async () => {
 		const pluginPromises = pluginIds.map(async (pluginId) => {
 			try {
 				// Get plugin basic data
-				const plugin = await dataManager.getPluginById(pluginId, ['name', 'software', 'owner']);
+				const plugin = await getPluginById(pluginId, ['name', 'software', 'owner']);
 
 				if (!plugin || plugin.name === null) {
 					return null; // Skip invalid plugins
@@ -34,13 +37,13 @@ export const GET: RequestHandler = async () => {
 				// Get server count (from 'servers' chart, latest data point)
 				let servers = 0;
 				try {
-					const serversChartUid = await dataManager.getChartUidByPluginIdAndChartId(
+					const serversChartUid = await getChartUidByPluginIdAndChartId(
 						pluginId,
 						'servers'
 					);
 
 					if (serversChartUid) {
-						const serversData = await dataManager.getLimitedLineChartData(serversChartUid, '1', 1);
+						const serversData = await getLimitedLineChartData(serversChartUid, '1', 1);
 						if (serversData.length > 0) {
 							servers = serversData[0][1];
 						}
@@ -52,13 +55,13 @@ export const GET: RequestHandler = async () => {
 				// Get player count (from 'players' chart, latest data point)
 				let players = 0;
 				try {
-					const playersChartUid = await dataManager.getChartUidByPluginIdAndChartId(
+					const playersChartUid = await getChartUidByPluginIdAndChartId(
 						pluginId,
 						'players'
 					);
 
 					if (playersChartUid) {
-						const playersData = await dataManager.getLimitedLineChartData(playersChartUid, '1', 1);
+						const playersData = await getLimitedLineChartData(playersChartUid, '1', 1);
 						if (playersData.length > 0) {
 							players = playersData[0][1];
 						}

@@ -1,5 +1,6 @@
 import type { LayoutServerLoad } from './$types';
-import * as dataManager from '$lib/server/dataManager.js';
+import { getAllSoftware } from '$lib/server/redis/software.js';
+import { getPluginsOfUser } from '$lib/server/redis/plugins.js';
 
 export const load: LayoutServerLoad = async ({ cookies, locals }) => {
 	// Get custom color from cookies
@@ -10,11 +11,11 @@ export const load: LayoutServerLoad = async ({ cookies, locals }) => {
 	const loggedIn = locals.loggedIn;
 
 	// Load all software
-	const allSoftware = await dataManager.getAllSoftware(['name', 'url', 'globalPlugin']);
+	const allSoftware = await getAllSoftware(['name', 'url', 'globalPlugin']);
 
 	// Load user's plugins if logged in
 	const myPluginsRaw =
-		loggedIn && user ? await dataManager.getPluginsOfUser(user.username, ['name', 'software']) : [];
+		loggedIn && user ? await getPluginsOfUser(user.username, ['name', 'software']) : [];
 
 	// Replace the software id with a proper object for myPlugins
 	const myPlugins = myPluginsRaw.map((plugin) => {

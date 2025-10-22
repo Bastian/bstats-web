@@ -1,5 +1,5 @@
 import type { PageServerLoad } from './$types';
-import * as dataManager from '$lib/server/dataManager.js';
+import { getAllSoftware } from '$lib/server/redis/software.js';
 
 export const load: PageServerLoad = async ({ url }) => {
 	// Check if user just added a plugin (from query params)
@@ -8,7 +8,7 @@ export const load: PageServerLoad = async ({ url }) => {
 	const pluginId = url.searchParams.get('pluginId') || '';
 
 	// Get all software to show Metrics.java and example links
-	const software = await dataManager.getAllSoftware(['name', 'metricsClass', 'examplePlugin']);
+	const software = await getAllSoftware(['name', 'metricsClass', 'examplePlugin']);
 
 	return {
 		software,

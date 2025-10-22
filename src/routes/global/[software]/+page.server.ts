@@ -1,12 +1,13 @@
 import type { PageServerLoad } from './$types';
 import { error } from '@sveltejs/kit';
-import * as dataManager from '$lib/server/dataManager.js';
+import { getSoftwareByUrl } from '$lib/server/redis/software.js';
+import { getPluginById } from '$lib/server/redis/plugins.js';
 
 export const load: PageServerLoad = async ({ params }) => {
 	const { software: softwareUrl } = params;
 
 	// Get software by URL
-	const software = await dataManager.getSoftwareByUrl(softwareUrl, [
+	const software = await getSoftwareByUrl(softwareUrl, [
 		'name',
 		'url',
 		'globalPlugin'
@@ -17,7 +18,7 @@ export const load: PageServerLoad = async ({ params }) => {
 	}
 
 	// Get the global plugin
-	const plugin = await dataManager.getPluginById(software.globalPlugin, [
+	const plugin = await getPluginById(software.globalPlugin, [
 		'name',
 		'software',
 		'owner'
