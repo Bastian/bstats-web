@@ -10,10 +10,7 @@ export const load: PageServerLoad = async ({ locals }) => {
 	}
 
 	// Get user's plugins
-	const myPluginsRaw = await getPluginsOfUser(locals.user.username, [
-		'name',
-		'software'
-	]);
+	const myPluginsRaw = await getPluginsOfUser(locals.user.username, ['name', 'software']);
 
 	// Get all software to map plugin software IDs to software objects
 	const allSoftware = await getAllSoftware(['name', 'url']);

@@ -37,10 +37,7 @@ export const GET: RequestHandler = async () => {
 				// Get server count (from 'servers' chart, latest data point)
 				let servers = 0;
 				try {
-					const serversChartUid = await getChartUidByPluginIdAndChartId(
-						pluginId,
-						'servers'
-					);
+					const serversChartUid = await getChartUidByPluginIdAndChartId(pluginId, 'servers');
 
 					if (serversChartUid) {
 						const serversData = await getLimitedLineChartData(serversChartUid, '1', 1);
@@ -55,10 +52,7 @@ export const GET: RequestHandler = async () => {
 				// Get player count (from 'players' chart, latest data point)
 				let players = 0;
 				try {
-					const playersChartUid = await getChartUidByPluginIdAndChartId(
-						pluginId,
-						'players'
-					);
+					const playersChartUid = await getChartUidByPluginIdAndChartId(pluginId, 'players');
 
 					if (playersChartUid) {
 						const playersData = await getLimitedLineChartData(playersChartUid, '1', 1);

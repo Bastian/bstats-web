@@ -7,22 +7,14 @@ export const load: PageServerLoad = async ({ params }) => {
 	const { software: softwareUrl } = params;
 
 	// Get software by URL
-	const software = await getSoftwareByUrl(softwareUrl, [
-		'name',
-		'url',
-		'globalPlugin'
-	]);
+	const software = await getSoftwareByUrl(softwareUrl, ['name', 'url', 'globalPlugin']);
 
 	if (!software || software.globalPlugin === null) {
 		throw error(404, 'Software not found or has no global plugin');
 	}
 
 	// Get the global plugin
-	const plugin = await getPluginById(software.globalPlugin, [
-		'name',
-		'software',
-		'owner'
-	]);
+	const plugin = await getPluginById(software.globalPlugin, ['name', 'software', 'owner']);
 
 	if (!plugin) {
 		throw error(404, 'Global plugin not found');

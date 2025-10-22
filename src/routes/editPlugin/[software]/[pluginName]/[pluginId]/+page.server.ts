@@ -131,10 +131,7 @@ export const actions = {
 		}
 
 		// Check if chart with this ID already exists
-		const existingChart = await getChartByPluginIdAndChartId(
-			parseInt(pluginId),
-			trimmedId
-		);
+		const existingChart = await getChartByPluginIdAndChartId(parseInt(pluginId), trimmedId);
 
 		if (existingChart) {
 			return fail(400, { error: 'Chart with this id already exists' });
@@ -270,8 +267,7 @@ export const actions = {
 		await updatePluginCharts(parseInt(pluginId), plugin.charts);
 
 		// Update positions of remaining charts
-		const allCharts =
-			(await getChartsByPluginId(parseInt(pluginId), ['position'])) || [];
+		const allCharts = (await getChartsByPluginId(parseInt(pluginId), ['position'])) || [];
 
 		for (const c of allCharts) {
 			if (c.position! > chart.position!) {

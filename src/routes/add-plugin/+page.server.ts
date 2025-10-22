@@ -16,12 +16,7 @@ export const load: PageServerLoad = async ({ locals }) => {
 	}
 
 	// Get all software for the dropdown
-	const allSoftware = await getAllSoftware([
-		'name',
-		'url',
-		'globalPlugin',
-		'defaultCharts'
-	]);
+	const allSoftware = await getAllSoftware(['name', 'url', 'globalPlugin', 'defaultCharts']);
 
 	// Filter software - only show those with globalPlugin or if user is admin
 	const filteredSoftware = allSoftware.filter(
