@@ -1,110 +1,200 @@
 /**
- * Sand-Signika theme for Highcharts JS
- * @author Torstein Honsi
+ * Modern bStats theme for Highcharts JS
+ * Matches Tailwind design system with emerald brand colors
  */
 
-// Load the fonts
-Highcharts.createElement('link', {
-    href: 'https://fonts.googleapis.com/css?family=Signika:400,700',
-    rel: 'stylesheet',
-    type: 'text/css'
-}, null, document.getElementsByTagName('head')[0]);
-
-// Add the background image to the container
-Highcharts.wrap(Highcharts.Chart.prototype, 'getContainer', function (proceed) {
-    proceed.call(this);
-    this.container.style.background = 'url(/images/backgrounds/sand.jpg)';
-});
+// Modern chart theme - no background image, clean slate-based design
+if (window.__bstatsCustomLayout) {
+    Highcharts.wrap(Highcharts.Chart.prototype, 'getContainer', function (proceed) {
+        proceed.call(this);
+        // No background - let the card background shine through
+        this.container.style.background = 'transparent';
+    });
+}
 
 Highcharts.theme = {
-    colors: ["#F44336", "#4CAF50", "#2196F3", "#FF9800", "#FFEB3B", "#009688", "#E91E63",
-        "#795548", "#607D8B", "#3F51B5", "#9C27B0"],
+    // Brand colors - emerald palette
+    colors: [
+        "#10b981", // emerald-500 (brand)
+        "#3b82f6", // blue-500
+        "#f59e0b", // amber-500
+        "#8b5cf6", // violet-500
+        "#ec4899", // pink-500
+        "#14b8a6", // teal-500
+        "#f97316", // orange-500
+        "#6366f1", // indigo-500
+        "#a855f7", // purple-500
+        "#06b6d4"  // cyan-500
+    ],
     chart: {
-        backgroundColor: null,
+        backgroundColor: 'transparent',
         style: {
-            fontFamily: "Signika, serif"
+            fontFamily: "Inter, sans-serif"
         }
     },
     title: {
         useHTML: true,
         style: {
-            color: 'black',
-            fontSize: '16px',
-            fontWeight: 'bold'
+            color: '#0f172a', // slate-900
+            fontSize: '18px',
+            fontWeight: '600',
+            fontFamily: "Space Grotesk, sans-serif"
         }
     },
-    credits: { // We mention HighCharts often enough
+    credits: {
         enabled: false
     },
     subtitle: {
         style: {
-            color: 'black'
+            color: '#475569', // slate-600
+            fontSize: '14px'
         }
     },
     tooltip: {
-        borderWidth: 0
-    },
-    legend: {
-        itemStyle: {
-            fontWeight: 'bold',
+        borderWidth: 0,
+        backgroundColor: 'rgba(255, 255, 255, 0.96)',
+        shadow: {
+            color: 'rgba(0, 0, 0, 0.1)',
+            offsetX: 0,
+            offsetY: 2,
+            opacity: 0.1,
+            width: 8
+        },
+        style: {
+            color: '#1e293b', // slate-800
             fontSize: '13px'
         }
     },
-    xAxis: {
-        labels: {
-            style: {
-                color: '#6e6e70'
-            }
+    legend: {
+        itemStyle: {
+            fontWeight: '500',
+            fontSize: '13px',
+            color: '#475569' // slate-600
+        },
+        itemHoverStyle: {
+            color: '#0f172a' // slate-900
         }
     },
-    yAxis: {
+    xAxis: {
+        gridLineColor: '#e2e8f0', // slate-200
         labels: {
             style: {
-                color: '#6e6e70'
+                color: '#64748b', // slate-500
+                fontSize: '12px'
+            }
+        },
+        lineColor: '#cbd5e1', // slate-300
+        tickColor: '#cbd5e1'
+    },
+    yAxis: {
+        gridLineColor: '#e2e8f0', // slate-200
+        labels: {
+            style: {
+                color: '#64748b', // slate-500
+                fontSize: '12px'
+            }
+        },
+        lineColor: '#cbd5e1',
+        tickColor: '#cbd5e1',
+        title: {
+            style: {
+                color: '#475569', // slate-600
+                fontSize: '13px',
+                fontWeight: '500'
             }
         }
     },
     plotOptions: {
         series: {
-            shadow: true
+            shadow: false, // Modern flat design
+            borderWidth: 0,
+            dataLabels: {
+                style: {
+                    fontSize: '12px',
+                    fontWeight: '500',
+                    textOutline: 'none'
+                }
+            }
         },
         candlestick: {
-            lineColor: '#404048'
+            lineColor: '#64748b'
         },
         map: {
             shadow: false
+        },
+        line: {
+            marker: {
+                radius: 3
+            }
+        },
+        spline: {
+            marker: {
+                radius: 3
+            }
         }
     },
 
     // Highstock specific
     navigator: {
         xAxis: {
-            gridLineColor: '#D0D0D8'
+            gridLineColor: '#e2e8f0'
+        },
+        series: {
+            color: '#10b981',
+            lineColor: '#059669'
         }
     },
     rangeSelector: {
         buttonTheme: {
-            fill: 'white',
-            stroke: '#C0C0C8',
+            fill: '#ffffff',
+            stroke: '#cbd5e1',
             'stroke-width': 1,
+            r: 8,
+            style: {
+                color: '#475569',
+                fontWeight: '500'
+            },
             states: {
+                hover: {
+                    fill: '#f1f5f9',
+                    stroke: '#94a3b8'
+                },
                 select: {
-                    fill: '#D0D0D8'
+                    fill: '#10b981',
+                    stroke: '#059669',
+                    style: {
+                        color: '#ffffff',
+                        fontWeight: '600'
+                    }
                 }
             }
+        },
+        inputBoxBorderColor: '#cbd5e1',
+        inputStyle: {
+            color: '#1e293b',
+            fontWeight: '500'
+        },
+        labelStyle: {
+            color: '#64748b',
+            fontWeight: '500'
         }
     },
     scrollbar: {
-        trackBorderColor: '#C0C0C8'
+        barBackgroundColor: '#cbd5e1',
+        barBorderColor: '#cbd5e1',
+        buttonBackgroundColor: '#94a3b8',
+        buttonBorderColor: '#94a3b8',
+        rifleColor: '#ffffff',
+        trackBackgroundColor: '#f1f5f9',
+        trackBorderColor: '#e2e8f0'
     },
 
     // General
-    background2: '#E0E0E8',
+    background2: '#f8fafc', // slate-50
 
     global: {
         useUTC: false
     }
-
 };
 
 // Apply the theme

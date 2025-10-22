@@ -1,171 +1,109 @@
 <script lang="ts">
-	let { customColor1 = 'teal', loggedIn = false } = $props<{
-		customColor1?: string;
+	import Badge from '$lib/components/Badge.svelte';
+	import { resolve } from '$app/paths';
+
+	let { loggedIn = false } = $props<{
 		loggedIn?: boolean;
 	}>();
-
-	function setCookie(name: string, value: string, exdays: number) {
-		const date = new Date();
-		date.setTime(date.getTime() + exdays * 24 * 60 * 60 * 1000);
-		const expires = 'expires=' + date.toUTCString();
-		document.cookie = name + '=' + value + ';' + expires + ';path=/';
-	}
-
-	function setColor(color: string) {
-		setCookie('custom-color1', color, 365);
-		location.reload();
-	}
 </script>
 
-<footer class="page-footer {customColor1} darken-2">
-	<div class="container">
-		<div class="row">
-			<div class="col l6 m4 s12">
-				<h5 class="white-text">About bStats</h5>
-				<p class="grey-text text-lighten-4">Made with ❤</p>
+<footer class="border-t border-slate-200 bg-white/90 backdrop-blur">
+	<div class="mx-auto max-w-6xl px-4 py-16 sm:px-6">
+		<div class="grid gap-12 md:grid-cols-4">
+			<div class="md:col-span-2">
+				<div class="inline-flex items-center gap-3">
+					<span
+						class="inline-flex h-11 w-11 items-center justify-center rounded-2xl bg-brand-500 font-display text-lg font-semibold text-white shadow-md"
+					>
+						bS
+					</span>
+					<div>
+						<p class="font-display text-xl font-semibold text-slate-900">bStats</p>
+						<p class="text-sm text-slate-500">Open source metrics built for plugin tinkerers.</p>
+					</div>
+				</div>
+				<p class="mt-6 max-w-xl text-sm leading-relaxed text-slate-600">
+					bStats started as a fun side project and grew into a community-driven way to understand
+					how your plugins live in the wild. No sales pitch, just insight and good vibes.
+				</p>
+				<div class="mt-6 flex flex-wrap gap-3">
+					<a href="https://github.com/Bastian/bStats">
+						<Badge class="bg-black text-slate-100 transition hover:brightness-110" type="none">
+							<img alt="GitHub" src="/images/github-mark-white.svg" class="h-4 w-4" />
+							GitHub
+						</Badge>
+					</a>
+					<a href="https://discord.gg/qTXtXuf">
+						<Badge
+							type="none"
+							class="bg-discord-blurple text-white transition hover:brightness-110"
+						>
+							<img alt="Discord" src="/images/Discord-Symbol-White.svg" class="h-4 w-4" />
+							Discord
+						</Badge>
+					</a>
+				</div>
 			</div>
-			<div class="col l3 m4 s12">
-				<h5 class="white-text">Useful links</h5>
-				<ul>
-					<li><a class="white-text" href="/getting-started">Getting Started</a></li>
-					<br class="hide-on-med-and-up" />
-					{#if loggedIn}
-						<li><a class="white-text" href="/add-plugin">Add Plugin</a></li>
-					{:else}
-						<li><a class="white-text" href="/login">Login</a></li>
-						<br class="hide-on-med-and-up" />
-						<li><a class="white-text" href="/register">Create Account</a></li>
-					{/if}
-					<br class="hide-on-med-and-up" />
-					<li><a class="white-text" href="/credits">Credits / Sponsor</a></li>
-					<br class="hide-on-med-and-up" />
-					<li><a class="white-text" href="/faq">FAQ</a></li>
-					<br class="hide-on-med-and-up" />
-					<li><a class="white-text" href="#colorPickerModal">Change Color</a></li>
-					<br class="hide-on-med-and-up" />
-					<li><a class="white-text" href="/what-is-my-plugin-id">What is my plugin id?</a></li>
+
+			<div>
+				<h3 class="text-sm font-semibold tracking-wide text-slate-400 uppercase">Get started</h3>
+				<ul class="mt-4 space-y-2 text-sm text-slate-600">
+					<li><a href={resolve('/getting-started')} class="hover:text-brand-700">Onboarding</a></li>
+					<li><a href={resolve('/faq')} class="hover:text-brand-700">FAQ</a></li>
+					<li>
+						<a href={resolve('/getting-started/include-metrics')} class="hover:text-brand-700"
+							>Include Metrics</a
+						>
+					</li>
+					<li>
+						<a href={resolve('/help/custom-charts')} class="hover:text-brand-700">Custom Charts</a>
+					</li>
 				</ul>
 			</div>
-			<div class="col l3 m4 s12">
-				<h5 class="white-text">Legal notices</h5>
-				<ul>
-					<li><a class="white-text" href="/terms-of-use">Terms of Use</a></li>
-					<br class="hide-on-med-and-up" />
-					<li><a class="white-text" href="/privacy-policy">Privacy Policy</a></li>
-					<br class="hide-on-med-and-up" />
-					<li><a class="white-text" href="/imprint">Imprint</a></li>
+
+			<div>
+				<h3 class="text-sm font-semibold tracking-wide text-slate-400 uppercase">Account</h3>
+				<ul class="mt-4 space-y-2 text-sm text-slate-600">
+					{#if loggedIn}
+						<li><a href={resolve('/add-plugin')} class="hover:text-brand-700">Add Plugin</a></li>
+						<li>
+							<a href={resolve('/change-password')} class="hover:text-brand-700">Change password</a>
+						</li>
+						<li><a href={resolve('/logout')} class="hover:text-brand-700">Logout</a></li>
+					{:else}
+						<li><a href={resolve('/login')} class="hover:text-brand-700">Log in</a></li>
+						<li><a href={resolve('/register')} class="hover:text-brand-700">Create account</a></li>
+					{/if}
+					<li>
+						<a href={resolve('/plugin/spigot/random')} class="hover:text-brand-700">Random plugin</a
+						>
+					</li>
+				</ul>
+			</div>
+
+			<div>
+				<h3 class="text-sm font-semibold tracking-wide text-slate-400 uppercase">Legal & more</h3>
+				<ul class="mt-4 space-y-2 text-sm text-slate-600">
+					<li><a href={resolve('/terms-of-use')} class="hover:text-brand-700">Terms of Use</a></li>
+					<li>
+						<a href={resolve('/privacy-policy')} class="hover:text-brand-700">Privacy Policy</a>
+					</li>
+					<li><a href={resolve('/imprint')} class="hover:text-brand-700">Imprint</a></li>
+					<li><a href={resolve('/credits')} class="hover:text-brand-700">Credits</a></li>
 				</ul>
 			</div>
 		</div>
-	</div>
-	<div class="footer-copyright">
-		<div class="container">
-			Made with <a class="{customColor1}-text text-lighten-3" href="http://materializecss.com"
-				>Materialize</a
-			>
+
+		<div
+			class="mt-12 flex flex-col gap-4 border-t border-slate-200 pt-6 text-sm text-slate-500 sm:flex-row sm:items-center sm:justify-between"
+		>
+			<p>Made with <span class="text-brand-500">love</span> by hobbyists for hobbyists.</p>
+			<div class="flex flex-wrap gap-4">
+				<a href={resolve('/what-is-my-plugin-id')} class="hover:text-brand-700">
+					What is my plugin ID?
+				</a>
+				<a href={resolve('/help/rest-api')} class="hover:text-brand-700">REST API</a>
+			</div>
 		</div>
 	</div>
 </footer>
-
-<!-- Color picker modal -->
-<div id="colorPickerModal" class="modal">
-	<div class="modal-content">
-		<div class="{customColor1}-text" style="text-align: center;">
-			<h4><u><b>Pick a color</b></u></h4>
-		</div>
-		<div class="row">
-			<div class="col s12 m6 l4 xl3">
-				<div class="card-panel coloredBox truncate hoverable red" onclick={() => setColor('red')}>Red</div>
-			</div>
-			<div class="col s12 m6 l4 xl3">
-				<div class="card-panel coloredBox truncate hoverable teal" onclick={() => setColor('teal')}>Teal</div
-				>
-			</div>
-			<div class="col s12 m6 l4 xl3">
-				<div class="card-panel coloredBox truncate hoverable blue" onclick={() => setColor('blue')}>Blue</div
-				>
-			</div>
-			<div class="col s12 m6 l4 xl3">
-				<div class="card-panel coloredBox truncate hoverable pink" onclick={() => setColor('pink')}>
-					❤ Pink ❤
-				</div>
-			</div>
-			<div class="col s12 m6 l4 xl3">
-				<div class="card-panel coloredBox truncate hoverable brown" onclick={() => setColor('brown')}>
-					Brown
-				</div>
-			</div>
-			<div class="col s12 m6 l4 xl3">
-				<div class="card-panel coloredBox truncate hoverable green" onclick={() => setColor('green')}>
-					Green
-				</div>
-			</div>
-			<div class="col s12 m6 l4 xl3">
-				<div class="card-panel coloredBox truncate hoverable black" onclick={() => setColor('black')}>
-					Black
-				</div>
-			</div>
-			<div class="col s12 m6 l4 xl3">
-				<div class="card-panel coloredBox truncate hoverable purple" onclick={() => setColor('purple')}>
-					Purple
-				</div>
-			</div>
-			<div class="col s12 m6 l4 xl3">
-				<div class="card-panel coloredBox truncate hoverable deep-purple" onclick={() => setColor('deep-purple')}
-					>Deep Purple</div
-				>
-			</div>
-			<div class="col s12 m6 l4 xl3">
-				<div class="card-panel coloredBox truncate hoverable indigo" onclick={() => setColor('indigo')}>
-					Indigo
-				</div>
-			</div>
-			<div class="col s12 m6 l4 xl3">
-				<div class="card-panel coloredBox truncate hoverable light-blue" onclick={() => setColor('light-blue')}
-					>Light Blue</div
-				>
-			</div>
-			<div class="col s12 m6 l4 xl3">
-				<div class="card-panel coloredBox truncate hoverable cyan" onclick={() => setColor('cyan')}>Cyan</div>
-			</div>
-			<div class="col s12 m6 l4 xl3">
-				<div
-					class="card-panel coloredBox truncate hoverable light-green"
-					onclick={() => setColor('light-green')}>Light Green</div
-				>
-			</div>
-			<div class="col s12 m6 l4 xl3">
-				<div class="card-panel coloredBox truncate hoverable lime" onclick={() => setColor('lime')}>Lime</div>
-			</div>
-			<div class="col s12 m6 l4 xl3">
-				<div class="card-panel coloredBox truncate hoverable yellow" onclick={() => setColor('yellow')}>
-					Yellow
-				</div>
-			</div>
-			<div class="col s12 m6 l4 xl3">
-				<div class="card-panel coloredBox truncate hoverable amber" onclick={() => setColor('amber')}>
-					Amber
-				</div>
-			</div>
-			<div class="col s12 m6 l4 xl3">
-				<div class="card-panel coloredBox truncate hoverable orange" onclick={() => setColor('orange')}>
-					Orange
-				</div>
-			</div>
-			<div class="col s12 m6 l4 xl3">
-				<div
-					class="card-panel coloredBox truncate hoverable deep-orange"
-					onclick={() => setColor('deep-orange')}>Deep Orange</div
-				>
-			</div>
-			<div class="col s12 m6 l4 xl3">
-				<div class="card-panel coloredBox truncate hoverable grey" onclick={() => setColor('grey')}>Grey</div>
-			</div>
-			<div class="col s12 m6 l4 xl3">
-				<div class="card-panel coloredBox truncate hoverable blue-grey" onclick={() => setColor('blue-grey')}
-					>Blue Grey</div
-				>
-			</div>
-		</div>
-	</div>
-</div>

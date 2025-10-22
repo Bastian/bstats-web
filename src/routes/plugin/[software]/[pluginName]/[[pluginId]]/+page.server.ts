@@ -71,7 +71,9 @@ export const load: PageServerLoad = async ({ params, locals }) => {
 
 	// Check if current user is owner
 	const isOwner =
-		locals.loggedIn && locals.user && locals.user.username.toLowerCase() === plugin.owner.toLowerCase();
+		locals.loggedIn &&
+		locals.user &&
+		locals.user.username.toLowerCase() === plugin.owner.toLowerCase();
 	const isAdmin = locals.loggedIn && locals.user && locals.user.admin;
 
 	return {

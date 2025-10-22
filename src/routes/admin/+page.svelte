@@ -111,9 +111,12 @@
 				star.style.transform = 'translate(0px, 0px)';
 				document.body.appendChild(star);
 
-				setTimeout(() => {
-					star.style.transform = 'translate(-' + largura + 'px, 0px)';
-				}, getRandomInt(5, 10) * 10);
+				setTimeout(
+					() => {
+						star.style.transform = 'translate(-' + largura + 'px, 0px)';
+					},
+					getRandomInt(5, 10) * 10
+				);
 
 				setTimeout(() => {
 					star.remove();

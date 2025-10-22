@@ -126,14 +126,10 @@ export const actions = {
 
 		// Check if chart with this ID already exists
 		const existingChart = await new Promise<any>((resolve, reject) => {
-			dataManager.getChartByPluginIdAndChartId(
-				pluginId,
-				trimmedId,
-				(err: any, result: any) => {
-					if (err) reject(err);
-					else resolve(result);
-				}
-			);
+			dataManager.getChartByPluginIdAndChartId(pluginId, trimmedId, (err: any, result: any) => {
+				if (err) reject(err);
+				else resolve(result);
+			});
 		});
 
 		if (existingChart) {

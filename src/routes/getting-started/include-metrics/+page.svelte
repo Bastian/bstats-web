@@ -1,260 +1,330 @@
 <script lang="ts">
+	import { resolve } from '$app/paths';
+	import Badge from '$lib/components/Badge.svelte';
+	import Button from '$lib/components/Button.svelte';
+	import PageHero from '$lib/components/PageHero.svelte';
 	import type { PageData } from './$types';
-	import { onMount } from 'svelte';
 
 	let { data }: { data: PageData } = $props();
-
-	onMount(() => {
-		// Initialize Materialize collapsible
-		if (typeof window !== 'undefined' && window.$) {
-			(window.$ as any)('.collapsible').collapsible();
-		}
-
-		// Load code prettify
-		const script = document.createElement('script');
-		script.src = 'https://cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js';
-		document.body.appendChild(script);
-	});
 </script>
 
 <svelte:head>
 	<title>bStats - Include metrics</title>
-	<meta
-		name="description"
-		content="A description on how to include bStats to your plugin"
-	/>
-	<style>
-		.withBox {
-			outline: 1px solid #ccc;
-			padding: 5px;
-			margin: 5px;
-		}
-	</style>
+	<meta name="description" content="A description on how to include bStats to your plugin" />
 </svelte:head>
 
-<main>
-	<div class="container">
-		<br />
+<main class="pb-24">
+	<PageHero>
+		{#snippet badge()}<Badge>Documentation</Badge>{/snippet}
+		{#snippet title()}Include metrics{/snippet}
+		{#snippet content()}
+			Choose your favorite workflow: take the Maven route for a maintained dependency, or drop-in
+			the Metrics class. Both paths end with live data in your dashboard.
+		{/snippet}
+		{#snippet extra()}
+			<Button href={resolve('/getting-started')}>Back to getting started</Button>
+		{/snippet}
+	</PageHero>
+
+	<section class="doc-container mt-12 space-y-12">
 		{#if data.addedPlugin}
-			<div class="col s12">
-				<div class="card">
-					<div class="card-content">
-						<b>You've successfully added your plugin!</b><br />
-						If you haven't done it already, you have to add bStats to your plugin.<br />
-					</div>
+			<div class="space-y-4">
+				<div class="doc-callout doc-callout-info">
+					<p class="text-sm font-semibold">Plugin added successfully</p>
+					<p class="mt-2">
+						<span class="font-semibold text-slate-800">{data.pluginName}</span> is registered as
+						plugin ID
+						<span class="font-semibold text-slate-800">{data.pluginId}</span>. Keep this
+						handy—you'll need it inside your metrics initialization.
+					</p>
 				</div>
-			</div>
-			<div class="col s12">
-				<div class="card">
-					<div class="card-content">
-						<b>Useful Information</b><br />
-						Your plugin <b>{data.pluginName}</b> has the plugin id <b>{data.pluginId}</b>. You
-						will need it when adding bStats to your plugin.
-						<br />
-						You can view the ids of all your plugins by visiting the <a
-							href="/what-is-my-plugin-id">What is my plugin id?</a
-						> page.
-					</div>
+				<div class="doc-callout doc-callout-note">
+					<p class="text-sm">
+						Need a refresher later? You can always revisit the
+						<a
+							class="font-semibold text-brand-600 hover:text-brand-700"
+							href={resolve('/what-is-my-plugin-id')}>What is my plugin ID?</a
+						>
+						page for every ID tied to your account.
+					</p>
 				</div>
 			</div>
 		{/if}
-		<div class="col s12">
-			<div class="card">
-				<div class="card-content">
-					<p>Including bStats is very easy. There are basically two ways to include bStats:</p>
-					<ul class="collapsible" data-collapsible="accordion">
-						<li>
-							<div class="collapsible-header">
-								<i class="material-icons">code</i>Using Maven to shade bStats
+
+		<div class="grid gap-8 lg:grid-cols-[260px_1fr]">
+			<aside class="space-y-4 rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+				<h2 class="text-xs tracking-[0.3em] text-slate-400 uppercase">On this page</h2>
+				<nav class="mt-4 space-y-2 text-sm text-slate-600">
+					<a
+						class="block rounded-lg px-3 py-2 transition hover:bg-slate-100 hover:text-slate-900"
+						href="#maven">Shade via Maven</a
+					>
+					<a
+						class="block rounded-lg px-3 py-2 transition hover:bg-slate-100 hover:text-slate-900"
+						href="#manual">Manual copy</a
+					>
+					<a
+						class="block rounded-lg px-3 py-2 transition hover:bg-slate-100 hover:text-slate-900"
+						href="#integration">Wire it up</a
+					>
+				</nav>
+			</aside>
+
+			<div class="space-y-10">
+				<article id="maven" class="doc-card space-y-6">
+					<div class="space-y-3">
+						<span class="text-xs tracking-[0.3em] text-slate-400 uppercase">Option 1</span>
+						<h2 class="doc-card-title">Shade bStats using Maven</h2>
+						<p class="text-sm leading-relaxed text-slate-600">
+							This is the most future-proof way to include bStats. Maven keeps the dependency
+							updated, and shading ensures your plugin ships a self-contained Metrics class.
+						</p>
+					</div>
+
+					<details class="group rounded-2xl border border-slate-200 bg-slate-50 p-4 sm:p-6">
+						<summary
+							class="flex cursor-pointer items-center justify-between text-sm font-semibold text-slate-700"
+						>
+							<span>Step 1 · Add the dependency</span>
+							<span class="text-xs tracking-[0.2em] text-slate-400 uppercase">Click to toggle</span>
+						</summary>
+						<div class="mt-4 space-y-4 text-sm text-slate-600">
+							<p>
+								Choose the artifact that matches your server platform. Recent versions are published
+								to Maven Central.
+							</p>
+							<pre class="doc-code language-xml">{`<dependency>
+  <groupId>org.bstats</groupId>
+  <artifactId>bstats-bukkit</artifactId>
+  <version>3.0.2</version>
+  <scope>compile</scope>
+</dependency>`}</pre>
+							<p class="text-xs tracking-[0.2em] text-slate-400 uppercase">Artifacts available</p>
+							<ul class="list-disc space-y-1 pl-6 text-sm">
+								<li><code class="font-mono text-slate-700">bstats-bukkit</code></li>
+								<li><code class="font-mono text-slate-700">bstats-bungeecord</code></li>
+								<li><code class="font-mono text-slate-700">bstats-sponge</code></li>
+								<li><code class="font-mono text-slate-700">bstats-velocity</code></li>
+							</ul>
+						</div>
+					</details>
+
+					<details class="group rounded-2xl border border-slate-200 bg-slate-50 p-4 sm:p-6">
+						<summary
+							class="flex cursor-pointer items-center justify-between text-sm font-semibold text-slate-700"
+						>
+							<span>Step 2 · Shade the dependency</span>
+							<span class="text-xs tracking-[0.2em] text-slate-400 uppercase">Click to toggle</span>
+						</summary>
+						<div class="mt-4 space-y-4 text-sm text-slate-600">
+							<div class="doc-callout doc-callout-note">
+								<p class="text-sm font-semibold text-amber-700">Don't skip this!</p>
+								<p class="mt-1 text-sm text-amber-700">
+									Shading bundles the Metrics class into your jar. If you use Sponge, skip the
+									relocation section.
+								</p>
 							</div>
-							<div class="collapsible-body">
-								<div style="margin-left: 10px; margin-top: 4px; margin-right: 10px;">
-									<b class="red-text"
-										>Note: You are expected to have a basic understanding on how to use Maven!</b
-									><br />
-									<b>1. Include the dependency.</b><br />
-									There are 4 possible artifact ids: <i><b>bstats-bukkit</b></i>, <i
-										><b>bstats-bungeecord</b></i
-									>, <i><b>bstats-sponge</b></i>, and <i><b>bstats-velocity</b></i>.
-									<pre class="prettyprint withBox" style="border: none"><code class="language-xml"
-											>&lt;dependency&gt;
-  &lt;groupId&gt;org.bstats&lt;/groupId&gt;
-  &lt;artifactId&gt;bstats-bukkit&lt;/artifactId&gt;
-  &lt;version&gt;3.0.2&lt;/version&gt;
-  &lt;scope&gt;compile&lt;/scope&gt;
-&lt;/dependency&gt;</code
-										></pre>
-									<b>3. Shade bStats into your plugin.</b><br />
-									This step is very important. Shading means, that the necessary classes are copied
-									into your plugin when you compile it. It also relocates the class to an other
-									package. Make sure to change <i>your.package</i> to your own package! If you are
-									using Sponge, do <b>not</b> relocate the bStats class (just remove the
-									&lt;configuration&gt;...&lt;/configuration&gt; part).
-									<pre class="prettyprint withBox" style="border: none"><code class="language-xml"
-											>&lt;build&gt;
-  &lt;plugins&gt;
-    &lt;plugin&gt;
-      &lt;groupId&gt;org.apache.maven.plugins&lt;/groupId&gt;
-      &lt;artifactId&gt;maven-shade-plugin&lt;/artifactId&gt;
-      &lt;version&gt;3.1.0&lt;/version&gt;
-      &lt;configuration&gt;
-        &lt;relocations&gt;
-          &lt;relocation&gt;
-            &lt;pattern&gt;org.bstats&lt;/pattern&gt;
-            &lt;!-- Replace this with your package! --&gt;
-            &lt;shadedPattern&gt;your.package&lt;/shadedPattern&gt;
-          &lt;/relocation&gt;
-        &lt;/relocations&gt;
-      &lt;/configuration&gt;
-      &lt;executions&gt;
-        &lt;execution&gt;
-          &lt;phase&gt;package&lt;/phase&gt;
-          &lt;goals&gt;
-            &lt;goal&gt;shade&lt;/goal&gt;
-          &lt;/goals&gt;
-        &lt;/execution&gt;
-      &lt;/executions&gt;
-    &lt;/plugin&gt;
-  &lt;/plugins&gt;
-&lt;/build&gt;</code
-										></pre>
-									<b>4. You're done!</b><br />
-									Your final pom.xml now may look like this:
-									<pre class="prettyprint withBox" style="border: none"><code class="language-xml"
-											>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
-&lt;project xmlns=&quot;http://maven.apache.org/POM/4.0.0&quot;
-     xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot;
-     xsi:schemaLocation=&quot;http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd&quot;&gt;
-  &lt;modelVersion&gt;4.0.0&lt;/modelVersion&gt;
+							<pre class="doc-code language-xml">{`<build>
+  <plugins>
+    <plugin>
+      <groupId>org.apache.maven.plugins</groupId>
+      <artifactId>maven-shade-plugin</artifactId>
+      <version>3.1.0</version>
+      <configuration>
+        <relocations>
+          <relocation>
+            <pattern>org.bstats</pattern>
+            <shadedPattern>your.package</shadedPattern>
+          </relocation>
+        </relocations>
+      </configuration>
+      <executions>
+        <execution>
+          <phase>package</phase>
+          <goals>
+            <goal>shade</goal>
+          </goals>
+        </execution>
+      </executions>
+    </plugin>
+  </plugins>
+</build>`}</pre>
+						</div>
+					</details>
 
-  &lt;groupId&gt;me.name&lt;/groupId&gt;
-  &lt;artifactId&gt;pluginname&lt;/artifactId&gt;
-  &lt;version&gt;1.0.0&lt;/version&gt;
+					<div class="space-y-4 text-sm text-slate-600">
+						<p class="text-xs tracking-[0.2em] text-slate-400 uppercase">
+							Sample <code class="font-mono text-slate-600">pom.xml</code>
+						</p>
+						<pre class="doc-code language-xml">{`<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>me.name</groupId>
+  <artifactId>pluginname</artifactId>
+  <version>1.0.0</version>
+  <dependencies>
+    <dependency>
+      <groupId>org.bstats</groupId>
+      <artifactId>bstats-bukkit</artifactId>
+      <version>3.0.2</version>
+      <scope>compile</scope>
+    </dependency>
+  </dependencies>
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-shade-plugin</artifactId>
+        <version>3.1.0</version>
+      </plugin>
+    </plugins>
+  </build>
+</project>`}</pre>
+					</div>
+				</article>
 
-  &lt;repositories&gt;
-    &lt;repository&gt;
-      &lt;id&gt;spigot-repo&lt;/id&gt;
-      &lt;url&gt;https://hub.spigotmc.org/nexus/content/groups/public/&lt;/url&gt;
-    &lt;/repository&gt;
-  &lt;/repositories&gt;
+				<article id="manual" class="doc-card space-y-6">
+					<div class="space-y-3">
+						<span class="text-xs tracking-[0.3em] text-slate-400 uppercase">Option 2</span>
+						<h2 class="doc-card-title">Manually bundle the Metrics class</h2>
+						<p class="text-sm leading-relaxed text-slate-600">
+							Prefer to copy files by hand? Download the Metrics class that matches your platform
+							and drop it into your project. Remember to change the package name to something inside
+							your namespace.
+						</p>
+					</div>
 
-  &lt;dependencies&gt;
-    &lt;!-- Spigot as an example --&gt;
-    &lt;dependency&gt;
-      &lt;groupId&gt;org.spigotmc&lt;/groupId&gt;
-      &lt;artifactId&gt;spigot-api&lt;/artifactId&gt;
-      &lt;version&gt;LATEST&lt;/version&gt;
-      &lt;scope&gt;provided&lt;/scope&gt;
-    &lt;/dependency&gt;
-    &lt;!-- bStats --&gt;
-    &lt;dependency&gt;
-      &lt;groupId&gt;org.bstats&lt;/groupId&gt;
-      &lt;artifactId&gt;bstats-bukkit&lt;/artifactId&gt;
-      &lt;version&gt;3.0.2&lt;/version&gt;
-      &lt;scope&gt;compile&lt;/scope&gt;
-    &lt;/dependency&gt;
-  &lt;/dependencies&gt;
+					<div class="overflow-hidden rounded-2xl border border-slate-200 bg-slate-50">
+						<table class="min-w-full divide-y divide-slate-200 text-sm">
+							<thead class="bg-slate-100 text-slate-500">
+								<tr>
+									<th class="px-4 py-3 text-left font-semibold tracking-[0.18em] uppercase"
+										>Software</th
+									>
+									<th class="px-4 py-3 text-left font-semibold tracking-[0.18em] uppercase"
+										>Download</th
+									>
+								</tr>
+							</thead>
+							<tbody class="divide-y divide-slate-200 bg-white text-slate-600">
+								{#each data.software as sw}
+									{#if sw.metricsClass !== null}
+										<tr>
+											<td class="px-4 py-3 font-semibold text-slate-800">{sw.name}</td>
+											<td class="px-4 py-3">
+												<a
+													class="font-semibold text-brand-600 hover:text-brand-700"
+													href={sw.metricsClass}
+													target="_blank"
+													rel="noopener"
+												>
+													Metrics.java
+												</a>
+											</td>
+										</tr>
+									{/if}
+								{/each}
+							</tbody>
+						</table>
+					</div>
+					<p class="text-sm leading-relaxed text-slate-600">
+						Each class is hosted on GitHub. Use the raw file, replace the <code
+							class="font-mono text-slate-700">org.bstats</code
+						> package name, and keep the file in sync with future releases.
+					</p>
+				</article>
 
-  &lt;build&gt;
-    &lt;plugins&gt;
-      &lt;plugin&gt;
-        &lt;groupId&gt;org.apache.maven.plugins&lt;/groupId&gt;
-        &lt;artifactId&gt;maven-shade-plugin&lt;/artifactId&gt;
-        &lt;version&gt;3.1.0&lt;/version&gt;
-        &lt;configuration&gt;
-          &lt;relocations&gt;
-            &lt;relocation&gt;
-              &lt;pattern&gt;org.bstats&lt;/pattern&gt;
-              &lt;shadedPattern&gt;me.name.util&lt;/shadedPattern&gt;
-            &lt;/relocation&gt;
-          &lt;/relocations&gt;
-        &lt;/configuration&gt;
-        &lt;executions&gt;
-          &lt;execution&gt;
-            &lt;phase&gt;package&lt;/phase&gt;
-            &lt;goals&gt;
-              &lt;goal&gt;shade&lt;/goal&gt;
-            &lt;/goals&gt;
-          &lt;/execution&gt;
-        &lt;/executions&gt;
-      &lt;/plugin&gt;
-    &lt;/plugins&gt;
-  &lt;/build&gt;
+				<article id="integration" class="doc-card space-y-6">
+					<div class="space-y-3">
+						<span class="text-xs tracking-[0.3em] text-slate-400 uppercase">Finish up</span>
+						<h2 class="doc-card-title">Create the Metrics instance</h2>
+						<p class="text-sm leading-relaxed text-slate-600">
+							With the class in place, you just need to instantiate Metrics in your plugin. Each
+							platform has a slightly different entry point—use the example that matches your
+							software.
+						</p>
+					</div>
 
-&lt;/project&gt;</code
-										></pre>
-								</div>
-							</div>
-						</li>
-						<li>
-							<div class="collapsible-header">
-								<i class="material-icons">code</i>Manually copy the Metrics class
-							</div>
-							<div class="collapsible-body">
-								<div style="margin-left: 10px; margin-top: 4px; margin-right: 10px;">
-									If you don't want to use Maven that's no problem. You can just copy and paste the
-									required class into your project. All classes can be found in the <a
-										href="https://github.com/Bastian/bStats-Metrics/tree/single-file"
-										>GitHub repository</a
-									>.<br />
-									Just copy the class fitting your server software. Make sure to change the package
-									from <i>org.bstats</i> to your own package.<br />
-									<div style="overflow-x:auto;">
-										<div style="min-width: 300px">
-											<table>
-												<thead>
-													<tr>
-														<th data-field="id">Software</th>
-														<th data-field="name">Standard</th>
-													</tr>
-												</thead>
+					<div class="space-y-6">
+						<div>
+							<h3 class="text-sm font-semibold tracking-[0.2em] text-slate-400 uppercase">
+								Bukkit / Spigot
+							</h3>
+							<pre class="doc-code language-java">{`public class ExamplePlugin extends JavaPlugin {
+    @Override
+    public void onEnable() {
+        int pluginId = ${data.pluginId || '12345'}; // Replace with your actual plugin id
+        Metrics metrics = new Metrics(this, pluginId);
+        metrics.addCustomChart(new Metrics.SimplePie("chart_id", () -> getConfig().getString("some-setting")));
+    }
+}`}</pre>
+						</div>
+						<div>
+							<h3 class="text-sm font-semibold tracking-[0.2em] text-slate-400 uppercase">
+								BungeeCord
+							</h3>
+							<pre
+								class="doc-code language-java">{`public final class ExampleBungee extends Plugin {
+    @Override
+    public void onEnable() {
+        int pluginId = ${data.pluginId || '12345'};
+        Metrics metrics = new Metrics(this, pluginId);
+        metrics.addCustomChart(new Metrics.SimpleBarChart("proxy_modes", () -> {
+            Map<String, Integer> map = new HashMap<>();
+            map.put(getProxy().getConfig().isOnlineMode() ? "Online" : "Offline", 1);
+            return map;
+        }));
+    }
+}`}</pre>
+						</div>
+						<div>
+							<h3 class="text-sm font-semibold tracking-[0.2em] text-slate-400 uppercase">
+								Sponge
+							</h3>
+							<pre
+								class="doc-code language-java">{`@Plugin(id = "example", name = "Example", version = "1.0")
+public class ExampleSponge {
+    @Inject private PluginContainer container;
 
-												<tbody>
-													{#each data.software as sw}
-														{#if sw.metricsClass !== null}
-															<tr>
-																<td><b>{sw.name}</b></td>
-																<td><a href={sw.metricsClass} target="_blank">Metrics.java</a></td>
-															</tr>
-														{/if}
-													{/each}
-												</tbody>
-											</table>
-										</div>
-									</div>
-								</div>
-							</div>
-						</li>
-					</ul>
-					After adding the Metrics class to your plugin, you now have to create an instance of the
-					class. How this is done depends on the server software you are using.<br />
-					Just take a look at the examples for your server software:
-					<table>
-						<thead>
-							<tr>
-								<th data-field="id">Software</th>
-								<th data-field="name">Example</th>
-							</tr>
-						</thead>
+    @Listener
+    public void onServerStart(GameStartedServerEvent event) {
+        int pluginId = ${data.pluginId || '12345'};
+        Metrics metrics = new Metrics(container, pluginId);
+        metrics.addCustomChart(new Metrics.AdvancedPie("worlds", () -> {
+            Map<String, Integer> data = new HashMap<>();
+            Sponge.server().worldManager().worlds().forEach(world -> data.put(world.key().asString(), 1));
+            return data;
+        }));
+    }
+}`}</pre>
+						</div>
+						<div>
+							<h3 class="text-sm font-semibold tracking-[0.2em] text-slate-400 uppercase">
+								Velocity
+							</h3>
+							<pre
+								class="doc-code language-java">{`@Plugin(id = "example", name = "Example", version = "1.0")
+public class ExampleVelocity {
+    @Inject
+    public ExampleVelocity(ProxyServer server, Metrics.Factory metricsFactory) {
+        int pluginId = ${data.pluginId || '12345'};
+        Metrics metrics = metricsFactory.make(this, pluginId);
+        metrics.addCustomChart(new Metrics.SimplePie("proxy_version", () -> server.getVersion().getName()));
+    }
+}`}</pre>
+						</div>
+					</div>
 
-						<tbody>
-							{#each data.software as sw}
-								{#if sw.examplePlugin !== null}
-									<tr>
-										<td><b>{sw.name}</b></td>
-										<td><a href={sw.examplePlugin} target="_blank">ExamplePlugin.java</a></td>
-									</tr>
-								{/if}
-							{/each}
-						</tbody>
-					</table>
-					You may notice, that all examples also include a very basic example on how to use custom
-					charts. You can find a detailed tutorial on how to use them <a href="/help/custom-charts"
-						>here</a
-					>. If you don't need custom charts you can (but not have to) use the lite version of the
-					Metrics class, too.
-				</div>
+					<div class="doc-callout doc-callout-info">
+						<p class="text-sm font-semibold">Ready to see data flow?</p>
+						<p class="mt-2">
+							Deploy your plugin, wait for the next stats cycle (about 30 minutes), and you'll spot
+							the numbers on your plugin page.
+						</p>
+					</div>
+				</article>
 			</div>
 		</div>
-	</div>
+	</section>
 </main>

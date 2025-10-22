@@ -2,96 +2,113 @@
 	import type { PageData, ActionData } from './$types';
 	import { onMount } from 'svelte';
 	import { enhance } from '$app/forms';
+	import Badge from '$lib/components/Badge.svelte';
+	import PageHero from '$lib/components/PageHero.svelte';
+	import Button from '$lib/components/Button.svelte';
 
 	let { data, form }: { data: PageData; form: ActionData } = $props();
 
-	onMount(() => {
-		// Initialize Materialize select
-		if (typeof window !== 'undefined' && window.$) {
-			(window.$ as any)('select').material_select();
-		}
+	let captchaSolved = $state(false);
+	let softwareSelected = $state('');
+	let pluginName = $state('');
 
+	let isFormValid = $derived(softwareSelected !== '' && pluginName.length > 0 && captchaSolved);
+
+	onMount(() => {
 		// Load reCAPTCHA script
 		const script = document.createElement('script');
 		script.src = 'https://www.google.com/recaptcha/api.js';
 		script.async = true;
 		script.defer = true;
 		document.head.appendChild(script);
-	});
 
-	let errorMessage = $derived(
-		form?.error === 'failed'
-			? 'Something went wrong on our side :('
-			: form?.error === 'alreadyAdded'
-				? 'Plugin already added!'
-				: form?.error === 'wrongCaptcha'
-					? 'Please solve the captcha!'
-					: form?.error === 'invalidName'
-						? 'Invalid plugin name!'
-						: null
-	);
+		// Set up global callback for reCAPTCHA
+		(window as any).captchaSolved = function () {
+			captchaSolved = true;
+		};
+	});
 </script>
 
 <svelte:head>
-	<title>bStats - Add plugin</title>
 	<meta name="description" content="Add a plugin to bStats." />
+	<title>bStats - Add plugin</title>
 </svelte:head>
 
-<main>
-	<div class="container">
-		<br /><br />
-		<div class="hide-on-med-and-down"><br /><br /></div>
-		<div class="row">
-			{#if errorMessage}
-				<h5 class="red-text col s12 center-align">{errorMessage}</h5>
-			{:else}
-				<h5 class="{data.customColor1}-text col s12 center-align">Add plugin</h5>
+<main class="pb-24">
+	<PageHero>
+		{#snippet badge()}<Badge>Account</Badge>{/snippet}
+		{#snippet title()}Register a plugin{/snippet}
+		{#snippet content()}
+			Pick the server software, choose a display name, and we'll generate a plugin ID. You'll use
+			that ID when instantiating the Metrics class.
+		{/snippet}
+	</PageHero>
+
+	<section class="doc-container mt-12">
+		<div class="form-card space-y-6">
+			{#if form?.error === 'failed'}
+				<div class="doc-callout border-rose-200 bg-rose-50 text-rose-700">
+					Something went wrong on our side. Please try again.
+				</div>
+			{:else if form?.error === 'alreadyAdded'}
+				<div class="doc-callout border-rose-200 bg-rose-50 text-rose-700">
+					You already added this plugin.
+				</div>
+			{:else if form?.error === 'wrongCaptcha'}
+				<div class="doc-callout border-amber-200 bg-amber-50 text-amber-700">
+					Please solve the captcha to continue.
+				</div>
+			{:else if form?.error === 'invalidName'}
+				<div class="doc-callout border-rose-200 bg-rose-50 text-rose-700">Invalid plugin name!</div>
 			{/if}
-			<br /><br />
-			<div class="col s12 m8 l6 offset-m2 offset-l3 z-depth-1 grey lighten-4 row">
-				<form class="col s12" method="post" use:enhance>
-					<br />
-					<div class="row">
-						<!-- Server software -->
-						<div class="input-field col s12">
-							<select id="software" name="software" required>
-								<option value="" disabled selected>Select software</option>
-								{#each data.allSoftware as software}
-									<option value={software.id}>{software.name}</option>
-								{/each}
-							</select>
-							<label>Select server software</label>
-						</div>
-						<!-- Name -->
-						<div class="input-field col s12">
-							<input
-								id="pluginName"
-								type="text"
-								name="pluginName"
-								pattern="^[-_a-zA-Z0-9]+(\s[-_a-zA-Z0-9]+)*$"
-								maxlength="32"
-								class="validate"
-								required
-							/>
-							<label for="pluginName" data-error="Invalid plugin name">Plugin name</label>
-						</div>
-					</div>
-					<div style="text-align: center">
-						<div class="g-recaptcha" style="display: inline-block" data-sitekey={data.recaptchaPublicKey}></div>
-					</div>
-					<br />
-					<!-- Add plugin button -->
-					<div class="row">
-						<button
-							type="submit"
-							name="btn_add_plugin"
-							class="col s12 btn btn-large waves-effect {data.customColor1}"
-						>
-							Add plugin
-						</button>
-					</div>
-				</form>
-			</div>
+
+			<form method="post" class="space-y-5" use:enhance>
+				<div class="input-group">
+					<label class="input-label" for="software">Server software</label>
+					<select
+						id="software"
+						name="software"
+						class="input-control"
+						bind:value={softwareSelected}
+						required
+					>
+						<option value="" disabled>Select software</option>
+						{#each data.allSoftware as software}
+							{#if software.globalPlugin || (data.user != null && data.user.admin)}
+								<option value={software.id}>{software.name}</option>
+							{/if}
+						{/each}
+					</select>
+				</div>
+
+				<div class="input-group">
+					<label class="input-label" for="pluginName">Plugin name</label>
+					<input
+						id="pluginName"
+						type="text"
+						name="pluginName"
+						maxlength="32"
+						pattern="^[-_a-zA-Z0-9]+(\s[-_a-zA-Z0-9]+)*$"
+						class="input-control"
+						placeholder="My Awesome Plugin"
+						bind:value={pluginName}
+						required
+					/>
+					<p class="form-helper">Letters, numbers, underscores. Spaces allowed between words.</p>
+				</div>
+
+				<div class="flex justify-center">
+					<div
+						class="g-recaptcha"
+						data-sitekey={data.recaptchaPublicKey}
+						data-callback="captchaSolved"
+					></div>
+				</div>
+
+				<Button fullWidth size="large" buttonProps={{ type: 'submit' }} disabled={!isFormValid}>
+					Add plugin
+				</Button>
+			</form>
 		</div>
-	</div>
+	</section>
 </main>

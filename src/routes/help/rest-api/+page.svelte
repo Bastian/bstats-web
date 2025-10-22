@@ -1,222 +1,174 @@
-<script lang="ts">
-	import type { PageData } from './$types';
-	import { onMount } from 'svelte';
-
-	let { data }: { data: PageData } = $props();
-
-	function syntaxHighlight(json: string) {
-		json = json.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
-		return json.replace(
-			/("(\\u[a-zA-Z0-9]{4}|\\[^u]|[^\\"])*"(\s*:)?|\b(true|false|null)\b|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?)/g,
-			function (match) {
-				let cls = 'number';
-				if (/^"/.test(match)) {
-					if (/:$/.test(match)) {
-						cls = 'key';
-					} else {
-						cls = 'string';
-					}
-				} else if (/true|false/.test(match)) {
-					cls = 'boolean';
-				} else if (/null/.test(match)) {
-					cls = 'null';
-				}
-				return '<span class="' + cls + '">' + match + '</span>';
-			}
-		);
-	}
-
-	const examples = {
-		plugins: syntaxHighlight(
-			JSON.stringify(
-				[
-					{
-						id: 1337,
-						name: 'ExamplePlugin',
-						owner: { id: 42, name: 'ExampleUser' },
-						software: { id: 1, name: 'Bukkit / Spigot', url: 'bukkit' },
-						isGlobal: false
-					},
-					{}
-				],
-				undefined,
-				2
-			)
-		),
-		plugin: syntaxHighlight(
-			JSON.stringify(
-				{
-					id: 1337,
-					name: 'ExamplePlugin',
-					owner: { id: 42, name: 'ExampleUser' },
-					charts: {
-						'%chartId%': {
-							uid: 1234,
-							type: 'single_linechart',
-							position: 0,
-							title: 'Example Linechart',
-							isDefault: true,
-							data: {
-								lineName: 'Line name',
-								filter: { enabled: false, maxValue: 1, minValue: 1 }
-							}
-						},
-						'%anOtherChartId%': {}
-					}
-				},
-				undefined,
-				2
-			)
-		),
-		charts: syntaxHighlight(
-			JSON.stringify(
-				{
-					'%chartId%': {
-						uid: 1234,
-						type: 'single_linechart',
-						position: 0,
-						title: 'Example Linechart',
-						isDefault: true,
-						data: {
-							lineName: 'Line name',
-							filter: { enabled: false, maxValue: 1, minValue: 1 }
-						}
-					},
-					'%anOtherChartId%': {}
-				},
-				undefined,
-				2
-			)
-		),
-		chart: syntaxHighlight(
-			JSON.stringify(
-				{
-					uid: 1234,
-					type: 'single_linechart',
-					position: 0,
-					title: 'Example Linechart',
-					isDefault: true,
-					data: {
-						lineName: 'Line name',
-						filter: { enabled: false, maxValue: 1, minValue: 1 }
-					}
-				},
-				undefined,
-				2
-			)
-		),
-		chartData: syntaxHighlight(
-			JSON.stringify(
-				[
-					[1479799800000, 122],
-					[1479801600000, 121],
-					[1479803400000, 124],
-					[1479805200000, 134]
-				],
-				undefined,
-				2
-			)
-		),
-		software: syntaxHighlight(
-			JSON.stringify(
-				[
-					{
-						id: 1,
-						name: 'Bukkit / Spigot',
-						url: 'bukkit',
-						globalPlugin: { id: 1, name: '_bukkit_' }
-					},
-					{}
-				],
-				undefined,
-				2
-			)
-		)
-	};
+<script>
+	import Badge from '$lib/components/Badge.svelte';
+	import PageHero from '$lib/components/PageHero.svelte';
 </script>
 
 <svelte:head>
-	<title>bStats - REST documentation</title>
-	<meta name="description" content="The REST documentation of bStats" />
-	<style>
-		.withBox {
-			outline: 1px solid #ccc;
-			padding: 5px;
-			margin: 5px;
-		}
-		:global(.string) {
-			color: green;
-		}
-		:global(.number) {
-			color: darkorange;
-		}
-		:global(.boolean) {
-			color: blue;
-		}
-		:global(.null) {
-			color: magenta;
-		}
-		:global(.key) {
-			color: red;
-		}
-	</style>
+	<title>bStats - REST API</title>
+	<meta name="description" content="REST documentation for bStats." />
 </svelte:head>
 
-<div class="container">
-	<br />
-	<div class="col s12">
-		<div class="card">
-			<div class="card-content">
-				<h3 class="center {data.customColor1}-text">REST-API</h3>
-				The REST-Api of bStats is very simple. It's meant to allow you to include data of your
-				plugin on your website, plugin presentation, etc. It is not meant to create new accounts,
-				add plugins, add charts, ... That's the reason it's only allowing GET-Requests.
+<main class="pb-24">
+	<PageHero>
+		{#snippet badge()}<Badge>API</Badge>{/snippet}
+		{#snippet title()}REST API{/snippet}
+		{#snippet content()}
+			Use the bStats REST API to embed plugin metrics in your site or tooling. All endpoints are
+			read-only and return JSON.
+		{/snippet}
+	</PageHero>
 
-				<blockquote>
-					<pre><b>GET</b> /api/v1/plugins</pre>
-				</blockquote>
-				Returns an array which contains all plugins:
-				<pre class="z-depth-1 withBox">{@html examples.plugins}</pre>
-
-				<blockquote>
-					<pre><b>GET</b> /api/v1/plugins/%pluginId%/</pre>
-				</blockquote>
-				Returns detailed information about the plugin with the given id:
-				<pre class="z-depth-1 withBox">{@html examples.plugin}</pre>
-
-				<blockquote>
-					<pre><b>GET</b> /api/v1/plugins/%pluginId%/charts</pre>
-				</blockquote>
-				Returns the charts of the given plugin:
-				<pre class="z-depth-1 withBox">{@html examples.charts}</pre>
-
-				<blockquote>
-					<pre><b>GET</b> /api/v1/plugins/%pluginId%/charts/%chartId%</pre>
-				</blockquote>
-				Returns information about a single chart:
-				<pre class="z-depth-1 withBox">{@html examples.chart}</pre>
-
-				<blockquote>
-					<pre><b>GET</b> /api/v1/plugins/%pluginId%/charts/%chartId%/data</pre>
-				</blockquote>
-				Returns the data of the chart. The format of the data depends on the type of the chart.
-				This is an example response for a Single Line Chart. The first number is the timestamp,
-				the second is the value.
-				<pre class="z-depth-1 withBox">{@html examples.chartData}</pre>
-
-				<blockquote>
-					<pre
-						><b>GET</b> /api/v1/plugins/%pluginId%/charts/%chartId%/data/?maxElements=%amount%</pre>
-				</blockquote>
-				maxElements is an optional parameter for LineCharts. It limits the amount of the returned
-				elements. If left blank it's 1 month by default (2*24*30).
-
-				<blockquote>
-					<pre><b>GET</b> /api/v1/software</pre>
-				</blockquote>
-				Returns an array with all supported server software:
-				<pre class="z-depth-1 withBox">{@html examples.software}</pre>
+	<section class="doc-container mt-12 space-y-12">
+		<article class="doc-card space-y-4">
+			<h2 class="doc-card-title">Getting started</h2>
+			<p class="text-sm leading-relaxed text-slate-600">
+				Requests are simple <code class="font-mono text-slate-700">GET</code> calls. No authentication
+				is required for public data.
+			</p>
+			<div class="doc-callout doc-callout-note">
+				These examples assume the API is reachable at <code class="font-mono text-slate-700"
+					>https://bstats.org</code
+				>.
 			</div>
-		</div>
-	</div>
-</div>
+		</article>
+
+		<article class="doc-card space-y-4">
+			<h3 class="text-sm font-semibold tracking-[0.2em] text-slate-400 uppercase">List plugins</h3>
+			<pre class="doc-code"><code class="language-http">GET /api/v1/plugins</code></pre>
+			<p class="text-sm text-slate-600">Returns all plugins registered on bStats.</p>
+			<pre class="doc-code"><code class="language-json"
+					>[
+  &#123;
+    "id": 1337,
+    "name": "ExamplePlugin",
+    "owner": &#123; "id": 42, "name": "ExampleUser" &#125;,
+    "software": &#123; "id": 1, "name": "Bukkit / Spigot", "url": "bukkit" &#125;,
+    "isGlobal": false
+  &#125;,
+  ...
+]</code
+				></pre>
+		</article>
+
+		<article class="doc-card space-y-4">
+			<h3 class="text-sm font-semibold tracking-[0.2em] text-slate-400 uppercase">
+				Plugin details
+			</h3>
+			<pre class="doc-code"><code class="language-http"
+					>GET /api/v1/plugins/&#123;pluginId&#125;</code
+				></pre>
+			<p class="text-sm text-slate-600">
+				Returns metadata plus chart definitions for a specific plugin.
+			</p>
+			<pre class="doc-code"><code class="language-json"
+					>&#123;
+  "id": 1337,
+  "name": "ExamplePlugin",
+  "owner": &#123; "id": 42, "name": "ExampleUser" &#125;,
+  "charts": &#123;
+    "players": &#123;
+      "uid": 1234,
+      "type": "single_linechart",
+      "position": 0,
+      "title": "Players",
+      "isDefault": true,
+      "data": &#123;
+        "lineName": "Players",
+        "filter": &#123; "enabled": false, "maxValue": null, "minValue": null &#125;
+      &#125;
+    &#125;
+  &#125;
+&#125;</code
+				></pre>
+		</article>
+
+		<article class="doc-card space-y-4">
+			<h3 class="text-sm font-semibold tracking-[0.2em] text-slate-400 uppercase">
+				Charts for a plugin
+			</h3>
+			<pre class="doc-code"><code class="language-http"
+					>GET /api/v1/plugins/&#123;pluginId&#125;/charts</code
+				></pre>
+			<p class="text-sm text-slate-600">Returns the chart registry for a plugin.</p>
+			<pre class="doc-code"><code class="language-json"
+					>&#123;
+  "players": &#123;
+    "uid": 1234,
+    "type": "single_linechart",
+    "position": 0,
+    "title": "Players",
+    "isDefault": true,
+    "data": &#123;
+      "lineName": "Players",
+      "filter": &#123; "enabled": false, "maxValue": null, "minValue": null &#125;
+    &#125;
+  &#125;
+&#125;</code
+				></pre>
+		</article>
+
+		<article class="doc-card space-y-4">
+			<h3 class="text-sm font-semibold tracking-[0.2em] text-slate-400 uppercase">
+				Chart metadata
+			</h3>
+			<pre class="doc-code"><code class="language-http"
+					>GET /api/v1/plugins/&#123;pluginId&#125;/charts/&#123;chartId&#125;</code
+				></pre>
+			<pre class="doc-code"><code class="language-json"
+					>&#123;
+  "uid": 1234,
+  "type": "single_linechart",
+  "position": 0,
+  "title": "Players",
+  "isDefault": true,
+  "data": &#123;
+    "lineName": "Players",
+    "filter": &#123; "enabled": false, "maxValue": null, "minValue": null &#125;
+  &#125;
+&#125;</code
+				></pre>
+		</article>
+
+		<article class="doc-card space-y-4">
+			<h3 class="text-sm font-semibold tracking-[0.2em] text-slate-400 uppercase">Chart data</h3>
+			<pre class="doc-code"><code class="language-http"
+					>GET /api/v1/plugins/&#123;pluginId&#125;/charts/&#123;chartId&#125;/data</code
+				></pre>
+			<p class="text-sm text-slate-600">
+				Returns raw chart data. For line charts each entry is <code class="font-mono text-slate-700"
+					>[timestamp, value]</code
+				>.
+			</p>
+			<pre class="doc-code"><code class="language-json"
+					>[
+  [1479799800000, 122],
+  [1479801600000, 121],
+  [1479803400000, 124],
+  [1479805200000, 134]
+]</code
+				></pre>
+			<div class="doc-callout doc-callout-note">
+				Append <code class="font-mono text-slate-700">?maxElements=&#123;amount&#125;</code> to limit
+				the number of entries (line charts only).
+			</div>
+		</article>
+
+		<article class="doc-card space-y-4">
+			<h3 class="text-sm font-semibold tracking-[0.2em] text-slate-400 uppercase">
+				Supported software
+			</h3>
+			<pre class="doc-code"><code class="language-http">GET /api/v1/software</code></pre>
+			<pre class="doc-code"><code class="language-json"
+					>[
+  &#123;
+    "id": 1,
+    "name": "Bukkit / Spigot",
+    "url": "bukkit",
+    "globalPlugin": &#123; "id": 1, "name": "_bukkit_" &#125;
+  &#125;,
+  ...
+]</code
+				></pre>
+		</article>
+	</section>
+</main>

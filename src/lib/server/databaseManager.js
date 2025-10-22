@@ -9,12 +9,12 @@ let cluster = null;
  * @returns {Redis.Cluster} The cluster.
  */
 export function getRedisCluster() {
-    if (cluster === null) {
-        if (Array.isArray(config.redis)) {
-            cluster = new Redis.Cluster(config.redis);
-        } else {
-            cluster = new Redis(config.redis);
-        }
-    }
-    return cluster;
+	if (cluster === null) {
+		if (Array.isArray(config.redis)) {
+			cluster = new Redis.Cluster(config.redis);
+		} else {
+			cluster = new Redis(config.redis);
+		}
+	}
+	return cluster;
 }

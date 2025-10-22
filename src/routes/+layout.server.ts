@@ -19,14 +19,19 @@ export const load: LayoutServerLoad = async ({ cookies, locals }) => {
 	});
 
 	// Load user's plugins if logged in
-	const myPlugins = loggedIn && user
-		? await new Promise<any[]>((resolve, reject) => {
-				dataManager.getPluginsOfUser(user.username, ['name', 'software'], (err: any, plugins: any) => {
-					if (err) reject(err);
-					else resolve(plugins || []);
-				});
-			})
-		: [];
+	const myPlugins =
+		loggedIn && user
+			? await new Promise<any[]>((resolve, reject) => {
+					dataManager.getPluginsOfUser(
+						user.username,
+						['name', 'software'],
+						(err: any, plugins: any) => {
+							if (err) reject(err);
+							else resolve(plugins || []);
+						}
+					);
+				})
+			: [];
 
 	// Replace the software id with a proper object for myPlugins
 	for (let i = 0; i < myPlugins.length; i++) {

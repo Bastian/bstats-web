@@ -1,141 +1,100 @@
 <script lang="ts">
-	import type { PageData, ActionData } from './$types';
-	import { enhance } from '$app/forms';
-	import { onMount } from 'svelte';
+	import { resolve } from '$app/paths';
+	import Badge from '$lib/components/Badge.svelte';
+	import Button from '$lib/components/Button.svelte';
+	import PageHero from '$lib/components/PageHero.svelte';
 
-	let { data, form }: { data: PageData; form: ActionData } = $props();
+	let { data, form } = $props();
 
 	let newPassword = $state('');
 	let confirmPassword = $state('');
-	let passwordMatchHelper = $state('');
-	let passwordMatchClass = $state('');
-	let submitDisabled = $state(true);
 
-	function checkPasswordsMatch() {
-		if (confirmPassword === '') {
-			passwordMatchHelper = '';
-			passwordMatchClass = '';
-			submitDisabled = true;
-			return;
+	let hint = $derived.by(() => {
+		if (!newPassword || !confirmPassword) {
+			return { text: '', type: '' };
 		}
-
+		if (newPassword.length < 6) {
+			return { text: 'Password must be at least 6 characters', type: 'error' };
+		}
 		if (newPassword === confirmPassword) {
-			passwordMatchHelper = 'Passwords match';
-			passwordMatchClass = 'green-text';
-			submitDisabled = false;
-		} else {
-			passwordMatchHelper = 'Passwords do not match';
-			passwordMatchClass = 'red-text';
-			submitDisabled = true;
+			return { text: 'Passwords match', type: 'success' };
 		}
-	}
-
-	// Watch for password changes
-	$effect(() => {
-		newPassword;
-		confirmPassword;
-		checkPasswordsMatch();
+		return { text: 'Passwords do not match', type: 'error' };
 	});
 
-	onMount(() => {
-		// Initialize Materialize components
-		if (typeof window !== 'undefined' && window.Materialize) {
-			window.Materialize.updateTextFields();
-		}
-	});
+	let isFormValid = $derived(newPassword.length >= 6 && newPassword === confirmPassword);
 </script>
 
 <svelte:head>
-	<title>bStats - Reset Password</title>
 	<meta name="description" content="Reset your bStats account password." />
+	<title>bStats - Reset password</title>
 </svelte:head>
 
-<div class="container">
-	<br /><br />
-	<div class="hide-on-med-and-down"><br /><br /></div>
-	<div class="row">
-		{#if form?.error || data.error}
-			<h5 class="red-text col s12 center-align">{form?.error || data.error}</h5>
-		{:else if data.success}
-			<h5 class="green-text col s12 center-align">{data.success}</h5>
-			<br /><br />
-			<div class="col s12 center-align">
-				<a href="/login" class="btn {data.customColor1}">Go to Login</a>
-			</div>
-		{:else}
-			<h5 class="{data.customColor1}-text col s12 center-align">Reset your password</h5>
-		{/if}
+<main class="pb-24">
+	<PageHero>
+		{#snippet badge()}<Badge>Account</Badge>{/snippet}
+		{#snippet title()}Reset password{/snippet}
+		{#snippet content()}
+			You can use the form below to reset your bStats account password.
+		{/snippet}
+	</PageHero>
 
-		{#if !data.success && (data.token || form?.token)}
-			<br /><br />
-			<div class="col s12 m8 l6 offset-m2 offset-l3 z-depth-1 grey lighten-4 row">
-				<form class="col s12" method="POST" use:enhance>
-					<br />
-					<input type="hidden" name="token" value={data.token || form?.token} />
-
+	<section class="doc-container mt-12">
+		<div class="form-card space-y-6">
+			{#if form?.error}
+				<div class="doc-callout border-rose-200 bg-rose-50 text-rose-700">{form.error}</div>
+			{:else if form?.success}
+				<div class="doc-callout doc-callout-info">{form.success}</div>
+				<Button href={resolve('/login')} fullWidth>Go to login</Button>
+			{:else if data.token}
+				<form method="post" class="space-y-5">
+					<input type="hidden" name="token" value={data.token} />
 					{#if data.username}
-						<div class="row">
-							<div class="col s12">
-								<p class="center-align">
-									Resetting password for user: <strong>{data.username}</strong>
-								</p>
-							</div>
-						</div>
+						<p class="text-sm text-slate-500">
+							Resetting password for <span class="font-semibold text-slate-900">
+								{data.username}
+							</span>
+						</p>
 					{/if}
-
-					<!-- New Password -->
-					<div class="row">
-						<div class="input-field col s12">
-							<input
-								id="newPassword"
-								type="password"
-								name="newPassword"
-								bind:value={newPassword}
-								required
-								minlength="6"
-							/>
-							<label for="newPassword">New Password</label>
-							<span class="helper-text">Minimum 6 characters</span>
-						</div>
+					<div class="input-group">
+						<label class="input-label" for="newPassword">New password</label>
+						<input
+							id="newPassword"
+							type="password"
+							name="newPassword"
+							class="input-control"
+							minlength="6"
+							bind:value={newPassword}
+							required
+						/>
+						<p class="form-helper">Minimum 6 characters</p>
 					</div>
-
-					<!-- Confirm New Password -->
-					<div class="row">
-						<div class="input-field col s12">
-							<input
-								id="confirmPassword"
-								type="password"
-								name="confirmPassword"
-								bind:value={confirmPassword}
-								required
-							/>
-							<label for="confirmPassword">Confirm New Password</label>
-							<span class="helper-text {passwordMatchClass}">{passwordMatchHelper}</span>
-						</div>
+					<div class="input-group">
+						<label class="input-label" for="confirmPassword">Confirm password</label>
+						<input
+							id="confirmPassword"
+							type="password"
+							name="confirmPassword"
+							class="input-control"
+							bind:value={confirmPassword}
+							required
+						/>
+						{#if hint.text}
+							<p class="form-helper {hint.type === 'error' ? 'text-rose-600' : 'text-emerald-600'}">
+								{hint.text}
+							</p>
+						{/if}
 					</div>
-
-					<br />
-
-					<!-- Reset Password button -->
-					<div class="row">
-						<button
-							type="submit"
-							class="col s12 btn btn-large waves-effect {data.customColor1}"
-							disabled={submitDisabled}
-						>
-							Reset Password
-						</button>
-					</div>
+					<Button fullWidth buttonProps={{ type: 'submit' }} disabled={!isFormValid} size="large">
+						Reset password
+					</Button>
 				</form>
-			</div>
-		{/if}
-
-		{#if !data.token && !form?.token && !data.success}
-			<br /><br />
-			<div class="col s12 center-align">
-				<p>If you need to reset your password, please contact an administrator.</p>
-				<a href="/login" class="btn {data.customColor1}">Back to Login</a>
-			</div>
-		{/if}
-	</div>
-</div>
+			{:else}
+				<div class="doc-callout doc-callout-note">
+					Need a reset link? Reach out to us via mail or Discord.
+				</div>
+				<Button href={resolve('/login')} fullWidth>Back to login</Button>
+			{/if}
+		</div>
+	</section>
+</main>

@@ -1,8 +1,19 @@
 <script lang="ts">
+	import { resolve } from '$app/paths';
+	import Badge from '$lib/components/Badge.svelte';
+	import Button from '$lib/components/Button.svelte';
+	import PageHero from '$lib/components/PageHero.svelte';
 	import type { PageData } from './$types';
 	import { onMount } from 'svelte';
 
 	let { data }: { data: PageData } = $props();
+
+	const formatter = new Intl.NumberFormat();
+
+	let serversCurrent = $state('--');
+	let serversRecord = $state('--');
+	let playersCurrent = $state('--');
+	let playersRecord = $state('--');
 
 	onMount(() => {
 		if (data.unknownPlugin) return;
@@ -14,28 +25,21 @@
 		document.head.appendChild(link);
 
 		// Set up global functions BEFORE loading charts.js
+		(window as any).__bstatsCustomLayout = true;
 		(window as any).getPluginId = () => data.plugin.id;
 		(window as any).updatePlayersBadge = (chartData: any[]) => {
+			if (!Array.isArray(chartData) || !chartData.length) return;
 			const current = chartData[chartData.length - 1][1];
-			let record = 0;
-			for (let i = 0; i < chartData.length; i++) {
-				record = chartData[i][1] > record ? chartData[i][1] : record;
-			}
-			const badge = document.getElementById('playersBadge');
-			if (badge) {
-				badge.innerHTML = `Players (Current/Record): ${current} / ${record}`;
-			}
+			const record = chartData.reduce((max: number, point: any) => Math.max(max, point[1]), 0);
+			playersCurrent = formatter.format(current);
+			playersRecord = formatter.format(record);
 		};
 		(window as any).updateServersBadge = (chartData: any[]) => {
+			if (!Array.isArray(chartData) || !chartData.length) return;
 			const current = chartData[chartData.length - 1][1];
-			let record = 0;
-			for (let i = 0; i < chartData.length; i++) {
-				record = chartData[i][1] > record ? chartData[i][1] : record;
-			}
-			const badge = document.getElementById('serversBadge');
-			if (badge) {
-				badge.innerHTML = `Servers (Current/Record): ${current} / ${record}`;
-			}
+			const record = chartData.reduce((max: number, point: any) => Math.max(max, point[1]), 0);
+			serversCurrent = formatter.format(current);
+			serversRecord = formatter.format(record);
 		};
 
 		// Load scripts sequentially to maintain dependencies
@@ -53,7 +57,6 @@
 
 		function loadScriptSequentially(index: number) {
 			if (index >= scripts.length) {
-				// All scripts loaded, now initialize charts
 				initializeCharts();
 				return;
 			}
@@ -61,110 +64,133 @@
 			const script = document.createElement('script');
 			script.src = scripts[index];
 			script.onload = () => {
-				// Load next script
 				loadScriptSequentially(index + 1);
 			};
 			script.onerror = () => {
 				console.error(`Failed to load script: ${scripts[index]}`);
-				// Continue loading next script even if one fails
 				loadScriptSequentially(index + 1);
 			};
 			document.body.appendChild(script);
 		}
 
-		// Start loading scripts sequentially
 		loadScriptSequentially(0);
 	});
 
 	function initializeCharts() {
-		// Load and render charts
 		fetch(`/api/v1/plugins/${data.plugin.id}/charts`)
 			.then((res) => res.json())
 			.then((charts) => {
-				const chartIdsSorted = Object.keys(charts).sort(
-					(a, b) => charts[a].position - charts[b].position
-				);
-				let previousRowWasFull = true;
+				const ids = Object.keys(charts).sort((a, b) => charts[a].position - charts[b].position);
+
+				(window as any).__bstatsCharts = charts;
 
 				const chartsContainer = document.getElementById('charts');
 				if (!chartsContainer) return;
 
-				for (let i = 0; i < chartIdsSorted.length; i++) {
-					const chartId = chartIdsSorted[i];
-					if (!charts.hasOwnProperty(chartId)) continue;
+				ids.forEach((chartId) => {
+					if (!charts.hasOwnProperty(chartId)) return;
 
 					const chart = charts[chartId];
+					const { card, suffix } = createChartCard(chartId, chart);
+					chartsContainer.appendChild(card);
+				});
 
-					let nextChartIsCompleteRow = true;
-					if (chartIdsSorted.length > i + 1) {
-						const nextChartId = chartIdsSorted[i + 1];
-						if (charts.hasOwnProperty(nextChartId)) {
-							const nextChart = charts[nextChartId];
-							switch (nextChart.type) {
-								case 'simple_pie':
-								case 'advanced_pie':
-								case 'drilldown_pie':
-									nextChartIsCompleteRow = false;
-									break;
-								default:
-									nextChartIsCompleteRow = true;
-									break;
-							}
-						}
-					}
-
-					let colWidth = 's12 m12 l12 xl12';
-					switch (chart.type) {
-						case 'simple_pie':
-						case 'advanced_pie':
-						case 'drilldown_pie':
-							if (previousRowWasFull && nextChartIsCompleteRow) {
-								colWidth = 's12 m12 l12 xl12';
-								previousRowWasFull = true;
-							} else if (!previousRowWasFull) {
-								colWidth = 's12 m6 l6 xl5';
-								previousRowWasFull = true;
-							} else if (!nextChartIsCompleteRow) {
-								colWidth = 's12 m6 l6 xl5 offset-xl1';
-								previousRowWasFull = false;
-							}
-							chartsContainer.innerHTML += `<div id="${chartId}" class="col ${colWidth}"><div id="${chartId}Pie" style="min-width: 310px; height: 400px; max-width: 600px; margin: 0 auto"></div></div>`;
-							break;
-						case 'single_linechart':
-							chartsContainer.innerHTML += `<div id="${chartId}" class="col s12"><div id="${chartId}LineChart" class="container" style="min-width: 310px; height: 400px; margin: 0 auto"></div><br><br></div>`;
-							previousRowWasFull = true;
-							break;
-						case 'simple_map':
-						case 'advanced_map':
-							chartsContainer.innerHTML += `<div id="${chartId}" class="col s12"><div id="${chartId}Map" class="container" style="min-width: 310px; height: 600px; margin: 0 auto"></div><br><br></div>`;
-							previousRowWasFull = true;
-							break;
-						case 'simple_bar':
-						case 'advanced_bar':
-							chartsContainer.innerHTML += `<div id="${chartId}" class="col s12"><div id="${chartId}Bar" class="container" style="min-width: 310px; margin: 0 auto"></div><br><br></div>`;
-							previousRowWasFull = true;
-							break;
-					}
-				}
+				// Trigger chart rendering via existing charts.js
+				const event = new CustomEvent('bstats:charts-shell-ready', { detail: charts });
+				document.dispatchEvent(event);
 
 				// Scroll to anchor if present
 				if (window.location.hash) {
 					const target = document.querySelector(window.location.hash);
 					if (target) {
-						target.scrollIntoView({ behavior: 'smooth' });
+						setTimeout(() => {
+							target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+						}, 800);
 					}
 				}
 			});
+	}
+
+	function createChartCard(chartId: string, chart: any): { card: HTMLElement; suffix: string } {
+		let colClass = 'col-span-1 min-w-0';
+		let suffix = 'Pie';
+		let height = '18rem';
+
+		switch (chart.type) {
+			case 'single_linechart':
+				colClass = 'col-span-1 min-w-0 md:col-span-2';
+				suffix = 'LineChart';
+				height = '24rem';
+				break;
+			case 'simple_map':
+			case 'advanced_map':
+				colClass = 'col-span-1 min-w-0 md:col-span-2';
+				suffix = 'Map';
+				height = '30rem';
+				break;
+			case 'simple_bar':
+			case 'advanced_bar':
+				colClass = 'col-span-1 min-w-0 md:col-span-2';
+				suffix = 'Bar';
+				height = '24rem';
+				break;
+			default:
+				colClass = 'col-span-1 min-w-0';
+				suffix = 'Pie';
+				height = '18rem';
+		}
+
+		const card = document.createElement('article');
+		card.id = chartId;
+		card.className = `${colClass} rounded-2xl border border-slate-200 bg-white shadow-sm`;
+
+		const header = document.createElement('div');
+		header.className = 'flex items-start justify-between gap-4 px-5 pt-5';
+
+		const meta = document.createElement('div');
+		meta.className = 'flex flex-col gap-2';
+
+		const title = document.createElement('h3');
+		title.className = 'font-display text-lg font-semibold text-slate-900';
+		title.textContent = chart.title;
+		meta.appendChild(title);
+		header.appendChild(meta);
+
+		const link = document.createElement('a');
+		link.href = '#' + chartId;
+		link.className =
+			'inline-flex items-center gap-2 rounded-full border border-slate-200 px-3 py-1.5 text-xs font-semibold text-slate-500 transition hover:border-slate-300 hover:text-slate-600';
+		link.innerHTML = `<span>Permalink</span><svg class="h-4 w-4 text-current" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M13 4h7v7M11 13l9-9M11 4H6a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
+		header.appendChild(link);
+
+		const body = document.createElement('div');
+		body.className = 'px-5 pb-6 pt-4';
+
+		const surface = document.createElement('div');
+		surface.className =
+			'overflow-hidden rounded-xl border border-slate-100 bg-slate-50 p-2 sm:p-3 min-w-0';
+
+		const container = document.createElement('div');
+		container.id = chartId + suffix;
+		container.className = 'w-full';
+		container.style.minHeight = height;
+
+		surface.appendChild(container);
+		body.appendChild(surface);
+		card.appendChild(header);
+		card.appendChild(body);
+
+		return { card, suffix };
 	}
 </script>
 
 <svelte:head>
 	{#if data.unknownPlugin}
-		<title>bStats - Unknown plugin</title>
 		<meta name="description" content="We don't have stats about {data.pluginName}." />
+		<title>bStats - Unknown plugin</title>
 	{:else}
-		<title>bStats - {data.plugin.name}</title>
 		<meta name="description" content="Some stats about {data.plugin.name}." />
+		<title>bStats - {data.plugin.name}</title>
 		<meta name="twitter:card" content="summary" />
 		<meta name="twitter:site" content="@btobastian" />
 		<meta name="twitter:title" content="{data.plugin.name} | bStats" />
@@ -174,73 +200,126 @@
 </svelte:head>
 
 {#if data.unknownPlugin}
-	<div class="container">
-		<div class="section no-pad-bot" id="index-banner">
-			<div class="container">
-				<br /><br />
-				<h1 class="header center {data.customColor1}-text">Unknown plugin! :(</h1>
-				<div class="row center">
-					<h5 class="header col s12 light">
-						Sorry but we don't have stats about
-						<div class="truncate">{data.pluginName}</div>
-					</h5>
-					<img src="/images/homer.png" alt="Doh!" style="width: 75%; height: 75%" />
+	<main>
+		<PageHero>
+			{#snippet badge()}<Badge type="error">Unknown plugin</Badge>{/snippet}
+			{#snippet title()}We couldn't find it{/snippet}
+			{#snippet content()}
+				Sorry, we don't have any stats about
+				<span class="font-semibold text-slate-900">{data.pluginName}</span>. Maybe it hasn't been
+				registered yet or the name is spelled differently
+			{/snippet}
+			{#snippet extra()}
+				<div class="mt-6 flex flex-wrap justify-center gap-3">
+					<Button href={resolve('/plugin-list')}>Browse plugin list</Button>
+					<a
+						href={resolve('/add-plugin')}
+						class="inline-flex items-center gap-2 rounded-full border border-slate-200 px-5 py-3 text-sm font-semibold text-slate-600 transition hover:border-brand-200 hover:text-brand-700"
+					>
+						Register plugin
+					</a>
+				</div>
+			{/snippet}
+		</PageHero>
+	</main>
+{:else}
+	<main class="pb-24">
+		<section
+			class="relative overflow-hidden border-b border-slate-200 bg-gradient-to-br from-brand-50 via-white to-sky-100"
+		>
+			<div
+				class="absolute top-[-12rem] left-1/2 h-96 w-96 -translate-x-1/2 rounded-full bg-brand-200/60 blur-3xl"
+			></div>
+			<div
+				class="absolute top-1/2 right-[-10rem] h-80 w-80 -translate-y-1/2 rounded-full bg-sky-200/60 blur-3xl"
+			></div>
+			<div class="relative mx-auto max-w-6xl px-4 py-16 sm:px-6 lg:py-20">
+				<div class="flex flex-col gap-10 lg:flex-row lg:items-start">
+					<div class="max-w-3xl">
+						<Badge>{data.software.name}</Badge>
+						<div class="mt-6 flex items-center gap-4">
+							<h1
+								class="font-display text-4xl font-semibold tracking-tight text-slate-900 sm:text-5xl"
+							>
+								{data.plugin.name}
+							</h1>
+							{#if data.isOwner}
+								<a
+									href={resolve(
+										`/editPlugin/${data.software.url}/${data.plugin.name}/${data.plugin.id}`
+									)}
+									class="inline-flex items-center justify-center rounded-full border border-slate-300 bg-white px-3 py-2 text-sm font-semibold text-slate-600 transition hover:border-brand-300 hover:text-brand-700"
+								>
+									Edit
+								</a>
+							{/if}
+						</div>
+						<div class="mt-4 flex flex-wrap items-center gap-4 text-sm text-slate-500">
+							<span>
+								by <a
+									class="font-semibold text-brand-600 hover:text-brand-700"
+									href={resolve(`/author/${data.plugin.owner}`)}>{data.plugin.owner}</a
+								>
+							</span>
+							<span class="hidden h-1 w-1 rounded-full bg-slate-300 sm:inline-block"></span>
+						</div>
+					</div>
+				</div>
+
+				<div class="mt-12 grid gap-4 sm:grid-cols-2">
+					<article class="min-w-0 rounded-2xl border border-slate-200 bg-white px-5 py-4 shadow-sm">
+						<span class="text-[11px] tracking-[0.25em] text-slate-400 uppercase">Servers</span>
+						<div class="mt-4 flex items-baseline gap-2">
+							<span id="serversCurrent" class="font-display text-4xl font-semibold text-slate-900"
+								>{serversCurrent}</span
+							>
+							<span class="text-[11px] tracking-[0.2em] text-slate-400 uppercase">current</span>
+						</div>
+						<div
+							class="mt-3 flex items-center justify-between rounded-lg border border-slate-200 bg-slate-50 px-3 py-2 text-xs text-slate-500"
+						>
+							<span class="tracking-[0.18em] uppercase">record</span>
+							<span id="serversRecord" class="font-semibold text-slate-600">{serversRecord}</span>
+						</div>
+					</article>
+					<article class="min-w-0 rounded-2xl border border-slate-200 bg-white px-5 py-4 shadow-sm">
+						<span class="text-[11px] tracking-[0.25em] text-slate-400 uppercase">Players</span>
+						<div class="mt-4 flex items-baseline gap-2">
+							<span id="playersCurrent" class="font-display text-4xl font-semibold text-slate-900"
+								>{playersCurrent}</span
+							>
+							<span class="text-[11px] tracking-[0.2em] text-slate-400 uppercase">current</span>
+						</div>
+						<div
+							class="mt-3 flex items-center justify-between rounded-lg border border-slate-200 bg-slate-50 px-3 py-2 text-xs text-slate-500"
+						>
+							<span class="tracking-[0.18em] uppercase">record</span>
+							<span id="playersRecord" class="font-semibold text-slate-600">{playersRecord}</span>
+						</div>
+					</article>
 				</div>
 			</div>
-		</div>
-	</div>
-{:else}
-	<div class="section no-pad-bot" id="index-banner">
-		<div class="container">
-			<br /><br />
-			<h1 class="header center {data.customColor1}-text truncate">
-				{data.plugin.name}
-				{#if data.isOwner}
-					<a href="/editPlugin/{data.software.url}/{data.plugin.name}/{data.plugin.id}"
-						><sup><i title="Edit plugin settings" class="material-icons small">build</i></sup></a
-					>
-				{/if}
-			</h1>
-			<div class="row center">
-				<h5 class="header col s12 light authorbox">
-					by <a
-						class="{data.customColor1}-text text-darken-2"
-						href="/author/{data.plugin.owner}">{data.plugin.owner}</a
-					>
-				</h5>
-			</div>
-		</div>
-	</div>
+		</section>
 
-	<div class="row">
-		<div class="col s12 m6 l4 offset-l2">
-			<div class="card-panel {data.customColor1}">
-				<span class="white-text"
-					><i class="material-icons left">storage</i><b id="serversBadge"
-						>Servers (Current/Record): loading...</b
-					></span
+		<section class="mx-auto mt-16 max-w-6xl px-4 sm:px-6">
+			<div class="flex flex-col gap-3 sm:gap-2">
+				<h2 class="font-display text-3xl font-semibold text-slate-900">Live charts</h2>
+				<p class="text-sm text-slate-500">
+					Hover, zoom, and drill into the data. Updated every 30 minutes.
+				</p>
+			</div>
+			<div id="charts" class="mt-8 grid gap-8 md:grid-cols-2"></div>
+
+			<div
+				class="mt-14 rounded-3xl border border-slate-200 bg-white/80 p-6 text-sm text-slate-500 shadow-sm"
+			>
+				Charts powered by <a
+					class="font-semibold text-brand-600 hover:text-brand-700"
+					href="https://www.highcharts.com/"
+					target="_blank"
+					rel="noopener">Highcharts</a
 				>
 			</div>
-		</div>
-		<div class="col s12 m6 l4">
-			<div class="card-panel {data.customColor1}">
-				<span class="white-text"
-					><i class="material-icons left">people</i><b id="playersBadge"
-						>Players (Current/Record): loading...</b
-					></span
-				>
-			</div>
-		</div>
-	</div>
-	<br /><br />
-
-	<div id="charts" class="row">
-		<!-- Charts get added dynamically using JavaScript -->
-	</div>
-
-	<div class="center">
-		Charts powered by <a href="http://highcharts.com">Highcharts</a>
-		<br />
-		<br />
-	</div>
+		</section>
+	</main>
 {/if}

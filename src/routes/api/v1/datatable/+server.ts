@@ -119,11 +119,13 @@ export const GET: RequestHandler = async () => {
 				}
 
 				return {
-					name: `<a href="/plugin/${softwareUrl}/${plugin.name}/${plugin.id}">${plugin.name}</a>`,
+					name: plugin.name,
+					pluginId: plugin.id,
 					softwareName: softwareName,
-					ownerName: `<a href="/author/${plugin.owner}">${plugin.owner}</a>`,
-					servers: servers.toLocaleString(),
-					players: players.toLocaleString()
+					softwareUrl: softwareUrl,
+					ownerName: plugin.owner,
+					servers: servers,
+					players: players
 				};
 			} catch (e) {
 				console.error(`Error processing plugin ${pluginId}:`, e);

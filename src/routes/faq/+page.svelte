@@ -1,124 +1,169 @@
-<script lang="ts">
-	import { onMount } from 'svelte';
-
-	onMount(() => {
-		// Initialize Materialize collapsible
-		if (typeof window !== 'undefined' && window.$) {
-			(window.$ as any)('.collapsible').collapsible();
-		}
-	});
+<script>
+	import { resolve } from '$app/paths';
+	import Badge from '$lib/components/Badge.svelte';
+	import PageHero from '$lib/components/PageHero.svelte';
 </script>
 
 <svelte:head>
-	<meta name="description" content="The FAQ page." />
+	<meta name="description" content="Frequently asked questions about bStats." />
 	<title>bStats - FAQ</title>
 </svelte:head>
 
-<br />
-<div class="container">
-	<!--General-->
-	<ul class="collection with-header">
-		<li class="collection-header"><h4>General</h4></li>
-		<li class="collection-item">
-			<ul class="collapsible" data-collapsible="accordion">
-				<li>
-					<div class="collapsible-header">
-						<i class="material-icons">question_answer</i>Will bStats be free for ever?
-					</div>
-					<div class="collapsible-body">
-						<span
-							>There are no plans to charge you for anything. <b>Maybe</b> there will be some
-							premium features in the future, but as bStats has a sponsor (<a href="/credits"
-								>GameHosting</a
-							>) I don't need any money at the moment to run the website.</span
-						>
-					</div>
-				</li>
-				<li>
-					<div class="collapsible-header">
-						<i class="material-icons">question_answer</i>Why is there no "Universal" category?
-					</div>
-					<div class="collapsible-body">
-						<span
-							>A "Universal" category would mess up a lot of charts and make global charts
-							completely useless. E.g. for Bukkit and Bungeecord the player amount would be counted
-							twice. Trust me, you don't want this. ;-)</span
-						>
-					</div>
-				</li>
-				<li>
-					<div class="collapsible-header">
-						<i class="material-icons">question_answer</i>Is there an API to access the data?
-					</div>
-					<div class="collapsible-body">
-						<span>Yes, bStats has a REST-API. You can find it <a href="/help/rest-api">here</a></span
-						>
-					</div>
-				</li>
-			</ul>
-		</li>
-	</ul>
+<main class="pb-24">
+	<PageHero>
+		{#snippet badge()}<Badge>Help</Badge>{/snippet}
+		{#snippet title()}Frequently asked questions{/snippet}
+		{#snippet content()}
+			Answers to common questions about bStats, accounts, and the Metrics class. Still curious?
+			Reach out on
+			<a
+				class="font-semibold text-brand-600 hover:text-brand-700"
+				href="https://discord.gg/qTXtXuf"
+			>
+				Discord
+			</a>
+			or open an issue on GitHub.
+		{/snippet}
+	</PageHero>
 
-	<!--Account-->
-	<ul class="collection with-header">
-		<li class="collection-header"><h4>Account</h4></li>
-		<li class="collection-item">
-			<ul class="collapsible" data-collapsible="accordion">
-				<li>
-					<div class="collapsible-header">
-						<i class="material-icons">question_answer</i>How do I change my password?
-					</div>
-					<div class="collapsible-body">
+	<section class="doc-container mt-12 space-y-10">
+		<article class="doc-card space-y-4">
+			<h2 class="doc-card-title">General</h2>
+			<div class="space-y-3">
+				<details class="group rounded-2xl border border-slate-200 bg-slate-50 p-4 sm:p-5">
+					<summary
+						class="flex cursor-pointer items-center justify-between text-sm font-semibold text-slate-700"
+					>
+						<span>Will bStats stay free?</span>
 						<span
-							>That's not supported at the moment. If there's a real reason for you to change your
-							password (e.g. someone else knows it or your current password is something like
-							'password') please contact me.</span
+							class="text-xs tracking-[0.2em] text-slate-400 uppercase group-open:text-brand-600"
+							>Toggle</span
 						>
+					</summary>
+					<div class="mt-3 text-sm leading-relaxed text-slate-600">
+						bStats has no plans to charge for existing features. Thanks to our sponsor
+						<a class="font-semibold text-brand-600 hover:text-brand-700" href={resolve('/credits')}
+							>GameHosting</a
+						> the platform runs without subscription income. Any future premium functionality would be
+						optional.
 					</div>
-				</li>
-				<li>
-					<div class="collapsible-header">
-						<i class="material-icons">question_answer</i>I forgot my password!
-					</div>
-					<div class="collapsible-body">
+				</details>
+				<details class="group rounded-2xl border border-slate-200 bg-slate-50 p-4 sm:p-5">
+					<summary
+						class="flex cursor-pointer items-center justify-between text-sm font-semibold text-slate-700"
+					>
+						<span>Why isn't there a "Universal" category?</span>
 						<span
-							>There's no automatic option to reset your password. Please contact me, so I can
-							reset your password.</span
+							class="text-xs tracking-[0.2em] text-slate-400 uppercase group-open:text-brand-600"
+							>Toggle</span
 						>
+					</summary>
+					<div class="mt-3 text-sm leading-relaxed text-slate-600">
+						Mixing Bukkit, BungeeCord, and more in a single bucket would double-count players and
+						break comparisons. Separate categories keep charts accurate and easy to read.
 					</div>
-				</li>
-			</ul>
-		</li>
-	</ul>
+				</details>
+				<details class="group rounded-2xl border border-slate-200 bg-slate-50 p-4 sm:p-5">
+					<summary
+						class="flex cursor-pointer items-center justify-between text-sm font-semibold text-slate-700"
+					>
+						<span>Is there an API?</span>
+						<span
+							class="text-xs tracking-[0.2em] text-slate-400 uppercase group-open:text-brand-600"
+							>Toggle</span
+						>
+					</summary>
+					<div class="mt-3 text-sm leading-relaxed text-slate-600">
+						Yes. bStats exposes a lightweight REST API for public metrics. Start here:
+						<a
+							class="font-semibold text-brand-600 hover:text-brand-700"
+							href={resolve('/help/rest-api')}
+						>
+							REST API documentation
+						</a>.
+					</div>
+				</details>
+			</div>
+		</article>
 
-	<!--Metrics class-->
-	<ul class="collection with-header">
-		<li class="collection-header"><h4>Metrics class</h4></li>
-		<li class="collection-item">
-			<ul class="collapsible" data-collapsible="accordion">
-				<li>
-					<div class="collapsible-header">
-						<i class="material-icons">question_answer</i>How do I add bStats to my plugin?
-					</div>
-					<div class="collapsible-body">
-						<span><a href="/getting-started/include-metrics">Click here</a></span>
-					</div>
-				</li>
-				<li>
-					<div class="collapsible-header">
-						<i class="material-icons">question_answer</i>Where do I report bugs or suggest features?
-					</div>
-					<div class="collapsible-body">
+		<article class="doc-card space-y-4">
+			<h2 class="doc-card-title">Account</h2>
+			<div class="space-y-3">
+				<details class="group rounded-2xl border border-slate-200 bg-slate-50 p-4 sm:p-5">
+					<summary
+						class="flex cursor-pointer items-center justify-between text-sm font-semibold text-slate-700"
+					>
+						<span>How do I change my password?</span>
 						<span
-							>You can report bugs or suggest features on GitHub. Website related stuff should be
-							reported
-							<a href="https://github.com/Bastian/bStats/issues"> here</a> and plugin related stuff
-							(the Metrics class) should be reported
-							<a href="https://github.com/Bastian/bStats-Metrics/issues"> here</a>.</span
+							class="text-xs tracking-[0.2em] text-slate-400 uppercase group-open:text-brand-600"
+							>Toggle</span
 						>
+					</summary>
+					<div class="mt-3 text-sm leading-relaxed text-slate-600">
+						We don't support self-service password changes yet. If you urgently need an update,
+						contact the maintainers and we'll help manually.
 					</div>
-				</li>
-			</ul>
-		</li>
-	</ul>
-</div>
+				</details>
+				<details class="group rounded-2xl border border-slate-200 bg-slate-50 p-4 sm:p-5">
+					<summary
+						class="flex cursor-pointer items-center justify-between text-sm font-semibold text-slate-700"
+					>
+						<span>I forgot my password!</span>
+						<span
+							class="text-xs tracking-[0.2em] text-slate-400 uppercase group-open:text-brand-600"
+							>Toggle</span
+						>
+					</summary>
+					<div class="mt-3 text-sm leading-relaxed text-slate-600">
+						Drop us a message on Discord or via GitHub Issues. We'll verify your ownership and reset
+						the account for you.
+					</div>
+				</details>
+			</div>
+		</article>
+
+		<article class="doc-card space-y-4">
+			<h2 class="doc-card-title">Metrics class</h2>
+			<div class="space-y-3">
+				<details class="group rounded-2xl border border-slate-200 bg-slate-50 p-4 sm:p-5">
+					<summary
+						class="flex cursor-pointer items-center justify-between text-sm font-semibold text-slate-700"
+					>
+						<span>How do I add bStats to my plugin?</span>
+						<span
+							class="text-xs tracking-[0.2em] text-slate-400 uppercase group-open:text-brand-600"
+							>Toggle</span
+						>
+					</summary>
+					<div class="mt-3 text-sm leading-relaxed text-slate-600">
+						Head over to the <a
+							class="font-semibold text-brand-600 hover:text-brand-700"
+							href={resolve('/getting-started/include-metrics')}>Include metrics guide</a
+						> for Maven and manual instructions.
+					</div>
+				</details>
+				<details class="group rounded-2xl border border-slate-200 bg-slate-50 p-4 sm:p-5">
+					<summary
+						class="flex cursor-pointer items-center justify-between text-sm font-semibold text-slate-700"
+					>
+						<span>Where do I report bugs or request features?</span>
+						<span
+							class="text-xs tracking-[0.2em] text-slate-400 uppercase group-open:text-brand-600"
+							>Toggle</span
+						>
+					</summary>
+					<div class="mt-3 text-sm leading-relaxed text-slate-600">
+						Website feedback lives on <a
+							class="font-semibold text-brand-600 hover:text-brand-700"
+							href="https://github.com/Bastian/bStats/issues">the bStats GitHub</a
+						>. Metrics class improvements belong on
+						<a
+							class="font-semibold text-brand-600 hover:text-brand-700"
+							href="https://github.com/Bastian/bStats-Metrics/issues">bStats-Metrics</a
+						>.
+					</div>
+				</details>
+			</div>
+		</article>
+	</section>
+</main>

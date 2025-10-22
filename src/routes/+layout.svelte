@@ -13,19 +13,16 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0" />
 	<link rel="icon" href="/favicon.ico" />
 
-	<!-- CSS -->
-	<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
-	<link href="/stylesheets/materialize.min.css" type="text/css" rel="stylesheet" media="screen,projection" />
-	<link href="/stylesheets/style.css" type="text/css" rel="stylesheet" media="screen,projection" />
-
-	<!-- Scripts -->
-	{@html '<script src="https://code.jquery.com/jquery-2.1.1.min.js"></script>'}
-	{@html '<script src="/javascripts/materialize/materialize.min.js"></script>'}
-	{@html '<script src="/javascripts/materialize/init.js"></script>'}
+	<!-- Fonts -->
+	<link rel="preconnect" href="https://fonts.googleapis.com" />
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous" />
+	<link
+		href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600&family=JetBrains+Mono:wght@400;500&display=swap"
+		rel="stylesheet"
+	/>
 </svelte:head>
 
 <Navigation
-	customColor1={data.customColor1}
 	loggedIn={data.loggedIn}
 	user={data.user}
 	allSoftware={data.allSoftware}
@@ -36,7 +33,6 @@
 	{@render children?.()}
 </main>
 
-<Footer customColor1={data.customColor1} loggedIn={data.loggedIn} />
+<Footer loggedIn={data.loggedIn} />
 
 <GlobalScripts />
-

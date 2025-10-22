@@ -1,6 +1,128 @@
-/* Tailwind CSS - commented out for legacy migration, will be used later for redesign */
-/* @import 'tailwindcss'; */
-/* @plugin '@tailwindcss/forms'; */
-/* @plugin '@tailwindcss/typography'; */
+@import 'tailwindcss';
+@plugin '@tailwindcss/forms';
+@plugin '@tailwindcss/typography';
 
-/* App styles */
+@theme {
+	/* Brand colors (emerald) */
+	--color-brand-50: #ecfdf5;
+	--color-brand-100: #d1fae5;
+	--color-brand-200: #a7f3d0;
+	--color-brand-300: #6ee7b7;
+	--color-brand-400: #34d399;
+	--color-brand-500: #10b981;
+	--color-brand-600: #059669;
+	--color-brand-700: #047857;
+	--color-brand-800: #065f46;
+	--color-brand-900: #064e3b;
+	--color-brand-950: #022c22;
+
+	--color-discord-blurple: #5865f2;
+
+	/* Custom fonts */
+	--font-display: 'Space Grotesk', sans-serif;
+	--font-body: 'Inter', sans-serif;
+	--font-mono: 'JetBrains Mono', monospace;
+
+	/* Custom shadows */
+	--shadow-floating: 0 30px 80px -30px rgba(16, 185, 129, 0.45);
+}
+
+@layer base {
+	:root {
+		color-scheme: light;
+	}
+
+	html {
+		scroll-behavior: smooth;
+	}
+
+	body {
+		@apply bg-slate-50 font-body text-slate-900 antialiased;
+	}
+
+	a {
+		@apply text-brand-600 transition-colors duration-200;
+	}
+
+	a:hover {
+		@apply text-brand-700;
+	}
+
+	summary {
+		@apply cursor-pointer list-none;
+	}
+
+	summary::-webkit-details-marker {
+		display: none;
+	}
+}
+
+@layer components {
+	.doc-container {
+		@apply mx-auto w-full max-w-6xl px-4 sm:px-6;
+	}
+
+	.doc-card {
+		@apply rounded-2xl border border-slate-200 bg-white p-6 shadow-sm sm:p-8;
+	}
+
+	.doc-card-title {
+		@apply font-display text-xl font-semibold text-slate-900;
+	}
+
+	.doc-code {
+		@apply relative overflow-x-auto rounded-xl bg-slate-900 px-4 py-5 text-sm leading-relaxed text-slate-100 shadow-inner sm:px-6 sm:py-6;
+	}
+
+	.doc-callout {
+		@apply rounded-2xl border px-4 py-4 text-sm sm:px-6 sm:py-5;
+	}
+
+	.doc-callout-info {
+		@apply border-emerald-200 bg-emerald-50 text-emerald-700;
+	}
+
+	.doc-callout-note {
+		@apply border-amber-200 bg-amber-50 text-amber-700;
+	}
+
+	.doc-section {
+		@apply space-y-8;
+	}
+
+	.form-card {
+		@apply mx-auto w-full max-w-md rounded-2xl border border-slate-200 bg-white p-6 shadow-lg sm:p-8;
+	}
+
+	.form-field {
+		@apply flex flex-col gap-2;
+	}
+
+	.form-label {
+		@apply text-sm font-semibold text-slate-600;
+	}
+
+	.form-input {
+		@apply w-full rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-900 shadow-sm transition focus:border-brand-300 focus:ring-2 focus:ring-brand-200 focus:outline-none;
+	}
+
+	.form-helper {
+		@apply text-xs text-slate-400;
+	}
+
+	.form-error {
+		@apply text-xs font-semibold text-rose-600;
+	}
+
+	.input-group {
+		@apply flex flex-col gap-2;
+	}
+
+	.input-label {
+		@apply text-xs font-semibold tracking-[0.2em] text-slate-400 uppercase;
+	}
+
+	.input-control {
+		@apply w-full rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-900 shadow-sm transition focus:border-brand-300 focus:ring-2 focus:ring-brand-200 focus:outline-none;
+	}
+}

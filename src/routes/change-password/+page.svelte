@@ -1,119 +1,108 @@
 <script lang="ts">
-	import type { PageData, ActionData } from './$types';
-	import { enhance } from '$app/forms';
+	import { resolve } from '$app/paths';
+	import Badge from '$lib/components/Badge.svelte';
+	import Button from '$lib/components/Button.svelte';
+	import PageHero from '$lib/components/PageHero.svelte';
 
-	let { data, form }: { data: PageData; form: ActionData } = $props();
+	let { data, form } = $props();
 
 	let currentPassword = $state('');
 	let newPassword = $state('');
 	let confirmPassword = $state('');
 
-	let passwordsMatch = $derived(
-		confirmPassword === '' ? null : newPassword === confirmPassword
-	);
+	let hint = $derived.by(() => {
+		if (!currentPassword || !newPassword || !confirmPassword) {
+			return { text: '', type: '' };
+		}
+		if (newPassword.length < 6) {
+			return { text: 'Password must be at least 6 characters', type: 'error' };
+		}
+		if (newPassword === confirmPassword) {
+			return { text: 'Passwords match', type: 'success' };
+		}
+		return { text: 'Passwords do not match', type: 'error' };
+	});
+
 	let isFormValid = $derived(
-		currentPassword !== '' &&
-			newPassword.length >= 6 &&
-			confirmPassword !== '' &&
-			passwordsMatch === true
-	);
-
-	let passwordHelper = $derived(
-		confirmPassword === ''
-			? ''
-			: passwordsMatch
-				? 'Passwords match'
-				: 'Passwords do not match'
-	);
-
-	let passwordHelperClass = $derived(
-		passwordsMatch === null ? '' : passwordsMatch ? 'green-text' : 'red-text'
+		currentPassword.length > 0 && newPassword.length >= 6 && newPassword === confirmPassword
 	);
 </script>
 
 <svelte:head>
-	<title>bStats - Change Password</title>
 	<meta name="description" content="Change your bStats account password." />
+	<title>bStats - Change password</title>
 </svelte:head>
 
-<main>
-	<div class="container">
-		<br /><br />
-		<div class="hide-on-med-and-down"><br /><br /></div>
-		<div class="row">
-			{#if form?.error}
-				<h5 class="red-text col s12 center-align">{form.error}</h5>
-			{:else if form?.success}
-				<h5 class="green-text col s12 center-align">{form.success}</h5>
-			{:else}
-				<h5 class="{data.customColor1}-text col s12 center-align">Change your password</h5>
-			{/if}
-			<br /><br />
-			<div class="col s12 m8 l6 offset-m2 offset-l3 z-depth-1 grey lighten-4 row">
-				<form class="col s12" method="post" use:enhance>
-					<br />
-					<!-- Current Password -->
-					<div class="row">
-						<div class="input-field col s12">
-							<input
-								id="currentPassword"
-								type="password"
-								name="currentPassword"
-								bind:value={currentPassword}
-								required
-							/>
-							<label for="currentPassword">Current Password</label>
-						</div>
-					</div>
-					<!-- New Password -->
-					<div class="row">
-						<div class="input-field col s12">
-							<input
-								id="newPassword"
-								type="password"
-								name="newPassword"
-								bind:value={newPassword}
-								required
-								minlength="6"
-							/>
-							<label for="newPassword">New Password</label>
-							<span
-								class="helper-text"
-								data-error="Password must be at least 6 characters"
-								data-success="Valid">Minimum 6 characters</span
-							>
-						</div>
-					</div>
-					<!-- Confirm New Password -->
-					<div class="row">
-						<div class="input-field col s12">
-							<input
-								id="confirmPassword"
-								type="password"
-								name="confirmPassword"
-								bind:value={confirmPassword}
-								required
-							/>
-							<label for="confirmPassword">Confirm New Password</label>
-							<span class="helper-text {passwordHelperClass}">{passwordHelper}</span>
-						</div>
-					</div>
-					<br />
-					<!-- Change Password button -->
-					<div class="row">
-						<button
-							type="submit"
-							name="btn_change_password"
-							class="col s12 btn btn-large waves-effect {data.customColor1}"
-							disabled={!isFormValid}
-						>
-							Change Password
-						</button>
-					</div>
-				</form>
-			</div>
+<main class="pb-24">
+	<PageHero>
+		{#snippet badge()}<Badge>Account</Badge>{/snippet}
+		{#snippet title()}Change password{/snippet}
+		{#snippet content()}
+			Use the form below to change your bStats account password.
+		{/snippet}
+	</PageHero>
 
-			<a href="/author/{data.user.username}" class="col s12 center-align">Back to My Page</a>
+	<section class="doc-container mt-12">
+		<div class="form-card space-y-6">
+			{#if form?.error}
+				<div class="doc-callout border-rose-200 bg-rose-50 text-rose-700">{form.error}</div>
+			{:else if form?.success}
+				<div class="doc-callout doc-callout-info">{form.success}</div>
+				<Button href={resolve(`/author/${data.user.username}`)} size="large" fullWidth
+					>Back to my page</Button
+				>
+			{:else}
+				<form method="post" class="space-y-5">
+					<div class="input-group">
+						<label class="input-label" for="currentPassword">Current password</label>
+						<input
+							id="currentPassword"
+							type="password"
+							name="currentPassword"
+							class="input-control"
+							bind:value={currentPassword}
+							required
+						/>
+					</div>
+					<div class="input-group">
+						<label class="input-label" for="newPassword">New password</label>
+						<input
+							id="newPassword"
+							type="password"
+							name="newPassword"
+							class="input-control"
+							minlength="6"
+							bind:value={newPassword}
+							required
+						/>
+						<p class="form-helper">Minimum 6 characters</p>
+					</div>
+					<div class="input-group">
+						<label class="input-label" for="confirmPassword">Confirm password</label>
+						<input
+							id="confirmPassword"
+							type="password"
+							name="confirmPassword"
+							class="input-control"
+							bind:value={confirmPassword}
+							required
+						/>
+						{#if hint.text}
+							<p class="form-helper {hint.type === 'error' ? 'text-rose-600' : 'text-emerald-600'}">
+								{hint.text}
+							</p>
+						{/if}
+					</div>
+					<Button fullWidth size="large" buttonProps={{ type: 'submit' }} disabled={!isFormValid}>
+						Change password
+					</Button>
+				</form>
+				<a
+					href={resolve(`/author/${data.user.username}`)}
+					class="block text-center text-sm font-semibold text-brand-600 hover:text-brand-700"
+					>Back to my page</a
+				>
+			{/if}
 		</div>
-	</div>
+	</section>
 </main>
