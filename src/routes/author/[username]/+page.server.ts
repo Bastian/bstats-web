@@ -5,34 +5,25 @@ export const load: PageServerLoad = async ({ params }) => {
 	const { username } = params;
 
 	// Get all plugins by the user
-	const plugins = await new Promise<any[]>((resolve, reject) => {
-		dataManager.getPluginsOfUser(
-			username,
-			['name', 'software', 'charts', 'owner', 'global'],
-			(err, result) => {
-				if (err) reject(err);
-				else resolve(result || []);
-			}
-		);
-	});
+	const pluginsRaw = await dataManager.getPluginsOfUser(username, [
+		'name',
+		'software',
+		'charts',
+		'owner',
+		'global'
+	]);
 
 	// Get all software to map plugin software IDs to software objects
-	const allSoftware = await new Promise<any[]>((resolve, reject) => {
-		dataManager.getAllSoftware(['name', 'url', 'globalPlugin'], (err, result) => {
-			if (err) reject(err);
-			else resolve(result || []);
-		});
-	});
+	const allSoftware = await dataManager.getAllSoftware(['name', 'url', 'globalPlugin']);
 
 	// Replace software IDs with software objects
-	for (let i = 0; i < plugins.length; i++) {
-		for (let j = 0; j < allSoftware.length; j++) {
-			if (plugins[i].software === allSoftware[j].id) {
-				plugins[i].software = allSoftware[j];
-				break;
-			}
-		}
-	}
+	const plugins = pluginsRaw.map((plugin) => {
+		const software = allSoftware.find((s) => s.id === plugin.software);
+		return {
+			...plugin,
+			software: software || plugin.software
+		};
+	});
 
 	return {
 		username,

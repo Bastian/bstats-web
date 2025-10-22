@@ -11,15 +11,12 @@ export const load: PageServerLoad = async ({ locals }) => {
 	}
 
 	// Get all software for the dropdown
-	const allSoftware = await new Promise<any[]>((resolve, reject) => {
-		dataManager.getAllSoftware(
-			['name', 'url', 'globalPlugin', 'defaultCharts'],
-			(err: any, result: any[]) => {
-				if (err) reject(err);
-				else resolve(result || []);
-			}
-		);
-	});
+	const allSoftware = await dataManager.getAllSoftware([
+		'name',
+		'url',
+		'globalPlugin',
+		'defaultCharts'
+	]);
 
 	// Filter software - only show those with globalPlugin or if user is admin
 	const filteredSoftware = allSoftware.filter(
@@ -79,33 +76,23 @@ export const actions = {
 			}
 
 			// Get software details
-			const software = await new Promise<any>((resolve, reject) => {
-				dataManager.getSoftwareById(
-					softwareId,
-					['name', 'url', 'globalPlugin', 'defaultCharts'],
-					(err: any, result: any) => {
-						if (err) reject(err);
-						else resolve(result);
-					}
-				);
-			});
+			const software = await dataManager.getSoftwareById(parseInt(softwareId), [
+				'name',
+				'url',
+				'globalPlugin',
+				'defaultCharts'
+			]);
 
 			if (!software || (software.globalPlugin === null && !locals.user.admin)) {
 				return fail(400, { error: 'failed' });
 			}
 
 			// Check if plugin already exists
-			const existingPlugin = await new Promise<any>((resolve, reject) => {
-				dataManager.getPluginBySoftwareUrlAndName(
-					software.url,
-					trimmedName.toLowerCase(),
-					['name'],
-					(err: any, result: any) => {
-						if (err) reject(err);
-						else resolve(result);
-					}
-				);
-			});
+			const existingPlugin = await dataManager.getPluginBySoftwareUrlAndName(
+				software.url,
+				trimmedName.toLowerCase(),
+				['name']
+			);
 
 			if (existingPlugin !== null) {
 				return fail(400, { error: 'alreadyAdded' });
@@ -120,12 +107,7 @@ export const actions = {
 			};
 
 			// Add plugin to database
-			pluginId = await new Promise<number>((resolve, reject) => {
-				dataManager.addPlugin(plugin, software, (err: any, id: number) => {
-					if (err) reject(err);
-					else resolve(id);
-				});
-			});
+			pluginId = await dataManager.addPlugin(plugin as any, software as any);
 
 			// Add default charts
 			const chartUids: number[] = [];

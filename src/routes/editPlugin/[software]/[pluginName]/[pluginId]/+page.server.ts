@@ -11,12 +11,7 @@ export const load: PageServerLoad = async ({ params, locals }) => {
 	const { software: softwareUrl, pluginName, pluginId } = params;
 
 	// Get plugin data
-	const plugin = await new Promise<any>((resolve, reject) => {
-		dataManager.getPluginById(pluginId, ['owner', 'charts', 'name'], (err: any, result: any) => {
-			if (err) reject(err);
-			else resolve(result);
-		});
-	});
+	const plugin = await dataManager.getPluginById(parseInt(pluginId), ['owner', 'charts', 'name']);
 
 	if (!plugin) {
 		throw error(404, 'Plugin not found');
@@ -34,25 +29,23 @@ export const load: PageServerLoad = async ({ params, locals }) => {
 	// Get all charts for the plugin
 	const chartsArray = await Promise.all(
 		plugin.charts.map(async (chartUid: number) => {
-			return new Promise<any>((resolve, reject) => {
-				dataManager.getChartByUid(
-					chartUid,
-					['id', 'type', 'position', 'title', 'default', 'data'],
-					(err: any, chart: any) => {
-						if (err) reject(err);
-						else
-							resolve({
-								uid: chart.uid,
-								id: chart.id,
-								type: chart.type,
-								position: chart.position,
-								title: chart.title,
-								isDefault: chart.default,
-								data: chart.data
-							});
-					}
-				);
-			});
+			const chart = await dataManager.getChartByUid(chartUid, [
+				'id',
+				'type',
+				'position',
+				'title',
+				'default',
+				'data'
+			]);
+			return {
+				uid: chart?.uid,
+				id: chart?.id,
+				type: chart?.type,
+				position: chart?.position,
+				title: chart?.title,
+				isDefault: chart?.default,
+				data: chart?.data
+			};
 		})
 	);
 
@@ -88,12 +81,7 @@ export const actions = {
 		const formData = await request.formData();
 
 		// Get plugin
-		const plugin = await new Promise<any>((resolve, reject) => {
-			dataManager.getPluginById(pluginId, ['owner', 'charts', 'name'], (err: any, result: any) => {
-				if (err) reject(err);
-				else resolve(result);
-			});
-		});
+		const plugin = await dataManager.getPluginById(parseInt(pluginId), ['owner', 'charts', 'name']);
 
 		if (!plugin) {
 			return fail(404, { error: 'Plugin not found' });
@@ -125,12 +113,10 @@ export const actions = {
 		}
 
 		// Check if chart with this ID already exists
-		const existingChart = await new Promise<any>((resolve, reject) => {
-			dataManager.getChartByPluginIdAndChartId(pluginId, trimmedId, (err: any, result: any) => {
-				if (err) reject(err);
-				else resolve(result);
-			});
-		});
+		const existingChart = await dataManager.getChartByPluginIdAndChartId(
+			parseInt(pluginId),
+			trimmedId
+		);
 
 		if (existingChart) {
 			return fail(400, { error: 'Chart with this id already exists' });
@@ -231,12 +217,7 @@ export const actions = {
 			return fail(400, { error: 'Missing or invalid chart id' });
 		}
 
-		const plugin = await new Promise<any>((resolve, reject) => {
-			dataManager.getPluginById(pluginId, ['owner', 'charts'], (err: any, result: any) => {
-				if (err) reject(err);
-				else resolve(result);
-			});
-		});
+		const plugin = await dataManager.getPluginById(parseInt(pluginId), ['owner', 'charts']);
 
 		if (!plugin) {
 			return fail(404, { error: 'Plugin not found' });
@@ -279,12 +260,7 @@ export const actions = {
 		await redis.hset(`plugins:${pluginId}`, 'charts', JSON.stringify(plugin.charts));
 
 		// Update positions of remaining charts
-		const allCharts = await new Promise<any[]>((resolve, reject) => {
-			dataManager.getChartsByPluginId(pluginId, ['position'], (err: any, result: any[]) => {
-				if (err) reject(err);
-				else resolve(result || []);
-			});
-		});
+		const allCharts = (await dataManager.getChartsByPluginId(parseInt(pluginId), ['position'])) || [];
 
 		for (const c of allCharts) {
 			if (c.position > chart.position) {
@@ -318,12 +294,7 @@ export const actions = {
 			return fail(400, { error: 'Invalid arguments' });
 		}
 
-		const plugin = await new Promise<any>((resolve, reject) => {
-			dataManager.getPluginById(pluginId, ['owner'], (err: any, result: any) => {
-				if (err) reject(err);
-				else resolve(result);
-			});
-		});
+		const plugin = await dataManager.getPluginById(parseInt(pluginId), ['owner']);
 
 		if (!plugin) {
 			return fail(404, { error: 'Plugin not found' });
@@ -333,12 +304,7 @@ export const actions = {
 			return fail(401, { error: 'You are not allowed to edit this plugin' });
 		}
 
-		const charts = await new Promise<any[]>((resolve, reject) => {
-			dataManager.getChartsByPluginId(pluginId, ['position'], (err: any, result: any[]) => {
-				if (err) reject(err);
-				else resolve(result || []);
-			});
-		});
+		const charts = (await dataManager.getChartsByPluginId(parseInt(pluginId), ['position'])) || [];
 
 		const redis = databaseManager.getRedisCluster();
 
@@ -368,12 +334,11 @@ export const actions = {
 
 		const { pluginId, software: softwareUrl } = params;
 
-		const plugin = await new Promise<any>((resolve, reject) => {
-			dataManager.getPluginById(pluginId, ['owner', 'charts', 'name'], (err: any, result: any) => {
-				if (err) reject(err);
-				else resolve(result);
-			});
-		});
+		const plugin = await dataManager.getPluginById(parseInt(pluginId), [
+			'owner',
+			'charts',
+			'name'
+		]);
 
 		if (!plugin) {
 			return fail(404, { error: 'Plugin not found' });
@@ -394,13 +359,8 @@ export const actions = {
 		await redis.srem(`users.index.plugins.username:${plugin.owner.toLowerCase()}`, pluginId);
 
 		// Delete all charts
-		for (const chartUid of plugin.charts) {
-			const chart = await new Promise<any>((resolve, reject) => {
-				dataManager.getChartByUid(chartUid, ['id', 'type'], (err: any, result: any) => {
-					if (err) reject(err);
-					else resolve(result);
-				});
-			});
+		for (const chartUid of plugin.charts as number[]) {
+			const chart = await dataManager.getChartByUid(chartUid, ['id', 'type']);
 
 			if (chart) {
 				await redis.del(`charts.index.uid.pluginId+chartId:${pluginId}.${chart.id}`);
@@ -433,12 +393,7 @@ export const actions = {
 			return fail(400, { error: 'Missing new owner' });
 		}
 
-		const plugin = await new Promise<any>((resolve, reject) => {
-			dataManager.getPluginById(pluginId, ['owner'], (err: any, result: any) => {
-				if (err) reject(err);
-				else resolve(result);
-			});
-		});
+		const plugin = await dataManager.getPluginById(parseInt(pluginId), ['owner']);
 
 		if (!plugin) {
 			return fail(404, { error: 'Plugin not found' });

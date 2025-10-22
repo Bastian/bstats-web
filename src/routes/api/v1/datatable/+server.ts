@@ -5,20 +5,10 @@ import * as dataManager from '$lib/server/dataManager.js';
 export const GET: RequestHandler = async () => {
 	try {
 		// Get all plugin IDs
-		const pluginIds = await new Promise<string[]>((resolve, reject) => {
-			dataManager.getAllPluginIds((err: any, ids: string[]) => {
-				if (err) reject(err);
-				else resolve(ids || []);
-			});
-		});
+		const pluginIds = await dataManager.getAllPluginIds();
 
 		// Get all software to map IDs to names
-		const allSoftware = await new Promise<any[]>((resolve, reject) => {
-			dataManager.getAllSoftware(['name', 'url'], (err: any, result: any[]) => {
-				if (err) reject(err);
-				else resolve(result || []);
-			});
-		});
+		const allSoftware = await dataManager.getAllSoftware(['name', 'url']);
 
 		// Create a map for quick lookups
 		const softwareMap = new Map();
@@ -30,16 +20,7 @@ export const GET: RequestHandler = async () => {
 		const pluginPromises = pluginIds.map(async (pluginId) => {
 			try {
 				// Get plugin basic data
-				const plugin = await new Promise<any>((resolve, reject) => {
-					dataManager.getPluginById(
-						pluginId,
-						['name', 'software', 'owner'],
-						(err: any, result: any) => {
-							if (err) reject(err);
-							else resolve(result);
-						}
-					);
-				});
+				const plugin = await dataManager.getPluginById(pluginId, ['name', 'software', 'owner']);
 
 				if (!plugin || plugin.name === null) {
 					return null; // Skip invalid plugins
@@ -53,29 +34,13 @@ export const GET: RequestHandler = async () => {
 				// Get server count (from 'servers' chart, latest data point)
 				let servers = 0;
 				try {
-					const serversChartUid = await new Promise<number>((resolve, reject) => {
-						dataManager.getChartUidByPluginIdAndChartId(
-							pluginId,
-							'servers',
-							(err: any, uid: number) => {
-								if (err) resolve(0);
-								else resolve(uid || 0);
-							}
-						);
-					});
+					const serversChartUid = await dataManager.getChartUidByPluginIdAndChartId(
+						pluginId,
+						'servers'
+					);
 
 					if (serversChartUid) {
-						const serversData = await new Promise<any[]>((resolve, reject) => {
-							dataManager.getLimitedLineChartData(
-								serversChartUid,
-								1,
-								1,
-								(err: any, data: any[]) => {
-									if (err) resolve([]);
-									else resolve(data || []);
-								}
-							);
-						});
+						const serversData = await dataManager.getLimitedLineChartData(serversChartUid, '1', 1);
 						if (serversData.length > 0) {
 							servers = serversData[0][1];
 						}
@@ -87,29 +52,13 @@ export const GET: RequestHandler = async () => {
 				// Get player count (from 'players' chart, latest data point)
 				let players = 0;
 				try {
-					const playersChartUid = await new Promise<number>((resolve, reject) => {
-						dataManager.getChartUidByPluginIdAndChartId(
-							pluginId,
-							'players',
-							(err: any, uid: number) => {
-								if (err) resolve(0);
-								else resolve(uid || 0);
-							}
-						);
-					});
+					const playersChartUid = await dataManager.getChartUidByPluginIdAndChartId(
+						pluginId,
+						'players'
+					);
 
 					if (playersChartUid) {
-						const playersData = await new Promise<any[]>((resolve, reject) => {
-							dataManager.getLimitedLineChartData(
-								playersChartUid,
-								1,
-								1,
-								(err: any, data: any[]) => {
-									if (err) resolve([]);
-									else resolve(data || []);
-								}
-							);
-						});
+						const playersData = await dataManager.getLimitedLineChartData(playersChartUid, '1', 1);
 						if (playersData.length > 0) {
 							players = playersData[0][1];
 						}

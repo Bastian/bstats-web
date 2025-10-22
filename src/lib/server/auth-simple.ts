@@ -41,7 +41,7 @@ export async function verifyCredentials(
 	const userKey = `users:${username.toLowerCase()}`;
 
 	// Get user data
-	const userData = await redis.hmget(userKey, ['name', 'password', 'admin']);
+	const userData = await redis.hmget(userKey, 'name', 'password', 'admin');
 
 	if (!userData[0]) {
 		return { success: false }; // User doesn't exist
@@ -94,7 +94,7 @@ export async function getSession(
 	const redis = databaseManager.getRedisCluster();
 	const sessionKey = `sess:${sessionId}`;
 
-	const sessionData = await redis.hmget(sessionKey, ['user', 'admin']);
+	const sessionData = await redis.hmget(sessionKey, 'user', 'admin');
 
 	if (!sessionData[0]) {
 		return null; // Session doesn't exist
@@ -130,7 +130,7 @@ export async function changePassword(
 	const userKey = `users:${username.toLowerCase()}`;
 
 	// Get current user data
-	const userData = await redis.hmget(userKey, ['name', 'password']);
+	const userData = await redis.hmget(userKey, 'name', 'password');
 
 	if (!userData[0]) {
 		return { success: false, error: 'User not found' };

@@ -9,34 +9,22 @@ export const load: PageServerLoad = async ({ locals }) => {
 	}
 
 	// Get user's plugins
-	const myPlugins = await new Promise<any[]>((resolve, reject) => {
-		dataManager.getPluginsOfUser(
-			locals.user.username,
-			['name', 'software'],
-			(err: any, result: any[]) => {
-				if (err) reject(err);
-				else resolve(result || []);
-			}
-		);
-	});
+	const myPluginsRaw = await dataManager.getPluginsOfUser(locals.user.username, [
+		'name',
+		'software'
+	]);
 
 	// Get all software to map plugin software IDs to software objects
-	const allSoftware = await new Promise<any[]>((resolve, reject) => {
-		dataManager.getAllSoftware(['name', 'url'], (err: any, result: any[]) => {
-			if (err) reject(err);
-			else resolve(result || []);
-		});
-	});
+	const allSoftware = await dataManager.getAllSoftware(['name', 'url']);
 
 	// Replace software IDs with software objects
-	for (let i = 0; i < myPlugins.length; i++) {
-		for (let j = 0; j < allSoftware.length; j++) {
-			if (myPlugins[i].software === allSoftware[j].id) {
-				myPlugins[i].software = allSoftware[j];
-				break;
-			}
-		}
-	}
+	const myPlugins = myPluginsRaw.map((plugin) => {
+		const software = allSoftware.find((s) => s.id === plugin.software);
+		return {
+			...plugin,
+			software: software || plugin.software
+		};
+	});
 
 	return {
 		myPlugins

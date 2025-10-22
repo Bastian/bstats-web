@@ -21,7 +21,7 @@
 		"cookie-parser": "^1.4.3",
 		"express-session": "^1.15.6",
 		"geoip-lite": "^1.2.1",
-		"ioredis": "^3.2.2",
+		"ioredis": "^5.8.2",
 		"passport": "^0.4.0",
 		"passport-local": "^1.0.0",
 		"svelte-dnd-action": "^0.9.65",
