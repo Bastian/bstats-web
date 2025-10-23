@@ -1,4 +1,4 @@
-const isoCountries = {
+const isoCountries: Record<string, string> = {
 	AF: 'Afghanistan',
 	AX: 'Åland Islands',
 	AL: 'Albania',
@@ -240,18 +240,15 @@ const isoCountries = {
 };
 
 /**
- * Gets a country name by it's country code.
+ * Gets a country name by its country code.
  *
- * @param {string} countryCode The country code.
- * @returns {string} The country's name.
+ * @param countryCode The country code.
+ * @returns The country's name.
  */
-function getCountryName(countryCode) {
-	if (isoCountries.hasOwnProperty(countryCode)) {
+export function getCountryName(countryCode: string): string {
+	if (countryCode in isoCountries) {
 		return isoCountries[countryCode];
 	} else {
 		return countryCode;
 	}
 }
-
-// Exports
-module.exports.getCountryName = getCountryName;
