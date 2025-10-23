@@ -1,6 +1,5 @@
 import bcrypt from 'bcryptjs';
 import { randomUUID } from 'crypto';
-// @ts-ignore
 import * as databaseManager from './databaseManager.js';
 
 const saltRounds = 10;
