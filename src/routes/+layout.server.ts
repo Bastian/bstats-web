@@ -2,20 +2,16 @@ import type { LayoutServerLoad } from './$types';
 import { getAllSoftware } from '$lib/server/redis/software.js';
 import { getPluginsOfUser } from '$lib/server/redis/plugins.js';
 
-export const load: LayoutServerLoad = async ({ cookies, locals }) => {
-	// Get custom color from cookies
-	const customColor1 = cookies.get('custom-color1') || 'teal';
-
-	// Get user and auth state from locals (set by hooks.server.ts)
-	const user = locals.user;
-	const loggedIn = locals.loggedIn;
-
+export const load: LayoutServerLoad = async ({ locals, depends }) => {
+	depends('app:session');
 	// Load all software
 	const allSoftware = await getAllSoftware(['name', 'url', 'globalPlugin']);
 
 	// Load user's plugins if logged in
 	const myPluginsRaw =
-		loggedIn && user ? await getPluginsOfUser(user.username, ['name', 'software']) : [];
+		locals.session && locals.user
+			? await getPluginsOfUser(locals.user.name, ['name', 'software'])
+			: [];
 
 	// Replace the software id with a proper object for myPlugins
 	const myPlugins = myPluginsRaw.map((plugin) => {
@@ -27,10 +23,9 @@ export const load: LayoutServerLoad = async ({ cookies, locals }) => {
 	});
 
 	return {
-		user,
-		loggedIn,
+		user: locals.user,
+		session: locals.session,
 		allSoftware,
-		myPlugins,
-		customColor1
+		myPlugins
 	};
 };

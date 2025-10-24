@@ -1,6 +1,5 @@
 <script lang="ts">
 	import type { PageData, ActionData } from './$types';
-	import { onMount } from 'svelte';
 	import { enhance } from '$app/forms';
 	import Badge from '$lib/components/Badge.svelte';
 	import PageHero from '$lib/components/PageHero.svelte';
@@ -8,25 +7,10 @@
 
 	let { data, form }: { data: PageData; form: ActionData } = $props();
 
-	let captchaSolved = $state(false);
 	let softwareSelected = $state('');
 	let pluginName = $state('');
 
-	let isFormValid = $derived(softwareSelected !== '' && pluginName.length > 0 && captchaSolved);
-
-	onMount(() => {
-		// Load reCAPTCHA script
-		const script = document.createElement('script');
-		script.src = 'https://www.google.com/recaptcha/api.js';
-		script.async = true;
-		script.defer = true;
-		document.head.appendChild(script);
-
-		// Set up global callback for reCAPTCHA
-		(window as any).captchaSolved = function () {
-			captchaSolved = true;
-		};
-	});
+	let isFormValid = $derived(softwareSelected !== '' && pluginName.length > 0);
 </script>
 
 <svelte:head>
@@ -52,11 +36,7 @@
 				</div>
 			{:else if form?.error === 'alreadyAdded'}
 				<div class="doc-callout border-rose-200 bg-rose-50 text-rose-700">
-					You already added this plugin.
-				</div>
-			{:else if form?.error === 'wrongCaptcha'}
-				<div class="doc-callout border-amber-200 bg-amber-50 text-amber-700">
-					Please solve the captcha to continue.
+					Plugin with this name already exists for the selected software!
 				</div>
 			{:else if form?.error === 'invalidName'}
 				<div class="doc-callout border-rose-200 bg-rose-50 text-rose-700">Invalid plugin name!</div>
@@ -73,7 +53,7 @@
 						required
 					>
 						<option value="" disabled>Select software</option>
-						{#each data.allSoftware as software}
+						{#each data.allSoftware as software (software.id)}
 							{#if software.globalPlugin || (data.user != null && data.user.admin)}
 								<option value={software.id}>{software.name}</option>
 							{/if}
@@ -87,22 +67,12 @@
 						id="pluginName"
 						type="text"
 						name="pluginName"
-						maxlength="32"
-						pattern="^[-_a-zA-Z0-9]+(\s[-_a-zA-Z0-9]+)*$"
+						maxlength="48"
 						class="input-control"
 						placeholder="My Awesome Plugin"
 						bind:value={pluginName}
 						required
 					/>
-					<p class="form-helper">Letters, numbers, underscores. Spaces allowed between words.</p>
-				</div>
-
-				<div class="flex justify-center">
-					<div
-						class="g-recaptcha"
-						data-sitekey={data.recaptchaPublicKey}
-						data-callback="captchaSolved"
-					></div>
 				</div>
 
 				<Button fullWidth size="large" buttonProps={{ type: 'submit' }} disabled={!isFormValid}>

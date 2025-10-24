@@ -3,8 +3,42 @@
 	import Badge from '$lib/components/Badge.svelte';
 	import Button from '$lib/components/Button.svelte';
 	import PageHero from '$lib/components/PageHero.svelte';
+	import { authClient } from '$lib/auth.client.js';
+	import type { SvelteHTMLElements } from 'svelte/elements';
 
-	let { data, form } = $props();
+	let error: string | undefined = $state(undefined);
+
+	let { data } = $props();
+
+	const handleFormSubmit: SvelteHTMLElements['form']['onsubmit'] = async (event) => {
+		event.preventDefault();
+
+		const formData = new FormData(event.currentTarget);
+		const usernameOrEmail = formData.get('username') as string;
+
+		let response:
+			| Awaited<ReturnType<typeof authClient.signIn.username>>
+			| Awaited<ReturnType<typeof authClient.signIn.email>>;
+
+		if (usernameOrEmail.includes('@')) {
+			response = await authClient.signIn.email({
+				email: usernameOrEmail,
+				password: formData.get('password') as string,
+				rememberMe: !!formData.get('remember-me')
+			});
+		} else {
+			response = await authClient.signIn.username({
+				username: formData.get('username') as string,
+				password: formData.get('password') as string,
+				rememberMe: !!formData.get('remember-me')
+			});
+		}
+		if (response.error) {
+			error = response.error.message;
+		} else {
+			// Backend redirects to '/' automatically
+		}
+	};
 </script>
 
 <svelte:head>
@@ -21,52 +55,60 @@
 		{/snippet}
 	</PageHero>
 
-	<section class="doc-container mt-12">
-		<div class="form-card space-y-6">
-			{#if form?.error}
-				<div class="doc-callout border-rose-200 bg-rose-50 text-rose-700">
-					Login failed. Double-check your username and password and try again.
-				</div>
-			{:else if data.registered}
-				<div class="doc-callout doc-callout-info">
-					Account created successfully. You can sign in below.
-				</div>
-			{/if}
+	{#if data.session}
+		You are already logged in.
+	{:else}
+		<section class="doc-container mt-12">
+			<div class="form-card space-y-6">
+				{#if error}
+					<div class="doc-callout border-rose-200 bg-rose-50 text-rose-700">
+						{error}
+					</div>
+				{/if}
 
-			<form method="post" class="space-y-5">
-				<div class="input-group">
-					<label class="input-label" for="username">Username</label>
-					<input
-						id="username"
-						type="text"
-						name="username"
-						autocomplete="username"
-						class="input-control"
-						required
-					/>
-				</div>
-				<div class="input-group">
-					<label class="input-label" for="password">Password</label>
-					<input
-						id="password"
-						type="password"
-						name="password"
-						autocomplete="current-password"
-						class="input-control"
-						required
-					/>
-				</div>
-				<Button fullWidth size="large" buttonProps={{ type: 'submit', name: 'btn_login' }}
-					>Sign in</Button
-				>
-			</form>
+				<form method="post" class="space-y-5" onsubmit={async (event) => handleFormSubmit(event)}>
+					<div class="input-group">
+						<label class="input-label" for="username">Username</label>
+						<input
+							id="username"
+							type="text"
+							name="username"
+							autocomplete="username"
+							class="input-control"
+							required
+						/>
+					</div>
+					<div class="input-group">
+						<label class="input-label" for="password">Password</label>
+						<input
+							id="password"
+							type="password"
+							name="password"
+							autocomplete="current-password"
+							class="input-control"
+							required
+						/>
+					</div>
+					<label class="flex items-start gap-3 text-sm text-slate-600">
+						<input
+							type="checkbox"
+							id="remember-me"
+							class="mt-1 h-4 w-4 rounded border-slate-300 text-brand-600 focus:ring-brand-500"
+						/>
+						<span>Remember me</span>
+					</label>
+					<Button fullWidth size="large" buttonProps={{ type: 'submit', name: 'btn_login' }}>
+						Sign in
+					</Button>
+				</form>
 
-			<p class="text-center text-sm text-slate-500">
-				Don't have an account yet?
-				<a class="font-semibold text-brand-600 hover:text-brand-700" href={resolve('/register')}>
-					Create one
-				</a>.
-			</p>
-		</div>
-	</section>
+				<p class="text-center text-sm text-slate-500">
+					Don't have an account yet?
+					<a class="font-semibold text-brand-600 hover:text-brand-700" href={resolve('/register')}>
+						Create one
+					</a>.
+				</p>
+			</div>
+		</section>
+	{/if}
 </main>

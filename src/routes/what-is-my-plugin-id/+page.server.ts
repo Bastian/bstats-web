@@ -3,7 +3,7 @@ import { getAllSoftware } from '$lib/server/redis/software.js';
 import { getPluginsOfUser } from '$lib/server/redis/plugins.js';
 
 export const load: PageServerLoad = async ({ locals }) => {
-	if (!locals.loggedIn || !locals.user) {
+	if (!locals.user) {
 		return {
 			myPlugins: []
 		};

@@ -2,6 +2,9 @@
 	import Button from '$lib/components/Button.svelte';
 	import { resolve } from '$app/paths';
 
+	import type { User } from 'better-auth';
+	import { authClient } from '$lib/auth.client';
+
 	type Software = {
 		id: number;
 		name: string;
@@ -19,28 +22,22 @@
 		};
 	};
 
-	type User = {
-		username: string;
-		admin: boolean;
-	};
-
 	let {
-		loggedIn = false,
-		user = null,
 		allSoftware = [],
-		myPlugins = []
-	} = $props<{
-		loggedIn?: boolean;
-		user?: User | null;
+		myPlugins = [],
+		user
+	}: {
+		user: User | null;
 		allSoftware?: Software[];
 		myPlugins?: Plugin[];
-	}>();
+	} = $props();
 
 	const globalSoftware = $derived(
 		allSoftware.filter((software) => software && software.globalPlugin)
 	);
+
 	const plugins = $derived(myPlugins || []);
-	const username = $derived(loggedIn && user && user.username ? user.username : '');
+	const username = $derived(user?.name ?? '');
 	const usernameInitial = $derived(username ? username.charAt(0).toUpperCase() : '🙂');
 </script>
 
@@ -54,9 +51,9 @@
 			</span>
 			<span class="flex flex-col leading-tight">
 				<span class="font-display text-xl font-semibold text-slate-900 md:text-2xl">bStats</span>
-				<span class="text-xs font-medium tracking-wide text-slate-400 uppercase"
-					>Open source metrics</span
-				>
+				<span class="text-xs font-medium tracking-wide text-slate-400 uppercase">
+					Open source metrics
+				</span>
 			</span>
 		</a>
 
@@ -83,7 +80,7 @@
 						class="pointer-events-none invisible absolute top-full left-1/2 z-20 mt-3 w-72 -translate-x-1/2 -translate-y-1 rounded-xl border border-slate-200 bg-white/95 p-3 opacity-0 shadow-2xl transition-all duration-200 group-open:pointer-events-auto group-open:visible group-open:translate-y-0 group-open:opacity-100"
 					>
 						<ul class="space-y-1.5 text-sm">
-							{#each globalSoftware as software}
+							{#each globalSoftware as software (software.name)}
 								<li>
 									<a
 										href={resolve(`/global/${software.url}`)}
@@ -113,7 +110,7 @@
 		</nav>
 
 		<div class="hidden items-center gap-3 md:flex">
-			{#if loggedIn}
+			{#if user}
 				<Button href={resolve('/add-plugin')}>Add Plugin</Button>
 				<details class="group relative">
 					<summary
@@ -121,8 +118,9 @@
 					>
 						<span
 							class="inline-flex h-8 w-8 items-center justify-center rounded-full bg-brand-100 font-display text-sm font-semibold text-brand-700"
-							>{usernameInitial}</span
 						>
+							{usernameInitial}
+						</span>
 						<span>Account</span>
 						<svg class="h-4 w-4 transition group-open:rotate-180" viewBox="0 0 20 20" fill="none">
 							<path
@@ -146,8 +144,9 @@
 								<a
 									href={resolve(`/author/${username}`)}
 									class="block rounded-md px-3 py-2 transition hover:bg-brand-50 hover:text-slate-900"
-									>My page</a
 								>
+									My page
+								</a>
 							</li>
 							{#if plugins.length}
 								<li>
@@ -155,16 +154,16 @@
 									<ul
 										class="mt-2 max-h-40 space-y-1 overflow-y-auto rounded-md bg-slate-50 p-2 text-sm"
 									>
-										{#each plugins as plugin}
+										{#each plugins as plugin (plugin.id)}
 											<li>
 												<a
 													href={resolve(`/plugin/${plugin.software.url}/${plugin.name}`)}
 													class="block truncate rounded px-2 py-1 transition hover:bg-white hover:text-brand-700"
 												>
 													{plugin.name}
-													<span class="text-xs tracking-wide text-slate-400 uppercase"
-														>({plugin.software.name})</span
-													>
+													<span class="text-xs tracking-wide text-slate-400 uppercase">
+														({plugin.software.name})
+													</span>
 												</a>
 											</li>
 										{/each}
@@ -175,15 +174,17 @@
 								<a
 									href={resolve('/change-password')}
 									class="block rounded-md px-3 py-2 transition hover:bg-slate-100 hover:text-slate-900"
-									>Change password</a
 								>
+									Change password
+								</a>
 							</li>
 							<li>
-								<a
-									href={resolve('/logout')}
-									class="block rounded-md px-3 py-2 transition hover:bg-slate-100 hover:text-slate-900"
-									>Logout</a
+								<button
+									onclick={() => authClient.signOut()}
+									class="block w-full appearance-none rounded-md px-3 py-2 text-start transition hover:bg-slate-100 hover:text-slate-900"
 								>
+									Logout
+								</button>
 							</li>
 						</ul>
 					</div>
@@ -219,18 +220,20 @@
 				<a
 					href={resolve('/plugin-list')}
 					class="block rounded-lg px-4 py-3 transition hover:bg-brand-50 hover:text-brand-700"
-					>Plugin List</a
 				>
+					Plugin List
+				</a>
 				<a
 					href={resolve('/getting-started')}
 					class="block rounded-lg px-4 py-3 transition hover:bg-brand-50 hover:text-brand-700"
-					>Docs</a
 				>
+					Docs
+				</a>
 				{#if globalSoftware.length}
 					<div class="rounded-2xl bg-slate-100/80 p-4">
 						<p class="text-xs tracking-wide text-slate-400 uppercase">Global Stats</p>
 						<ul class="mt-3 space-y-2 text-sm">
-							{#each globalSoftware as software}
+							{#each globalSoftware as software (software.name)}
 								<li>
 									<a
 										href={resolve(`/global/${software.url}`)}
@@ -259,7 +262,7 @@
 				</p>
 			</div>
 
-			{#if loggedIn}
+			{#if user}
 				<div class="space-y-2">
 					<Button href={resolve('/add-plugin')} fullWidth>
 						<span>Add Plugin</span>
@@ -267,23 +270,26 @@
 					<a
 						href={resolve(`/author/${username}`)}
 						class="block rounded-lg border border-slate-200 px-4 py-3 text-center text-sm font-semibold text-slate-600 transition hover:border-brand-300 hover:text-brand-700"
-						>My page</a
 					>
+						My page
+					</a>
 					<a
 						href={resolve('/change-password')}
 						class="block rounded-lg border border-slate-200 px-4 py-3 text-center text-sm font-semibold text-slate-600 transition hover:border-brand-300 hover:text-brand-700"
-						>Change password</a
 					>
-					<a
-						href={resolve('/logout')}
-						class="block rounded-lg border border-slate-200 px-4 py-3 text-center text-sm font-semibold text-slate-600 transition hover:border-brand-300 hover:text-brand-700"
-						>Logout</a
+						Change password
+					</a>
+					<button
+						onclick={() => authClient.signOut()}
+						class="block appearance-none rounded-lg border border-slate-200 px-4 py-3 text-center text-sm font-semibold text-slate-600 transition hover:border-brand-300 hover:text-brand-700"
 					>
+						Logout
+					</button>
 					{#if plugins.length}
 						<div class="rounded-2xl bg-slate-100/80 p-4">
 							<p class="text-xs tracking-wide text-slate-400 uppercase">My Plugins</p>
 							<ul class="mt-3 space-y-2 text-sm">
-								{#each plugins as plugin}
+								{#each plugins as plugin (plugin.id)}
 									<li>
 										<a
 											href={resolve(`/plugin/${plugin.software.url}/${plugin.name}`)}
@@ -305,8 +311,9 @@
 					<a
 						href={resolve('/login')}
 						class="block rounded-lg border border-slate-200 px-4 py-3 text-center text-sm font-semibold text-slate-600 transition hover:border-brand-300 hover:text-brand-700"
-						>Log in</a
 					>
+						Log in
+					</a>
 					<Button href={resolve('/register')} fullWidth>Create account</Button>
 				</div>
 			{/if}

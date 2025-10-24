@@ -8,10 +8,9 @@ import {
 	updatePluginCharts
 } from '$lib/server/redis/plugins.js';
 import { createChart } from '$lib/server/redis/charts.js';
-import config from '$lib/server/config.js';
 
 export const load: PageServerLoad = async ({ locals }) => {
-	if (!locals.loggedIn || !locals.user) {
+	if (!locals.session || !locals.user) {
 		throw redirect(303, '/login');
 	}
 
@@ -24,31 +23,29 @@ export const load: PageServerLoad = async ({ locals }) => {
 	);
 
 	return {
-		allSoftware: filteredSoftware,
-		recaptchaPublicKey: config.recaptcha.publicKey
+		allSoftware: filteredSoftware
 	};
 };
 
 export const actions = {
 	default: async ({ request, locals }: RequestEvent) => {
-		if (!locals.loggedIn || !locals.user) {
+		if (!locals.session || !locals.user) {
 			throw redirect(303, '/login');
 		}
 
 		const data = await request.formData();
 		const pluginName = data.get('pluginName')?.toString();
 		const softwareId = data.get('software')?.toString();
-		const recaptchaResponse = data.get('g-recaptcha-response')?.toString();
 
 		// Validate plugin name
 		if (!pluginName || pluginName.length === 0 || pluginName.length > 32) {
 			return fail(400, { error: 'invalidName' });
 		}
 
-		const trimmedName = pluginName.substring(0, 32);
+		const trimmedName = pluginName.trim().substring(0, 48);
 
 		// Validate plugin name format
-		if (!/^[-_a-zA-Z0-9]+(\s[-_a-zA-Z0-9]+)*$/.test(trimmedName)) {
+		if (!/^[-_a-zA-Z0-9 ]+(\s[-_a-zA-Z0-9 ]+)*$/.test(trimmedName)) {
 			return fail(400, { error: 'invalidName' });
 		}
 
@@ -57,24 +54,10 @@ export const actions = {
 			return fail(400, { error: 'failed' });
 		}
 
-		// Verify reCAPTCHA
-		if (!recaptchaResponse) {
-			return fail(400, { error: 'wrongCaptcha' });
-		}
-
 		let pluginId: number;
 		let trimmedNameForRedirect: string;
 
 		try {
-			// Verify reCAPTCHA with Google
-			const verificationUrl = `https://www.google.com/recaptcha/api/siteverify?secret=${config.recaptcha.secretKey}&response=${recaptchaResponse}`;
-			const verificationResult = await fetch(verificationUrl, { method: 'POST' });
-			const verificationBody = await verificationResult.json();
-
-			if (!verificationBody.success) {
-				return fail(400, { error: 'wrongCaptcha' });
-			}
-
 			// Get software details
 			const software = await getSoftwareById(parseInt(softwareId), [
 				'name',

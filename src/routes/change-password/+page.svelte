@@ -1,21 +1,25 @@
 <script lang="ts">
 	import { resolve } from '$app/paths';
+	import { authClient } from '$lib/auth.client.js';
 	import Badge from '$lib/components/Badge.svelte';
 	import Button from '$lib/components/Button.svelte';
 	import PageHero from '$lib/components/PageHero.svelte';
 
-	let { data, form } = $props();
+	let { data } = $props();
 
+	let error = $state<string | undefined>(undefined);
 	let currentPassword = $state('');
 	let newPassword = $state('');
 	let confirmPassword = $state('');
 
+	let success = $state('');
+
 	let hint = $derived.by(() => {
-		if (!currentPassword || !newPassword || !confirmPassword) {
+		if (!error || !currentPassword || !newPassword || !confirmPassword) {
 			return { text: '', type: '' };
 		}
-		if (newPassword.length < 6) {
-			return { text: 'Password must be at least 6 characters', type: 'error' };
+		if (error) {
+			return { text: error, type: 'error' };
 		}
 		if (newPassword === confirmPassword) {
 			return { text: 'Passwords match', type: 'success' };
@@ -44,15 +48,28 @@
 
 	<section class="doc-container mt-12">
 		<div class="form-card space-y-6">
-			{#if form?.error}
-				<div class="doc-callout border-rose-200 bg-rose-50 text-rose-700">{form.error}</div>
-			{:else if form?.success}
-				<div class="doc-callout doc-callout-info">{form.success}</div>
-				<Button href={resolve(`/author/${data.user.username}`)} size="large" fullWidth
-					>Back to my page</Button
-				>
+			{#if success}
+				<div class="doc-callout doc-callout-info">{success}</div>
+				<Button href={resolve(`/author/${data.user?.name}`)} size="large" fullWidth>
+					Back to my page
+				</Button>
 			{:else}
-				<form method="post" class="space-y-5">
+				<form
+					method="post"
+					class="space-y-5"
+					onsubmit={async (event) => {
+						event.preventDefault();
+						const response = await authClient.changePassword({
+							currentPassword,
+							newPassword
+						});
+						if (response.error) {
+							error = response.error.message;
+						} else {
+							success = 'Your password has been changed successfully.';
+						}
+					}}
+				>
 					<div class="input-group">
 						<label class="input-label" for="currentPassword">Current password</label>
 						<input
@@ -98,10 +115,11 @@
 					</Button>
 				</form>
 				<a
-					href={resolve(`/author/${data.user.username}`)}
+					href={resolve(`/author/${data.user?.name}`)}
 					class="block text-center text-sm font-semibold text-brand-600 hover:text-brand-700"
-					>Back to my page</a
 				>
+					Back to my page
+				</a>
 			{/if}
 		</div>
 	</section>

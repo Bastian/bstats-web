@@ -32,7 +32,7 @@
 					incoming metrics.
 				</p>
 				<div class="mt-6 flex flex-wrap gap-3 text-sm">
-					{#if data.loggedIn}
+					{#if data.user}
 						<Button href={resolve('/add-plugin')}>Add a plugin</Button>
 					{:else}
 						<Button href={resolve('/register')}>Create account</Button>

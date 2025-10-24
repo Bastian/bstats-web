@@ -1,11 +1,13 @@
 // See https://svelte.dev/docs/kit/types#app.d.ts
 // for information about these interfaces
+import type { Session, User } from 'better-auth/types';
+
 declare global {
 	namespace App {
 		// interface Error {}
 		interface Locals {
-			user: { username: string; admin: boolean } | null;
-			loggedIn: boolean;
+			user: User | null;
+			session: Session | null;
 			allSoftware: Array<{
 				id: number;
 				name: string;

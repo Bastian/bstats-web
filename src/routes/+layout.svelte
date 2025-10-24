@@ -9,8 +9,6 @@
 
 <svelte:head>
 	<title>bStats</title>
-	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0" />
 	<link rel="icon" href="/favicon.ico" />
 
 	<!-- Fonts -->
@@ -22,8 +20,22 @@
 	/>
 </svelte:head>
 
+<!-- TODO Enable
+{#if data.user && !data.user?.emailVerified}
+	<div
+		class="border-b border-yellow-200 bg-yellow-50 px-4 py-3 text-center text-sm text-yellow-800"
+	>
+		Your email address is not verified. Please check your inbox for a verification email. If you did
+		not receive the email, please&nbsp;
+		<a href="#todo" class="font-medium underline transition-colors hover:text-yellow-900">
+			click here to resend it
+		</a>.
+	</div>
+{/if}
+-->
+
 <Navigation
-	loggedIn={data.loggedIn}
+	session={data.session}
 	user={data.user}
 	allSoftware={data.allSoftware}
 	myPlugins={data.myPlugins}
@@ -33,6 +45,6 @@
 	{@render children?.()}
 </main>
 
-<Footer loggedIn={data.loggedIn} />
+<Footer loggedIn={!!data.session} />
 
 <GlobalScripts />

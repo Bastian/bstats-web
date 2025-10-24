@@ -46,7 +46,7 @@
 		{/snippet}
 	</PageHero>
 
-	{#if !data.loggedIn}
+	{#if !data.user}
 		<section class="doc-container mt-12">
 			<div class="form-card space-y-4 text-center">
 				<p class="text-sm text-slate-600">You need to be signed in to view your plugin IDs.</p>

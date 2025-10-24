@@ -13,11 +13,10 @@ function generateResetToken(): string {
 }
 
 export const load: PageServerLoad = async ({ locals }) => {
-	const { loggedIn, user } = locals;
-	const isAdmin = loggedIn && user && user.admin;
+	const { user } = locals;
+	const isAdmin = user && user.admin;
 
 	return {
-		loggedIn,
 		user,
 		isAdmin
 	};
@@ -26,7 +25,7 @@ export const load: PageServerLoad = async ({ locals }) => {
 export const actions = {
 	generateResetLink: async ({ request, locals, url }: RequestEvent) => {
 		// Check if user is admin
-		if (!locals.loggedIn || !locals.user || !locals.user.admin) {
+		if (!locals.user || !locals.user.admin) {
 			return fail(403, {
 				success: false,
 				error: 'Access denied. Admin privileges required.'

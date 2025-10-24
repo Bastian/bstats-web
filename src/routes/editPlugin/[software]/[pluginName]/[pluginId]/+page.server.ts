@@ -22,7 +22,7 @@ import {
 import { deleteChartLineData } from '$lib/server/redis/chart-data.js';
 
 export const load: PageServerLoad = async ({ params, locals }) => {
-	if (!locals.loggedIn || !locals.user) {
+	if (!locals.user) {
 		throw redirect(303, '/login');
 	}
 
@@ -91,7 +91,7 @@ export const load: PageServerLoad = async ({ params, locals }) => {
 
 export const actions = {
 	addChart: async ({ request, locals, params }) => {
-		if (!locals.loggedIn || !locals.user) {
+		if (!locals.user) {
 			return fail(401, { error: 'Not authenticated' });
 		}
 
@@ -220,7 +220,7 @@ export const actions = {
 	},
 
 	deleteChart: async ({ request, locals, params }) => {
-		if (!locals.loggedIn || !locals.user) {
+		if (!locals.user) {
 			return fail(401, { error: 'Not authenticated' });
 		}
 
@@ -288,7 +288,7 @@ export const actions = {
 	},
 
 	reorderCharts: async ({ request, locals, params }) => {
-		if (!locals.loggedIn || !locals.user) {
+		if (!locals.user) {
 			return fail(401, { error: 'Not authenticated' });
 		}
 
@@ -333,7 +333,7 @@ export const actions = {
 	},
 
 	deletePlugin: async ({ locals, params }) => {
-		if (!locals.loggedIn || !locals.user) {
+		if (!locals.user) {
 			return fail(401, { error: 'Not authenticated' });
 		}
 
@@ -374,7 +374,7 @@ export const actions = {
 	},
 
 	transferOwnership: async ({ request, locals, params }) => {
-		if (!locals.loggedIn || !locals.user) {
+		if (!locals.user) {
 			return fail(401, { error: 'Not authenticated' });
 		}
 

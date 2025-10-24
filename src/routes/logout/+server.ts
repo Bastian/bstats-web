@@ -1,16 +1,12 @@
 import { redirect } from '@sveltejs/kit';
 import type { RequestHandler } from './$types';
-import { destroySession } from '$lib/server/auth-simple';
+import { auth } from '$lib/auth';
 
-export const GET: RequestHandler = async ({ cookies }) => {
-	// Get session ID and destroy it
-	const sessionId = cookies.get('session');
-	if (sessionId) {
-		await destroySession(sessionId);
-	}
-
-	// Clear session cookie
-	cookies.delete('session', { path: '/' });
+export const GET: RequestHandler = async ({ request }) => {
+	// Sign out with Better Auth
+	await auth.api.signOut({
+		headers: request.headers
+	});
 
 	// Redirect to home
 	throw redirect(303, '/');
