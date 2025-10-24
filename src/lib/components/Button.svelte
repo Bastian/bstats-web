@@ -1,6 +1,5 @@
 <script lang="ts">
-	import { Button as ButtonPrimitive } from 'bits-ui';
-	import type { Button } from 'bits-ui';
+	import { Button } from 'bits-ui';
 	import type { Snippet } from 'svelte';
 
 	type Props = Button.RootProps & {
@@ -13,7 +12,7 @@
 	let { children, size, fullWidth, variant, ...restProps }: Props = $props();
 </script>
 
-<ButtonPrimitive.Root
+<Button.Root
 	class={[
 		'cursor-pointer disabled:cursor-not-allowed disabled:opacity-50',
 		{
@@ -28,4 +27,4 @@
 	{...restProps}
 >
 	{@render children()}
-</ButtonPrimitive.Root>
+</Button.Root>

@@ -2,6 +2,7 @@
 	import { resolve } from '$app/paths';
 	import Badge from '$lib/components/Badge.svelte';
 	import Button from '$lib/components/Button.svelte';
+	import Checkbox from '$lib/components/Checkbox.svelte';
 	import PageHero from '$lib/components/PageHero.svelte';
 	import { env } from '$env/dynamic/public';
 	import HCaptcha from '$lib/components/HCaptcha.svelte';
@@ -155,20 +156,14 @@
 						{/if}
 					</div>
 
-					<label class="flex items-start gap-3 text-sm text-slate-600">
-						<input
-							type="checkbox"
-							id="accept-privacy-policy"
-							class="mt-1 h-4 w-4 rounded border-slate-300 text-brand-600 focus:ring-brand-500"
-							bind:checked={privacyAccepted}
-						/>
-						<span>
+					<Checkbox id="accept-privacy-policy" class="mt-1" bind:checked={privacyAccepted}>
+						{#snippet label()}
 							I accept the <a
 								class="font-semibold text-brand-600 hover:text-brand-700"
 								href={resolve('/privacy-policy')}>privacy policy</a
-							>.</span
-						>
-					</label>
+							>.
+						{/snippet}
+					</Checkbox>
 
 					<div class="flex justify-center">
 						<HCaptcha
@@ -184,13 +179,7 @@
 						/>
 					</div>
 
-					<Button
-						fullWidth
-						type="submit"
-						name="btn_register"
-						disabled={!isFormValid}
-						size="large"
-					>
+					<Button fullWidth type="submit" name="btn_register" disabled={!isFormValid} size="large">
 						Create account
 					</Button>
 				</form>

@@ -2,6 +2,7 @@
 	import { resolve } from '$app/paths';
 	import Badge from '$lib/components/Badge.svelte';
 	import Button from '$lib/components/Button.svelte';
+	import Checkbox from '$lib/components/Checkbox.svelte';
 	import PageHero from '$lib/components/PageHero.svelte';
 	import { authClient } from '$lib/auth.client.js';
 	import type { SvelteHTMLElements } from 'svelte/elements';
@@ -89,17 +90,8 @@
 							required
 						/>
 					</div>
-					<label class="flex items-start gap-3 text-sm text-slate-600">
-						<input
-							type="checkbox"
-							id="remember-me"
-							class="mt-1 h-4 w-4 rounded border-slate-300 text-brand-600 focus:ring-brand-500"
-						/>
-						<span>Remember me</span>
-					</label>
-					<Button fullWidth size="large" type="submit" name="btn_login">
-						Sign in
-					</Button>
+					<Checkbox id="remember-me" class="mt-1" label="Remember me" />
+					<Button fullWidth size="large" type="submit" name="btn_login">Sign in</Button>
 				</form>
 
 				<p class="text-center text-sm text-slate-500">

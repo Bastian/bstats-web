@@ -2,6 +2,7 @@
 	import { resolve } from '$app/paths';
 	import Badge from '$lib/components/Badge.svelte';
 	import Button from '$lib/components/Button.svelte';
+	import Checkbox from '$lib/components/Checkbox.svelte';
 	import PageHero from '$lib/components/PageHero.svelte';
 	import type { PageData, ActionData } from './$types';
 	import { dndzone } from 'svelte-dnd-action';
@@ -437,26 +438,12 @@
 							</div>
 
 							<div class="border-t border-slate-200 pt-4">
-								<label class="flex items-center gap-3">
-									<input
-										type="checkbox"
-										bind:checked={simplePieFilterEnabled}
-										class="h-4 w-4 rounded border-slate-300 text-brand-600 focus:ring-brand-500"
-									/>
-									<span class="text-sm font-semibold text-slate-700">Filter data</span>
-								</label>
+								<Checkbox bind:checked={simplePieFilterEnabled} label="Filter data" />
 							</div>
 
 							{#if simplePieFilterEnabled}
 								<div class="space-y-4 rounded-lg border border-slate-300 bg-white p-4">
-									<label class="flex items-center gap-3">
-										<input
-											type="checkbox"
-											bind:checked={simplePieRegex}
-											class="h-4 w-4 rounded border-slate-300 text-brand-600 focus:ring-brand-500"
-										/>
-										<span class="text-sm font-semibold text-slate-700">Use regex</span>
-									</label>
+									<Checkbox bind:checked={simplePieRegex} label="Use regex" />
 
 									<div class="input-group">
 										<label class="input-label" for="simplePieFilterMode">Filter mode</label>
@@ -485,11 +472,7 @@
 								</div>
 							{/if}
 
-							<Button
-								type="button"
-								onclick={() => addChart('simple_pie')}
-								fullWidth
-							>
+							<Button type="button" onclick={() => addChart('simple_pie')} fullWidth>
 								Create Chart
 							</Button>
 						</div>
@@ -522,14 +505,7 @@
 							</div>
 
 							<div class="border-t border-slate-200 pt-4">
-								<label class="flex items-center gap-3">
-									<input
-										type="checkbox"
-										bind:checked={advancedPieFilterEnabled}
-										class="h-4 w-4 rounded border-slate-300 text-brand-600 focus:ring-brand-500"
-									/>
-									<span class="text-sm font-semibold text-slate-700">Filter data</span>
-								</label>
+								<Checkbox bind:checked={advancedPieFilterEnabled} label="Filter data" />
 							</div>
 
 							{#if advancedPieFilterEnabled}
@@ -546,14 +522,7 @@
 										/>
 									</div>
 
-									<label class="flex items-center gap-3">
-										<input
-											type="checkbox"
-											bind:checked={advancedPieRegex}
-											class="h-4 w-4 rounded border-slate-300 text-brand-600 focus:ring-brand-500"
-										/>
-										<span class="text-sm font-semibold text-slate-700">Use regex</span>
-									</label>
+									<Checkbox bind:checked={advancedPieRegex} label="Use regex" />
 
 									<div class="input-group">
 										<label class="input-label" for="advancedPieFilterMode">Filter mode</label>
@@ -582,11 +551,7 @@
 								</div>
 							{/if}
 
-							<Button
-								type="button"
-								onclick={() => addChart('advanced_pie')}
-								fullWidth
-							>
+							<Button type="button" onclick={() => addChart('advanced_pie')} fullWidth>
 								Create Chart
 							</Button>
 						</div>
@@ -619,14 +584,7 @@
 							</div>
 
 							<div class="border-t border-slate-200 pt-4">
-								<label class="flex items-center gap-3">
-									<input
-										type="checkbox"
-										bind:checked={drilldownPieFilterEnabled}
-										class="h-4 w-4 rounded border-slate-300 text-brand-600 focus:ring-brand-500"
-									/>
-									<span class="text-sm font-semibold text-slate-700">Filter data</span>
-								</label>
+								<Checkbox bind:checked={drilldownPieFilterEnabled} label="Filter data" />
 							</div>
 
 							{#if drilldownPieFilterEnabled}
@@ -644,14 +602,7 @@
 										/>
 									</div>
 
-									<label class="flex items-center gap-3">
-										<input
-											type="checkbox"
-											bind:checked={drilldownPieRegex}
-											class="h-4 w-4 rounded border-slate-300 text-brand-600 focus:ring-brand-500"
-										/>
-										<span class="text-sm font-semibold text-slate-700">Use regex</span>
-									</label>
+									<Checkbox bind:checked={drilldownPieRegex} label="Use regex" />
 
 									<div class="input-group">
 										<label class="input-label" for="drilldownPieFilterMode">Filter mode</label>
@@ -680,11 +631,7 @@
 								</div>
 							{/if}
 
-							<Button
-								type="button"
-								onclick={() => addChart('drilldown_pie')}
-								fullWidth
-							>
+							<Button type="button" onclick={() => addChart('drilldown_pie')} fullWidth>
 								Create Chart
 							</Button>
 						</div>
@@ -728,14 +675,7 @@
 							</div>
 
 							<div class="border-t border-slate-200 pt-4">
-								<label class="flex items-center gap-3">
-									<input
-										type="checkbox"
-										bind:checked={singleLineFilterEnabled}
-										class="h-4 w-4 rounded border-slate-300 text-brand-600 focus:ring-brand-500"
-									/>
-									<span class="text-sm font-semibold text-slate-700">Filter data</span>
-								</label>
+								<Checkbox bind:checked={singleLineFilterEnabled} label="Filter data" />
 							</div>
 
 							{#if singleLineFilterEnabled}
@@ -765,11 +705,7 @@
 								</div>
 							{/if}
 
-							<Button
-								type="button"
-								onclick={() => addChart('single_linechart')}
-								fullWidth
-							>
+							<Button type="button" onclick={() => addChart('single_linechart')} fullWidth>
 								Create Chart
 							</Button>
 						</div>
@@ -905,12 +841,7 @@
 							/>
 						</div>
 
-						<Button
-							type="button"
-							onclick={transferOwnership}
-							fullWidth
-							size="large"
-						>
+						<Button type="button" onclick={transferOwnership} fullWidth size="large">
 							Transfer Ownership
 						</Button>
 					</article>
