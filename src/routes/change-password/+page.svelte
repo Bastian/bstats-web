@@ -110,7 +110,7 @@
 							</p>
 						{/if}
 					</div>
-					<Button fullWidth size="large" buttonProps={{ type: 'submit' }} disabled={!isFormValid}>
+					<Button fullWidth size="large" type="submit" disabled={!isFormValid}>
 						Change password
 					</Button>
 				</form>

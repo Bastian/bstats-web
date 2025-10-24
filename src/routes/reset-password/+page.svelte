@@ -85,7 +85,7 @@
 							</p>
 						{/if}
 					</div>
-					<Button fullWidth buttonProps={{ type: 'submit' }} disabled={!isFormValid} size="large">
+					<Button fullWidth type="submit" disabled={!isFormValid} size="large">
 						Reset password
 					</Button>
 				</form>

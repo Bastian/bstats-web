@@ -486,7 +486,8 @@
 							{/if}
 
 							<Button
-								buttonProps={{ type: 'button', onclick: () => addChart('simple_pie') }}
+								type="button"
+								onclick={() => addChart('simple_pie')}
 								fullWidth
 							>
 								Create Chart
@@ -582,7 +583,8 @@
 							{/if}
 
 							<Button
-								buttonProps={{ type: 'button', onclick: () => addChart('advanced_pie') }}
+								type="button"
+								onclick={() => addChart('advanced_pie')}
 								fullWidth
 							>
 								Create Chart
@@ -679,7 +681,8 @@
 							{/if}
 
 							<Button
-								buttonProps={{ type: 'button', onclick: () => addChart('drilldown_pie') }}
+								type="button"
+								onclick={() => addChart('drilldown_pie')}
 								fullWidth
 							>
 								Create Chart
@@ -763,7 +766,8 @@
 							{/if}
 
 							<Button
-								buttonProps={{ type: 'button', onclick: () => addChart('single_linechart') }}
+								type="button"
+								onclick={() => addChart('single_linechart')}
 								fullWidth
 							>
 								Create Chart
@@ -902,7 +906,8 @@
 						</div>
 
 						<Button
-							buttonProps={{ type: 'button', onclick: transferOwnership }}
+							type="button"
+							onclick={transferOwnership}
 							fullWidth
 							size="large"
 						>

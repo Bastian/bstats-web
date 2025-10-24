@@ -186,7 +186,8 @@
 
 					<Button
 						fullWidth
-						buttonProps={{ type: 'submit', name: 'btn_register' }}
+						type="submit"
+						name="btn_register"
 						disabled={!isFormValid}
 						size="large"
 					>

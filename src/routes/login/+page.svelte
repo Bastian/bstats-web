@@ -97,7 +97,7 @@
 						/>
 						<span>Remember me</span>
 					</label>
-					<Button fullWidth size="large" buttonProps={{ type: 'submit', name: 'btn_login' }}>
+					<Button fullWidth size="large" type="submit" name="btn_login">
 						Sign in
 					</Button>
 				</form>

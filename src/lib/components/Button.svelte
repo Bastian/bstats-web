@@ -1,23 +1,19 @@
 <script lang="ts">
+	import { Button as ButtonPrimitive } from 'bits-ui';
+	import type { Button } from 'bits-ui';
 	import type { Snippet } from 'svelte';
-	import type { HTMLButtonAttributes } from 'svelte/elements';
 
-	export interface Props {
-		href?: string;
+	type Props = Button.RootProps & {
 		children: Snippet;
 		variant?: 'primary';
 		size?: 'small' | 'medium' | 'large';
 		fullWidth?: boolean;
-		disabled?: boolean;
-		buttonProps?: HTMLButtonAttributes;
-	}
+	};
 
-	let { href, children, size, fullWidth, disabled, variant, buttonProps }: Props = $props();
+	let { children, size, fullWidth, variant, ...restProps }: Props = $props();
 </script>
 
-<svelte:element
-	this={href ? 'a' : 'button'}
-	{href}
+<ButtonPrimitive.Root
 	class={[
 		'cursor-pointer disabled:cursor-not-allowed disabled:opacity-50',
 		{
@@ -29,8 +25,7 @@
 			'w-full justify-center': !!fullWidth
 		}
 	]}
-	disabled={disabled ? true : undefined}
-	{...href ? {} : buttonProps}
+	{...restProps}
 >
 	{@render children()}
-</svelte:element>
+</ButtonPrimitive.Root>
