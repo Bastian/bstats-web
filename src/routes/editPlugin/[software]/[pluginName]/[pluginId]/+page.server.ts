@@ -41,7 +41,7 @@ export const load: PageServerLoad = async ({ params, locals }) => {
 	}
 
 	// Check ownership
-	const isOwner = plugin.owner === locals.user.username;
+	const isOwner = plugin.owner?.toLowerCase() === locals.user.username;
 	const canEdit = isOwner || locals.user.admin;
 
 	// Get all charts for the plugin
@@ -106,7 +106,7 @@ export const actions = {
 		}
 
 		// Check permissions
-		if (plugin.owner !== locals.user.username && !locals.user.admin) {
+		if (plugin.owner?.toLowerCase() !== locals.user.username && !locals.user.admin) {
 			return fail(401, { error: 'You are not allowed to edit this plugin' });
 		}
 
@@ -238,7 +238,7 @@ export const actions = {
 			return fail(404, { error: 'Plugin not found' });
 		}
 
-		if (plugin.owner !== locals.user.username && !locals.user.admin) {
+		if (plugin.owner?.toLowerCase() !== locals.user.username && !locals.user.admin) {
 			return fail(401, { error: 'You are not allowed to edit this plugin' });
 		}
 
@@ -307,7 +307,7 @@ export const actions = {
 			return fail(404, { error: 'Plugin not found' });
 		}
 
-		if (plugin.owner !== locals.user.username && !locals.user.admin) {
+		if (plugin.owner?.toLowerCase() !== locals.user.username && !locals.user.admin) {
 			return fail(401, { error: 'You are not allowed to edit this plugin' });
 		}
 
@@ -345,7 +345,7 @@ export const actions = {
 			return fail(404, { error: 'Plugin not found' });
 		}
 
-		if (plugin.owner !== locals.user.username && !locals.user.admin) {
+		if (plugin.owner?.toLowerCase() !== locals.user.username && !locals.user.admin) {
 			return fail(401, { error: 'You are not allowed to delete this plugin' });
 		}
 
