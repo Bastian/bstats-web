@@ -83,10 +83,6 @@
 		@apply font-display text-xl font-semibold text-slate-900;
 	}
 
-	.doc-code {
-		@apply relative overflow-x-auto rounded-xl bg-slate-900 px-4 py-5 text-sm leading-relaxed text-slate-100 shadow-inner sm:px-6 sm:py-6;
-	}
-
 	.doc-callout {
 		@apply rounded-2xl border px-4 py-4 text-sm sm:px-6 sm:py-5;
 	}

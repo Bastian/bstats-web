@@ -1,7 +1,5 @@
 <script lang="ts">
-	import { resolve } from '$app/paths';
 	import Badge from '$lib/components/Badge.svelte';
-	import Button from '$lib/components/Button.svelte';
 	import PageHero from '$lib/components/PageHero.svelte';
 	import type { PageProps } from './$types';
 	import BuildToolSelectStep, { type BuildTool } from './BuildToolSelectStep.svelte';

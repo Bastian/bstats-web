@@ -24,6 +24,7 @@
 <script lang="ts">
 	import WizardStep from './WizardStep.svelte';
 	import Button from '$lib/components/Button.svelte';
+	import CodeBlock from '$lib/components/CodeBlock.svelte';
 	import { Collapsible } from 'bits-ui';
 
 	let {
@@ -32,13 +33,13 @@
 		status,
 		metricsIncluded = $bindable()
 	}: IncludeMetricsStepProps = $props();
-</script>
 
-{#snippet Code(code: string, language: string)}
-	<pre class="doc-code language-{language}">{code
+	function processCode(code: string): string {
+		return code
 			.replace('{{platform}}', platform ?? 'unknown')
-			.replace('{{version}}', METRICS_VERSION)}</pre>
-{/snippet}
+			.replace('{{version}}', METRICS_VERSION);
+	}
+</script>
 
 {#snippet NextButton()}
 	{#if !metricsIncluded}
@@ -82,12 +83,12 @@
 		{:else if buildTool === 'maven'}
 			<div class="space-y-4">
 				<p>Add the bStats dependency:</p>
-				{@render Code(mavenDependency, 'xml')}
+				<CodeBlock code={processCode(mavenDependency)} lang="xml" />
 				<div class="max-w-prose">
 					Relocate <code class="font-mono text-slate-700">org.bstats</code> into your own package
 					for example with the <code class="font-mono text-slate-700">maven-shade-plugin</code>:
 				</div>
-				{@render Code(mavenShade, 'xml')}
+				<CodeBlock code={processCode(mavenShade)} lang="xml" />
 				<Collapsible.Root class="w-full">
 					<div class="max-w-prose">
 						That's it. Your final <code class="font-mono text-slate-700">pom.xml</code> should look
@@ -102,22 +103,22 @@
 						hiddenUntilFound
 						class="data-[state=open]:animate-collapsible-down data-[state=closed]:animate-collapsible-up overflow-hidden"
 					>
-						{@render Code(mavenFull, 'xml')}
+						<CodeBlock code={processCode(mavenFull)} lang="xml" />
 					</Collapsible.Content>
 				</Collapsible.Root>
 			</div>
 		{:else if buildTool === 'gradle'}
 			<div class="space-y-4">
 				<p>Ensure that Maven Central is available:</p>
-				{@render Code(gradleRepositories, 'kts')}
+				<CodeBlock code={processCode(gradleRepositories)} lang="kotlin" />
 				<p>Add the bStats dependency:</p>
-				{@render Code(gradleDependencies, 'kts')}
+				<CodeBlock code={processCode(gradleDependencies)} lang="kotlin" />
 				<p>
 					Relocate <code class="font-mono text-slate-700">org.bstats</code> into your own package
 					for example with the <code class="font-mono text-slate-700">Shadow</code> plugin:
 				</p>
-				{@render Code(gradlePlugins, 'kts')}
-				{@render Code(gradleShadowTask, 'kts')}
+				<CodeBlock code={processCode(gradlePlugins)} lang="kotlin" />
+				<CodeBlock code={processCode(gradleShadowTask)} lang="kotlin" />
 				<p class="text-sm text-slate-600">
 					Run <code class="font-mono text-slate-700">./gradlew shadowJar</code> to build a jar with Metrics
 					included.

@@ -1,6 +1,7 @@
 <script>
 	import Badge from '$lib/components/Badge.svelte';
 	import PageHero from '$lib/components/PageHero.svelte';
+	import CodeBlock from '$lib/components/CodeBlock.svelte';
 </script>
 
 <svelte:head>
@@ -34,119 +35,116 @@
 
 		<article class="doc-card space-y-4">
 			<h3 class="text-sm font-semibold tracking-[0.2em] text-slate-400 uppercase">List plugins</h3>
-			<pre class="doc-code"><code class="language-http">GET /api/v1/plugins</code></pre>
+			<CodeBlock code="GET /api/v1/plugins" lang="http" />
 			<p class="text-sm text-slate-600">Returns all plugins registered on bStats.</p>
-			<pre class="doc-code"><code class="language-json"
-					>[
-  &#123;
+			<CodeBlock
+				code={`[
+  {
     "id": 1337,
     "name": "ExamplePlugin",
-    "owner": &#123; "id": 42, "name": "ExampleUser" &#125;,
-    "software": &#123; "id": 1, "name": "Bukkit / Spigot", "url": "bukkit" &#125;,
+    "owner": { "id": 42, "name": "ExampleUser" },
+    "software": { "id": 1, "name": "Bukkit / Spigot", "url": "bukkit" },
     "isGlobal": false
-  &#125;,
+  },
   ...
-]</code
-				></pre>
+]`}
+				lang="json"
+			/>
 		</article>
 
 		<article class="doc-card space-y-4">
 			<h3 class="text-sm font-semibold tracking-[0.2em] text-slate-400 uppercase">
 				Plugin details
 			</h3>
-			<pre class="doc-code"><code class="language-http"
-					>GET /api/v1/plugins/&#123;pluginId&#125;</code
-				></pre>
+			<CodeBlock code={'GET /api/v1/plugins/{pluginId}'} lang="http" />
 			<p class="text-sm text-slate-600">
 				Returns metadata plus chart definitions for a specific plugin.
 			</p>
-			<pre class="doc-code"><code class="language-json"
-					>&#123;
+			<CodeBlock
+				code={`{
   "id": 1337,
   "name": "ExamplePlugin",
-  "owner": &#123; "id": 42, "name": "ExampleUser" &#125;,
-  "charts": &#123;
-    "players": &#123;
+  "owner": { "id": 42, "name": "ExampleUser" },
+  "charts": {
+    "players": {
       "uid": 1234,
       "type": "single_linechart",
       "position": 0,
       "title": "Players",
       "isDefault": true,
-      "data": &#123;
+      "data": {
         "lineName": "Players",
-        "filter": &#123; "enabled": false, "maxValue": null, "minValue": null &#125;
-      &#125;
-    &#125;
-  &#125;
-&#125;</code
-				></pre>
+        "filter": { "enabled": false, "maxValue": null, "minValue": null }
+      }
+    }
+  }
+}`}
+				lang="json"
+			/>
 		</article>
 
 		<article class="doc-card space-y-4">
 			<h3 class="text-sm font-semibold tracking-[0.2em] text-slate-400 uppercase">
 				Charts for a plugin
 			</h3>
-			<pre class="doc-code"><code class="language-http"
-					>GET /api/v1/plugins/&#123;pluginId&#125;/charts</code
-				></pre>
+			<CodeBlock code={'GET /api/v1/plugins/{pluginId}/charts'} lang="http" />
 			<p class="text-sm text-slate-600">Returns the chart registry for a plugin.</p>
-			<pre class="doc-code"><code class="language-json"
-					>&#123;
-  "players": &#123;
+			<CodeBlock
+				code={`{
+  "players": {
     "uid": 1234,
     "type": "single_linechart",
     "position": 0,
     "title": "Players",
     "isDefault": true,
-    "data": &#123;
+    "data": {
       "lineName": "Players",
-      "filter": &#123; "enabled": false, "maxValue": null, "minValue": null &#125;
-    &#125;
-  &#125;
-&#125;</code
-				></pre>
+      "filter": { "enabled": false, "maxValue": null, "minValue": null }
+    }
+  }
+}`}
+				lang="json"
+			/>
 		</article>
 
 		<article class="doc-card space-y-4">
 			<h3 class="text-sm font-semibold tracking-[0.2em] text-slate-400 uppercase">
 				Chart metadata
 			</h3>
-			<pre class="doc-code"><code class="language-http"
-					>GET /api/v1/plugins/&#123;pluginId&#125;/charts/&#123;chartId&#125;</code
-				></pre>
-			<pre class="doc-code"><code class="language-json"
-					>&#123;
+			<CodeBlock code={'GET /api/v1/plugins/{pluginId}/charts/{chartId}'} lang="http" />
+			<CodeBlock
+				code={`{
   "uid": 1234,
   "type": "single_linechart",
   "position": 0,
   "title": "Players",
   "isDefault": true,
-  "data": &#123;
+  "data": {
     "lineName": "Players",
-    "filter": &#123; "enabled": false, "maxValue": null, "minValue": null &#125;
-  &#125;
-&#125;</code
-				></pre>
+    "filter": { "enabled": false, "maxValue": null, "minValue": null }
+  }
+}`}
+				lang="json"
+			/>
 		</article>
 
 		<article class="doc-card space-y-4">
 			<h3 class="text-sm font-semibold tracking-[0.2em] text-slate-400 uppercase">Chart data</h3>
-			<pre class="doc-code"><code class="language-http"
-					>GET /api/v1/plugins/&#123;pluginId&#125;/charts/&#123;chartId&#125;/data</code
-				></pre>
+			<CodeBlock code={'GET /api/v1/plugins/{pluginId}/charts/{chartId}/data'} lang="http" />
 			<p class="text-sm text-slate-600">
 				Returns raw chart data. For line charts each entry is <code class="font-mono text-slate-700"
 					>[timestamp, value]</code
 				>.
 			</p>
-			<pre class="doc-code"><code class="language-json"
-					>[
+			<CodeBlock
+				code={`[
   [1479799800000, 122],
   [1479801600000, 121],
   [1479803400000, 124],
   [1479805200000, 134]
-]</code
-				></pre>
+]`}
+				lang="json"
+			/>
 			<div class="doc-callout doc-callout-note">
 				Append <code class="font-mono text-slate-700">?maxElements=&#123;amount&#125;</code> to limit
 				the number of entries (line charts only).
@@ -157,18 +155,19 @@
 			<h3 class="text-sm font-semibold tracking-[0.2em] text-slate-400 uppercase">
 				Supported software
 			</h3>
-			<pre class="doc-code"><code class="language-http">GET /api/v1/software</code></pre>
-			<pre class="doc-code"><code class="language-json"
-					>[
-  &#123;
+			<CodeBlock code="GET /api/v1/software" lang="http" />
+			<CodeBlock
+				code={`[
+  {
     "id": 1,
     "name": "Bukkit / Spigot",
     "url": "bukkit",
-    "globalPlugin": &#123; "id": 1, "name": "_bukkit_" &#125;
-  &#125;,
+    "globalPlugin": { "id": 1, "name": "_bukkit_" }
+  },
   ...
-]</code
-				></pre>
+]`}
+				lang="json"
+			/>
 		</article>
 	</section>
 </main>

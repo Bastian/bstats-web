@@ -25,6 +25,7 @@
 		"ioredis": "^5.8.2",
 		"nodemailer": "^7.0.10",
 		"pg": "^8.13.1",
+		"shiki": "^3.14.0",
 		"svelte-dnd-action": "^0.9.65",
 		"uuid": "^3.2.1"
 	},

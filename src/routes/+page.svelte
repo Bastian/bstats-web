@@ -3,9 +3,12 @@
 	import Badge from '$lib/components/Badge.svelte';
 	import Button from '$lib/components/Button.svelte';
 	import type { Snippet } from 'svelte';
+	import type { PageData } from './$types';
 
 	import githubIcon from '../../static/images/github-mark.svg';
 	import discordIcon from '../../static/images/Discord-Symbol-White.svg';
+
+	let { data }: { data: PageData } = $props();
 </script>
 
 <svelte:head>
@@ -213,31 +216,21 @@
 					</ol>
 				</div>
 
-				<div class="relative">
+				<div class="relative min-w-0">
 					<div
-						class="rounded-2xl border border-slate-200 bg-slate-900 p-5 text-slate-100 shadow-md"
+						class="flex max-w-full flex-col overflow-hidden rounded-2xl border border-slate-200 bg-slate-800 p-5 text-slate-100 shadow-md"
 					>
 						<div class="flex items-center justify-between">
 							<span class="text-xs tracking-wide text-slate-400 uppercase">
 								Example (Bukkit / Spigot)
 							</span>
 						</div>
-						<pre
-							class="mt-3 overflow-x-auto rounded-lg bg-slate-950/50 p-4 text-[13px] leading-relaxed"><code
-								class="language-java"
-								>public class MyPlugin extends JavaPlugin &#123;
-  @Override
-  public void onEnable() &#123;
-    int pluginId = 12345; // your unique plugin ID
-    Metrics metrics = new Metrics(this, pluginId);
-
-    // Example Custom Chart
-    metrics.addCustomChart(
-      new Metrics.SimplePie("my_chart", () -> "My Value")
-    );
-  &#125;
-&#125;</code
-							></pre>
+						<div
+							class="relative mt-4 max-w-full overflow-x-auto rounded-xl bg-slate-900 px-3 py-4 text-sm leading-relaxed shadow-inner sm:px-4 sm:py-6 [&>*]:bg-slate-900!"
+						>
+							<!-- eslint-disable-next-line svelte/no-at-html-tags -->
+							{@html data.highlightedCode}
+						</div>
 						<p class="mt-3 text-xs text-slate-400">
 							Works across Bukkit, Spigot, Paper, Velocity and more.
 						</p>

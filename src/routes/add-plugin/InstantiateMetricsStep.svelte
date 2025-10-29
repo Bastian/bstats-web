@@ -20,6 +20,7 @@
 <script lang="ts">
 	import WizardStep from './WizardStep.svelte';
 	import Button from '$lib/components/Button.svelte';
+	import CodeBlock from '$lib/components/CodeBlock.svelte';
 
 	let {
 		platform,
@@ -27,13 +28,13 @@
 		plugin,
 		metricsInstantiated = $bindable()
 	}: InstantiateMetricsStepProps = $props();
-</script>
 
-{#snippet Code(code: string, language: string)}
-	<pre class="doc-code language-{language}">{code
+	function processCode(code: string): string {
+		return code
 			.replace('{{platform}}', platform ?? 'unknown')
-			.replace('{{pluginId}}', !plugin ? '<insert-plugin-id>' : plugin.pluginId.toFixed(0))}</pre>
-{/snippet}
+			.replace('{{pluginId}}', !plugin ? '<insert-plugin-id>' : plugin.pluginId.toFixed(0));
+	}
+</script>
 
 <WizardStep index={5} title="Instantiate Metrics" {status}>
 	{#if (status === 'active' || status === 'done') && platform}
@@ -44,7 +45,7 @@
 					<code class="font-mono text-slate-700">onEnable()</code>
 					method:
 				</p>
-				{@render Code(instantiateBukkit, 'java')}
+				<CodeBlock code={processCode(instantiateBukkit)} lang="java" />
 			</div>
 		{:else if platform === 'bungeecord'}
 			<div class="space-y-4">
@@ -53,7 +54,7 @@
 					<code class="font-mono text-slate-700">onEnable()</code>
 					method:
 				</p>
-				{@render Code(instantiateBungeeCord, 'java')}
+				<CodeBlock code={processCode(instantiateBungeeCord)} lang="java" />
 			</div>
 		{:else if platform === 'sponge'}
 			<div class="space-y-4">
@@ -62,7 +63,7 @@
 					<code class="font-mono text-slate-700">onServerStart(...)</code> method. Make sure to use dependency
 					injection to get the Metrics.Factory instance:
 				</p>
-				{@render Code(instantiateSponge, 'java')}
+				<CodeBlock code={processCode(instantiateSponge)} lang="java" />
 			</div>
 		{:else if platform === 'velocity'}
 			<div class="space-y-4">
@@ -71,7 +72,7 @@
 					<code class="font-mono text-slate-700">onProxyInitialization(...)</code> method. Make sure
 					to use dependency injection to get the Metrics.Factory instance in your plugin's constructor:
 				</p>
-				{@render Code(instantiateVelocity, 'java')}
+				<CodeBlock code={processCode(instantiateVelocity)} lang="java" />
 			</div>
 		{:else if platform === 'server-implementation'}
 			<div class="max-w-prose space-y-4">
