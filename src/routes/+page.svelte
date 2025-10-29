@@ -163,9 +163,15 @@
 								<p class="mt-2 max-w-prose text-sm leading-relaxed text-slate-600">
 									Sign up for free and add your plugin to receive a unique plugin&nbsp;ID.
 								</p>
-								<div class="mt-3">
-									<Button href={resolve('/register')} variant="primary">Create account</Button>
-								</div>
+								{#if !data.session}
+									<div class="mt-3">
+										<Button href={resolve('/register')} variant="primary">Create account</Button>
+									</div>
+								{:else}
+									<div class="mt-3">
+										<Button href={resolve('/add-plugin')} variant="primary">Add plugin</Button>
+									</div>
+								{/if}
 							</div>
 						</li>
 

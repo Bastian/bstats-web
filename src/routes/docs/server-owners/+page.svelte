@@ -2,6 +2,7 @@
 	import { resolve } from '$app/paths';
 	import Badge from '$lib/components/Badge.svelte';
 	import PageHero from '$lib/components/PageHero.svelte';
+	import { Accordion } from '$lib/components/accordion';
 </script>
 
 <svelte:head>
@@ -256,36 +257,16 @@
 
 		<article class="doc-card space-y-4">
 			<h2 class="doc-card-title">Frequently asked questions</h2>
-			<div class="space-y-3">
-				<details class="group rounded-2xl border border-slate-200 bg-slate-50 p-4 sm:p-5">
-					<summary
-						class="flex cursor-pointer items-center justify-between text-sm font-semibold text-slate-700"
-					>
-						<span>Does bStats affect server performance?</span>
-						<span
-							class="text-xs tracking-[0.2em] text-slate-400 uppercase group-open:text-brand-600"
-							>Toggle</span
-						>
-					</summary>
-					<div class="mt-3 max-w-prose text-sm leading-relaxed text-slate-600">
-						<p>
-							No. bStats sends data asynchronously in the background and has negligible performance
-							impact. Data is sent once every 30 minutes, taking only a few milliseconds.
-						</p>
-					</div>
-				</details>
+			<Accordion.Root class="space-y-3">
+				<Accordion.Item value="faq-1" title="Does bStats affect server performance?">
+					<p class="max-w-prose">
+						No. bStats sends data asynchronously in the background and has negligible performance
+						impact. Data is sent once every 30 minutes, taking only a few milliseconds.
+					</p>
+				</Accordion.Item>
 
-				<details class="group rounded-2xl border border-slate-200 bg-slate-50 p-4 sm:p-5">
-					<summary
-						class="flex cursor-pointer items-center justify-between text-sm font-semibold text-slate-700"
-					>
-						<span>Can I view what data my server sends?</span>
-						<span
-							class="text-xs tracking-[0.2em] text-slate-400 uppercase group-open:text-brand-600"
-							>Toggle</span
-						>
-					</summary>
-					<div class="mt-3 max-w-prose space-y-4 text-sm leading-relaxed text-slate-600">
+				<Accordion.Item value="faq-2" title="Can I view what data my server sends?">
+					<div class="max-w-prose space-y-4">
 						<p>
 							Yes. All bStats data is public. Visit any plugin's page on bStats to see exactly what
 							metrics are being collected and view the charts showing aggregated data from all
@@ -296,65 +277,32 @@
 							server sends.
 						</p>
 					</div>
-				</details>
+				</Accordion.Item>
 
-				<details class="group rounded-2xl border border-slate-200 bg-slate-50 p-4 sm:p-5">
-					<summary
-						class="flex cursor-pointer items-center justify-between text-sm font-semibold text-slate-700"
-					>
-						<span>Is bStats GDPR compliant?</span>
-						<span
-							class="text-xs tracking-[0.2em] text-slate-400 uppercase group-open:text-brand-600"
-							>Toggle</span
-						>
-					</summary>
-					<div class="mt-3 max-w-prose text-sm leading-relaxed text-slate-600">
-						<p>
-							Yes. bStats doesn't collect any personally identifiable information. IP addresses are
-							used only for rate limiting and are never linked to any metrics data. All data is
-							anonymous and aggregated.
-						</p>
-					</div>
-				</details>
+				<Accordion.Item value="faq-3" title="Is bStats GDPR compliant?">
+					<p class="max-w-prose">
+						Yes. bStats doesn't collect any personally identifiable information. IP addresses are
+						used only for rate limiting and are never linked to any metrics data. All data is
+						anonymous and aggregated.
+					</p>
+				</Accordion.Item>
 
-				<details class="group rounded-2xl border border-slate-200 bg-slate-50 p-4 sm:p-5">
-					<summary
-						class="flex cursor-pointer items-center justify-between text-sm font-semibold text-slate-700"
-					>
-						<span>Who can see my server's data?</span>
-						<span
-							class="text-xs tracking-[0.2em] text-slate-400 uppercase group-open:text-brand-600"
-							>Toggle</span
-						>
-					</summary>
-					<div class="mt-3 max-w-prose text-sm leading-relaxed text-slate-600">
-						<p>
-							No one can identify your specific server. All data is aggregated across thousands of
-							servers and displayed as charts showing overall trends. Individual server data points
-							are never exposed.
-						</p>
-					</div>
-				</details>
+				<Accordion.Item value="faq-4" title="Who can see my server's data?">
+					<p class="max-w-prose">
+						No one can identify your specific server. All data is aggregated across thousands of
+						servers and displayed as charts showing overall trends. Individual server data points
+						are never exposed.
+					</p>
+				</Accordion.Item>
 
-				<details class="group rounded-2xl border border-slate-200 bg-slate-50 p-4 sm:p-5">
-					<summary
-						class="flex cursor-pointer items-center justify-between text-sm font-semibold text-slate-700"
-					>
-						<span>Why do I see a bStats folder in my plugins directory?</span>
-						<span
-							class="text-xs tracking-[0.2em] text-slate-400 uppercase group-open:text-brand-600"
-							>Toggle</span
-						>
-					</summary>
-					<div class="mt-3 max-w-prose text-sm leading-relaxed text-slate-600">
-						<p>
-							The <code class="font-mono text-slate-700">/plugins/bStats/</code> folder contains the
-							shared configuration file used by all plugins. This allows you to enable or disable metrics
-							globally instead of configuring each plugin individually.
-						</p>
-					</div>
-				</details>
-			</div>
+				<Accordion.Item value="faq-5" title="Why do I see a bStats folder in my plugins directory?">
+					<p class="max-w-prose">
+						The <code class="font-mono text-slate-700">/plugins/bStats/</code> folder contains the
+						shared configuration file used by all plugins. This allows you to enable or disable metrics
+						globally instead of configuring each plugin individually.
+					</p>
+				</Accordion.Item>
+			</Accordion.Root>
 		</article>
 
 		<article class="doc-card space-y-4">
