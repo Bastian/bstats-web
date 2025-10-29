@@ -1,0 +1,6 @@
+<dependency>
+    <groupId>org.bstats</groupId>
+    <artifactId>bstats-{{platform}}</artifactId>
+    <version>{{version}}</version>
+    <scope>compile</scope>
+</dependency>

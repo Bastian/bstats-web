@@ -55,6 +55,19 @@
 	summary::-webkit-details-marker {
 		display: none;
 	}
+
+	/* Left to right used to obfuscate the email */
+	.ltr-text {
+		unicode-bidi: bidi-override;
+		direction: rtl;
+		display: inline-block;
+		white-space: pre;
+	}
+
+	.no-copy {
+		-webkit-user-select: none;
+		user-select: none;
+	}
 }
 
 @layer components {
@@ -84,6 +97,10 @@
 
 	.doc-callout-note {
 		@apply border-amber-200 bg-amber-50 text-amber-700;
+	}
+
+	.doc-callout-warning {
+		@apply border-rose-200 bg-rose-50 text-rose-700;
 	}
 
 	.doc-section {

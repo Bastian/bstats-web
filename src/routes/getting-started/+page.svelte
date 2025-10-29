@@ -65,7 +65,7 @@
 					step.
 				</p>
 				<a
-					href={resolve('/getting-started/include-metrics')}
+					href={resolve('/add-plugin')}
 					class="mt-6 inline-flex items-center gap-2 text-sm font-semibold text-brand-600 transition hover:text-brand-700"
 				>
 					Jump to the integration guide

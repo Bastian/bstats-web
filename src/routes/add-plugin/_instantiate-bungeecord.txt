@@ -1,0 +1,16 @@
+import net.md_5.bungee.api.plugin.Plugin;
+
+public class ExamplePlugin extends Plugin {
+
+    @Override
+    public void onEnable() {
+        // You can find the plugin ids of your plugins on
+        // the page https://bstats.org/what-is-my-plugin-id
+        int pluginId = { { pluginId } };
+        Metrics metrics = new Metrics(this, pluginId);
+
+        // Optional: Add custom charts
+        metrics.addCustomChart(new Metrics.SimplePie("chart_id", () -> "My value"));
+    }
+
+}

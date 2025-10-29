@@ -138,7 +138,7 @@
 					<div class="mt-3 text-sm leading-relaxed text-slate-600">
 						Head over to the <a
 							class="font-semibold text-brand-600 hover:text-brand-700"
-							href={resolve('/getting-started/include-metrics')}>Include metrics guide</a
+							href={resolve('/getting-started')}>Include metrics guide</a
 						> for Maven and manual instructions.
 					</div>
 				</details>

@@ -1,0 +1,26 @@
+@Plugin(id = "myfirstplugin", name = "My First Plugin", version = "0.1.0-SNAPSHOT",
+        url = "https://example.org", description = "I did it!", authors = {"Me"})
+public class MyFirstPlugin {
+
+    private final ProxyServer server;
+    private final Logger logger;
+    private final Metrics.Factory metricsFactory;
+
+    @Inject
+    public MyFirstPlugin(ProxyServer server, Logger logger, Metrics.Factory metricsFactory) {
+        this.server = server;
+        this.logger = logger;
+        this.metricsFactory = metricsFactory;
+    }
+
+    @Subscribe
+    public void onProxyInitialization(ProxyInitializeEvent event) {
+        // You can find the plugin ids of your plugins on
+        // the page https://bstats.org/what-is-my-plugin-id
+        int pluginId = {{pluginId}};
+        Metrics metrics = metricsFactory.make(this, pluginId);
+       
+        // You can also add custom charts:
+        metrics.addCustomChart(new SimplePie("chart_id", () -> "value"));
+    }
+}

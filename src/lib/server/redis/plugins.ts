@@ -87,8 +87,17 @@ export async function getPluginsOfUser(
 	return plugins.filter((plugin): plugin is Partial<Plugin> => plugin !== null);
 }
 
-export async function addPlugin(plugin: Omit<Plugin, 'id'>, software: Software): Promise<number> {
+export async function addPlugin(
+	plugin: Pick<Plugin, 'name' | 'software' | 'charts' | 'owner'>,
+	software: Software
+): Promise<number> {
 	const pluginId = await databaseManager.getRedisCluster().incr('plugins.id-increment');
+
+	const { name, software: softwareId, charts, owner } = plugin;
+
+	if (software.id !== softwareId) {
+		throw new Error('Software ID mismatch when adding plugin');
+	}
 
 	await Promise.all([
 		databaseManager.getRedisCluster().sadd('plugins.ids', pluginId),
@@ -101,9 +110,12 @@ export async function addPlugin(plugin: Omit<Plugin, 'id'>, software: Software):
 		databaseManager
 			.getRedisCluster()
 			.sadd(`users.index.plugins.username:${plugin.owner.toLowerCase()}`, pluginId),
-		databaseManager
-			.getRedisCluster()
-			.hmset(`plugins:${pluginId}`, plugin as unknown as Record<string, string | number>)
+		databaseManager.getRedisCluster().hmset(`plugins:${pluginId}`, {
+			name,
+			software: softwareId,
+			charts: JSON.stringify(charts),
+			owner
+		})
 	]);
 
 	return pluginId;

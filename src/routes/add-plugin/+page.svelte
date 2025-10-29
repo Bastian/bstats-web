@@ -1,84 +1,98 @@
 <script lang="ts">
-	import type { PageData, ActionData } from './$types';
-	import { enhance } from '$app/forms';
+	import { resolve } from '$app/paths';
 	import Badge from '$lib/components/Badge.svelte';
-	import PageHero from '$lib/components/PageHero.svelte';
 	import Button from '$lib/components/Button.svelte';
+	import PageHero from '$lib/components/PageHero.svelte';
+	import type { PageProps } from './$types';
+	import BuildToolSelectStep, { type BuildTool } from './BuildToolSelectStep.svelte';
+	import IncludeMetricsStep from './IncludeMetricsStep.svelte';
+	import InstantiateMetricsStep from './InstantiateMetricsStep.svelte';
+	import PlatformSelectStep, { type Platform } from './PlatformSelectStep.svelte';
+	import RegisterPluginStep from './RegisterPluginStep.svelte';
+	import WizardStep from './WizardStep.svelte';
 
-	let { data, form }: { data: PageData; form: ActionData } = $props();
+	let { data, form }: PageProps = $props();
 
-	let softwareSelected = $state('');
-	let pluginName = $state('');
+	let selectedPlatform = $state<Platform | null>(null);
+	let pluginCreationSkipped = $state<boolean>(false);
+	let plugin = $derived.by(() => {
+		if (!form || form.error) {
+			return undefined;
+		}
 
-	let isFormValid = $derived(softwareSelected !== '' && pluginName.length > 0);
+		return {
+			platform: form.platform!,
+			pluginName: form.pluginName!,
+			pluginId: form.pluginId!
+		};
+	});
+	let selectedBuildTool = $state<BuildTool | null>(null);
+	let metricsIncluded = $state<boolean>(false);
+	let metricsInstantiated = $state<boolean>(false);
 </script>
 
 <svelte:head>
-	<meta name="description" content="Add a plugin to bStats." />
 	<title>bStats - Add plugin</title>
+	<meta
+		name="description"
+		content="Follow the step-by-step guide to add bStats Metrics to your plugin."
+	/>
 </svelte:head>
 
 <main class="pb-24">
 	<PageHero>
-		{#snippet badge()}<Badge>Account</Badge>{/snippet}
-		{#snippet title()}Register a plugin{/snippet}
+		{#snippet badge()}<Badge>Documentation</Badge>{/snippet}
+		{#snippet title()}Add Plugin{/snippet}
 		{#snippet content()}
-			Pick the server software, choose a display name, and we'll generate a plugin ID. You'll use
-			that ID when instantiating the Metrics class.
+			A guided flow for including bStats into your plugin. Pick the platform, register the plugin,
+			add the bStats dependency and instantiate the Metrics class in your code.
 		{/snippet}
 	</PageHero>
 
-	<section class="doc-container mt-12">
-		<div class="form-card space-y-6">
-			{#if form?.error === 'failed'}
-				<div class="doc-callout border-rose-200 bg-rose-50 text-rose-700">
-					Something went wrong on our side. Please try again.
-				</div>
-			{:else if form?.error === 'alreadyAdded'}
-				<div class="doc-callout border-rose-200 bg-rose-50 text-rose-700">
-					Plugin with this name already exists for the selected software!
-				</div>
-			{:else if form?.error === 'invalidName'}
-				<div class="doc-callout border-rose-200 bg-rose-50 text-rose-700">Invalid plugin name!</div>
-			{/if}
+	<section class="doc-container mt-12 space-y-8">
+		<div class="space-y-6">
+			<PlatformSelectStep bind:selectedPlatform editable={!plugin || pluginCreationSkipped} />
 
-			<form method="post" class="space-y-5" use:enhance>
-				<div class="input-group">
-					<label class="input-label" for="software">Server software</label>
-					<select
-						id="software"
-						name="software"
-						class="input-control"
-						bind:value={softwareSelected}
-						required
-					>
-						<option value="" disabled>Select software</option>
-						{#each data.allSoftware as software (software.id)}
-							{#if software.globalPlugin || (data.user != null && data.user.admin)}
-								<option value={software.id}>{software.name}</option>
-							{/if}
-						{/each}
-					</select>
-				</div>
+			<RegisterPluginStep
+				bind:pluginCreationSkipped
+				platform={selectedPlatform}
+				{form}
+				session={data.session}
+				status={plugin || pluginCreationSkipped ? 'done' : selectedPlatform ? 'active' : 'locked'}
+			/>
 
-				<div class="input-group">
-					<label class="input-label" for="pluginName">Plugin name</label>
-					<input
-						id="pluginName"
-						type="text"
-						name="pluginName"
-						maxlength="48"
-						class="input-control"
-						placeholder="My Awesome Plugin"
-						bind:value={pluginName}
-						required
-					/>
-				</div>
+			<BuildToolSelectStep
+				bind:selectedBuildTool
+				status={selectedBuildTool ? 'done' : plugin || pluginCreationSkipped ? 'active' : 'locked'}
+			/>
 
-				<Button fullWidth size="large" type="submit" disabled={!isFormValid}>
-					Add plugin
-				</Button>
-			</form>
+			<IncludeMetricsStep
+				platform={selectedPlatform}
+				buildTool={selectedBuildTool}
+				bind:metricsIncluded
+				status={metricsIncluded ? 'done' : selectedBuildTool ? 'active' : 'locked'}
+			/>
+
+			<InstantiateMetricsStep
+				platform={selectedPlatform}
+				{plugin}
+				bind:metricsInstantiated
+				status={metricsInstantiated ? 'done' : metricsIncluded ? 'active' : 'locked'}
+			/>
+
+			<WizardStep index={6} title="Done" status={metricsInstantiated ? 'done' : 'locked'}>
+				<p class="max-w-prose">You have successfully included bStats Metrics in your plugin.</p>
+				{#if metricsInstantiated}
+					<div class="doc-callout doc-callout-info mt-4">
+						<p class="text-sm font-semibold text-slate-800">When will data show up?</p>
+						<p class="mt-2 max-w-prose text-sm text-slate-600">
+							After the server starts, the first data is sent after a random 3-6 minute delay. The
+							site publishes updates at hh:00 and hh:30, so once data is sent it may take up to 30
+							minutes to become visible.
+						</p>
+					</div>
+				{/if}
+			</WizardStep>
 		</div>
 	</section>
 </main>

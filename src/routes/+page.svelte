@@ -149,7 +149,7 @@
 					<p class="mt-4 text-base leading-relaxed text-slate-600">
 						View the
 						<a
-							href={resolve('/getting-started/include-metrics')}
+							href={resolve('/getting-started')}
 							class="font-semibold text-brand-600 hover:text-brand-700"
 						>
 							getting started guide
@@ -194,7 +194,7 @@
 									major platforms and build tools.
 								</p>
 								<a
-									href={resolve('/getting-started/include-metrics')}
+									href={resolve('/getting-started')}
 									class="mt-3 inline-flex items-center gap-2 text-sm font-semibold text-brand-600 hover:text-brand-700"
 								>
 									View integration guide

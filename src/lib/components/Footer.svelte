@@ -72,7 +72,7 @@
 			{@render FooterSection('Get started', [
 				{ href: resolve('/getting-started'), label: 'Onboarding' },
 				{ href: resolve('/faq'), label: 'FAQ' },
-				{ href: resolve('/getting-started/include-metrics'), label: 'Include Metrics' },
+				{ href: resolve('/add-plugin'), label: 'Add Plugin' },
 				{ href: resolve('/help/custom-charts'), label: 'Custom Charts' },
 				{ href: resolve('/help/rest-api'), label: 'REST API' }
 			])}
