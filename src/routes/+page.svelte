@@ -10,6 +10,8 @@
 	import gamehostingLogo from '$lib/assets/images/logos/gamehosting.png';
 
 	let { data }: { data: PageData } = $props();
+
+	const formatter = new Intl.NumberFormat();
 </script>
 
 <svelte:head>
@@ -86,56 +88,70 @@
 			</div>
 
 			<!-- Spotlight card -->
-			<div class="relative flex-1">
-				<div class="absolute inset-x-4 top-0 h-24 rounded-3xl bg-white/50 blur-2xl"></div>
-				<div class="relative mx-auto w-full max-w-xl">
-					<a
-						href={resolve('/plugin/spigot/SkySmith_Toolkit')}
-						class="block rounded-3xl border border-slate-200 bg-white p-6 shadow-2xl shadow-brand-100/70 transition hover:-translate-y-1 hover:shadow-2xl focus-visible:ring-2 focus-visible:ring-brand-500/60 focus-visible:outline-none"
-					>
-						<div
-							class="flex items-center justify-between text-xs tracking-wide text-slate-400 uppercase"
+			{#if data.spotlightPlugin}
+				<div class="relative min-w-0 flex-1">
+					<div class="absolute inset-x-4 top-0 h-24 rounded-3xl bg-white/50 blur-2xl"></div>
+					<div class="relative mx-auto w-full max-w-xl overflow-hidden">
+						<a
+							href={resolve(
+								`/plugin/${data.spotlightPlugin.softwareUrl}/${data.spotlightPlugin.name}/${data.spotlightPlugin.pluginId}`
+							)}
+							class="block rounded-3xl border border-slate-200 bg-white p-6 shadow-2xl shadow-brand-100/70 transition hover:-translate-y-1 hover:shadow-2xl focus-visible:ring-2 focus-visible:ring-brand-500/60 focus-visible:outline-none"
 						>
-							<span>Plugin spotlight</span>
-							<span class="rounded-full bg-brand-100 px-3 py-1 text-brand-700">Top 100</span>
-						</div>
-						<h3 class="mt-4 font-display text-2xl font-semibold text-slate-900">EssentialsX</h3>
-						<p class="mt-2 text-xs tracking-wide text-slate-400 uppercase">by md678685</p>
-						<dl
-							class="mt-5 grid gap-3 rounded-2xl bg-slate-50 p-4 text-sm text-slate-700 sm:grid-cols-2"
-						>
-							<div>
-								<dt class="text-xs tracking-wide text-slate-400 uppercase">Servers</dt>
-								<dd class="mt-1 font-mono text-lg text-slate-900">60,124</dd>
+							<div
+								class="flex items-center justify-between text-xs tracking-wide text-slate-400 uppercase"
+							>
+								<span>Plugin spotlight</span>
+								<span class="rounded-full bg-brand-100 px-3 py-1 text-brand-700">Top 100</span>
 							</div>
-							<div>
-								<dt class="text-xs tracking-wide text-slate-400 uppercase">Players</dt>
-								<dd class="mt-1 font-mono text-lg text-slate-900">66,744</dd>
-							</div>
-							<div>
-								<dt class="text-xs tracking-wide text-slate-400 uppercase sm:col-span-2 sm:mt-3">
-									Platform
-								</dt>
-								<dd class="mt-1 font-mono text-sm text-slate-900">Bukkit / Spigot</dd>
-							</div>
-						</dl>
-						<span
-							class="mt-5 inline-flex items-center gap-2 text-sm font-semibold text-brand-600 transition group-hover:text-brand-700"
-						>
-							View plugin stats
-							<svg class="h-4 w-4" viewBox="0 0 20 20" fill="none">
-								<path
-									d="M5 10h10m0 0l-4-4m4 4l-4 4"
-									stroke="currentColor"
-									stroke-width="1.5"
-									stroke-linecap="round"
-									stroke-linejoin="round"
-								/>
-							</svg>
-						</span>
-					</a>
+							<h3 class="mt-4 break-words font-display text-2xl font-semibold text-slate-900">
+								{data.spotlightPlugin.name}
+							</h3>
+							<p class="mt-2 break-words text-xs tracking-wide text-slate-400 uppercase">
+								by {data.spotlightPlugin.ownerName}
+							</p>
+							<dl
+								class="mt-5 grid gap-3 rounded-2xl bg-slate-50 p-4 text-sm text-slate-700 sm:grid-cols-2"
+							>
+								<div>
+									<dt class="text-xs tracking-wide text-slate-400 uppercase">Servers</dt>
+									<dd class="mt-1 font-mono text-lg text-slate-900">
+										{formatter.format(data.spotlightPlugin.servers)}
+									</dd>
+								</div>
+								<div>
+									<dt class="text-xs tracking-wide text-slate-400 uppercase">Players</dt>
+									<dd class="mt-1 font-mono text-lg text-slate-900">
+										{formatter.format(data.spotlightPlugin.players)}
+									</dd>
+								</div>
+								<div>
+									<dt class="text-xs tracking-wide text-slate-400 uppercase sm:col-span-2 sm:mt-3">
+										Platform
+									</dt>
+									<dd class="mt-1 font-mono text-sm text-slate-900">
+										{data.spotlightPlugin.softwareName}
+									</dd>
+								</div>
+							</dl>
+							<span
+								class="mt-5 inline-flex items-center gap-2 text-sm font-semibold text-brand-600 transition group-hover:text-brand-700"
+							>
+								View plugin stats
+								<svg class="h-4 w-4" viewBox="0 0 20 20" fill="none">
+									<path
+										d="M5 10h10m0 0l-4-4m4 4l-4 4"
+										stroke="currentColor"
+										stroke-width="1.5"
+										stroke-linecap="round"
+										stroke-linejoin="round"
+									/>
+								</svg>
+							</span>
+						</a>
+					</div>
 				</div>
-			</div>
+			{/if}
 		</div>
 	</section>
 

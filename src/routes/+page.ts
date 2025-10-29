@@ -1,9 +1,10 @@
 import { highlightCode } from '$lib/utils/shiki';
 import type { PageLoad } from './$types';
 
-export const load: PageLoad = async () => {
+export const load: PageLoad = async ({ data }) => {
 	return {
-		highlightedCode: await getHighlightedExampleCode()
+		highlightedCode: await getHighlightedExampleCode(),
+		spotlightPlugin: data.spotlightPlugin
 	};
 };
 
