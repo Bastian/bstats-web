@@ -435,7 +435,7 @@
 				{/snippet}
 
 				{@render Card({
-					title: 'Star and contribute on GitHub',
+					title: 'Gift bStats a star on GitHub',
 					href: 'https://github.com/Bastian/bStats',
 					subtitle: 'Issue tracker, pull requests, source code.',
 					description: 'Browse the code, report bugs, or submit improvements.',
