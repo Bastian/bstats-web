@@ -32,7 +32,10 @@
 	function processCode(code: string): string {
 		return code
 			.replace('{{platform}}', platform ?? 'unknown')
-			.replace('{{pluginId}}', !plugin ? '<insert-plugin-id>' : plugin.pluginId.toFixed(0));
+			.replace(
+				'{{pluginId}}',
+				!plugin ? '/* INSERT PLUGIN ID HERE */' : plugin.pluginId.toFixed(0)
+			);
 	}
 </script>
 
@@ -43,7 +46,7 @@
 				<p class="max-w-prose">
 					Instantiate the Metrics class in your plugin's
 					<code class="font-mono text-slate-700">onEnable()</code>
-					method:
+					method.
 				</p>
 				<CodeBlock code={processCode(instantiateBukkit)} lang="java" />
 			</div>
@@ -52,25 +55,27 @@
 				<p class="max-w-prose">
 					Instantiate the Metrics class in your plugin's
 					<code class="font-mono text-slate-700">onEnable()</code>
-					method:
+					method.
 				</p>
 				<CodeBlock code={processCode(instantiateBungeeCord)} lang="java" />
 			</div>
 		{:else if platform === 'sponge'}
 			<div class="space-y-4">
 				<p class="max-w-prose">
-					Instantiate the Metrics class in your plugin's
-					<code class="font-mono text-slate-700">onServerStart(...)</code> method. Make sure to use dependency
-					injection to get the Metrics.Factory instance:
+					Use dependency injection to get a
+					<code class="font-mono text-slate-700">Metrics.Factory</code>
+					instance. Then instantiate the Metrics class in your plugin's
+					<code class="font-mono text-slate-700">onServerStart(...)</code> method.
 				</p>
 				<CodeBlock code={processCode(instantiateSponge)} lang="java" />
 			</div>
 		{:else if platform === 'velocity'}
 			<div class="space-y-4">
 				<p class="max-w-prose">
-					Instantiate the Metrics class in your plugin's
-					<code class="font-mono text-slate-700">onProxyInitialization(...)</code> method. Make sure
-					to use dependency injection to get the Metrics.Factory instance in your plugin's constructor:
+					Use dependency injection to get a
+					<code class="font-mono text-slate-700">Metrics.Factory</code>
+					instance in your plugin's constructor. Then instantiate the Metrics class in your plugin's
+					<code class="font-mono text-slate-700">onProxyInitialization(...)</code> method.
 				</p>
 				<CodeBlock code={processCode(instantiateVelocity)} lang="java" />
 			</div>

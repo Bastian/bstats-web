@@ -8,12 +8,11 @@ public class ExamplePlugin {
 
     private final Metrics metrics;
 
-    // The metricsFactory parameter gets injected using @Inject :)
-    // Check out https://docs.spongepowered.org/stable/en/plugin/injection.html
-    // if you don't know what @Inject does
+    // The metricsFactory parameter gets injected using @Inject
+    // See https://docs.spongepowered.org/stable/en/plugin/injection.html
     @Inject
     public ExamplePlugin(Metrics.Factory metricsFactory) {
-        // You can find the plugin ids of your plugins on
+        // You can find the plugin id of your plugins on
         // the page https://bstats.org/what-is-my-plugin-id
         int pluginId = {{pluginId}};
         metrics = metricsFactory.make(pluginId);
@@ -22,7 +21,9 @@ public class ExamplePlugin {
     // Optional: Add custom charts
     @Listener
     public void onServerStart(GameStartedServerEvent event) {
-        metrics.addCustomChart(new Metrics.SimplePie("chart_id", () -> "My value"));
+        metrics.addCustomChart(
+            new Metrics.SimplePie("chart_id", () -> "My value")
+        );
     }
 
 }

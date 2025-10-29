@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { resolve } from '$app/paths';
 	import Badge from '$lib/components/Badge.svelte';
 	import PageHero from '$lib/components/PageHero.svelte';
 	import type { PageProps } from './$types';
@@ -80,14 +81,23 @@
 
 			<WizardStep index={6} title="Done" status={metricsInstantiated ? 'done' : 'locked'}>
 				<p class="max-w-prose">You have successfully included bStats Metrics in your plugin.</p>
-				{#if metricsInstantiated}
-					<div class="doc-callout doc-callout-info mt-4">
-						<p class="text-sm font-semibold text-slate-800">When will data show up?</p>
-						<p class="mt-2 max-w-prose text-sm text-slate-600">
-							After the server starts, the first data is sent after a random 3-6 minute delay. The
-							site publishes updates at hh:00 and hh:30, so once data is sent it may take up to 30
-							minutes to become visible.
-						</p>
+
+				<div class="doc-callout doc-callout-info mt-4">
+					<p class="text-sm font-semibold text-slate-800">When will data show up?</p>
+					<p class="mt-2 max-w-prose text-sm text-slate-600">
+						After the server starts, the first data is sent after a random 3-6 minute delay. The
+						site publishes updates at hh:00 and hh:30, so once data is sent it may take up to 30
+						minutes to become visible.
+					</p>
+				</div>
+				{#if plugin}
+					<div class="mt-6">
+						<a
+							href={resolve(`/plugin/${plugin.platform}/${plugin.pluginName}/${plugin.pluginId}`)}
+							class="inline-block text-sm font-semibold text-brand-600 underline hover:text-brand-800"
+						>
+							View your plugin on bStats →
+						</a>
 					</div>
 				{/if}
 			</WizardStep>
