@@ -45,7 +45,10 @@ export async function ensureSchema() {
 			throw new Error('Migration directory not found. Run: npx @better-auth/cli generate');
 		}
 
-		const files = readdirSync(migrationsDir).filter((f) => f.endsWith('.sql')).sort().reverse();
+		const files = readdirSync(migrationsDir)
+			.filter((f) => f.endsWith('.sql'))
+			.sort()
+			.reverse();
 
 		if (files.length === 0) {
 			throw new Error('No migration files found. Run: npx @better-auth/cli generate');
