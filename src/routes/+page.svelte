@@ -7,6 +7,7 @@
 
 	import githubIcon from '../../static/images/github-mark.svg';
 	import discordIcon from '../../static/images/Discord-Symbol-White.svg';
+	import gamehostingLogo from '$lib/assets/images/logos/gamehosting.png';
 
 	let { data }: { data: PageData } = $props();
 </script>
@@ -255,6 +256,104 @@
 							>
 						</a>
 					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+
+	<!-- Sponsor -->
+	<section class="border-t border-slate-200 bg-white">
+		<div class="mx-auto max-w-6xl px-4 py-16 sm:px-6">
+			<div class="grid gap-8 lg:grid-cols-2 lg:items-center lg:gap-12">
+				<!-- Left column: Content -->
+				<div>
+					<Badge>Sponsor</Badge>
+					<h2 class="mt-5 font-display text-3xl font-semibold text-slate-900">
+						Proudly sponsored by GameHosting.it
+					</h2>
+					<p class="mt-4 text-base leading-relaxed text-slate-600">
+						Italy's leading game server hosting provider, offering premium Minecraft servers, VPS
+						hosting, and dedicated servers with competitive pricing and exceptional support.
+					</p>
+					<div class="mt-6 space-y-3">
+						<div class="flex items-center gap-3 text-sm text-slate-600">
+							<svg
+								class="h-5 w-5 text-brand-600"
+								fill="none"
+								viewBox="0 0 24 24"
+								stroke="currentColor"
+							>
+								<path
+									stroke-linecap="round"
+									stroke-linejoin="round"
+									stroke-width="2"
+									d="M5 13l4 4L19 7"
+								/>
+							</svg>
+							<span>Premium hardware & Milan-based infrastructure</span>
+						</div>
+						<div class="flex items-center gap-3 text-sm text-slate-600">
+							<svg
+								class="h-5 w-5 text-brand-600"
+								fill="none"
+								viewBox="0 0 24 24"
+								stroke="currentColor"
+							>
+								<path
+									stroke-linecap="round"
+									stroke-linejoin="round"
+									stroke-width="2"
+									d="M5 13l4 4L19 7"
+								/>
+							</svg>
+							<span>Instant activation & advanced control panels</span>
+						</div>
+						<div class="flex items-center gap-3 text-sm text-slate-600">
+							<svg
+								class="h-5 w-5 text-brand-600"
+								fill="none"
+								viewBox="0 0 24 24"
+								stroke="currentColor"
+							>
+								<path
+									stroke-linecap="round"
+									stroke-linejoin="round"
+									stroke-width="2"
+									d="M5 13l4 4L19 7"
+								/>
+							</svg>
+							<span>Comprehensive support during business hours</span>
+						</div>
+					</div>
+					<a
+						href="https://www.gamehosting.it/"
+						target="_blank"
+						rel="noopener noreferrer"
+						class="mt-8 inline-flex items-center gap-2 text-sm font-semibold text-brand-600 transition hover:text-brand-700"
+					>
+						Visit GameHosting.it
+						<svg class="h-4 w-4 transition hover:translate-x-1" viewBox="0 0 20 20" fill="none">
+							<path
+								d="M5 10h10m0 0l-4-4m4 4l-4 4"
+								stroke="currentColor"
+								stroke-width="1.5"
+								stroke-linecap="round"
+								stroke-linejoin="round"
+							/>
+						</svg>
+					</a>
+				</div>
+
+				<!-- Right column: Logo -->
+				<div class="flex items-center justify-center lg:justify-end">
+					<a
+						href="https://www.gamehosting.it/"
+						target="_blank"
+						rel="noopener noreferrer"
+						class="block rounded-2xl bg-slate-900 px-12 py-10 transition hover:scale-105"
+					>
+						<img src={gamehostingLogo} alt="GameHosting.it" class="h-32 w-auto" />
+					</a>
 				</div>
 			</div>
 		</div>
