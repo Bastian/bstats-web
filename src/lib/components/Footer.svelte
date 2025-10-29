@@ -70,11 +70,11 @@
 			</div>
 
 			{@render FooterSection('Get started', [
-				{ href: resolve('/getting-started'), label: 'Onboarding' },
+				{ href: resolve('/docs'), label: 'Documentation' },
 				{ href: resolve('/faq'), label: 'FAQ' },
 				{ href: resolve('/add-plugin'), label: 'Add Plugin' },
-				{ href: resolve('/help/custom-charts'), label: 'Custom Charts' },
-				{ href: resolve('/help/rest-api'), label: 'REST API' }
+				{ href: resolve('/docs/custom-charts'), label: 'Custom Charts' },
+				{ href: resolve('/docs/rest-api'), label: 'REST API' }
 			])}
 
 			{@render FooterSection(

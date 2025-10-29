@@ -59,7 +59,7 @@
 
 		<nav class="hidden items-center gap-6 text-sm font-semibold text-slate-600 md:flex">
 			<a href={resolve('/plugin-list')} class="transition hover:text-slate-900">Plugin List</a>
-			<a href={resolve('/getting-started')} class="transition hover:text-slate-900">Docs</a>
+			<a href={resolve('/docs')} class="transition hover:text-slate-900">Docs</a>
 			{#if globalSoftware.length}
 				<details class="group relative">
 					<summary
@@ -224,7 +224,7 @@
 					Plugin List
 				</a>
 				<a
-					href={resolve('/getting-started')}
+					href={resolve('/docs')}
 					class="block rounded-lg px-4 py-3 transition hover:bg-brand-50 hover:text-brand-700"
 				>
 					Docs

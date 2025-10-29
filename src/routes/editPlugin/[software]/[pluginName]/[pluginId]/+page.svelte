@@ -381,7 +381,7 @@
 							</p>
 						</div>
 						<a
-							href={resolve('/help/custom-charts')}
+							href={resolve('/docs/custom-charts')}
 							class="inline-flex h-8 w-8 items-center justify-center rounded-full bg-blue-100 text-blue-600 transition hover:bg-blue-200"
 							title="Help with custom charts"
 						>

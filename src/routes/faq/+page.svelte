@@ -77,7 +77,7 @@
 						Yes. bStats exposes a lightweight REST API for public metrics. Start here:
 						<a
 							class="font-semibold text-brand-600 hover:text-brand-700"
-							href={resolve('/help/rest-api')}
+							href={resolve('/docs/rest-api')}
 						>
 							REST API documentation
 						</a>.
@@ -138,7 +138,7 @@
 					<div class="mt-3 text-sm leading-relaxed text-slate-600">
 						Head over to the <a
 							class="font-semibold text-brand-600 hover:text-brand-700"
-							href={resolve('/getting-started')}>Include metrics guide</a
+							href={resolve('/add-plugin')}>integration wizard</a
 						> for Maven and manual instructions.
 					</div>
 				</details>

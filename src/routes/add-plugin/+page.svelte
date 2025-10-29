@@ -90,6 +90,31 @@
 						minutes to become visible.
 					</p>
 				</div>
+
+				<div class="mt-6 rounded-2xl border border-slate-200 bg-slate-50 p-5">
+					<h3 class="text-sm font-semibold text-slate-800">What's next?</h3>
+					<p class="mt-2 max-w-prose text-sm text-slate-600">
+						Beyond the default metrics, you can track custom data specific to your plugin with
+						custom charts. Add pie charts for configuration options, line charts for trends, or bar
+						charts for feature adoption.
+					</p>
+					<a
+						href={resolve('/docs/custom-charts')}
+						class="mt-3 inline-flex items-center gap-2 text-sm font-semibold text-brand-600 transition hover:text-brand-700"
+					>
+						Learn about custom charts
+						<svg class="h-4 w-4" viewBox="0 0 20 20" fill="none">
+							<path
+								d="M5 10h10m0 0l-4-4m4 4l-4 4"
+								stroke="currentColor"
+								stroke-width="1.5"
+								stroke-linecap="round"
+								stroke-linejoin="round"
+							/>
+						</svg>
+					</a>
+				</div>
+
 				{#if plugin}
 					<div class="mt-6">
 						<a

@@ -57,7 +57,7 @@
 					integrates in minutes.
 				</p>
 				<div class="mt-10 flex flex-wrap gap-4">
-					<Button href={resolve('/getting-started')} size="large">
+					<Button href={resolve('/add-plugin')} size="large">
 						Get started in minutes
 						<svg class="h-4 w-4" viewBox="0 0 20 20" fill="none">
 							<path
@@ -104,10 +104,10 @@
 								<span>Plugin spotlight</span>
 								<span class="rounded-full bg-brand-100 px-3 py-1 text-brand-700">Top 100</span>
 							</div>
-							<h3 class="mt-4 break-words font-display text-2xl font-semibold text-slate-900">
+							<h3 class="mt-4 font-display text-2xl font-semibold break-words text-slate-900">
 								{data.spotlightPlugin.name}
 							</h3>
-							<p class="mt-2 break-words text-xs tracking-wide text-slate-400 uppercase">
+							<p class="mt-2 text-xs tracking-wide break-words text-slate-400 uppercase">
 								by {data.spotlightPlugin.ownerName}
 							</p>
 							<dl
@@ -168,10 +168,7 @@
 					</h2>
 					<p class="mt-4 text-base leading-relaxed text-slate-600">
 						View the
-						<a
-							href={resolve('/getting-started')}
-							class="font-semibold text-brand-600 hover:text-brand-700"
-						>
+						<a href={resolve('/docs')} class="font-semibold text-brand-600 hover:text-brand-700">
 							getting started guide
 						</a>
 						for detailed instructions.
@@ -214,10 +211,10 @@
 									major platforms and build tools.
 								</p>
 								<a
-									href={resolve('/getting-started')}
+									href={resolve('/add-plugin')}
 									class="mt-3 inline-flex items-center gap-2 text-sm font-semibold text-brand-600 hover:text-brand-700"
 								>
-									View integration guide
+									Start integration wizard
 									<svg class="h-4 w-4" viewBox="0 0 20 20" fill="none"
 										><path
 											d="M5 10h10m0 0l-4-4m4 4l-4 4"
@@ -257,7 +254,7 @@
 						class="mt-6 flex flex-wrap items-center justify-between gap-4 rounded-2xl bg-slate-100 px-5 py-4 text-sm text-slate-600"
 					>
 						<a
-							href={resolve('/getting-started')}
+							href={resolve('/docs')}
 							class="inline-flex items-center gap-2 font-semibold text-brand-600 hover:text-brand-700"
 						>
 							Read the full guide

@@ -22,7 +22,7 @@
 	<section class="doc-container mt-12 space-y-12">
 		<article class="doc-card space-y-4">
 			<h2 class="doc-card-title">Getting started</h2>
-			<p class="text-sm leading-relaxed text-slate-600">
+			<p class="max-w-prose text-sm leading-relaxed text-slate-600">
 				Requests are simple <code class="font-mono text-slate-700">GET</code> calls. No authentication
 				is required for public data.
 			</p>

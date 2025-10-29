@@ -300,7 +300,7 @@
 	<section class="doc-container mt-12 space-y-10">
 		<article class="doc-card space-y-4">
 			<h2 class="doc-card-title">Basics</h2>
-			<p class="text-sm leading-relaxed text-slate-600">
+			<p class="max-w-prose text-sm leading-relaxed text-slate-600">
 				Adding a chart consists of two steps: provide the data in your plugin code and register the
 				chart on the website.
 			</p>
@@ -327,7 +327,7 @@
 		<article class="doc-card space-y-6">
 			<div class="space-y-3">
 				<h2 class="doc-card-title">Pie charts</h2>
-				<p class="text-sm leading-relaxed text-slate-600">
+				<p class="max-w-prose text-sm leading-relaxed text-slate-600">
 					Great for categorical data such as configuration switches or version breakdowns. Simple
 					pies track one value per server. Advanced pies let you combine multiple signals or apply
 					weights.
@@ -351,7 +351,7 @@
 		<article class="doc-card space-y-6">
 			<div class="space-y-3">
 				<h2 class="doc-card-title">Drilldown pie</h2>
-				<p class="text-sm leading-relaxed text-slate-600">
+				<p class="max-w-prose text-sm leading-relaxed text-slate-600">
 					Ideal when you want to group categories and allow readers to dive deeper—for example, OS
 					families followed by specific distributions.
 				</p>
@@ -365,7 +365,7 @@
 		<article class="doc-card space-y-6">
 			<div class="space-y-3">
 				<h2 class="doc-card-title">Line charts</h2>
-				<p class="text-sm leading-relaxed text-slate-600">
+				<p class="max-w-prose text-sm leading-relaxed text-slate-600">
 					Track trends over time. Single line charts are perfect for players, servers, or any value
 					that has one sample per interval. Multi line charts let you compare metrics side by side.
 				</p>
@@ -391,7 +391,7 @@
 		<article class="doc-card space-y-6">
 			<div class="space-y-3">
 				<h2 class="doc-card-title">Bar charts</h2>
-				<p class="text-sm leading-relaxed text-slate-600">
+				<p class="max-w-prose text-sm leading-relaxed text-slate-600">
 					Surface rankings or option adoption. Simple bar charts display a single value per
 					category. Advanced bar charts support multiple bars per category.
 				</p>
