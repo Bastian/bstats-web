@@ -4,6 +4,7 @@
 	import Button from '$lib/components/Button.svelte';
 	import type { Snippet } from 'svelte';
 	import type { PageData } from './$types';
+	import IconArrowRight from '@tabler/icons-svelte/icons/arrow-right';
 
 	import githubIcon from '../../static/images/github-mark.svg';
 	import discordIcon from '../../static/images/Discord-Symbol-White.svg';
@@ -57,32 +58,13 @@
 					integrates in minutes.
 				</p>
 				<div class="mt-10 flex flex-wrap gap-4">
-					<Button href={resolve('/add-plugin')} size="large">
-						Get started in minutes
-						<svg class="h-4 w-4" viewBox="0 0 20 20" fill="none">
-							<path
-								d="M5 10h10m0 0l-4-4m4 4l-4 4"
-								stroke="currentColor"
-								stroke-width="1.5"
-								stroke-linecap="round"
-								stroke-linejoin="round"
-							/>
-						</svg>
-					</Button>
+					<Button href={resolve('/add-plugin')} size="large">Get started in minutes</Button>
 					<a
 						href={resolve('/plugin-list')}
 						class="inline-flex items-center gap-2 text-sm font-semibold text-slate-600 transition hover:text-brand-700"
 					>
 						Browse plugin list
-						<svg class="h-4 w-4" viewBox="0 0 20 20" fill="none">
-							<path
-								d="M5 10h10m0 0l-4-4m4 4l-4 4"
-								stroke="currentColor"
-								stroke-width="1.5"
-								stroke-linecap="round"
-								stroke-linejoin="round"
-							/>
-						</svg>
+						<IconArrowRight size={18} />
 					</a>
 				</div>
 			</div>
@@ -138,15 +120,7 @@
 								class="mt-5 inline-flex items-center gap-2 text-sm font-semibold text-brand-600 transition group-hover:text-brand-700"
 							>
 								View plugin stats
-								<svg class="h-4 w-4" viewBox="0 0 20 20" fill="none">
-									<path
-										d="M5 10h10m0 0l-4-4m4 4l-4 4"
-										stroke="currentColor"
-										stroke-width="1.5"
-										stroke-linecap="round"
-										stroke-linejoin="round"
-									/>
-								</svg>
+								<IconArrowRight size={18} />
 							</span>
 						</a>
 					</div>
@@ -215,15 +189,7 @@
 									class="mt-3 inline-flex items-center gap-2 text-sm font-semibold text-brand-600 hover:text-brand-700"
 								>
 									Start integration wizard
-									<svg class="h-4 w-4" viewBox="0 0 20 20" fill="none"
-										><path
-											d="M5 10h10m0 0l-4-4m4 4l-4 4"
-											stroke="currentColor"
-											stroke-width="1.5"
-											stroke-linecap="round"
-											stroke-linejoin="round"
-										/></svg
-									>
+									<IconArrowRight size={18} />
 								</a>
 							</div>
 						</li>
@@ -258,15 +224,7 @@
 							class="inline-flex items-center gap-2 font-semibold text-brand-600 hover:text-brand-700"
 						>
 							Read the full guide
-							<svg class="h-4 w-4" viewBox="0 0 20 20" fill="none"
-								><path
-									d="M5 10h10m0 0l-4-4m4 4l-4 4"
-									stroke="currentColor"
-									stroke-width="1.5"
-									stroke-linecap="round"
-									stroke-linejoin="round"
-								/></svg
-							>
+							<IconArrowRight size={18} />
 						</a>
 					</div>
 				</div>
@@ -345,15 +303,7 @@
 						class="mt-8 inline-flex items-center gap-2 text-sm font-semibold text-brand-600 transition hover:text-brand-700"
 					>
 						Visit GameHosting.it
-						<svg class="h-4 w-4 transition hover:translate-x-1" viewBox="0 0 20 20" fill="none">
-							<path
-								d="M5 10h10m0 0l-4-4m4 4l-4 4"
-								stroke="currentColor"
-								stroke-width="1.5"
-								stroke-linecap="round"
-								stroke-linejoin="round"
-							/>
-						</svg>
+						<IconArrowRight size={18} class="transition hover:translate-x-1" />
 					</a>
 				</div>
 
@@ -421,15 +371,7 @@
 							</p>
 							<div class="flex items-center gap-1 text-slate-700">
 								{data.linkText}
-								<svg class="h-4 w-4" viewBox="0 0 20 20" fill="none" aria-hidden="true">
-									<path
-										d="M5 10h10m0 0l-4-4m4 4l-4 4"
-										stroke="currentColor"
-										stroke-width="1.5"
-										stroke-linecap="round"
-										stroke-linejoin="round"
-									/>
-								</svg>
+								<IconArrowRight size={18} aria-hidden="true" />
 							</div>
 						</article>
 					</a>

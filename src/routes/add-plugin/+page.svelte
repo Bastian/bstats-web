@@ -9,6 +9,7 @@
 	import PlatformSelectStep, { type Platform } from './PlatformSelectStep.svelte';
 	import RegisterPluginStep from './RegisterPluginStep.svelte';
 	import WizardStep from './WizardStep.svelte';
+	import IconArrowRight from '@tabler/icons-svelte/icons/arrow-right';
 
 	let { data, form }: PageProps = $props();
 
@@ -103,15 +104,7 @@
 						class="mt-3 inline-flex items-center gap-2 text-sm font-semibold text-brand-600 transition hover:text-brand-700"
 					>
 						Learn about custom charts
-						<svg class="h-4 w-4" viewBox="0 0 20 20" fill="none">
-							<path
-								d="M5 10h10m0 0l-4-4m4 4l-4 4"
-								stroke="currentColor"
-								stroke-width="1.5"
-								stroke-linecap="round"
-								stroke-linejoin="round"
-							/>
-						</svg>
+						<IconArrowRight size={18} />
 					</a>
 				</div>
 
@@ -121,7 +114,7 @@
 							href={resolve(`/plugin/${plugin.platform}/${plugin.pluginName}/${plugin.pluginId}`)}
 							class="inline-block text-sm font-semibold text-brand-600 underline hover:text-brand-800"
 						>
-							View your plugin on bStats →
+							View your plugin on bStats <IconArrowRight size={18} />
 						</a>
 					</div>
 				{/if}

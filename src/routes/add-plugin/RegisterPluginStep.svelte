@@ -17,6 +17,7 @@
 	import { resolve } from '$app/paths';
 	import { enhance } from '$app/forms';
 	import type { ActionData } from './$types';
+	import IconArrowRight from '@tabler/icons-svelte/icons/arrow-right';
 
 	const alertId = $props.id();
 
@@ -34,10 +35,10 @@
 		{#if !pluginCreationSkipped}
 			<button
 				type="button"
-				class="inline-flex cursor-pointer items-center text-sm font-semibold text-slate-600 transition hover:text-slate-800"
+				class="inline-flex cursor-pointer items-center gap-2 text-sm font-semibold text-slate-600 transition hover:text-slate-800"
 				onclick={() => (pluginCreationSkipped = true)}
 			>
-				Skip for now →
+				Skip for now <IconArrowRight size={16} />
 			</button>
 		{:else}
 			<p aria-live="polite" class="text-sm text-brand-600">
