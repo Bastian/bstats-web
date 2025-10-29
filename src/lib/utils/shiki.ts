@@ -22,6 +22,12 @@ export async function highlightCode(code: string, lang: BundledLanguage): Promis
 	const highlighter = await getHighlighter();
 	return highlighter.codeToHtml(code, {
 		lang,
-		theme: 'github-dark'
+		theme: 'github-dark',
+		// shiki adds tabindex by default for accessibility reasons. This allows
+		// keyboard users to focus the code to scroll it when it's overflowing.
+		//
+		// However, we handle this ourselves with a Svelte attachment to only add
+		// tabindex when the code block is actually overflowing.
+		tabindex: false
 	});
 }
