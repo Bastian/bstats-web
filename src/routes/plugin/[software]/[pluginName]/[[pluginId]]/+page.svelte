@@ -268,12 +268,12 @@
 
 				<div class="mt-12 grid gap-4 sm:grid-cols-2">
 					<article class="min-w-0 rounded-2xl border border-slate-200 bg-white px-5 py-4 shadow-sm">
-						<span class="text-[11px] tracking-[0.25em] text-slate-400 uppercase">Servers</span>
+						<span class="text-[11px] tracking-[0.25em] text-slate-500 uppercase">Servers</span>
 						<div class="mt-4 flex items-baseline gap-2">
 							<span id="serversCurrent" class="font-display text-4xl font-semibold text-slate-900"
 								>{serversCurrent}</span
 							>
-							<span class="text-[11px] tracking-[0.2em] text-slate-400 uppercase">current</span>
+							<span class="text-[11px] tracking-[0.2em] text-slate-500 uppercase">current</span>
 						</div>
 						<div
 							class="mt-3 flex items-center justify-between rounded-lg border border-slate-200 bg-slate-50 px-3 py-2 text-xs text-slate-500"
@@ -283,12 +283,12 @@
 						</div>
 					</article>
 					<article class="min-w-0 rounded-2xl border border-slate-200 bg-white px-5 py-4 shadow-sm">
-						<span class="text-[11px] tracking-[0.25em] text-slate-400 uppercase">Players</span>
+						<span class="text-[11px] tracking-[0.25em] text-slate-500 uppercase">Players</span>
 						<div class="mt-4 flex items-baseline gap-2">
 							<span id="playersCurrent" class="font-display text-4xl font-semibold text-slate-900"
 								>{playersCurrent}</span
 							>
-							<span class="text-[11px] tracking-[0.2em] text-slate-400 uppercase">current</span>
+							<span class="text-[11px] tracking-[0.2em] text-slate-500 uppercase">current</span>
 						</div>
 						<div
 							class="mt-3 flex items-center justify-between rounded-lg border border-slate-200 bg-slate-50 px-3 py-2 text-xs text-slate-500"

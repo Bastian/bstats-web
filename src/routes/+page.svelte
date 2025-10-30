@@ -81,7 +81,7 @@
 							class="block rounded-3xl border border-slate-200 bg-white p-6 shadow-2xl shadow-brand-100/70 transition hover:-translate-y-1 hover:shadow-2xl focus-visible:ring-2 focus-visible:ring-brand-500/60 focus-visible:outline-none"
 						>
 							<div
-								class="flex items-center justify-between text-xs tracking-wide text-slate-400 uppercase"
+								class="flex items-center justify-between text-xs tracking-wide text-slate-500 uppercase"
 							>
 								<span>Plugin spotlight</span>
 								<span class="rounded-full bg-brand-100 px-3 py-1 text-brand-700">Top 100</span>
@@ -89,26 +89,26 @@
 							<h3 class="mt-4 font-display text-2xl font-semibold break-words text-slate-900">
 								{data.spotlightPlugin.name}
 							</h3>
-							<p class="mt-2 text-xs tracking-wide break-words text-slate-400 uppercase">
+							<p class="mt-2 text-xs tracking-wide break-words text-slate-500 uppercase">
 								by {data.spotlightPlugin.ownerName}
 							</p>
 							<dl
 								class="mt-5 grid gap-3 rounded-2xl bg-slate-50 p-4 text-sm text-slate-700 sm:grid-cols-2"
 							>
 								<div>
-									<dt class="text-xs tracking-wide text-slate-400 uppercase">Servers</dt>
+									<dt class="text-xs tracking-wide text-slate-500 uppercase">Servers</dt>
 									<dd class="mt-1 font-mono text-lg text-slate-900">
 										{formatter.format(data.spotlightPlugin.servers)}
 									</dd>
 								</div>
 								<div>
-									<dt class="text-xs tracking-wide text-slate-400 uppercase">Players</dt>
+									<dt class="text-xs tracking-wide text-slate-500 uppercase">Players</dt>
 									<dd class="mt-1 font-mono text-lg text-slate-900">
 										{formatter.format(data.spotlightPlugin.players)}
 									</dd>
 								</div>
 								<div>
-									<dt class="text-xs tracking-wide text-slate-400 uppercase sm:col-span-2 sm:mt-3">
+									<dt class="text-xs tracking-wide text-slate-500 uppercase sm:col-span-2 sm:mt-3">
 										Platform
 									</dt>
 									<dd class="mt-1 font-mono text-sm text-slate-900">

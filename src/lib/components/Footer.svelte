@@ -9,7 +9,7 @@
 
 {#snippet FooterSection(title: string, links: Array<{ href: string; label: string }>)}
 	<div>
-		<h3 class="text-sm font-semibold tracking-wide text-slate-400 uppercase">{title}</h3>
+		<h3 class="text-sm font-semibold tracking-wide text-slate-500 uppercase">{title}</h3>
 		<ul class="mt-4 space-y-2 text-sm text-slate-600">
 			{#each links as { href, label } (href)}
 				<li>

@@ -74,7 +74,7 @@
 			<span class="flex flex-col leading-tight">
 				<span class="font-display text-xl font-semibold text-slate-900 md:text-2xl">bStats</span>
 				<span
-					class="text-xs font-medium tracking-wide text-slate-400 uppercase md:hidden lg:inline"
+					class="text-xs font-medium tracking-wide text-slate-500 uppercase md:hidden lg:inline"
 				>
 					Open source metrics
 				</span>
@@ -129,7 +129,7 @@
 										>
 											<div class="gap-2">
 												<span>{plugin.name}</span>
-												<span class="text-xs text-slate-400">
+												<span class="text-xs text-slate-500">
 													({plugin.software.name})
 												</span>
 											</div>
@@ -171,7 +171,7 @@
 							</NavigationMenu.Trigger>
 							<NavigationMenu.Content class="w-56 text-sm" align="end">
 								<div class="mb-2 rounded-lg bg-slate-50 p-3">
-									<p class="text-xs tracking-wide text-slate-400 uppercase">Signed in as</p>
+									<p class="text-xs tracking-wide text-slate-500 uppercase">Signed in as</p>
 									<p class="font-semibold text-slate-700">{username || 'bStats user'}</p>
 								</div>
 								<ul class="space-y-1">
@@ -243,8 +243,8 @@
 						Docs
 					</a>
 					{#if globalSoftware.length}
-						<div class="rounded-2xl bg-slate-100/80 p-4">
-							<p class="text-xs tracking-wide text-slate-400 uppercase">Global Stats</p>
+						<div class="rounded-2xl bg-slate-50 p-4">
+							<p class="text-xs tracking-wide text-slate-500 uppercase">Global Stats</p>
 							<ul class="mt-3 space-y-2 text-sm">
 								{#each globalSoftware as software (software.name)}
 									<li>
@@ -265,8 +265,8 @@
 				{#if user}
 					<div class="space-y-2">
 						{#if plugins.length}
-							<div class="rounded-2xl bg-slate-100/80 p-4">
-								<p class="text-xs tracking-wide text-slate-400 uppercase">My Plugins</p>
+							<div class="rounded-2xl bg-slate-50 p-4">
+								<p class="text-xs tracking-wide text-slate-500 uppercase">My Plugins</p>
 								<ul class="mt-3 space-y-2 text-sm">
 									{#each plugins as plugin (plugin.id)}
 										<li>
@@ -276,7 +276,7 @@
 											>
 												<div class="truncate">
 													{plugin.name}
-													<span class="text-xs tracking-wide text-slate-400 uppercase">
+													<span class="text-xs tracking-wide text-slate-500 uppercase">
 														({plugin.software.name})
 													</span>
 												</div>

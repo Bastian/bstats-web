@@ -201,14 +201,14 @@
 				<article
 					class="min-w-0 rounded-2xl border border-slate-200 bg-white px-5 py-4 text-sm text-slate-600 shadow-sm"
 				>
-					<span class="text-[11px] tracking-[0.25em] text-slate-400 uppercase">Servers</span>
+					<span class="text-[11px] tracking-[0.25em] text-slate-500 uppercase">Servers</span>
 					<div class="mt-2 flex items-baseline gap-3">
 						<span id="serversCurrent" class="font-display text-4xl font-semibold text-slate-900"
 							>{serversCurrent}</span
 						>
-						<span class="text-[11px] tracking-[0.2em] text-slate-400 uppercase">current</span>
+						<span class="text-[11px] tracking-[0.2em] text-slate-500 uppercase">current</span>
 					</div>
-					<div class="mt-2 text-xs tracking-[0.18em] text-slate-400 uppercase">Record</div>
+					<div class="mt-2 text-xs tracking-[0.18em] text-slate-500 uppercase">Record</div>
 					<div id="serversRecord" class="text-sm font-semibold text-slate-600">
 						{serversRecord}
 					</div>
@@ -216,14 +216,14 @@
 				<article
 					class="min-w-0 rounded-2xl border border-slate-200 bg-white px-5 py-4 text-sm text-slate-600 shadow-sm"
 				>
-					<span class="text-[11px] tracking-[0.25em] text-slate-400 uppercase">Players</span>
+					<span class="text-[11px] tracking-[0.25em] text-slate-500 uppercase">Players</span>
 					<div class="mt-2 flex items-baseline gap-3">
 						<span id="playersCurrent" class="font-display text-4xl font-semibold text-slate-900"
 							>{playersCurrent}</span
 						>
-						<span class="text-[11px] tracking-[0.2em] text-slate-400 uppercase">current</span>
+						<span class="text-[11px] tracking-[0.2em] text-slate-500 uppercase">current</span>
 					</div>
-					<div class="mt-2 text-xs tracking-[0.18em] text-slate-400 uppercase">Record</div>
+					<div class="mt-2 text-xs tracking-[0.18em] text-slate-500 uppercase">Record</div>
 					<div id="playersRecord" class="text-sm font-semibold text-slate-600">
 						{playersRecord}
 					</div>

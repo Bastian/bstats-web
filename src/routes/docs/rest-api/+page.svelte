@@ -34,7 +34,7 @@
 		</article>
 
 		<article class="doc-card space-y-4">
-			<h3 class="text-sm font-semibold tracking-[0.2em] text-slate-400 uppercase">List plugins</h3>
+			<h3 class="text-sm font-semibold tracking-[0.2em] text-slate-500 uppercase">List plugins</h3>
 			<CodeBlock code="GET /api/v1/plugins" lang="http" />
 			<p class="text-sm text-slate-600">Returns all plugins registered on bStats.</p>
 			<CodeBlock
@@ -53,7 +53,7 @@
 		</article>
 
 		<article class="doc-card space-y-4">
-			<h3 class="text-sm font-semibold tracking-[0.2em] text-slate-400 uppercase">
+			<h3 class="text-sm font-semibold tracking-[0.2em] text-slate-500 uppercase">
 				Plugin details
 			</h3>
 			<CodeBlock code={'GET /api/v1/plugins/{pluginId}'} lang="http" />
@@ -84,7 +84,7 @@
 		</article>
 
 		<article class="doc-card space-y-4">
-			<h3 class="text-sm font-semibold tracking-[0.2em] text-slate-400 uppercase">
+			<h3 class="text-sm font-semibold tracking-[0.2em] text-slate-500 uppercase">
 				Charts for a plugin
 			</h3>
 			<CodeBlock code={'GET /api/v1/plugins/{pluginId}/charts'} lang="http" />
@@ -108,7 +108,7 @@
 		</article>
 
 		<article class="doc-card space-y-4">
-			<h3 class="text-sm font-semibold tracking-[0.2em] text-slate-400 uppercase">
+			<h3 class="text-sm font-semibold tracking-[0.2em] text-slate-500 uppercase">
 				Chart metadata
 			</h3>
 			<CodeBlock code={'GET /api/v1/plugins/{pluginId}/charts/{chartId}'} lang="http" />
@@ -129,7 +129,7 @@
 		</article>
 
 		<article class="doc-card space-y-4">
-			<h3 class="text-sm font-semibold tracking-[0.2em] text-slate-400 uppercase">Chart data</h3>
+			<h3 class="text-sm font-semibold tracking-[0.2em] text-slate-500 uppercase">Chart data</h3>
 			<CodeBlock code={'GET /api/v1/plugins/{pluginId}/charts/{chartId}/data'} lang="http" />
 			<p class="text-sm text-slate-600">
 				Returns raw chart data. For line charts each entry is <code class="font-mono text-slate-700"
@@ -152,7 +152,7 @@
 		</article>
 
 		<article class="doc-card space-y-4">
-			<h3 class="text-sm font-semibold tracking-[0.2em] text-slate-400 uppercase">
+			<h3 class="text-sm font-semibold tracking-[0.2em] text-slate-500 uppercase">
 				Supported software
 			</h3>
 			<CodeBlock code="GET /api/v1/software" lang="http" />

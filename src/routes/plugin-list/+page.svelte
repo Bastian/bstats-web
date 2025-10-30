@@ -74,7 +74,7 @@
 					bind:value={searchValue}
 				/>
 			</div>
-			<div class="flex items-center gap-3 text-xs tracking-[0.2em] text-slate-400 uppercase">
+			<div class="flex items-center gap-3 text-xs tracking-[0.2em] text-slate-500 uppercase">
 				<span>
 					{#if isLoading}
 						&nbsp;

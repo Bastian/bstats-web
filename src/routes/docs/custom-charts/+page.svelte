@@ -337,11 +337,11 @@
 				<div id="onlineModePie" class="min-h-[320px] w-full"></div>
 			</div>
 			<div class="space-y-4">
-				<h3 class="text-sm font-semibold tracking-[0.2em] text-slate-400 uppercase">
+				<h3 class="text-sm font-semibold tracking-[0.2em] text-slate-500 uppercase">
 					Simple Pie example
 				</h3>
 				<div id="gist-simple-pie"></div>
-				<h3 class="text-sm font-semibold tracking-[0.2em] text-slate-400 uppercase">
+				<h3 class="text-sm font-semibold tracking-[0.2em] text-slate-500 uppercase">
 					Advanced Pie example
 				</h3>
 				<div id="gist-advanced-pie"></div>
@@ -374,11 +374,11 @@
 				<div id="playersLineChart" class="min-h-[320px] w-full"></div>
 			</div>
 			<div class="space-y-4">
-				<h3 class="text-sm font-semibold tracking-[0.2em] text-slate-400 uppercase">
+				<h3 class="text-sm font-semibold tracking-[0.2em] text-slate-500 uppercase">
 					Single Line Chart example
 				</h3>
 				<div id="gist-single-line"></div>
-				<h3 class="text-sm font-semibold tracking-[0.2em] text-slate-400 uppercase">
+				<h3 class="text-sm font-semibold tracking-[0.2em] text-slate-500 uppercase">
 					Multi Line Chart example
 				</h3>
 				<div id="gist-multi-line"></div>
