@@ -1,5 +1,6 @@
 <script lang="ts">
 	import Button from '$lib/components/Button.svelte';
+	import { NavigationMenu } from '$lib/components/navigation-menu';
 	import { resolve } from '$app/paths';
 
 	import type { User } from 'better-auth';
@@ -39,7 +40,25 @@
 	const plugins = $derived(myPlugins || []);
 	const username = $derived(user?.name ?? '');
 	const usernameInitial = $derived(username ? username.charAt(0).toUpperCase() : '🙂');
+
+	let mobileNavOpen = $state(false);
+
+	function toggleMobileNav() {
+		mobileNavOpen = !mobileNavOpen;
+	}
+
+	function closeMobileNav() {
+		mobileNavOpen = false;
+	}
+
+	function handleKeydown(event: KeyboardEvent) {
+		if (event.key === 'Escape' && mobileNavOpen) {
+			closeMobileNav();
+		}
+	}
 </script>
+
+<svelte:window onkeydown={handleKeydown} />
 
 <header class="sticky top-0 z-40 border-b border-slate-200 bg-white/90 backdrop-blur">
 	<div class="mx-auto flex h-20 max-w-6xl items-center justify-between px-4 sm:px-6">
@@ -57,138 +76,140 @@
 			</span>
 		</a>
 
-		<nav class="hidden items-center gap-6 text-sm font-semibold text-slate-600 md:flex">
-			<a href={resolve('/plugin-list')} class="transition hover:text-slate-900">Plugin List</a>
-			<a href={resolve('/docs')} class="transition hover:text-slate-900">Docs</a>
-			{#if globalSoftware.length}
-				<details class="group relative">
-					<summary
-						class="flex items-center gap-1 rounded-full bg-slate-100/80 px-3 py-1.5 text-slate-600 transition hover:bg-slate-200 hover:text-slate-900"
-					>
-						Global Stats
-						<svg class="h-4 w-4 transition group-open:rotate-180" viewBox="0 0 20 20" fill="none">
-							<path
-								d="M5 7.5L10 12.5L15 7.5"
-								stroke="currentColor"
-								stroke-width="1.5"
-								stroke-linecap="round"
-								stroke-linejoin="round"
-							/>
-						</svg>
-					</summary>
-					<div
-						class="pointer-events-none invisible absolute top-full left-1/2 z-20 mt-3 w-72 -translate-x-1/2 -translate-y-1 rounded-xl border border-slate-200 bg-white/95 p-3 opacity-0 shadow-2xl transition-all duration-200 group-open:pointer-events-auto group-open:visible group-open:translate-y-0 group-open:opacity-100"
-					>
-						<ul class="space-y-1.5 text-sm">
-							{#each globalSoftware as software (software.name)}
-								<li>
-									<a
-										href={resolve(`/global/${software.url}`)}
-										class="flex items-center justify-between rounded-lg px-3 py-2 text-slate-600 transition hover:bg-brand-50 hover:text-slate-900"
-									>
-										<span>{software.name}</span>
-										<svg class="h-4 w-4 text-brand-500" fill="currentColor" viewBox="0 0 20 20">
-											<path
-												fill-rule="evenodd"
-												d="M13.293 9.293a1 1 0 0 1 1.414 1.414l-4.586 4.586A1 1 0 0 1 8 14.586V6a1 1 0 0 1 2 0v6.172l3.293-3.293z"
-												clip-rule="evenodd"
-											/>
-										</svg>
-									</a>
-								</li>
-							{/each}
-						</ul>
-						<div class="mt-3 rounded-lg bg-slate-50 p-3 text-xs text-slate-500">
-							Curious how it works? Dive into the <a
-								href={resolve('/faq')}
-								class="font-semibold text-brand-600 hover:text-brand-700">FAQ</a
-							>.
-						</div>
-					</div>
-				</details>
-			{/if}
-		</nav>
+		<NavigationMenu.Root>
+			<NavigationMenu.List class="hidden md:flex">
+				<NavigationMenu.Item>
+					<a href={resolve('/plugin-list')} class="transition hover:text-slate-900">Plugin List</a>
+				</NavigationMenu.Item>
+				<NavigationMenu.Item>
+					<a href={resolve('/docs')} class="transition hover:text-slate-900">Docs</a>
+				</NavigationMenu.Item>
+				{#if globalSoftware.length}
+					<NavigationMenu.Item value="global-stats">
+						<NavigationMenu.Trigger>
+							Global Stats
+							<svg
+								class="h-4 w-4 transition-transform duration-100 group-data-[state=open]:rotate-180"
+								viewBox="0 0 20 20"
+								fill="none"
+							>
+								<path
+									d="M5 7.5L10 12.5L15 7.5"
+									stroke="currentColor"
+									stroke-width="1.5"
+									stroke-linecap="round"
+									stroke-linejoin="round"
+								/>
+							</svg>
+						</NavigationMenu.Trigger>
+						<NavigationMenu.Content align="center">
+							<ul class="space-y-1.5 text-sm">
+								{#each globalSoftware as software (software.name)}
+									<li>
+										<NavigationMenu.Link href={resolve(`/global/${software.url}`)}>
+											<span>{software.name}</span>
+											<svg class="h-4 w-4 text-brand-500" fill="currentColor" viewBox="0 0 20 20">
+												<path
+													fill-rule="evenodd"
+													d="M13.293 9.293a1 1 0 0 1 1.414 1.414l-4.586 4.586A1 1 0 0 1 8 14.586V6a1 1 0 0 1 2 0v6.172l3.293-3.293z"
+													clip-rule="evenodd"
+												/>
+											</svg>
+										</NavigationMenu.Link>
+									</li>
+								{/each}
+							</ul>
+						</NavigationMenu.Content>
+					</NavigationMenu.Item>
+				{/if}
+			</NavigationMenu.List>
+		</NavigationMenu.Root>
 
 		<div class="hidden items-center gap-3 md:flex">
 			{#if user}
 				<Button href={resolve('/add-plugin')}>Add Plugin</Button>
-				<details class="group relative">
-					<summary
-						class="flex items-center gap-2 rounded-full border border-slate-200 bg-white px-3 py-1.5 text-sm font-semibold text-slate-600 transition hover:border-brand-200 hover:text-brand-700"
-					>
-						<span
-							class="inline-flex h-8 w-8 items-center justify-center rounded-full bg-brand-100 font-display text-sm font-semibold text-brand-700"
-						>
-							{usernameInitial}
-						</span>
-						<span>Account</span>
-						<svg class="h-4 w-4 transition group-open:rotate-180" viewBox="0 0 20 20" fill="none">
-							<path
-								d="M5 7.5L10 12.5L15 7.5"
-								stroke="currentColor"
-								stroke-width="1.5"
-								stroke-linecap="round"
-								stroke-linejoin="round"
-							/>
-						</svg>
-					</summary>
-					<div
-						class="pointer-events-none invisible absolute top-full right-0 z-20 mt-3 w-56 -translate-y-1 rounded-xl border border-slate-200 bg-white/95 p-3 text-sm text-slate-600 opacity-0 shadow-2xl transition-all duration-200 group-open:pointer-events-auto group-open:visible group-open:translate-y-0 group-open:opacity-100"
-					>
-						<div class="mb-2 rounded-lg bg-slate-50 p-3">
-							<p class="text-xs tracking-wide text-slate-400 uppercase">Signed in as</p>
-							<p class="font-semibold text-slate-700">{username || 'bStats user'}</p>
-						</div>
-						<ul class="space-y-1">
-							<li>
-								<a
-									href={resolve(`/author/${username}`)}
-									class="block rounded-md px-3 py-2 transition hover:bg-brand-50 hover:text-slate-900"
+				<NavigationMenu.Root>
+					<NavigationMenu.List>
+						<NavigationMenu.Item value="account">
+							<NavigationMenu.Trigger
+								class="flex items-center gap-2 rounded-full border border-slate-200 bg-white px-3 py-1.5 text-sm font-semibold text-slate-600 transition hover:border-brand-200 hover:text-brand-700"
+							>
+								<span
+									class="inline-flex h-8 w-8 items-center justify-center rounded-full bg-brand-100 font-display text-sm font-semibold text-brand-700"
 								>
-									My page
-								</a>
-							</li>
-							{#if plugins.length}
-								<li>
-									<p class="px-3 pt-2 text-xs tracking-wide text-slate-400 uppercase">My Plugins</p>
-									<ul
-										class="mt-2 max-h-40 space-y-1 overflow-y-auto rounded-md bg-slate-50 p-2 text-sm"
-									>
-										{#each plugins as plugin (plugin.id)}
-											<li>
-												<a
-													href={resolve(`/plugin/${plugin.software.url}/${plugin.name}`)}
-													class="block truncate rounded px-2 py-1 transition hover:bg-white hover:text-brand-700"
-												>
-													{plugin.name}
-													<span class="text-xs tracking-wide text-slate-400 uppercase">
-														({plugin.software.name})
-													</span>
-												</a>
-											</li>
-										{/each}
-									</ul>
-								</li>
-							{/if}
-							<li>
-								<a
-									href={resolve('/change-password')}
-									class="block rounded-md px-3 py-2 transition hover:bg-slate-100 hover:text-slate-900"
+									{usernameInitial}
+								</span>
+								<span>Account</span>
+								<svg
+									class="h-4 w-4 transition-transform duration-100 group-data-[state=open]:rotate-180"
+									viewBox="0 0 20 20"
+									fill="none"
 								>
-									Change password
-								</a>
-							</li>
-							<li>
-								<button
-									onclick={() => authClient.signOut()}
-									class="block w-full appearance-none rounded-md px-3 py-2 text-start transition hover:bg-slate-100 hover:text-slate-900"
-								>
-									Logout
-								</button>
-							</li>
-						</ul>
-					</div>
-				</details>
+									<path
+										d="M5 7.5L10 12.5L15 7.5"
+										stroke="currentColor"
+										stroke-width="1.5"
+										stroke-linecap="round"
+										stroke-linejoin="round"
+									/>
+								</svg>
+							</NavigationMenu.Trigger>
+							<NavigationMenu.Content class="w-56 text-sm" align="end">
+								<div class="mb-2 rounded-lg bg-slate-50 p-3">
+									<p class="text-xs tracking-wide text-slate-400 uppercase">Signed in as</p>
+									<p class="font-semibold text-slate-700">{username || 'bStats user'}</p>
+								</div>
+								<ul class="space-y-1">
+									<li>
+										<NavigationMenu.Link href={resolve(`/author/${username}`)}>
+											My page
+										</NavigationMenu.Link>
+									</li>
+									{#if plugins.length}
+										<li>
+											<p class="px-3 pt-2 text-xs tracking-wide text-slate-400 uppercase">
+												My Plugins
+											</p>
+											<ul
+												class="mt-2 max-h-40 space-y-1 overflow-y-auto rounded-md bg-slate-50 p-2 text-sm"
+											>
+												{#each plugins as plugin (plugin.id)}
+													<li>
+														<NavigationMenu.Link
+															href={resolve(`/plugin/${plugin.software.url}/${plugin.name}`)}
+															class="block truncate rounded px-2 py-1 transition hover:bg-white hover:text-brand-700"
+														>
+															{plugin.name}
+															<span class="text-xs tracking-wide text-slate-400 uppercase">
+																({plugin.software.name})
+															</span>
+														</NavigationMenu.Link>
+													</li>
+												{/each}
+											</ul>
+										</li>
+									{/if}
+									<li>
+										<NavigationMenu.Link
+											href={resolve('/change-password')}
+											class="block rounded-md px-3 py-2 transition hover:bg-slate-100 hover:text-slate-900"
+										>
+											Change password
+										</NavigationMenu.Link>
+									</li>
+									<li>
+										<button
+											onclick={() => authClient.signOut()}
+											class="block w-full appearance-none rounded-md px-3 py-2 text-start text-sm text-slate-600 transition hover:bg-slate-100 hover:text-slate-900"
+										>
+											Logout
+										</button>
+									</li>
+								</ul>
+							</NavigationMenu.Content>
+						</NavigationMenu.Item>
+					</NavigationMenu.List>
+				</NavigationMenu.Root>
 			{:else}
 				<a
 					href={resolve('/login')}
@@ -200,9 +221,9 @@
 
 		<button
 			type="button"
+			onclick={toggleMobileNav}
 			class="inline-flex items-center justify-center rounded-full bg-white p-2 text-slate-600 shadow-sm ring-1 ring-slate-200 transition hover:bg-brand-50 hover:text-brand-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-500 md:hidden"
-			aria-expanded="false"
-			data-mobile-nav-toggle
+			aria-expanded={mobileNavOpen}
 		>
 			<span class="sr-only">Toggle navigation</span>
 			<svg class="h-6 w-6" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
@@ -211,112 +232,116 @@
 		</button>
 	</div>
 
-	<div
-		class="mobile-nav hidden border-t border-slate-200 bg-white/95 px-4 py-6 shadow-lg transition md:hidden"
-		data-mobile-nav-panel
-	>
-		<div class="mx-auto flex max-w-6xl flex-col gap-6 text-base font-medium text-slate-700">
-			<nav class="space-y-3">
-				<a
-					href={resolve('/plugin-list')}
-					class="block rounded-lg px-4 py-3 transition hover:bg-brand-50 hover:text-brand-700"
-				>
-					Plugin List
-				</a>
-				<a
-					href={resolve('/docs')}
-					class="block rounded-lg px-4 py-3 transition hover:bg-brand-50 hover:text-brand-700"
-				>
-					Docs
-				</a>
-				{#if globalSoftware.length}
-					<div class="rounded-2xl bg-slate-100/80 p-4">
-						<p class="text-xs tracking-wide text-slate-400 uppercase">Global Stats</p>
-						<ul class="mt-3 space-y-2 text-sm">
-							{#each globalSoftware as software (software.name)}
-								<li>
-									<a
-										href={resolve(`/global/${software.url}`)}
-										class="flex items-center justify-between rounded-lg bg-white px-3 py-2 shadow-sm transition hover:text-brand-700"
-									>
-										<span>{software.name}</span>
-										<svg class="h-4 w-4 text-brand-500" fill="currentColor" viewBox="0 0 20 20">
-											<path
-												fill-rule="evenodd"
-												d="M7.293 14.707a1 1 0 0 1 0-1.414L10.586 10 7.293 6.707A1 1 0 0 1 8.707 5.293l4 4a1 1 0 0 1 0 1.414l-4 4a1 1 0 0 1-1.414 0Z"
-												clip-rule="evenodd"
-											/>
-										</svg>
-									</a>
-								</li>
-							{/each}
-						</ul>
-					</div>
-				{/if}
-			</nav>
-
-			<div class="space-y-3 rounded-2xl bg-slate-900 px-5 py-6 text-slate-100">
-				<p class="text-xs tracking-wide text-brand-200 uppercase">Community vibes</p>
-				<p class="text-sm text-slate-200">
-					Made for hobbyists, powered by volunteers, and always open source.
-				</p>
-			</div>
-
-			{#if user}
-				<div class="space-y-2">
-					<Button href={resolve('/add-plugin')} fullWidth>
-						<span>Add Plugin</span>
-					</Button>
+	{#if mobileNavOpen}
+		<div
+			class="mobile-nav border-t border-slate-200 bg-white/95 px-4 py-6 shadow-lg transition md:hidden"
+		>
+			<div class="mx-auto flex max-w-6xl flex-col gap-6 text-base font-medium text-slate-700">
+				<nav class="space-y-3">
 					<a
-						href={resolve(`/author/${username}`)}
-						class="block rounded-lg border border-slate-200 px-4 py-3 text-center text-sm font-semibold text-slate-600 transition hover:border-brand-300 hover:text-brand-700"
+						href={resolve('/plugin-list')}
+						class="block rounded-lg px-4 py-3 transition hover:bg-brand-50 hover:text-brand-700"
 					>
-						My page
+						Plugin List
 					</a>
 					<a
-						href={resolve('/change-password')}
-						class="block rounded-lg border border-slate-200 px-4 py-3 text-center text-sm font-semibold text-slate-600 transition hover:border-brand-300 hover:text-brand-700"
+						href={resolve('/docs')}
+						class="block rounded-lg px-4 py-3 transition hover:bg-brand-50 hover:text-brand-700"
 					>
-						Change password
+						Docs
 					</a>
-					<button
-						onclick={() => authClient.signOut()}
-						class="block appearance-none rounded-lg border border-slate-200 px-4 py-3 text-center text-sm font-semibold text-slate-600 transition hover:border-brand-300 hover:text-brand-700"
-					>
-						Logout
-					</button>
-					{#if plugins.length}
+					{#if globalSoftware.length}
 						<div class="rounded-2xl bg-slate-100/80 p-4">
-							<p class="text-xs tracking-wide text-slate-400 uppercase">My Plugins</p>
+							<p class="text-xs tracking-wide text-slate-400 uppercase">Global Stats</p>
 							<ul class="mt-3 space-y-2 text-sm">
-								{#each plugins as plugin (plugin.id)}
+								{#each globalSoftware as software (software.name)}
 									<li>
 										<a
-											href={resolve(`/plugin/${plugin.software.url}/${plugin.name}`)}
-											class="block truncate rounded-lg bg-white px-3 py-2 shadow-sm transition hover:text-brand-700"
+											href={resolve(`/global/${software.url}`)}
+											class="flex items-center justify-between rounded-lg bg-white px-3 py-2 shadow-sm transition hover:text-brand-700"
 										>
-											{plugin.name}
-											<span class="text-xs tracking-wide text-slate-400 uppercase"
-												>({plugin.software.name})</span
-											>
+											<span>{software.name}</span>
+											<svg class="h-4 w-4 text-brand-500" fill="currentColor" viewBox="0 0 20 20">
+												<path
+													fill-rule="evenodd"
+													d="M7.293 14.707a1 1 0 0 1 0-1.414L10.586 10 7.293 6.707A1 1 0 0 1 8.707 5.293l4 4a1 1 0 0 1 0 1.414l-4 4a1 1 0 0 1-1.414 0Z"
+													clip-rule="evenodd"
+												/>
+											</svg>
 										</a>
 									</li>
 								{/each}
 							</ul>
 						</div>
 					{/if}
+				</nav>
+
+				<div class="space-y-3 rounded-2xl bg-slate-900 px-5 py-6 text-slate-100">
+					<p class="text-xs tracking-wide text-brand-200 uppercase">Community vibes</p>
+					<p class="text-sm text-slate-200">
+						Made for hobbyists, powered by volunteers, and always open source.
+					</p>
 				</div>
-			{:else}
-				<div class="flex flex-col gap-3">
-					<a
-						href={resolve('/login')}
-						class="block rounded-lg border border-slate-200 px-4 py-3 text-center text-sm font-semibold text-slate-600 transition hover:border-brand-300 hover:text-brand-700"
-					>
-						Log in
-					</a>
-					<Button href={resolve('/register')} fullWidth>Create account</Button>
-				</div>
-			{/if}
+
+				{#if user}
+					<div class="space-y-2">
+						<Button href={resolve('/add-plugin')} fullWidth>
+							<span>Add Plugin</span>
+						</Button>
+						<a
+							href={resolve(`/author/${username}`)}
+							class="block rounded-lg border border-slate-200 px-4 py-3 text-center text-sm font-semibold text-slate-600 transition hover:border-brand-300 hover:text-brand-700"
+						>
+							My page
+						</a>
+						<a
+							href={resolve('/change-password')}
+							class="block rounded-lg border border-slate-200 px-4 py-3 text-center text-sm font-semibold text-slate-600 transition hover:border-brand-300 hover:text-brand-700"
+						>
+							Change password
+						</a>
+						<button
+							onclick={() => {
+								authClient.signOut();
+								closeMobileNav();
+							}}
+							class="block w-full appearance-none rounded-lg border border-slate-200 px-4 py-3 text-center text-sm font-semibold text-slate-600 transition hover:border-brand-300 hover:text-brand-700"
+						>
+							Logout
+						</button>
+						{#if plugins.length}
+							<div class="rounded-2xl bg-slate-100/80 p-4">
+								<p class="text-xs tracking-wide text-slate-400 uppercase">My Plugins</p>
+								<ul class="mt-3 space-y-2 text-sm">
+									{#each plugins as plugin (plugin.id)}
+										<li>
+											<a
+												href={resolve(`/plugin/${plugin.software.url}/${plugin.name}`)}
+												class="block truncate rounded-lg bg-white px-3 py-2 shadow-sm transition hover:text-brand-700"
+											>
+												{plugin.name}
+												<span class="text-xs tracking-wide text-slate-400 uppercase"
+													>({plugin.software.name})</span
+												>
+											</a>
+										</li>
+									{/each}
+								</ul>
+							</div>
+						{/if}
+					</div>
+				{:else}
+					<div class="flex flex-col gap-3">
+						<a
+							href={resolve('/login')}
+							class="block rounded-lg border border-slate-200 px-4 py-3 text-center text-sm font-semibold text-slate-600 transition hover:border-brand-300 hover:text-brand-700"
+						>
+							Log in
+						</a>
+						<Button href={resolve('/register')} fullWidth>Create account</Button>
+					</div>
+				{/if}
+			</div>
 		</div>
-	</div>
+	{/if}
 </header>

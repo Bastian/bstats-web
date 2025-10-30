@@ -2,33 +2,6 @@
 	import { onMount } from 'svelte';
 
 	onMount(() => {
-		// Mobile navigation toggle
-		const toggle = document.querySelector('[data-mobile-nav-toggle]');
-		const panel = document.querySelector('[data-mobile-nav-panel]');
-
-		if (toggle && panel) {
-			const closePanel = () => {
-				panel.classList.add('hidden');
-				toggle.setAttribute('aria-expanded', 'false');
-			};
-
-			toggle.addEventListener('click', () => {
-				const isHidden = panel.classList.contains('hidden');
-				panel.classList.toggle('hidden');
-				toggle.setAttribute('aria-expanded', String(isHidden));
-			});
-
-			panel.querySelectorAll('a').forEach((link) => {
-				link.addEventListener('click', () => closePanel());
-			});
-
-			window.addEventListener('keydown', (event) => {
-				if (event.key === 'Escape') {
-					closePanel();
-				}
-			});
-		}
-
 		// Requests counter animation
 		const requestsCounterEl = document.querySelector('[data-requests-counter]');
 		if (requestsCounterEl) {

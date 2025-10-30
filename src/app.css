@@ -47,6 +47,32 @@
 			height: 0;
 		}
 	}
+
+	/* Navigation Menu animations */
+	--animate-dropdown-in: dropdown-in 0.1s ease-out;
+	--animate-dropdown-out: dropdown-out 0.075s ease-in;
+
+	@keyframes dropdown-in {
+		from {
+			opacity: 0;
+			transform: translateY(-8px) scale(0.96);
+		}
+		to {
+			opacity: 1;
+			transform: translateY(0) scale(1);
+		}
+	}
+
+	@keyframes dropdown-out {
+		from {
+			opacity: 1;
+			transform: translateY(0) scale(1);
+		}
+		to {
+			opacity: 0;
+			transform: translateY(-8px) scale(0.96);
+		}
+	}
 }
 
 @layer base {
