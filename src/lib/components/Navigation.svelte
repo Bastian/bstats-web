@@ -67,6 +67,7 @@
 	<div class="mx-auto flex h-20 max-w-6xl items-center justify-between px-4 sm:px-6">
 		<a href={resolve('/')} class="group flex items-center gap-3">
 			<span
+				aria-hidden="true"
 				class="inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-brand-500 font-display text-lg font-semibold text-white shadow-floating transition-transform group-hover:-translate-y-0.5 md:text-xl"
 			>
 				bS

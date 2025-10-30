@@ -31,6 +31,7 @@
 			<div class="md:col-span-3 lg:col-span-2">
 				<div class="inline-flex items-center gap-3">
 					<span
+						aria-hidden="true"
 						class="inline-flex h-11 w-11 items-center justify-center rounded-2xl bg-brand-500 font-display text-lg font-semibold text-white shadow-md"
 					>
 						bS
