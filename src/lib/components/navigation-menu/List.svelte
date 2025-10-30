@@ -11,7 +11,7 @@
 </script>
 
 <BitsNavigationMenu.List
-	class={['flex items-center gap-6 text-sm font-semibold text-slate-600', className]}
+	class={['flex items-center gap-4 text-sm font-semibold text-slate-600 lg:gap-6', className]}
 	{...restProps}
 >
 	{@render children()}

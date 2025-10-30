@@ -2,6 +2,9 @@
 	import Button from '$lib/components/Button.svelte';
 	import { NavigationMenu } from '$lib/components/navigation-menu';
 	import { resolve } from '$app/paths';
+	import IconArrowRight from '@tabler/icons-svelte/icons/arrow-right';
+	import IconChevronDown from '@tabler/icons-svelte/icons/chevron-down';
+	import IconChevronRight from '@tabler/icons-svelte/icons/chevron-right';
 
 	import type { User } from 'better-auth';
 	import { authClient } from '$lib/auth.client';
@@ -70,7 +73,9 @@
 			</span>
 			<span class="flex flex-col leading-tight">
 				<span class="font-display text-xl font-semibold text-slate-900 md:text-2xl">bStats</span>
-				<span class="text-xs font-medium tracking-wide text-slate-400 uppercase">
+				<span
+					class="text-xs font-medium tracking-wide text-slate-400 uppercase md:hidden lg:inline"
+				>
 					Open source metrics
 				</span>
 			</span>
@@ -88,19 +93,10 @@
 					<NavigationMenu.Item value="global-stats">
 						<NavigationMenu.Trigger>
 							Global Stats
-							<svg
-								class="h-4 w-4 transition-transform duration-100 group-data-[state=open]:rotate-180"
-								viewBox="0 0 20 20"
-								fill="none"
-							>
-								<path
-									d="M5 7.5L10 12.5L15 7.5"
-									stroke="currentColor"
-									stroke-width="1.5"
-									stroke-linecap="round"
-									stroke-linejoin="round"
-								/>
-							</svg>
+							<IconChevronDown
+								size={16}
+								class="transition-transform duration-100 group-data-[state=open]:rotate-180"
+							/>
 						</NavigationMenu.Trigger>
 						<NavigationMenu.Content align="center">
 							<ul class="space-y-1.5 text-sm">
@@ -108,17 +104,43 @@
 									<li>
 										<NavigationMenu.Link href={resolve(`/global/${software.url}`)}>
 											<span>{software.name}</span>
-											<svg class="h-4 w-4 text-brand-500" fill="currentColor" viewBox="0 0 20 20">
-												<path
-													fill-rule="evenodd"
-													d="M13.293 9.293a1 1 0 0 1 1.414 1.414l-4.586 4.586A1 1 0 0 1 8 14.586V6a1 1 0 0 1 2 0v6.172l3.293-3.293z"
-													clip-rule="evenodd"
-												/>
-											</svg>
 										</NavigationMenu.Link>
 									</li>
 								{/each}
 							</ul>
+						</NavigationMenu.Content>
+					</NavigationMenu.Item>
+				{/if}
+				{#if plugins.length}
+					<NavigationMenu.Item value="my-plugins">
+						<NavigationMenu.Trigger>
+							My Plugins
+							<IconChevronDown
+								size={16}
+								class="transition-transform duration-100 group-data-[state=open]:rotate-180"
+							/>
+						</NavigationMenu.Trigger>
+						<NavigationMenu.Content align="center">
+							<ul class="space-y-1.5 text-sm">
+								{#each plugins as plugin (plugin.id)}
+									<li>
+										<NavigationMenu.Link
+											href={resolve(`/plugin/${plugin.software.url}/${plugin.name}`)}
+										>
+											<div class="gap-2">
+												<span>{plugin.name}</span>
+												<span class="text-xs text-slate-400">
+													({plugin.software.name})
+												</span>
+											</div>
+										</NavigationMenu.Link>
+									</li>
+								{/each}
+							</ul>
+
+							<Button href={resolve('/add-plugin')} fullWidth class="mt-3">
+								<span>Add Plugin</span>
+							</Button>
 						</NavigationMenu.Content>
 					</NavigationMenu.Item>
 				{/if}
@@ -127,7 +149,9 @@
 
 		<div class="hidden items-center gap-3 md:flex">
 			{#if user}
-				<Button href={resolve('/add-plugin')}>Add Plugin</Button>
+				{#if !plugins.length}
+					<Button href={resolve('/add-plugin')}>Add Plugin</Button>
+				{/if}
 				<NavigationMenu.Root>
 					<NavigationMenu.List>
 						<NavigationMenu.Item value="account">
@@ -140,19 +164,10 @@
 									{usernameInitial}
 								</span>
 								<span>Account</span>
-								<svg
-									class="h-4 w-4 transition-transform duration-100 group-data-[state=open]:rotate-180"
-									viewBox="0 0 20 20"
-									fill="none"
-								>
-									<path
-										d="M5 7.5L10 12.5L15 7.5"
-										stroke="currentColor"
-										stroke-width="1.5"
-										stroke-linecap="round"
-										stroke-linejoin="round"
-									/>
-								</svg>
+								<IconChevronDown
+									size={16}
+									class="transition-transform duration-100 group-data-[state=open]:rotate-180"
+								/>
 							</NavigationMenu.Trigger>
 							<NavigationMenu.Content class="w-56 text-sm" align="end">
 								<div class="mb-2 rounded-lg bg-slate-50 p-3">
@@ -165,30 +180,7 @@
 											My page
 										</NavigationMenu.Link>
 									</li>
-									{#if plugins.length}
-										<li>
-											<p class="px-3 pt-2 text-xs tracking-wide text-slate-400 uppercase">
-												My Plugins
-											</p>
-											<ul
-												class="mt-2 max-h-40 space-y-1 overflow-y-auto rounded-md bg-slate-50 p-2 text-sm"
-											>
-												{#each plugins as plugin (plugin.id)}
-													<li>
-														<NavigationMenu.Link
-															href={resolve(`/plugin/${plugin.software.url}/${plugin.name}`)}
-															class="block truncate rounded px-2 py-1 transition hover:bg-white hover:text-brand-700"
-														>
-															{plugin.name}
-															<span class="text-xs tracking-wide text-slate-400 uppercase">
-																({plugin.software.name})
-															</span>
-														</NavigationMenu.Link>
-													</li>
-												{/each}
-											</ul>
-										</li>
-									{/if}
+
 									<li>
 										<NavigationMenu.Link
 											href={resolve('/change-password')}
@@ -234,7 +226,7 @@
 
 	{#if mobileNavOpen}
 		<div
-			class="mobile-nav border-t border-slate-200 bg-white/95 px-4 py-6 shadow-lg transition md:hidden"
+			class="mobile-nav border-t border-slate-200 bg-white/95 px-4 py-6 shadow-lg transition lg:hidden"
 		>
 			<div class="mx-auto flex max-w-6xl flex-col gap-6 text-base font-medium text-slate-700">
 				<nav class="space-y-3">
@@ -261,13 +253,7 @@
 											class="flex items-center justify-between rounded-lg bg-white px-3 py-2 shadow-sm transition hover:text-brand-700"
 										>
 											<span>{software.name}</span>
-											<svg class="h-4 w-4 text-brand-500" fill="currentColor" viewBox="0 0 20 20">
-												<path
-													fill-rule="evenodd"
-													d="M7.293 14.707a1 1 0 0 1 0-1.414L10.586 10 7.293 6.707A1 1 0 0 1 8.707 5.293l4 4a1 1 0 0 1 0 1.414l-4 4a1 1 0 0 1-1.414 0Z"
-													clip-rule="evenodd"
-												/>
-											</svg>
+											<IconChevronRight size={14} class=" text-brand-500" />
 										</a>
 									</li>
 								{/each}
@@ -276,15 +262,31 @@
 					{/if}
 				</nav>
 
-				<div class="space-y-3 rounded-2xl bg-slate-900 px-5 py-6 text-slate-100">
-					<p class="text-xs tracking-wide text-brand-200 uppercase">Community vibes</p>
-					<p class="text-sm text-slate-200">
-						Made for hobbyists, powered by volunteers, and always open source.
-					</p>
-				</div>
-
 				{#if user}
 					<div class="space-y-2">
+						{#if plugins.length}
+							<div class="rounded-2xl bg-slate-100/80 p-4">
+								<p class="text-xs tracking-wide text-slate-400 uppercase">My Plugins</p>
+								<ul class="mt-3 space-y-2 text-sm">
+									{#each plugins as plugin (plugin.id)}
+										<li>
+											<a
+												href={resolve(`/plugin/${plugin.software.url}/${plugin.name}`)}
+												class="flex items-center justify-between gap-1 truncate rounded-lg bg-white px-3 py-2 shadow-sm transition hover:text-brand-700"
+											>
+												<div class="truncate">
+													{plugin.name}
+													<span class="text-xs tracking-wide text-slate-400 uppercase">
+														({plugin.software.name})
+													</span>
+												</div>
+												<IconChevronRight size={14} class="shrink-0 text-brand-500" />
+											</a>
+										</li>
+									{/each}
+								</ul>
+							</div>
+						{/if}
 						<Button href={resolve('/add-plugin')} fullWidth>
 							<span>Add Plugin</span>
 						</Button>
@@ -309,26 +311,6 @@
 						>
 							Logout
 						</button>
-						{#if plugins.length}
-							<div class="rounded-2xl bg-slate-100/80 p-4">
-								<p class="text-xs tracking-wide text-slate-400 uppercase">My Plugins</p>
-								<ul class="mt-3 space-y-2 text-sm">
-									{#each plugins as plugin (plugin.id)}
-										<li>
-											<a
-												href={resolve(`/plugin/${plugin.software.url}/${plugin.name}`)}
-												class="block truncate rounded-lg bg-white px-3 py-2 shadow-sm transition hover:text-brand-700"
-											>
-												{plugin.name}
-												<span class="text-xs tracking-wide text-slate-400 uppercase"
-													>({plugin.software.name})</span
-												>
-											</a>
-										</li>
-									{/each}
-								</ul>
-							</div>
-						{/if}
 					</div>
 				{:else}
 					<div class="flex flex-col gap-3">

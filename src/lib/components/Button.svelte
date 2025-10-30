@@ -13,6 +13,7 @@
 </script>
 
 <Button.Root
+	{...restProps}
 	class={[
 		'cursor-pointer disabled:cursor-not-allowed disabled:opacity-50',
 		{
@@ -22,9 +23,9 @@
 			'px-5 py-2 text-sm': size === 'medium' || !size,
 			'px-4 py-2 text-sm': size === 'small',
 			'w-full justify-center': !!fullWidth
-		}
+		},
+		restProps.class
 	]}
-	{...restProps}
 >
 	{@render children()}
 </Button.Root>
