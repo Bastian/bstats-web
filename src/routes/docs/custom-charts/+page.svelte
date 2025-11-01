@@ -1,12 +1,65 @@
 <script lang="ts">
 	import Badge from '$lib/components/Badge.svelte';
 	import PageHero from '$lib/components/PageHero.svelte';
+	import PieChart from '$lib/components/charts/PieChart.svelte';
+	import DrilldownPieChart from '$lib/components/charts/DrilldownPieChart.svelte';
+	import LineChart from '$lib/components/charts/LineChart.svelte';
+	import BarChart from '$lib/components/charts/BarChart.svelte';
 	import type { PageData } from './$types';
 	import { onMount } from 'svelte';
 
 	let { data }: { data: PageData } = $props();
 
 	let gistStylesheetLoaded = $state(false);
+
+	// Static example data for charts
+	const pieData = [
+		{ name: 'Online', y: 86 },
+		{ name: 'Offline', y: 14 }
+	];
+
+	const drilldownPieData = {
+		seriesData: [
+			{ name: 'Linux', y: 48, drilldown: 'Linux' },
+			{ name: 'Windows', y: 37, drilldown: 'Windows' },
+			{ name: 'macOS', y: 15, drilldown: 'macOS' }
+		],
+		drilldownData: [
+			{ name: 'Linux', id: 'Linux', data: [['Ubuntu', 20], ['Debian', 12], ['Other', 16]] },
+			{
+				name: 'Windows',
+				id: 'Windows',
+				data: [
+					['Windows 11', 22],
+					['Windows 10', 10],
+					['Server', 5]
+				]
+			},
+			{
+				name: 'macOS',
+				id: 'macOS',
+				data: [
+					['Ventura', 7],
+					['Monterey', 5],
+					['Other', 3]
+				]
+			}
+		]
+	};
+
+	// Generate example line chart data for the last 7 days
+	const lineData: [number, number][] = [];
+	const base = new Date().getTime();
+	for (let i = 6; i >= 0; i--) {
+		lineData.push([base - i * 86400000, Math.round(100 + Math.random() * 60)]);
+	}
+
+	const barData = [
+		{ name: 'Disabled', data: [1337, 226] },
+		{ name: 'Enabled', data: [123, 1234] }
+	];
+
+	const barCategories = ['Feature A', 'Feature B'];
 
 	// Function to load a gist via JSONP
 	function loadGist(gistId: string, selector: string) {
@@ -53,233 +106,7 @@
 		gists.forEach(({ id, selector }) => {
 			loadGist(id, selector);
 		});
-
-		// Define global functions required by charts.js
-		(window as any).__bstatsCustomLayout = true;
-		(window as any).getPluginId = function () {
-			return '1';
-		};
-		(window as any).updatePlayersBadge = function () {};
-		(window as any).updateServersBadge = function () {};
-
-		// Load Highcharts scripts dynamically in sequential order
-		const scripts = [
-			'https://code.highcharts.com/stock/6.0.1/highstock.js',
-			'https://code.highcharts.com/maps/6.0.1/modules/map.js',
-			'https://code.highcharts.com/6.0.1/modules/exporting.js',
-			'https://code.highcharts.com/6.0.1/modules/no-data-to-display.js',
-			'https://code.highcharts.com/6.0.1/modules/drilldown.js',
-			'/javascripts/charts/themes/chartTheme.js'
-		];
-
-		function loadScriptSequentially(index: number) {
-			if (index >= scripts.length) {
-				initializeCharts();
-				return;
-			}
-
-			const script = document.createElement('script');
-			script.src = scripts[index];
-			script.onload = () => {
-				loadScriptSequentially(index + 1);
-			};
-			script.onerror = () => {
-				console.error(`Failed to load script: ${scripts[index]}`);
-				loadScriptSequentially(index + 1);
-			};
-			document.body.appendChild(script);
-		}
-
-		loadScriptSequentially(0);
 	});
-
-	function initializeCharts() {
-		if (typeof (window as any).Highcharts === 'undefined') {
-			return;
-		}
-
-		const Highcharts = (window as any).Highcharts;
-
-		// Pie chart example (Simple Pie)
-		const pieData = [
-			{
-				name: 'Online',
-				y: 86
-			},
-			{
-				name: 'Offline',
-				y: 14
-			}
-		];
-
-		const pieContainer = document.getElementById('onlineModePie');
-		if (pieContainer) {
-			Highcharts.chart(pieContainer, {
-				chart: { type: 'pie', backgroundColor: 'transparent' },
-				title: { text: null },
-				tooltip: { pointFormat: '<b>{point.percentage:.1f}%</b>' },
-				plotOptions: {
-					pie: {
-						allowPointSelect: true,
-						cursor: 'pointer',
-						dataLabels: {
-							enabled: true,
-							format: '<b>{point.name}</b>: {point.percentage:.1f}%'
-						}
-					}
-				},
-				series: [
-					{
-						name: 'Mode',
-						colorByPoint: true,
-						data: pieData
-					}
-				]
-			});
-		}
-
-		// Drilldown pie chart example
-		const osPieContainer = document.getElementById('osPie');
-		if (osPieContainer) {
-			Highcharts.chart(osPieContainer, {
-				chart: { type: 'pie', backgroundColor: 'transparent' },
-				title: { text: null },
-				tooltip: { pointFormat: '<b>{point.percentage:.1f}%</b>' },
-				plotOptions: {
-					pie: {
-						allowPointSelect: true,
-						cursor: 'pointer',
-						dataLabels: {
-							enabled: true,
-							format: '<b>{point.name}</b>: {point.percentage:.1f}%'
-						}
-					}
-				},
-				series: [
-					{
-						name: 'OS Family',
-						colorByPoint: true,
-						data: [
-							{
-								name: 'Linux',
-								y: 48,
-								drilldown: 'Linux'
-							},
-							{
-								name: 'Windows',
-								y: 37,
-								drilldown: 'Windows'
-							},
-							{
-								name: 'macOS',
-								y: 15,
-								drilldown: 'macOS'
-							}
-						]
-					}
-				],
-				drilldown: {
-					series: [
-						{
-							id: 'Linux',
-							data: [
-								['Ubuntu', 20],
-								['Debian', 12],
-								['Other', 16]
-							]
-						},
-						{
-							id: 'Windows',
-							data: [
-								['Windows 11', 22],
-								['Windows 10', 10],
-								['Server', 5]
-							]
-						},
-						{
-							id: 'macOS',
-							data: [
-								['Ventura', 7],
-								['Monterey', 5],
-								['Other', 3]
-							]
-						}
-					]
-				}
-			});
-		}
-
-		// Line chart example
-		const lineContainer = document.getElementById('playersLineChart');
-		if (lineContainer) {
-			const lineData = [];
-			const base = new Date().getTime();
-			for (let i = 6; i >= 0; i--) {
-				lineData.push([base - i * 86400000, Math.round(100 + Math.random() * 60)]);
-			}
-
-			Highcharts.stockChart(lineContainer, {
-				chart: { backgroundColor: 'transparent' },
-				rangeSelector: { selected: 1 },
-				title: { text: null },
-				series: [
-					{
-						name: 'Players',
-						data: lineData
-					}
-				]
-			});
-		}
-
-		// Bar chart example
-		const barContainer = document.getElementById('exampleBar');
-		if (barContainer) {
-			const barData = {
-				valueName: 'Servers',
-				categories: ['Feature A', 'Feature B'],
-				series: [
-					{
-						name: 'Disabled',
-						data: [1337, 226]
-					},
-					{
-						name: 'Enabled',
-						data: [123, 1234]
-					}
-				]
-			};
-
-			Highcharts.chart(barContainer, {
-				chart: {
-					type: 'bar',
-					backgroundColor: 'transparent',
-					height: barData.categories.length * barData.series.length * 28 + 180
-				},
-				title: { text: null },
-				tooltip: {
-					headerFormat: '<span style="font-size: 14px"><b>{point.key}</b></span><br/>',
-					pointFormat: '<b>{series.name}</b>: {point.y} ' + barData.valueName
-				},
-				legend: {
-					align: 'left',
-					verticalAlign: 'top'
-				},
-				xAxis: { categories: barData.categories },
-				yAxis: { min: 0, title: { text: barData.valueName } },
-				plotOptions: {
-					bar: {
-						dataLabels: {
-							enabled: true
-						}
-					},
-					series: {
-						pointWidth: 25
-					}
-				},
-				series: barData.series
-			});
-		}
-	}
 </script>
 
 <svelte:head>
@@ -334,7 +161,7 @@
 				</p>
 			</div>
 			<div class="rounded-2xl border border-slate-200 bg-white p-4 md:p-6">
-				<div id="onlineModePie" class="min-h-[320px] w-full"></div>
+				<PieChart data={pieData} />
 			</div>
 			<div class="space-y-4">
 				<h3 class="text-sm font-semibold tracking-[0.2em] text-slate-500 uppercase">
@@ -357,7 +184,7 @@
 				</p>
 			</div>
 			<div class="rounded-2xl border border-slate-200 bg-white p-4 md:p-6">
-				<div id="osPie" class="min-h-[320px] w-full"></div>
+				<DrilldownPieChart data={drilldownPieData} />
 			</div>
 			<div id="gist-drilldown-pie"></div>
 		</article>
@@ -371,7 +198,7 @@
 				</p>
 			</div>
 			<div class="rounded-2xl border border-slate-200 bg-white p-4 md:p-6">
-				<div id="playersLineChart" class="min-h-[320px] w-full"></div>
+				<LineChart data={lineData} lineName="Players" />
 			</div>
 			<div class="space-y-4">
 				<h3 class="text-sm font-semibold tracking-[0.2em] text-slate-500 uppercase">
@@ -397,7 +224,7 @@
 				</p>
 			</div>
 			<div class="rounded-2xl border border-slate-200 bg-white p-4 md:p-6">
-				<div id="exampleBar" class="min-h-[320px] w-full"></div>
+				<BarChart data={barData} categories={barCategories} valueName="Servers" />
 			</div>
 			<div id="gist-bar-chart"></div>
 		</article>

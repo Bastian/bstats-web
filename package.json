@@ -21,6 +21,7 @@
 		"bcryptjs": "^2.4.3",
 		"better-auth": "^1.0.0",
 		"bits-ui": "^2.14.1",
+		"echarts": "^6.0.0",
 		"geoip-lite": "^1.2.1",
 		"ioredis": "^5.8.2",
 		"nodemailer": "^7.0.10",

@@ -44,9 +44,30 @@
 				</Accordion.Item>
 				<Accordion.Item value="general-3" title="Is there an API?">
 					Yes. bStats exposes a lightweight REST API for public metrics. Start here:
-					<a class="font-semibold text-brand-600 hover:text-brand-700" href={resolve('/docs/rest-api')}>
+					<a
+						class="font-semibold text-brand-600 hover:text-brand-700"
+						href={resolve('/docs/rest-api')}
+					>
 						REST API documentation
 					</a>.
+				</Accordion.Item>
+			</Accordion.Root>
+		</article>
+
+		<article class="doc-card space-y-4">
+			<h2 class="doc-card-title">Map Charts</h2>
+			<Accordion.Root class="space-y-3">
+				<Accordion.Item value="maps-1" title="Why are certain borders displayed this way?">
+					Map data is provided by Natural Earth, and we follow <a
+						class="font-semibold text-brand-600 hover:text-brand-700"
+						href="https://www.naturalearthdata.com/about/disputed-boundaries-policy/"
+						target="_blank"
+						rel="noopener noreferrer"
+					>
+						their policy on disputed boundaries
+					</a>
+					to provide a neutral, de facto representation. While we recognize that all borders are inherently
+					political, our goal is to provide geographic context, not to take a stance on territorial claims.
 				</Accordion.Item>
 			</Accordion.Root>
 		</article>
@@ -70,18 +91,26 @@
 			<Accordion.Root class="space-y-3">
 				<Accordion.Item value="metrics-1" title="How do I add bStats to my plugin?">
 					Head over to the
-					<a class="font-semibold text-brand-600 hover:text-brand-700" href={resolve('/add-plugin')}>
+					<a
+						class="font-semibold text-brand-600 hover:text-brand-700"
+						href={resolve('/add-plugin')}
+					>
 						integration wizard
 					</a>
 					for Maven and manual instructions.
 				</Accordion.Item>
 				<Accordion.Item value="metrics-2" title="Where do I report bugs or request features?">
 					Website feedback lives on
-					<a class="font-semibold text-brand-600 hover:text-brand-700" href="https://github.com/Bastian/bStats/issues">
+					<a
+						class="font-semibold text-brand-600 hover:text-brand-700"
+						href="https://github.com/Bastian/bStats/issues"
+					>
 						the bStats GitHub
-					</a>.
-					Metrics class improvements belong on
-					<a class="font-semibold text-brand-600 hover:text-brand-700" href="https://github.com/Bastian/bStats-Metrics/issues">
+					</a>. Metrics class improvements belong on
+					<a
+						class="font-semibold text-brand-600 hover:text-brand-700"
+						href="https://github.com/Bastian/bStats-Metrics/issues"
+					>
 						bStats-Metrics
 					</a>.
 				</Accordion.Item>

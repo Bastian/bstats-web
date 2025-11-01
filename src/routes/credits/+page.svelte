@@ -58,29 +58,5 @@
 				</li>
 			</ul>
 		</article>
-
-		<article class="doc-card space-y-4">
-			<h2 class="doc-card-title">Special thanks</h2>
-			<ul class="grid gap-3 text-sm text-slate-600 sm:grid-cols-2">
-				<li class="rounded-xl border border-slate-200 bg-slate-50 px-4 py-3">
-					<span class="font-semibold text-slate-900">Cloudflare</span>
-					<a
-						href="https://www.cloudflare.com/"
-						class="mt-1 block text-xs tracking-[0.2em] text-brand-600 uppercase hover:text-brand-700"
-						target="_blank"
-						rel="noopener">Website</a
-					>
-				</li>
-				<li class="rounded-xl border border-slate-200 bg-slate-50 px-4 py-3">
-					<span class="font-semibold text-slate-900">Highcharts</span>
-					<a
-						href="https://www.highcharts.com/"
-						class="mt-1 block text-xs tracking-[0.2em] text-brand-600 uppercase hover:text-brand-700"
-						target="_blank"
-						rel="noopener">Website</a
-					>
-				</li>
-			</ul>
-		</article>
 	</section>
 </main>

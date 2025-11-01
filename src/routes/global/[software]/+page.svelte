@@ -1,6 +1,14 @@
 <script lang="ts">
 	import Badge from '$lib/components/Badge.svelte';
 	import PageHero from '$lib/components/PageHero.svelte';
+	import ChartCard from '$lib/components/charts/ChartCard.svelte';
+	import PieChart from '$lib/components/charts/PieChart.svelte';
+	import DrilldownPieChart from '$lib/components/charts/DrilldownPieChart.svelte';
+	import LineChart from '$lib/components/charts/LineChart.svelte';
+	import BarChart from '$lib/components/charts/BarChart.svelte';
+	import MapChart from '$lib/components/charts/MapChart.svelte';
+	import { fetchCharts, fetchChartData } from '$lib/charts/chart-data';
+	import type { LineChartData } from '$lib/charts/chart-data';
 	import type { PageData } from './$types';
 	import { onMount } from 'svelte';
 
@@ -13,6 +21,9 @@
 	let playersCurrent = $state('--');
 	let playersRecord = $state('--');
 
+	let charts = $state<any[]>([]);
+	let chartDataMap = $state<Record<number, any>>({});
+
 	onMount(() => {
 		// Load flag CSS for maps
 		const link = document.createElement('link');
@@ -20,159 +31,95 @@
 		link.href = 'https://cloud.github.com/downloads/lafeber/world-flags-sprite/flags32.css';
 		document.head.appendChild(link);
 
-		// Set up global functions BEFORE loading charts.js
-		(window as any).__bstatsCustomLayout = true;
-		(window as any).getPluginId = () => data.plugin.id;
-		(window as any).updatePlayersBadge = (chartData: any[]) => {
-			const current = chartData[chartData.length - 1][1];
-			const record = chartData.reduce((max: number, point: any) => Math.max(max, point[1]), 0);
-			playersCurrent = formatter.format(current);
-			playersRecord = formatter.format(record);
-		};
-		(window as any).updateServersBadge = (chartData: any[]) => {
-			const current = chartData[chartData.length - 1][1];
-			const record = chartData.reduce((max: number, point: any) => Math.max(max, point[1]), 0);
-			serversCurrent = formatter.format(current);
-			serversRecord = formatter.format(record);
-		};
-
-		// Load scripts sequentially to maintain dependencies
-		const scripts = [
-			'https://code.highcharts.com/stock/6.0.1/highstock.js',
-			'https://code.highcharts.com/maps/6.0.1/modules/map.js',
-			'https://code.highcharts.com/6.0.1/modules/exporting.js',
-			'https://code.highcharts.com/6.0.1/modules/no-data-to-display.js',
-			'https://code.highcharts.com/6.0.1/modules/drilldown.js',
-			'https://code.highcharts.com/maps/6.0.1/modules/data.js',
-			'https://code.highcharts.com/mapdata/custom/world.js',
-			'/javascripts/charts/themes/chartTheme.js',
-			'/javascripts/charts/charts.js'
-		];
-
-		function loadScriptSequentially(index: number) {
-			if (index >= scripts.length) {
-				// All scripts loaded, now initialize charts
-				initializeCharts();
-				return;
-			}
-
-			const script = document.createElement('script');
-			script.src = scripts[index];
-			script.onload = () => {
-				loadScriptSequentially(index + 1);
-			};
-			script.onerror = () => {
-				console.error(`Failed to load script: ${scripts[index]}`);
-				loadScriptSequentially(index + 1);
-			};
-			document.body.appendChild(script);
-		}
-
-		loadScriptSequentially(0);
+		// Fetch and initialize charts
+		initializeCharts();
 	});
 
-	function initializeCharts() {
-		fetch(`/api/v1/plugins/${data.plugin.id}/charts`)
-			.then((res) => res.json())
-			.then((charts) => {
-				const ids = Object.keys(charts).sort((a, b) => charts[a].position - charts[b].position);
+	async function initializeCharts() {
+		try {
+			// Fetch chart metadata
+			const chartsData = await fetchCharts(data.plugin.id);
+			const chartIds = Object.keys(chartsData).sort(
+				(a, b) => chartsData[a].position - chartsData[b].position
+			);
 
-				(window as any).__bstatsCharts = charts;
+			// Build charts array with metadata
+			charts = chartIds.map((id) => ({
+				id,
+				uid: chartsData[id].uid,
+				type: chartsData[id].type,
+				title: chartsData[id].title,
+				position: chartsData[id].position,
+				data: chartsData[id].data
+			}));
 
-				const chartsContainer = document.getElementById('charts');
-				if (!chartsContainer) return;
+			// Fetch data for each chart
+			for (const chart of charts) {
+				try {
+					const maxElements = chart.type === 'single_linechart' ? 2 * 24 * 31 * 1 : undefined;
+					const data = await fetchChartData(chart.uid, maxElements);
+					chartDataMap[chart.uid] = data;
 
-				ids.forEach((chartId) => {
-					if (!charts.hasOwnProperty(chartId)) return;
+					// Update badges for special charts
+					if (chart.id === 'players' && Array.isArray(data) && data.length > 0) {
+						updatePlayersBadge(data as LineChartData);
+					} else if (chart.id === 'servers' && Array.isArray(data) && data.length > 0) {
+						updateServersBadge(data as LineChartData);
+					}
+				} catch (error) {
+					console.error(`Failed to fetch data for chart ${chart.id}:`, error);
+				}
+			}
 
-					const chart = charts[chartId];
-					const { card, suffix } = createChartCard(chartId, chart);
-					chartsContainer.appendChild(card);
-				});
-
-				// Trigger chart rendering via existing charts.js
-				const event = new CustomEvent('bstats:charts-shell-ready', { detail: charts });
-				document.dispatchEvent(event);
-
-				// Scroll to anchor if present
-				if (window.location.hash) {
+			// Scroll to anchor if present
+			if (window.location.hash) {
+				setTimeout(() => {
 					const target = document.querySelector(window.location.hash);
 					if (target) {
-						setTimeout(() => {
-							target.scrollIntoView({ behavior: 'smooth', block: 'start' });
-						}, 800);
+						target.scrollIntoView({ behavior: 'smooth', block: 'start' });
 					}
-				}
-			});
+				}, 800);
+			}
+		} catch (error) {
+			console.error('Failed to initialize charts:', error);
+		}
 	}
 
-	function createChartCard(chartId: string, chart: any): { card: HTMLElement; suffix: string } {
-		let colClass = 'col-span-1 min-w-0';
-		let suffix = 'Pie';
-		let height = '18rem';
+	function updatePlayersBadge(chartData: LineChartData) {
+		if (!Array.isArray(chartData) || !chartData.length) return;
+		// Data is in reverse chronological order (newest first)
+		const current = chartData[0][1];
+		const record = chartData.reduce(
+			(max: number, point: [number, number]) => Math.max(max, point[1]),
+			0
+		);
+		playersCurrent = formatter.format(current);
+		playersRecord = formatter.format(record);
+	}
 
-		switch (chart.type) {
+	function updateServersBadge(chartData: LineChartData) {
+		if (!Array.isArray(chartData) || !chartData.length) return;
+		// Data is in reverse chronological order (newest first)
+		const current = chartData[0][1];
+		const record = chartData.reduce(
+			(max: number, point: [number, number]) => Math.max(max, point[1]),
+			0
+		);
+		serversCurrent = formatter.format(current);
+		serversRecord = formatter.format(record);
+	}
+
+	function getColSpan(chartType: string): 'single' | 'double' {
+		switch (chartType) {
 			case 'single_linechart':
-				colClass = 'col-span-1 min-w-0 md:col-span-2';
-				suffix = 'LineChart';
-				height = '24rem';
-				break;
 			case 'simple_map':
 			case 'advanced_map':
-				colClass = 'col-span-1 min-w-0 md:col-span-2';
-				suffix = 'Map';
-				height = '30rem';
-				break;
 			case 'simple_bar':
 			case 'advanced_bar':
-				colClass = 'col-span-1 min-w-0 md:col-span-2';
-				suffix = 'Bar';
-				height = '24rem';
-				break;
+				return 'double';
 			default:
-				colClass = 'col-span-1 min-w-0';
-				suffix = 'Pie';
-				height = '18rem';
+				return 'single';
 		}
-
-		const card = document.createElement('article');
-		card.id = chartId;
-		card.className = `${colClass} rounded-2xl border border-slate-200 bg-white shadow-sm`;
-
-		const header = document.createElement('div');
-		header.className = 'flex items-start justify-between gap-4 px-5 pt-5';
-
-		const title = document.createElement('h3');
-		title.className = 'font-display text-lg font-semibold text-slate-900';
-		title.textContent = chart.title;
-
-		const link = document.createElement('a');
-		link.href = '#' + chartId;
-		link.className =
-			'inline-flex items-center gap-2 rounded-full border border-slate-200 px-3 py-1.5 text-xs font-semibold text-slate-500 transition hover:border-slate-300 hover:text-slate-600';
-		link.innerHTML = `<span>Permalink</span><svg class="h-4 w-4" viewBox="0 0 24 24" fill="none"><path d="M13 4h7v7M11 13l9-9M11 4H6a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
-
-		header.appendChild(title);
-		header.appendChild(link);
-
-		const body = document.createElement('div');
-		body.className = 'px-5 pb-6 pt-4';
-
-		const surface = document.createElement('div');
-		surface.className =
-			'overflow-hidden rounded-xl border border-slate-100 bg-slate-50 p-2 sm:p-3 min-w-0';
-
-		const container = document.createElement('div');
-		container.id = chartId + suffix;
-		container.className = 'w-full';
-		container.style.minHeight = height;
-
-		surface.appendChild(container);
-		body.appendChild(surface);
-		card.appendChild(header);
-		card.appendChild(body);
-
-		return { card, suffix };
 	}
 </script>
 
@@ -239,16 +186,32 @@
 				Hover, zoom, and drill into the metrics shaping the {data.software.name} ecosystem.
 			</p>
 		</div>
-		<div id="charts" class="grid gap-8 md:grid-cols-2"></div>
-		<div
-			class="rounded-2xl border border-slate-200 bg-white/80 p-6 text-sm text-slate-500 shadow-sm"
-		>
-			Charts powered by <a
-				class="font-semibold text-brand-600 hover:text-brand-700"
-				href="https://www.highcharts.com/"
-				target="_blank"
-				rel="noopener">Highcharts</a
-			>.
+		<div class="grid gap-8 md:grid-cols-2">
+			{#each charts as chart (chart.id)}
+				<ChartCard title={chart.title} chartId={chart.id} colSpan={getColSpan(chart.type)}>
+					{#if chartDataMap[chart.uid]}
+						{#if chart.type === 'simple_pie' || chart.type === 'advanced_pie'}
+							<PieChart data={chartDataMap[chart.uid]} />
+						{:else if chart.type === 'drilldown_pie'}
+							<DrilldownPieChart data={chartDataMap[chart.uid]} />
+						{:else if chart.type === 'single_linechart'}
+							<LineChart data={chartDataMap[chart.uid]} lineName={chart.data?.lineName} />
+						{:else if chart.type === 'simple_bar' || chart.type === 'advanced_bar'}
+							<BarChart
+								data={chartDataMap[chart.uid]}
+								categories={chartDataMap[chart.uid]?.map((d: any) => d.name) || []}
+								valueName={chart.data?.valueName}
+							/>
+						{:else if chart.type === 'simple_map' || chart.type === 'advanced_map'}
+							<MapChart data={chartDataMap[chart.uid]} valueName={chart.data?.valueName} />
+						{/if}
+					{:else}
+						<div class="flex h-72 items-center justify-center text-slate-500">
+							Loading chart data...
+						</div>
+					{/if}
+				</ChartCard>
+			{/each}
 		</div>
 	</section>
 </main>
