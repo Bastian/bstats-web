@@ -297,9 +297,9 @@
 
 				<Accordion.Item value="faq-5" title="Why do I see a bStats folder in my plugins directory?">
 					<p class="max-w-prose">
-						The <code class="font-mono text-slate-700">/plugins/bStats/</code> folder contains the
-						shared configuration file used by all plugins. This allows you to enable or disable metrics
-						globally instead of configuring each plugin individually.
+						The <code class="font-mono text-slate-700">/plugins/bStats/</code> folder contains the shared
+						configuration file used by all plugins. This allows you to enable or disable metrics globally
+						instead of configuring each plugin individually.
 					</p>
 				</Accordion.Item>
 			</Accordion.Root>

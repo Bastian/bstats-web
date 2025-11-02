@@ -41,7 +41,7 @@
 			</svg>
 		</a>
 	</div>
-	<div class="px-5 pb-6 pt-4">
+	<div class="px-5 pt-4 pb-6">
 		<div class="min-w-0 overflow-hidden rounded-xl border border-slate-100 bg-slate-50 p-2 sm:p-3">
 			{@render children()}
 		</div>

@@ -69,9 +69,7 @@ export async function getAllPluginIds(): Promise<number[]> {
 	return res.map((id) => parseInt(id));
 }
 
-export async function getPluginsOfUser(
-	username: string
-): Promise<Array<Plugin>> {
+export async function getPluginsOfUser(username: string): Promise<Array<Plugin>> {
 	const normalizedUsername = username.toLowerCase();
 	const pluginIds = await databaseManager
 		.getRedisCluster()

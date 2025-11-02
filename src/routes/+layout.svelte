@@ -34,11 +34,7 @@
 {/if}
 -->
 
-<Navigation
-	user={data.user}
-	allSoftware={data.allSoftware}
-	myPlugins={data.myPlugins}
-/>
+<Navigation user={data.user} allSoftware={data.allSoftware} myPlugins={data.myPlugins} />
 
 <main>
 	{@render children?.()}

@@ -37,10 +37,7 @@ export type ChartData =
  * @param maxElements - Optional max elements for line charts
  * @returns Chart data
  */
-export async function fetchChartData(
-	chartUid: number,
-	maxElements?: number
-): Promise<ChartData> {
+export async function fetchChartData(chartUid: number, maxElements?: number): Promise<ChartData> {
 	const url = maxElements
 		? `/api/v2/charts/${chartUid}/data?maxElements=${maxElements}`
 		: `/api/v2/charts/${chartUid}/data`;

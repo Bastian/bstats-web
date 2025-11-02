@@ -28,7 +28,15 @@
 			{ name: 'macOS', y: 15, drilldown: 'macOS' }
 		],
 		drilldownData: [
-			{ name: 'Linux', id: 'Linux', data: [['Ubuntu', 20], ['Debian', 12], ['Other', 16]] },
+			{
+				name: 'Linux',
+				id: 'Linux',
+				data: [
+					['Ubuntu', 20],
+					['Debian', 12],
+					['Other', 16]
+				]
+			},
 			{
 				name: 'Windows',
 				id: 'Windows',
