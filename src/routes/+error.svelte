@@ -42,12 +42,12 @@
 		{/snippet}
 	</PageHero>
 
-	{#if !is404 && import.meta.env.DEV && ($page.error as any)?.stack}
+	{#if !is404 && import.meta.env.DEV && ($page.error as Error)?.stack}
 		<section class="doc-container mt-12 mb-24">
 			<div class="doc-card space-y-3">
 				<h2 class="doc-card-title">Debug details</h2>
 				<pre class="overflow-x-auto rounded-lg bg-slate-900 p-4 text-xs text-slate-100">
-					{($page.error as any).stack}
+					{($page.error as Error).stack}
 				</pre>
 			</div>
 		</section>

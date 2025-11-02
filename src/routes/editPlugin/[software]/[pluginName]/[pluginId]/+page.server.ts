@@ -7,7 +7,8 @@ import {
 	deletePluginIndex,
 	removePluginFromPluginIds,
 	removePluginFromUser,
-	transferPluginOwnership
+	transferPluginOwnership,
+	type Plugin
 } from '$lib/server/redis/plugins.js';
 import {
 	getChartByUid,
@@ -20,6 +21,25 @@ import {
 	createChart
 } from '$lib/server/redis/charts.js';
 import { deleteChartLineData } from '$lib/server/redis/chart-data.js';
+
+interface ChartInfo {
+	uid?: number;
+	id?: string;
+	type?: string;
+	position?: number;
+	title?: string;
+	isDefault?: boolean;
+	data?: Record<string, unknown>;
+}
+
+interface ChartData {
+	type: string;
+	id: string;
+	position: number;
+	isDefault: boolean;
+	title: string;
+	data: Record<string, unknown>;
+}
 
 export const load: PageServerLoad = async ({ params, locals }) => {
 	if (!locals.user) {
@@ -61,7 +81,7 @@ export const load: PageServerLoad = async ({ params, locals }) => {
 	);
 
 	// Convert charts array to object keyed by chart id
-	const charts: Record<string, any> = {};
+	const charts: Record<string, ChartInfo> = {};
 	for (const chart of chartsArray) {
 		if (chart.id) {
 			charts[chart.id] = {
@@ -70,7 +90,7 @@ export const load: PageServerLoad = async ({ params, locals }) => {
 				position: chart.position,
 				title: chart.title,
 				isDefault: chart.isDefault,
-				data: chart.data
+				data: chart.data as Record<string, unknown> | undefined
 			};
 		}
 	}
@@ -133,7 +153,7 @@ export const actions = {
 		}
 
 		// Build chart data based on type
-		const chartData: any = {
+		const chartData: ChartData = {
 			type: chartType,
 			id: trimmedId,
 			position: plugin.charts.length,
@@ -393,7 +413,7 @@ export const actions = {
 	}
 } satisfies Actions;
 
-async function saveChart(plugin: any, chartData: any): Promise<void> {
+async function saveChart(plugin: Plugin, chartData: ChartData): Promise<void> {
 	// Create chart and get its UID
 	const chartUid = await createChart(plugin.id, {
 		id: chartData.id,

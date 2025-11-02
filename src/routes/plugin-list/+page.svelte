@@ -6,9 +6,19 @@
 	import Pagination from '$lib/components/Pagination.svelte';
 	import { onMount } from 'svelte';
 
+	interface PluginListItem {
+		pluginId: number;
+		softwareUrl: string;
+		name: string;
+		softwareName: string;
+		ownerName: string;
+		servers?: number;
+		players?: number;
+	}
+
 	let searchValue = $state('');
-	let plugins = $state<any[]>([]);
-	let filteredPlugins = $state<any[]>([]);
+	let plugins = $state<PluginListItem[]>([]);
+	let filteredPlugins = $state<PluginListItem[]>([]);
 	let isLoading = $state(true);
 	let hasError = $state(false);
 	let page = $state(1);

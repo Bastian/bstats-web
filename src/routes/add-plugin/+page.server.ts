@@ -8,6 +8,13 @@ import { fail } from '@sveltejs/kit';
 import type { Actions, PageServerLoad } from './$types';
 import { createChart } from '$lib/server/redis/charts';
 
+interface DefaultChart {
+	id: string;
+	type: string;
+	title: string;
+	data?: Record<string, unknown>;
+}
+
 export const load: PageServerLoad = async ({ url }) => {
 	// Check if user just added a plugin (from query params)
 	const addedPlugin = url.searchParams.get('addedPlugin') === 'true';
@@ -85,7 +92,12 @@ export const actions: Actions = {
 		// Add default charts
 		const chartUids: number[] = [];
 		for (let i = 0; i < software.defaultCharts.length; i++) {
-			const chartUid = await addChart(pluginId, trimmedName, software.defaultCharts[i], i);
+			const chartUid = await addChart(
+				pluginId,
+				trimmedName,
+				software.defaultCharts[i] as DefaultChart,
+				i
+			);
 			chartUids.push(chartUid);
 		}
 
@@ -103,7 +115,7 @@ export const actions: Actions = {
 async function addChart(
 	pluginId: number,
 	pluginName: string,
-	chart: any,
+	chart: DefaultChart,
 	position: number
 ): Promise<number> {
 	// Replace %plugin.name% in chart title

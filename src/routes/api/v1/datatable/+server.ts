@@ -45,7 +45,7 @@ export const GET: RequestHandler = async () => {
 							servers = serversData[0][1];
 						}
 					}
-				} catch (e) {
+				} catch {
 					// Ignore errors for individual chart data
 				}
 
@@ -60,7 +60,7 @@ export const GET: RequestHandler = async () => {
 							players = playersData[0][1];
 						}
 					}
-				} catch (e) {
+				} catch {
 					// Ignore errors for individual chart data
 				}
 

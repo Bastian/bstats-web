@@ -31,6 +31,15 @@ export type ChartData =
 	| BarChartData[]
 	| MapChartData[];
 
+export interface ChartMetadata {
+	uid: number;
+	id: string;
+	type: string;
+	position: number;
+	title: string;
+	data?: Record<string, unknown>;
+}
+
 /**
  * Fetch chart data from the API
  * @param chartUid - The chart UID
@@ -55,7 +64,7 @@ export async function fetchChartData(chartUid: number, maxElements?: number): Pr
  * @param pluginId - The plugin ID
  * @returns Object with chart IDs as keys and chart metadata as values
  */
-export async function fetchCharts(pluginId: number): Promise<Record<string, any>> {
+export async function fetchCharts(pluginId: number): Promise<Record<string, ChartMetadata>> {
 	const response = await fetch(`/api/v1/plugins/${pluginId}/charts`);
 	if (!response.ok) {
 		throw new Error(`Failed to fetch charts: ${response.statusText}`);

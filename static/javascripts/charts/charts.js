@@ -7,7 +7,7 @@ document.addEventListener('bstats:charts-shell-ready', function(event) {
     }
 
     for (const chartId in charts) {
-        if (!charts.hasOwnProperty(chartId)) {
+        if (!Object.prototype.hasOwnProperty.call(charts, chartId)) {
             continue;
         }
         const chart = charts[chartId];
@@ -205,8 +205,6 @@ function handleLineChart(chartId, chart) {
         console.error('getPluginId function not found');
         return;
     }
-
-    const isMobile = window.innerWidth < 600;
 
     fetch('/api/v1/plugins/' + pluginId + '/charts/' + chartId + '/data/?maxElements=' + (2*24*31*1))
         .then(response => response.json())

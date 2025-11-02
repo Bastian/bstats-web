@@ -2,7 +2,6 @@
 	import Button from '$lib/components/Button.svelte';
 	import { NavigationMenu } from '$lib/components/navigation-menu';
 	import { resolve } from '$app/paths';
-	import IconArrowRight from '@tabler/icons-svelte/icons/arrow-right';
 	import IconChevronDown from '@tabler/icons-svelte/icons/chevron-down';
 	import IconChevronRight from '@tabler/icons-svelte/icons/chevron-right';
 

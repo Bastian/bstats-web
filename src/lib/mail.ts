@@ -1,5 +1,4 @@
 import { env } from '$env/dynamic/private';
-import type { BetterAuthOptions } from 'better-auth';
 import nodemailer from 'nodemailer';
 import type Mail from 'nodemailer/lib/mailer';
 

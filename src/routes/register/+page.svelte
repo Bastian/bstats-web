@@ -15,7 +15,7 @@
 
 	let password = $state('');
 	let confirmPassword = $state('');
-	let email = $state('');
+	// TODO enable: let email = $state('');
 	let username = $state('');
 	let privacyAccepted = $state(false);
 	let passwordMismatch = $derived(confirmPassword.length > 0 && password !== confirmPassword);

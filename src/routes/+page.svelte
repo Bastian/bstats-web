@@ -351,7 +351,7 @@
 					href: string;
 					icon: Snippet;
 				})}
-					<!-- eslint-disable-next-line svelte/no-navigation-without-resolve -->
+					<!-- eslint-disable svelte/no-navigation-without-resolve -->
 					<a
 						href={data.href}
 						target="_blank"
@@ -381,6 +381,7 @@
 							</div>
 						</article>
 					</a>
+					<!-- eslint-enable svelte/no-navigation-without-resolve -->
 				{/snippet}
 
 				{#snippet GitHubIcon()}

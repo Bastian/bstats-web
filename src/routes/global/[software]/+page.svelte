@@ -8,7 +8,15 @@
 	import BarChart from '$lib/components/charts/BarChart.svelte';
 	import MapChart from '$lib/components/charts/MapChart.svelte';
 	import { fetchCharts, fetchChartData } from '$lib/charts/chart-data';
-	import type { LineChartData } from '$lib/charts/chart-data';
+	import type {
+		LineChartData,
+		ChartMetadata,
+		ChartData,
+		BarChartData,
+		SimplePieChartData,
+		DrilldownPieChartData,
+		MapChartData
+	} from '$lib/charts/chart-data';
 	import type { PageData } from './$types';
 	import { onMount } from 'svelte';
 
@@ -21,8 +29,8 @@
 	let playersCurrent = $state('--');
 	let playersRecord = $state('--');
 
-	let charts = $state<any[]>([]);
-	let chartDataMap = $state<Record<number, any>>({});
+	let charts = $state<ChartMetadata[]>([]);
+	let chartDataMap = $state<Record<number, ChartData>>({});
 
 	onMount(() => {
 		// Load flag CSS for maps
@@ -150,9 +158,9 @@
 				>
 					<span class="text-[11px] tracking-[0.25em] text-slate-500 uppercase">Servers</span>
 					<div class="mt-2 flex items-baseline gap-3">
-						<span id="serversCurrent" class="font-display text-4xl font-semibold text-slate-900"
-							>{serversCurrent}</span
-						>
+						<span id="serversCurrent" class="font-display text-4xl font-semibold text-slate-900">
+							{serversCurrent}
+						</span>
 						<span class="text-[11px] tracking-[0.2em] text-slate-500 uppercase">current</span>
 					</div>
 					<div class="mt-2 text-xs tracking-[0.18em] text-slate-500 uppercase">Record</div>
@@ -165,9 +173,9 @@
 				>
 					<span class="text-[11px] tracking-[0.25em] text-slate-500 uppercase">Players</span>
 					<div class="mt-2 flex items-baseline gap-3">
-						<span id="playersCurrent" class="font-display text-4xl font-semibold text-slate-900"
-							>{playersCurrent}</span
-						>
+						<span id="playersCurrent" class="font-display text-4xl font-semibold text-slate-900">
+							{playersCurrent}
+						</span>
 						<span class="text-[11px] tracking-[0.2em] text-slate-500 uppercase">current</span>
 					</div>
 					<div class="mt-2 text-xs tracking-[0.18em] text-slate-500 uppercase">Record</div>
@@ -191,19 +199,27 @@
 				<ChartCard title={chart.title} chartId={chart.id} colSpan={getColSpan(chart.type)}>
 					{#if chartDataMap[chart.uid]}
 						{#if chart.type === 'simple_pie' || chart.type === 'advanced_pie'}
-							<PieChart data={chartDataMap[chart.uid]} />
+							<PieChart data={chartDataMap[chart.uid] as SimplePieChartData[]} />
 						{:else if chart.type === 'drilldown_pie'}
-							<DrilldownPieChart data={chartDataMap[chart.uid]} />
+							<DrilldownPieChart data={chartDataMap[chart.uid] as DrilldownPieChartData} />
 						{:else if chart.type === 'single_linechart'}
-							<LineChart data={chartDataMap[chart.uid]} lineName={chart.data?.lineName} />
+							<LineChart
+								data={chartDataMap[chart.uid] as LineChartData}
+								lineName={chart.data?.lineName as string | undefined}
+							/>
 						{:else if chart.type === 'simple_bar' || chart.type === 'advanced_bar'}
 							<BarChart
-								data={chartDataMap[chart.uid]}
-								categories={chartDataMap[chart.uid]?.map((d: any) => d.name) || []}
-								valueName={chart.data?.valueName}
+								data={chartDataMap[chart.uid] as BarChartData[]}
+								categories={(chartDataMap[chart.uid] as BarChartData[])?.map(
+									(d: BarChartData) => d.name
+								) || []}
+								valueName={chart.data?.valueName as string | undefined}
 							/>
 						{:else if chart.type === 'simple_map' || chart.type === 'advanced_map'}
-							<MapChart data={chartDataMap[chart.uid]} valueName={chart.data?.valueName} />
+							<MapChart
+								data={chartDataMap[chart.uid] as MapChartData[]}
+								valueName={chart.data?.valueName as string | undefined}
+							/>
 						{/if}
 					{:else}
 						<div class="flex h-72 items-center justify-center text-slate-500">

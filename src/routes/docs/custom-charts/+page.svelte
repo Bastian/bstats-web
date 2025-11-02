@@ -5,10 +5,7 @@
 	import DrilldownPieChart from '$lib/components/charts/DrilldownPieChart.svelte';
 	import LineChart from '$lib/components/charts/LineChart.svelte';
 	import BarChart from '$lib/components/charts/BarChart.svelte';
-	import type { PageData } from './$types';
 	import { onMount } from 'svelte';
-
-	let { data }: { data: PageData } = $props();
 
 	let gistStylesheetLoaded = $state(false);
 
@@ -72,12 +69,17 @@
 
 	const barCategories = ['Feature A', 'Feature B'];
 
+	interface GistData {
+		stylesheet?: string;
+		div: string;
+	}
+
 	// Function to load a gist via JSONP
 	function loadGist(gistId: string, selector: string) {
 		const callbackName = `gist_callback_${gistId.replace(/[^a-z0-9]/gi, '')}`;
 
 		// Create global callback
-		(window as any)[callbackName] = function (gistData: any) {
+		(window as unknown as Record<string, unknown>)[callbackName] = function (gistData: GistData) {
 			// Load the stylesheet if not already loaded
 			if (!gistStylesheetLoaded && gistData.stylesheet) {
 				const link = document.createElement('link');
@@ -94,7 +96,7 @@
 			}
 
 			// Cleanup
-			delete (window as any)[callbackName];
+			delete (window as unknown as Record<string, unknown>)[callbackName];
 		};
 
 		// Load script with JSONP callback

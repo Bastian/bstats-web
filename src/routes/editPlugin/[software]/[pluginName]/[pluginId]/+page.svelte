@@ -4,11 +4,11 @@
 	import Button from '$lib/components/Button.svelte';
 	import Checkbox from '$lib/components/Checkbox.svelte';
 	import PageHero from '$lib/components/PageHero.svelte';
-	import type { PageData, ActionData } from './$types';
+	import type { PageData } from './$types';
 	import { dndzone } from 'svelte-dnd-action';
 	import { flip } from 'svelte/animate';
 
-	let { data, form }: { data: PageData; form: ActionData } = $props();
+	let { data }: { data: PageData } = $props();
 
 	// State
 	let selectedChartType = $state('');
@@ -63,15 +63,16 @@
 	// Sorted charts for display - convert to array with ids for dnd
 	let sortedCharts = $state(
 		Object.keys(data.charts || {})
-			.sort((a, b) => data.charts[a].position - data.charts[b].position)
+			.sort((a, b) => (data.charts![a]?.position ?? 0) - (data.charts![b]?.position ?? 0))
 			.map((chartId) => ({ id: chartId, chartId }))
 	);
 
 	// Recalculate when data.charts changes
 	$effect(() => {
 		if (data.charts) {
-			sortedCharts = Object.keys(data.charts)
-				.sort((a, b) => data.charts[a].position - data.charts[b].position)
+			const charts = data.charts;
+			sortedCharts = Object.keys(charts)
+				.sort((a, b) => (charts[a]?.position ?? 0) - (charts[b]?.position ?? 0))
 				.map((chartId) => ({ id: chartId, chartId }));
 		}
 	});
@@ -219,6 +220,7 @@
 				showFeedback('error', result.error || 'Something went wrong. Please try again.');
 			}
 		} catch (error) {
+			console.error('Error adding chart:', error);
 			showFeedback('error', 'Something went wrong. Please try again.');
 		}
 	}
@@ -248,6 +250,7 @@
 				showFeedback('error', result.error || 'Failed to delete chart.');
 			}
 		} catch (error) {
+			console.error('Error deleting chart:', error);
 			showFeedback('error', 'Failed to delete chart.');
 		}
 	}
@@ -273,6 +276,7 @@
 				showFeedback('error', result.error || 'Something went wrong.');
 			}
 		} catch (error) {
+			console.error('Error deleting plugin:', error);
 			showFeedback('error', 'Something went wrong.');
 		}
 	}
@@ -302,6 +306,7 @@
 				showFeedback('error', result.error || 'Transfer failed.');
 			}
 		} catch (error) {
+			console.error('Error transferring ownership:', error);
 			showFeedback('error', 'Transfer failed.');
 		}
 	}
@@ -360,12 +365,14 @@
 				>
 					<span>{feedbackMessage}</span>
 					{#if feedbackLink}
+						<!-- eslint-disable svelte/no-navigation-without-resolve -->
 						<a
 							href={feedbackLink}
 							class="ml-2 font-semibold text-brand-600 hover:text-brand-700"
 							target="_blank"
 							rel="noopener">View chart</a
 						>
+						<!-- eslint-enable svelte/no-navigation-without-resolve -->
 					{/if}
 				</div>
 			{/if}

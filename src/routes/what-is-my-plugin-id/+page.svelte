@@ -27,6 +27,7 @@
 			button.textContent = 'Copied!';
 			setTimeout(() => (button.textContent = 'Copy ID'), 1500);
 		} catch (err) {
+			console.error('Error copying plugin ID:', err);
 			button.textContent = 'Failed';
 		}
 	}
