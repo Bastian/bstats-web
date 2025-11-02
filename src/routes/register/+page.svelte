@@ -168,7 +168,7 @@
 					<div class="flex justify-center">
 						<HCaptcha
 							bind:this={captcha}
-							sitekey={env.PUBLIC_HCAPTCHA_SITE_KEY}
+							sitekey={env.PUBLIC_HCAPTCHA_SITE_KEY!}
 							size="normal"
 							theme="light"
 							bind:token

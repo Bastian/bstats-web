@@ -40,6 +40,8 @@
 	});
 
 	async function initializeCharts() {
+		if (!data.plugin) return;
+
 		try {
 			// Fetch chart metadata
 			const chartsData = await fetchCharts(data.plugin.id);
@@ -132,12 +134,12 @@
 		<meta name="description" content="We don't have stats about {data.pluginName}." />
 		<title>bStats - Unknown plugin</title>
 	{:else}
-		<meta name="description" content="Some stats about {data.plugin.name}." />
-		<title>bStats - {data.plugin.name}</title>
+		<meta name="description" content="Some stats about {data.plugin?.name}." />
+		<title>bStats - {data.plugin?.name}</title>
 		<meta name="twitter:card" content="summary" />
 		<meta name="twitter:site" content="@btobastian" />
-		<meta name="twitter:title" content="{data.plugin.name} | bStats" />
-		<meta name="twitter:description" content="Statistics about {data.plugin.name}!" />
+		<meta name="twitter:title" content="{data.plugin?.name} | bStats" />
+		<meta name="twitter:description" content="Statistics about {data.plugin?.name}!" />
 		<meta name="twitter:image" content="https://bstats.org/images/Twitter.jpg" />
 	{/if}
 </svelte:head>
@@ -179,14 +181,14 @@
 			<div class="relative mx-auto max-w-6xl px-4 py-16 sm:px-6 lg:py-20">
 				<div class="flex flex-col gap-10 lg:flex-row lg:items-start">
 					<div class="max-w-3xl">
-						<Badge>{data.software.name}</Badge>
+						<Badge>{data.software?.name}</Badge>
 						<div class="mt-6 flex items-center gap-4">
 							<h1
 								class="font-display text-4xl font-semibold tracking-tight text-slate-900 sm:text-5xl"
 							>
-								{data.plugin.name}
+								{data.plugin?.name}
 							</h1>
-							{#if data.isOwner}
+							{#if data.isOwner && data.plugin && data.software}
 								<a
 									href={resolve(
 										`/editPlugin/${data.software.url}/${data.plugin.name}/${data.plugin.id}`
@@ -201,7 +203,7 @@
 							<span>
 								by <a
 									class="font-semibold text-brand-600 hover:text-brand-700"
-									href={resolve(`/author/${data.plugin.owner}`)}>{data.plugin.owner}</a
+									href={resolve(`/author/${data.plugin?.owner}`)}>{data.plugin?.owner}</a
 								>
 							</span>
 							<span class="hidden h-1 w-1 rounded-full bg-slate-300 sm:inline-block"></span>

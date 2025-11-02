@@ -29,7 +29,7 @@ export const load: PageServerLoad = async ({ params, locals }) => {
 	const { software: softwareUrl, pluginName, pluginId } = params;
 
 	// Get plugin data
-	const plugin = await getPluginById(parseInt(pluginId), ['owner', 'charts', 'name']);
+	const plugin = await getPluginById(parseInt(pluginId));
 
 	if (!plugin) {
 		throw error(404, 'Plugin not found');
@@ -47,14 +47,7 @@ export const load: PageServerLoad = async ({ params, locals }) => {
 	// Get all charts for the plugin
 	const chartsArray = await Promise.all(
 		plugin.charts.map(async (chartUid: number) => {
-			const chart = await getChartByUid(chartUid, [
-				'id',
-				'type',
-				'position',
-				'title',
-				'default',
-				'data'
-			]);
+			const chart = await getChartByUid(chartUid);
 			return {
 				uid: chart?.uid,
 				id: chart?.id,
@@ -70,14 +63,16 @@ export const load: PageServerLoad = async ({ params, locals }) => {
 	// Convert charts array to object keyed by chart id
 	const charts: Record<string, any> = {};
 	for (const chart of chartsArray) {
-		charts[chart.id] = {
-			uid: chart.uid,
-			type: chart.type,
-			position: chart.position,
-			title: chart.title,
-			isDefault: chart.isDefault,
-			data: chart.data
-		};
+		if (chart.id) {
+			charts[chart.id] = {
+				uid: chart.uid,
+				type: chart.type,
+				position: chart.position,
+				title: chart.title,
+				isDefault: chart.isDefault,
+				data: chart.data
+			};
+		}
 	}
 
 	return {
@@ -99,7 +94,7 @@ export const actions = {
 		const formData = await request.formData();
 
 		// Get plugin
-		const plugin = await getPluginById(parseInt(pluginId), ['owner', 'charts', 'name']);
+		const plugin = await getPluginById(parseInt(pluginId));
 
 		if (!plugin) {
 			return fail(404, { error: 'Plugin not found' });
@@ -232,7 +227,7 @@ export const actions = {
 			return fail(400, { error: 'Missing or invalid chart id' });
 		}
 
-		const plugin = await getPluginById(parseInt(pluginId), ['owner', 'charts']);
+		const plugin = await getPluginById(parseInt(pluginId));
 
 		if (!plugin) {
 			return fail(404, { error: 'Plugin not found' });
@@ -242,11 +237,7 @@ export const actions = {
 			return fail(401, { error: 'You are not allowed to edit this plugin' });
 		}
 
-		const chart = await getChartByPluginIdAndChartId(parseInt(pluginId), chartId, [
-			'default',
-			'position',
-			'type'
-		]);
+		const chart = await getChartByPluginIdAndChartId(parseInt(pluginId), chartId);
 
 		if (!chart) {
 			return fail(404, { error: 'Unknown chart!' });
@@ -267,7 +258,7 @@ export const actions = {
 		await updatePluginCharts(parseInt(pluginId), plugin.charts);
 
 		// Update positions of remaining charts
-		const allCharts = (await getChartsByPluginId(parseInt(pluginId), ['position'])) || [];
+		const allCharts = (await getChartsByPluginId(parseInt(pluginId))) || [];
 
 		for (const c of allCharts) {
 			if (c.position! > chart.position!) {
@@ -301,7 +292,7 @@ export const actions = {
 			return fail(400, { error: 'Invalid arguments' });
 		}
 
-		const plugin = await getPluginById(parseInt(pluginId), ['owner']);
+		const plugin = await getPluginById(parseInt(pluginId));
 
 		if (!plugin) {
 			return fail(404, { error: 'Plugin not found' });
@@ -311,7 +302,7 @@ export const actions = {
 			return fail(401, { error: 'You are not allowed to edit this plugin' });
 		}
 
-		const charts = (await getChartsByPluginId(parseInt(pluginId), ['position'])) || [];
+		const charts = (await getChartsByPluginId(parseInt(pluginId))) || [];
 
 		for (const chart of charts) {
 			if (oldIndex > newIndex) {
@@ -339,7 +330,7 @@ export const actions = {
 
 		const { pluginId, software: softwareUrl } = params;
 
-		const plugin = await getPluginById(parseInt(pluginId), ['owner', 'charts', 'name']);
+		const plugin = await getPluginById(parseInt(pluginId));
 
 		if (!plugin) {
 			return fail(404, { error: 'Plugin not found' });
@@ -357,7 +348,7 @@ export const actions = {
 
 		// Delete all charts
 		for (const chartUid of plugin.charts as number[]) {
-			const chart = await getChartByUid(chartUid, ['id', 'type']);
+			const chart = await getChartByUid(chartUid);
 
 			if (chart) {
 				await deleteChartIndex(parseInt(pluginId), chart.id!);
@@ -390,7 +381,7 @@ export const actions = {
 			return fail(400, { error: 'Missing new owner' });
 		}
 
-		const plugin = await getPluginById(parseInt(pluginId), ['owner']);
+		const plugin = await getPluginById(parseInt(pluginId));
 
 		if (!plugin) {
 			return fail(404, { error: 'Plugin not found' });

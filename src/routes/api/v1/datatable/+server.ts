@@ -11,7 +11,7 @@ export const GET: RequestHandler = async () => {
 		const pluginIds = await getAllPluginIds();
 
 		// Get all software to map IDs to names
-		const allSoftware = await getAllSoftware(['name', 'url']);
+		const allSoftware = await getAllSoftware();
 
 		// Create a map for quick lookups
 		const softwareMap = new Map();
@@ -23,7 +23,7 @@ export const GET: RequestHandler = async () => {
 		const pluginPromises = pluginIds.map(async (pluginId) => {
 			try {
 				// Get plugin basic data
-				const plugin = await getPluginById(pluginId, ['name', 'software', 'owner']);
+				const plugin = await getPluginById(pluginId);
 
 				if (!plugin || plugin.name === null) {
 					return null; // Skip invalid plugins

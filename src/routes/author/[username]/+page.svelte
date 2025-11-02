@@ -70,7 +70,7 @@
 							</Table.Cell>
 						</Table.Row>
 					{:else}
-						{#each filteredPlugins as plugin (plugin.pluginId)}
+						{#each filteredPlugins as plugin (plugin.id)}
 							<Table.Row>
 								<Table.Cell class="font-semibold text-slate-900">
 									<a

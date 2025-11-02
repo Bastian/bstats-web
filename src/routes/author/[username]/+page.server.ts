@@ -6,23 +6,20 @@ export const load: PageServerLoad = async ({ params }) => {
 	const { username } = params;
 
 	// Get all plugins by the user
-	const pluginsRaw = await getPluginsOfUser(username, [
-		'name',
-		'software',
-		'charts',
-		'owner',
-		'global'
-	]);
+	const pluginsRaw = await getPluginsOfUser(username);
 
 	// Get all software to map plugin software IDs to software objects
-	const allSoftware = await getAllSoftware(['name', 'url', 'globalPlugin']);
+	const allSoftware = await getAllSoftware();
 
 	// Replace software IDs with software objects
 	const plugins = pluginsRaw.map((plugin) => {
 		const software = allSoftware.find((s) => s.id === plugin.software);
+		if (!software) {
+			throw new Error(`Software with ID ${plugin.software} not found for plugin ${plugin.name}`);
+		}
 		return {
 			...plugin,
-			software: software || plugin.software
+			software
 		};
 	});
 

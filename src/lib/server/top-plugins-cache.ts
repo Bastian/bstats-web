@@ -29,7 +29,7 @@ async function refreshCache(): Promise<void> {
 
 	try {
 		const pluginIds = await getAllPluginIds();
-		const allSoftware = await getAllSoftware(['name', 'url']);
+		const allSoftware = await getAllSoftware();
 
 		// Create a map for quick lookups
 		const softwareMap = new Map();
@@ -39,7 +39,7 @@ async function refreshCache(): Promise<void> {
 
 		const pluginPromises = pluginIds.map(async (pluginId) => {
 			try {
-				const plugin = await getPluginById(pluginId, ['name', 'software', 'owner']);
+				const plugin = await getPluginById(pluginId);
 
 				if (!plugin || plugin.name === null || plugin.global) {
 					return null;

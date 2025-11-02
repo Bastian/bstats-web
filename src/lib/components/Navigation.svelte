@@ -8,13 +8,7 @@
 
 	import type { User } from 'better-auth';
 	import { authClient } from '$lib/auth.client';
-
-	type Software = {
-		id: number;
-		name: string;
-		url: string;
-		globalPlugin: boolean;
-	};
+	import type { Software } from '$lib/server/redis/software';
 
 	type Plugin = {
 		id: number;

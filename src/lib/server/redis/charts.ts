@@ -18,13 +18,10 @@ export interface DrilldownPieData {
 
 type ChartField = keyof Omit<Chart, 'uid'>;
 
-const DEFAULT_CHART_FIELDS: ChartField[] = ['id', 'type', 'position', 'title', 'default', 'data'];
+const CHART_FIELDS: ChartField[] = ['id', 'type', 'position', 'title', 'default', 'data'];
 
-export async function getChartByUid(
-	uid: number,
-	fields: ChartField[] = DEFAULT_CHART_FIELDS
-): Promise<Partial<Chart> | null> {
-	const res = await databaseManager.getRedisCluster().hmget(`charts:${uid}`, ...fields);
+export async function getChartByUid(uid: number): Promise<Chart | null> {
+	const res = await databaseManager.getRedisCluster().hmget(`charts:${uid}`, ...CHART_FIELDS);
 
 	if (res === null || res.every((v) => v === null)) {
 		return null;
@@ -32,8 +29,8 @@ export async function getChartByUid(
 
 	const result: Partial<Chart> = { uid };
 
-	for (let i = 0; i < fields.length; i++) {
-		const field = fields[i];
+	for (let i = 0; i < CHART_FIELDS.length; i++) {
+		const field = CHART_FIELDS[i];
 		const value = res[i];
 
 		switch (field) {
@@ -47,19 +44,18 @@ export async function getChartByUid(
 				result[field] = value ? parseInt(value) : 0;
 				break;
 			default:
-				(result as any)[field] = value;
+				result[field] = value ?? undefined;
 				break;
 		}
 	}
 
-	return result;
+	return result as Chart;
 }
 
 export async function getChartByPluginIdAndChartId(
 	pluginId: number,
-	chartId: string,
-	fields: ChartField[] = DEFAULT_CHART_FIELDS
-): Promise<Partial<Chart> | null> {
+	chartId: string
+): Promise<Chart | null> {
 	const chartUid = await databaseManager
 		.getRedisCluster()
 		.get(`charts.index.uid.pluginId+chartId:${pluginId}.${chartId}`);
@@ -68,7 +64,7 @@ export async function getChartByPluginIdAndChartId(
 		return null;
 	}
 
-	return getChartByUid(parseInt(chartUid), fields);
+	return getChartByUid(parseInt(chartUid));
 }
 
 export async function getChartUidByPluginIdAndChartId(
@@ -82,21 +78,16 @@ export async function getChartUidByPluginIdAndChartId(
 	return chartUid ? parseInt(chartUid) : null;
 }
 
-export async function getChartsByPluginId(
-	pluginId: number,
-	fields: ChartField[] = DEFAULT_CHART_FIELDS
-): Promise<Array<Partial<Chart>> | null> {
-	const plugin = await getPluginById(pluginId, ['charts']);
+export async function getChartsByPluginId(pluginId: number): Promise<Array<Chart> | null> {
+	const plugin = await getPluginById(pluginId);
 
 	if (plugin === null || !plugin.charts) {
 		return null;
 	}
 
-	const charts = await Promise.all(
-		plugin.charts.map((chartUid) => getChartByUid(chartUid, fields))
-	);
+	const charts = await Promise.all(plugin.charts.map((chartUid) => getChartByUid(chartUid)));
 
-	return charts.filter((chart): chart is Partial<Chart> => chart !== null);
+	return charts.filter((chart): chart is Chart => chart !== null);
 }
 
 export async function createChart(

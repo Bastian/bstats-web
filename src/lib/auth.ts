@@ -25,6 +25,11 @@ if (!env.HCAPTCHA_SECRET_KEY) {
 	process.exit(1);
 }
 
+if (!publicEnv.PUBLIC_HCAPTCHA_SITE_KEY) {
+	console.error('PUBLIC_HCAPTCHA_SITE_KEY environment variable is not set.');
+	process.exit(1);
+}
+
 export const auth = betterAuth({
 	database: pool,
 	appName: 'bStats',
@@ -36,6 +41,16 @@ export const auth = betterAuth({
 			// Old passwords are bcrypt hashed, so we need to use bcrypt here
 			hash: async (password: string) => bcrypt.hash(password, 12),
 			verify: async ({ hash, password }) => bcrypt.compare(password, hash)
+		}
+	},
+	user: {
+		additionalFields: {
+			admin: {
+				type: 'boolean',
+				required: false,
+				defaultValue: false,
+				input: false // Don't allow users to set their own admin status
+			}
 		}
 	},
 	secret: BETTER_AUTH_SECRET,

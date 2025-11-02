@@ -14,7 +14,7 @@ export interface Software {
 
 type SoftwareField = keyof Omit<Software, 'id'>;
 
-const DEFAULT_SOFTWARE_FIELDS: SoftwareField[] = [
+const SOFTWARE_FIELDS: SoftwareField[] = [
 	'name',
 	'url',
 	'globalPlugin',
@@ -25,16 +25,13 @@ const DEFAULT_SOFTWARE_FIELDS: SoftwareField[] = [
 	'hideInPluginList'
 ];
 
-export async function getSoftwareById(
-	id: number,
-	fields: SoftwareField[] = DEFAULT_SOFTWARE_FIELDS
-): Promise<Partial<Software>> {
-	const res = await databaseManager.getRedisCluster().hmget(`software:${id}`, ...fields);
+export async function getSoftwareById(id: number): Promise<Software> {
+	const res = await databaseManager.getRedisCluster().hmget(`software:${id}`, ...SOFTWARE_FIELDS);
 
 	const result: Partial<Software> = { id: parseInt(String(id)) };
 
-	for (let i = 0; i < fields.length; i++) {
-		const field = fields[i];
+	for (let i = 0; i < SOFTWARE_FIELDS.length; i++) {
+		const field = SOFTWARE_FIELDS[i];
 		const value = res[i];
 
 		switch (field) {
@@ -48,18 +45,16 @@ export async function getSoftwareById(
 				result[field] = value !== null;
 				break;
 			default:
-				(result as any)[field] = value;
+				// eslint-disable-next-line @typescript-eslint/no-explicit-any
+				(result as any)[field] = value ?? undefined;
 				break;
 		}
 	}
 
-	return result;
+	return result as Software;
 }
 
-export async function getSoftwareByUrl(
-	url: string,
-	fields: SoftwareField[] = DEFAULT_SOFTWARE_FIELDS
-): Promise<Partial<Software> | null> {
+export async function getSoftwareByUrl(url: string): Promise<Software | null> {
 	const normalizedUrl = url.toLowerCase();
 	const softwareId = await databaseManager
 		.getRedisCluster()
@@ -69,7 +64,7 @@ export async function getSoftwareByUrl(
 		return null;
 	}
 
-	return getSoftwareById(parseInt(softwareId), fields);
+	return getSoftwareById(parseInt(softwareId));
 }
 
 export async function getAllSoftwareIds(): Promise<number[]> {
@@ -77,9 +72,7 @@ export async function getAllSoftwareIds(): Promise<number[]> {
 	return res.map((id) => parseInt(id));
 }
 
-export async function getAllSoftware(
-	fields: SoftwareField[] = DEFAULT_SOFTWARE_FIELDS
-): Promise<Array<Partial<Software>>> {
+export async function getAllSoftware(): Promise<Array<Software>> {
 	const softwareIds = await getAllSoftwareIds();
-	return Promise.all(softwareIds.map((id) => getSoftwareById(id, fields)));
+	return Promise.all(softwareIds.map((id) => getSoftwareById(id)));
 }

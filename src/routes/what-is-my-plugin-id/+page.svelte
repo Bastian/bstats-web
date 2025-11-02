@@ -94,7 +94,7 @@
 						</Table.Row>
 					</Table.Header>
 					<Table.Body>
-						{#each filteredPlugins as plugin (plugin.pluginId)}
+						{#each filteredPlugins as plugin (plugin.id)}
 							<Table.Row>
 								<Table.Cell class="font-semibold text-slate-900">{plugin.name}</Table.Cell>
 								<Table.Cell class="text-slate-600">{plugin.software.name}</Table.Cell>

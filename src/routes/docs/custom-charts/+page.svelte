@@ -18,7 +18,10 @@
 		{ name: 'Offline', y: 14 }
 	];
 
-	const drilldownPieData = {
+	const drilldownPieData: {
+		seriesData: { name: string; y: number; drilldown: string }[];
+		drilldownData: { name: string; id: string; data: [string, number][] }[];
+	} = {
 		seriesData: [
 			{ name: 'Linux', y: 48, drilldown: 'Linux' },
 			{ name: 'Windows', y: 37, drilldown: 'Windows' },

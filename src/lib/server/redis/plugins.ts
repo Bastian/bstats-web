@@ -12,13 +12,10 @@ export interface Plugin {
 
 type PluginField = keyof Omit<Plugin, 'id'>;
 
-const DEFAULT_PLUGIN_FIELDS: PluginField[] = ['name', 'software', 'charts', 'owner', 'global'];
+const PLUGIN_FIELDS: PluginField[] = ['name', 'software', 'charts', 'owner', 'global'];
 
-export async function getPluginById(
-	id: number,
-	fields: PluginField[] = DEFAULT_PLUGIN_FIELDS
-): Promise<Partial<Plugin> | null> {
-	const res = await databaseManager.getRedisCluster().hmget(`plugins:${id}`, ...fields);
+export async function getPluginById(id: number): Promise<Plugin | null> {
+	const res = await databaseManager.getRedisCluster().hmget(`plugins:${id}`, ...PLUGIN_FIELDS);
 
 	if (res === null || res.every((v) => v === null)) {
 		return null;
@@ -26,8 +23,8 @@ export async function getPluginById(
 
 	const result: Partial<Plugin> = { id };
 
-	for (let i = 0; i < fields.length; i++) {
-		const field = fields[i];
+	for (let i = 0; i < PLUGIN_FIELDS.length; i++) {
+		const field = PLUGIN_FIELDS[i];
 		const value = res[i];
 
 		switch (field) {
@@ -41,19 +38,18 @@ export async function getPluginById(
 				result[field] = value ? parseInt(value) : 0;
 				break;
 			default:
-				(result as any)[field] = value;
+				result[field] = value ?? undefined;
 				break;
 		}
 	}
 
-	return result;
+	return result as Plugin;
 }
 
 export async function getPluginBySoftwareUrlAndName(
 	softwareUrl: string,
-	pluginName: string,
-	fields: PluginField[] = DEFAULT_PLUGIN_FIELDS
-): Promise<Partial<Plugin> | null> {
+	pluginName: string
+): Promise<Plugin | null> {
 	const normalizedUrl = softwareUrl.toLowerCase();
 	const normalizedName = pluginName.toLowerCase();
 
@@ -65,7 +61,7 @@ export async function getPluginBySoftwareUrlAndName(
 		return null;
 	}
 
-	return getPluginById(parseInt(pluginId), fields);
+	return getPluginById(parseInt(pluginId));
 }
 
 export async function getAllPluginIds(): Promise<number[]> {
@@ -74,17 +70,16 @@ export async function getAllPluginIds(): Promise<number[]> {
 }
 
 export async function getPluginsOfUser(
-	username: string,
-	fields: PluginField[] = DEFAULT_PLUGIN_FIELDS
-): Promise<Array<Partial<Plugin>>> {
+	username: string
+): Promise<Array<Plugin>> {
 	const normalizedUsername = username.toLowerCase();
 	const pluginIds = await databaseManager
 		.getRedisCluster()
 		.smembers(`users.index.plugins.username:${normalizedUsername}`);
 
-	const plugins = await Promise.all(pluginIds.map((id) => getPluginById(parseInt(id), fields)));
+	const plugins = await Promise.all(pluginIds.map((id) => getPluginById(parseInt(id))));
 
-	return plugins.filter((plugin): plugin is Partial<Plugin> => plugin !== null);
+	return plugins.filter((plugin): plugin is Plugin => plugin !== null);
 }
 
 export async function addPlugin(

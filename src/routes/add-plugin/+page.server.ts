@@ -17,13 +17,7 @@ export const load: PageServerLoad = async ({ url }) => {
 	const initialBuildTool = url.searchParams.get('buildTool');
 
 	// Get all software to show Metrics.java and example links
-	const software = await getAllSoftware([
-		'name',
-		'url',
-		'globalPlugin',
-		'metricsClass',
-		'examplePlugin'
-	]);
+	const software = await getAllSoftware();
 
 	return {
 		software,
@@ -37,7 +31,7 @@ export const load: PageServerLoad = async ({ url }) => {
 
 export const actions: Actions = {
 	addPlugin: async ({ request, locals }) => {
-		if (!locals.session || !locals.user) {
+		if (!locals.session || !locals.user || !locals.user.username) {
 			return fail(401, { error: 'notAuthenticated' });
 		}
 
@@ -59,12 +53,7 @@ export const actions: Actions = {
 			return fail(400, { error: 'invalidName' });
 		}
 
-		const software = await getSoftwareByUrl(softwareUrl, [
-			'name',
-			'url',
-			'globalPlugin',
-			'defaultCharts'
-		]);
+		const software = await getSoftwareByUrl(softwareUrl);
 
 		if (!software) {
 			return fail(404, { error: 'softwareNotFound' });
@@ -76,8 +65,7 @@ export const actions: Actions = {
 
 		const existingPlugin = await getPluginBySoftwareUrlAndName(
 			software.url,
-			trimmedName.toLowerCase(),
-			['name']
+			trimmedName.toLowerCase()
 		);
 
 		if (existingPlugin) {

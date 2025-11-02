@@ -23,11 +23,7 @@ export const load: PageServerLoad = async ({ params, locals }) => {
 
 	// If no pluginId provided, try to get it by software and name
 	if (!pluginId) {
-		const plugin = await getPluginBySoftwareUrlAndName(softwareUrl, pluginName, [
-			'name',
-			'software',
-			'owner'
-		]);
+		const plugin = await getPluginBySoftwareUrlAndName(softwareUrl, pluginName);
 
 		if (plugin === null) {
 			throw redirect(302, `/plugin/${softwareUrl}/${pluginName}/-1`);
@@ -37,7 +33,7 @@ export const load: PageServerLoad = async ({ params, locals }) => {
 	}
 
 	// Get plugin by ID
-	const plugin = await getPluginById(parseInt(pluginId), ['name', 'software', 'owner']);
+	const plugin = await getPluginById(parseInt(pluginId));
 
 	// Handle unknown plugin
 	if (plugin === null || plugin.name === null) {
@@ -53,7 +49,7 @@ export const load: PageServerLoad = async ({ params, locals }) => {
 	}
 
 	// Get software details
-	const software = await getSoftwareById(plugin.software as number, ['name', 'url']);
+	const software = await getSoftwareById(plugin.software as number);
 
 	// Redirect if software URL doesn't match
 	if (software.url !== softwareUrl) {
@@ -61,7 +57,10 @@ export const load: PageServerLoad = async ({ params, locals }) => {
 	}
 
 	// Check if current user is owner
-	const isOwner = locals.user && locals.user.username.toLowerCase() === plugin.owner.toLowerCase();
+	const isOwner =
+		locals.user && locals.user.username
+			? locals.user.username.toLowerCase() === plugin.owner.toLowerCase()
+			: false;
 	const isAdmin = locals.user && locals.user.admin;
 
 	return {
@@ -102,9 +101,13 @@ async function getRandomPlugin() {
 	const selected = results.find((r) => r.servers > 4) || results[results.length - 1];
 
 	// Get plugin details
-	const plugin = await getPluginById(selected.pluginId, ['name', 'software']);
+	const plugin = await getPluginById(selected.pluginId);
 
-	const software = await getSoftwareById(plugin?.software as number, ['url']);
+	if (!plugin) {
+		throw new Error('Plugin not found');
+	}
+
+	const software = await getSoftwareById(plugin.software as number);
 
 	return {
 		pluginId: plugin.id,

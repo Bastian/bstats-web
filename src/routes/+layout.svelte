@@ -35,7 +35,6 @@
 -->
 
 <Navigation
-	session={data.session}
 	user={data.user}
 	allSoftware={data.allSoftware}
 	myPlugins={data.myPlugins}
