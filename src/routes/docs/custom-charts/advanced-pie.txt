@@ -1,0 +1,11 @@
+metrics.addCustomChart(new Metrics.AdvancedPie("player_gamemodes", () -> {
+    Map<String, Integer> gamemodeMap = new HashMap<>();
+    
+    for (Player player : Bukkit.getOnlinePlayers()) {
+        String gamemode = player.getGameMode().name();
+        gamemodeMap.put(gamemode, gamemodeMap.getOrDefault(gamemode, 0) + 1);
+    }
+    
+    return gamemodeMap;
+}));
+// If you use the Copy & Paste Metrics classes, use `Metrics.AdvancedPie` instead

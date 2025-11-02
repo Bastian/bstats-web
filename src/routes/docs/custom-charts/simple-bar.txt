@@ -1,0 +1,7 @@
+metrics.addCustomChart(new SimpleBarChart("features", () -> {
+    // Format: Map<Category, Value>
+    Map<String, Integer> map = new HashMap<>();
+    map.put("Feature A", 1);
+    return map;
+}));
+// If you use the Copy & Paste Metrics classes, use `Metrics.SimpleBarChart`instead

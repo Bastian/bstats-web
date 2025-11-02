@@ -1,0 +1,21 @@
+metrics.addCustomChart(new DrilldownPie("java_version", () -> {
+    // Format: Map<Category, Map<Subcategory, Count>>
+    Map<String, Map<String, Integer>> data = new HashMap<>();
+
+    String javaVersion = System.getProperty("java.version");
+    Map<String, Integer> subCategory = new HashMap<>();
+    subCategory.put(javaVersion, 1);
+
+    if (javaVersion.startsWith("1.7")) {
+        data.put("Java 7", subCategory);
+    } else if (javaVersion.startsWith("1.8")) {
+        data.put("Java 8", subCategory);
+    } else if (javaVersion.startsWith("1.9")) {
+        data.put("Java 9", subCategory);
+    } else {
+        data.put("Other", subCategory);
+    }
+
+    return data;
+}));
+// If you use the Copy & Paste Metrics classes, use `Metrics.DrilldownPie` instead

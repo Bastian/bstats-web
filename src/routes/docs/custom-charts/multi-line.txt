@@ -1,0 +1,7 @@
+metrics.addCustomChart(new MultiLineChart("players_and_servers", () -> {
+    Map<String, Integer> valueMap = new HashMap<>();
+    valueMap.put("servers", 1);
+    valueMap.put("players", Bukkit.getOnlinePlayers().size());
+    return valueMap;
+}));
+// If you use the Copy & Paste Metrics classes, use `Metrics.MultiLineChart` instead
