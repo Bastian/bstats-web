@@ -2,6 +2,8 @@
 	import { resolve } from '$app/paths';
 	import Badge from '$lib/components/Badge.svelte';
 	import PageHero from '$lib/components/PageHero.svelte';
+	import { Table } from '$lib/components/table';
+	import Pagination from '$lib/components/Pagination.svelte';
 	import { onMount } from 'svelte';
 
 	let searchValue = $state('');
@@ -9,13 +11,22 @@
 	let filteredPlugins = $state<any[]>([]);
 	let isLoading = $state(true);
 	let hasError = $state(false);
+	let page = $state(1);
 
+	const perPage = 20;
 	const formatter = new Intl.NumberFormat();
+
+	let paginatedPlugins = $derived.by(() => {
+		const start = (page - 1) * perPage;
+		const end = start + perPage;
+		return filteredPlugins.slice(start, end);
+	});
 
 	function filterPlugins() {
 		const query = searchValue.trim().toLowerCase();
 		if (!query) {
 			filteredPlugins = plugins;
+			page = 1;
 			return;
 		}
 		filteredPlugins = plugins.filter((plugin) => {
@@ -25,6 +36,7 @@
 				plugin.ownerName.toLowerCase().includes(query)
 			);
 		});
+		page = 1;
 	}
 
 	onMount(() => {
@@ -86,74 +98,75 @@
 			</div>
 		</div>
 
-		<div class="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
-			<div class="overflow-x-auto">
-				<table class="min-w-full divide-y divide-slate-200 text-sm">
-					<thead class="bg-slate-100 text-slate-500">
-						<tr>
-							<th class="px-4 py-3 text-left font-semibold tracking-[0.18em] uppercase">Name</th>
-							<th class="px-4 py-3 text-left font-semibold tracking-[0.18em] uppercase">Software</th
-							>
-							<th class="px-4 py-3 text-left font-semibold tracking-[0.18em] uppercase">Owner</th>
-							<th class="px-4 py-3 text-right font-semibold tracking-[0.18em] uppercase">Servers</th
-							>
-							<th class="px-4 py-3 text-right font-semibold tracking-[0.18em] uppercase">Players</th
-							>
-						</tr>
-					</thead>
-					<tbody class="divide-y divide-slate-200 text-slate-700">
-						{#if isLoading}
-							<tr>
-								<td colspan="5" class="px-4 py-6 text-center text-sm text-slate-500"
-									>Loading plugins…</td
-								>
-							</tr>
-						{:else if hasError}
-							<tr>
-								<td colspan="5" class="px-4 py-6 text-center text-sm text-rose-600"
-									>Failed to load plugins. Please try again later.</td
-								>
-							</tr>
-						{:else if filteredPlugins.length === 0}
-							<tr>
-								<td colspan="5" class="px-4 py-6 text-center text-sm text-slate-500"
-									>No plugins match your search.</td
-								>
-							</tr>
-						{:else}
-							{#each filteredPlugins as plugin}
-								<tr class="transition-colors hover:bg-slate-50">
-									<td class="px-4 py-3">
-										<a
-											href={resolve(
-												`/plugin/${plugin.softwareUrl}/${plugin.name}/${plugin.pluginId}`
-											)}
-											class="font-semibold text-slate-900 hover:text-brand-600"
-										>
-											{plugin.name}
-										</a>
-									</td>
-									<td class="px-4 py-3 text-slate-600">{plugin.softwareName}</td>
-									<td class="px-4 py-3">
-										<a
-											href={resolve(`/author/${plugin.ownerName}`)}
-											class="text-slate-600 hover:text-brand-600"
-										>
-											{plugin.ownerName}
-										</a>
-									</td>
-									<td class="px-4 py-3 text-right font-semibold text-slate-900"
-										>{formatter.format(plugin.servers || 0)}</td
+		<div class="overflow-x-auto">
+			<Table.Root>
+				<Table.Header>
+					<Table.Row>
+						<Table.HeaderCell>Name</Table.HeaderCell>
+						<Table.HeaderCell>Software</Table.HeaderCell>
+						<Table.HeaderCell>Owner</Table.HeaderCell>
+						<Table.HeaderCell align="right">Servers</Table.HeaderCell>
+						<Table.HeaderCell align="right">Players</Table.HeaderCell>
+					</Table.Row>
+				</Table.Header>
+				<Table.Body>
+					{#if isLoading}
+						<Table.Row>
+							<Table.Cell colspan={5} class="py-6 text-center text-slate-500">
+								Loading plugins…
+							</Table.Cell>
+						</Table.Row>
+					{:else if hasError}
+						<Table.Row>
+							<Table.Cell colspan={5} class="py-6 text-center text-rose-600">
+								Failed to load plugins. Please try again later.
+							</Table.Cell>
+						</Table.Row>
+					{:else if filteredPlugins.length === 0}
+						<Table.Row>
+							<Table.Cell colspan={5} class="py-6 text-center text-slate-500">
+								No plugins match your search.
+							</Table.Cell>
+						</Table.Row>
+					{:else}
+						{#each paginatedPlugins as plugin (plugin.pluginId)}
+							<Table.Row>
+								<Table.Cell>
+									<a
+										href={resolve(
+											`/plugin/${plugin.softwareUrl}/${plugin.name}/${plugin.pluginId}`
+										)}
+										class="font-semibold text-slate-900 hover:text-brand-600"
 									>
-									<td class="px-4 py-3 text-right font-semibold text-slate-900"
-										>{formatter.format(plugin.players || 0)}</td
+										{plugin.name}
+									</a>
+								</Table.Cell>
+								<Table.Cell class="text-slate-600">{plugin.softwareName}</Table.Cell>
+								<Table.Cell>
+									<a
+										href={resolve(`/author/${plugin.ownerName}`)}
+										class="text-slate-600 hover:text-brand-600"
 									>
-								</tr>
-							{/each}
-						{/if}
-					</tbody>
-				</table>
-			</div>
+										{plugin.ownerName}
+									</a>
+								</Table.Cell>
+								<Table.Cell align="right" class="font-semibold text-slate-900">
+									{formatter.format(plugin.servers || 0)}
+								</Table.Cell>
+								<Table.Cell align="right" class="font-semibold text-slate-900">
+									{formatter.format(plugin.players || 0)}
+								</Table.Cell>
+							</Table.Row>
+						{/each}
+					{/if}
+				</Table.Body>
+			</Table.Root>
 		</div>
+
+		{#if !isLoading && !hasError && filteredPlugins.length > 0}
+			<div class="mt-6">
+				<Pagination count={filteredPlugins.length} {perPage} bind:page />
+			</div>
+		{/if}
 	</section>
 </main>

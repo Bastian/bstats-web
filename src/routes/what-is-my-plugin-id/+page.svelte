@@ -3,6 +3,7 @@
 	import Badge from '$lib/components/Badge.svelte';
 	import Button from '$lib/components/Button.svelte';
 	import PageHero from '$lib/components/PageHero.svelte';
+	import { Table } from '$lib/components/table';
 	import type { PageData } from './$types';
 
 	let { data }: { data: PageData } = $props();
@@ -82,44 +83,35 @@
 					bind:value={searchValue}
 				/>
 			</div>
-			<div class="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
-				<div class="overflow-x-auto">
-					<table class="min-w-full divide-y divide-slate-200 text-sm">
-						<thead class="bg-slate-100 text-slate-500">
-							<tr>
-								<th class="px-4 py-3 text-left font-semibold tracking-[0.18em] uppercase">Plugin</th
-								>
-								<th class="px-4 py-3 text-left font-semibold tracking-[0.18em] uppercase"
-									>Software</th
-								>
-								<th class="px-4 py-3 text-left font-semibold tracking-[0.18em] uppercase"
-									>Plugin ID</th
-								>
-								<th class="px-4 py-3 text-right font-semibold tracking-[0.18em] uppercase"
-									>Action</th
-								>
-							</tr>
-						</thead>
-						<tbody class="divide-y divide-slate-200 text-slate-700">
-							{#each filteredPlugins as plugin}
-								<tr class="transition-colors hover:bg-slate-50">
-									<td class="px-4 py-3 font-semibold text-slate-900">{plugin.name}</td>
-									<td class="px-4 py-3 text-slate-600">{plugin.software.name}</td>
-									<td class="px-4 py-3 font-mono text-sm text-slate-800">{plugin.id}</td>
-									<td class="px-4 py-3 text-right">
-										<button
-											type="button"
-											class="inline-flex items-center gap-2 rounded-full border border-slate-200 px-3 py-1.5 text-xs font-semibold text-slate-500 transition hover:border-brand-200 hover:text-brand-600"
-											onclick={(e) => copyToClipboard(plugin.id, e)}
-										>
-											Copy ID
-										</button>
-									</td>
-								</tr>
-							{/each}
-						</tbody>
-					</table>
-				</div>
+			<div class="overflow-x-auto">
+				<Table.Root>
+					<Table.Header>
+						<Table.Row>
+							<Table.HeaderCell>Plugin</Table.HeaderCell>
+							<Table.HeaderCell>Software</Table.HeaderCell>
+							<Table.HeaderCell>Plugin ID</Table.HeaderCell>
+							<Table.HeaderCell align="right">Action</Table.HeaderCell>
+						</Table.Row>
+					</Table.Header>
+					<Table.Body>
+						{#each filteredPlugins as plugin (plugin.pluginId)}
+							<Table.Row>
+								<Table.Cell class="font-semibold text-slate-900">{plugin.name}</Table.Cell>
+								<Table.Cell class="text-slate-600">{plugin.software.name}</Table.Cell>
+								<Table.Cell class="font-mono text-sm text-slate-800">{plugin.id}</Table.Cell>
+								<Table.Cell align="right">
+									<button
+										type="button"
+										class="inline-flex items-center gap-2 rounded-full border border-slate-200 px-3 py-1.5 text-xs font-semibold text-slate-500 transition hover:border-brand-200 hover:text-brand-600"
+										onclick={(e) => copyToClipboard(plugin.id, e)}
+									>
+										Copy ID
+									</button>
+								</Table.Cell>
+							</Table.Row>
+						{/each}
+					</Table.Body>
+				</Table.Root>
 			</div>
 		</section>
 	{/if}

@@ -2,6 +2,7 @@
 	import { resolve } from '$app/paths';
 	import Badge from '$lib/components/Badge.svelte';
 	import PageHero from '$lib/components/PageHero.svelte';
+	import { Table } from '$lib/components/table';
 	import type { PageData } from './$types';
 
 	let { data }: { data: PageData } = $props();
@@ -53,51 +54,49 @@
 				bind:value={searchValue}
 			/>
 		</div>
-		<div class="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
-			<div class="overflow-x-auto">
-				<table class="min-w-full divide-y divide-slate-200 text-sm">
-					<thead class="bg-slate-100 text-slate-500">
-						<tr>
-							<th class="px-4 py-3 text-left font-semibold tracking-[0.18em] uppercase">Name</th>
-							<th class="px-4 py-3 text-left font-semibold tracking-[0.18em] uppercase">Software</th
-							>
-						</tr>
-					</thead>
-					<tbody class="divide-y divide-slate-200 text-slate-700">
-						{#if filteredPlugins.length === 0}
-							<tr>
-								<td colspan="2" class="px-4 py-6 text-center text-sm text-slate-500"
-									>No plugins {searchValue ? 'match your search' : 'yet'}.</td
-								>
-							</tr>
-						{:else}
-							{#each filteredPlugins as plugin}
-								<tr class="transition-colors hover:bg-slate-50">
-									<td class="px-4 py-3 font-semibold text-slate-900">
+		<div class="overflow-x-auto">
+			<Table.Root>
+				<Table.Header>
+					<Table.Row>
+						<Table.HeaderCell>Name</Table.HeaderCell>
+						<Table.HeaderCell>Software</Table.HeaderCell>
+					</Table.Row>
+				</Table.Header>
+				<Table.Body>
+					{#if filteredPlugins.length === 0}
+						<Table.Row>
+							<Table.Cell colspan={2} class="py-6 text-center text-slate-500">
+								No plugins {searchValue ? 'match your search' : 'yet'}.
+							</Table.Cell>
+						</Table.Row>
+					{:else}
+						{#each filteredPlugins as plugin (plugin.pluginId)}
+							<Table.Row>
+								<Table.Cell class="font-semibold text-slate-900">
+									<a
+										class="hover:text-brand-600"
+										href={resolve(`/plugin/${plugin.software.url}/${plugin.name}/${plugin.id}`)}
+									>
+										{plugin.name}
+									</a>
+								</Table.Cell>
+								<Table.Cell class="text-slate-600">
+									{#if plugin.software.globalPlugin}
 										<a
 											class="hover:text-brand-600"
-											href={resolve(`/plugin/${plugin.software.url}/${plugin.name}/${plugin.id}`)}
-											>{plugin.name}</a
+											href={resolve(`/global/${plugin.software.url}`)}
 										>
-									</td>
-									<td class="px-4 py-3 text-slate-600">
-										{#if plugin.software.globalPlugin}
-											<a
-												class="hover:text-brand-600"
-												href={resolve(`/global/${plugin.software.url}`)}
-											>
-												{plugin.software.name}
-											</a>
-										{:else}
 											{plugin.software.name}
-										{/if}
-									</td>
-								</tr>
-							{/each}
-						{/if}
-					</tbody>
-				</table>
-			</div>
+										</a>
+									{:else}
+										{plugin.software.name}
+									{/if}
+								</Table.Cell>
+							</Table.Row>
+						{/each}
+					{/if}
+				</Table.Body>
+			</Table.Root>
 		</div>
 	</section>
 </main>
