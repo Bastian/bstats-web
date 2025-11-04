@@ -1,4 +1,4 @@
-import { createHighlighter, type BundledLanguage } from 'shiki';
+import { createHighlighter, type BundledLanguage, type ShikiTransformer } from 'shiki';
 
 let highlighterPromise: ReturnType<typeof createHighlighter> | null = null;
 
@@ -18,7 +18,11 @@ async function getHighlighter() {
 /**
  * Highlight code with Shiki
  */
-export async function highlightCode(code: string, lang: BundledLanguage): Promise<string> {
+export async function highlightCode(
+	code: string,
+	lang: BundledLanguage,
+	transformers?: ShikiTransformer[]
+): Promise<string> {
 	const highlighter = await getHighlighter();
 	return highlighter.codeToHtml(code, {
 		lang,
@@ -28,6 +32,7 @@ export async function highlightCode(code: string, lang: BundledLanguage): Promis
 		//
 		// However, we handle this ourselves with a Svelte attachment to only add
 		// tabindex when the code block is actually overflowing.
-		tabindex: false
+		tabindex: false,
+		transformers
 	});
 }

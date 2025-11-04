@@ -1,15 +1,16 @@
 <script lang="ts">
 	import { tabbableIfOverflow } from '$lib/attachments/tabbable-if-overflow';
 	import { highlightCode } from '$lib/utils/shiki';
-	import type { BundledLanguage } from 'shiki';
+	import type { BundledLanguage, ShikiTransformer } from 'shiki';
 
 	type CodeBlockProps = {
 		code: string;
 		lang: BundledLanguage;
+		transformers?: ShikiTransformer[];
 	};
 
-	let { code, lang }: CodeBlockProps = $props();
-	let highlightPromise = highlightCode(code, lang);
+	let { code, lang, transformers }: CodeBlockProps = $props();
+	let highlightPromise = $derived(highlightCode(code, lang, transformers));
 </script>
 
 <div

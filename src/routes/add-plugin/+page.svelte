@@ -76,6 +76,7 @@
 			<InstantiateMetricsStep
 				platform={selectedPlatform}
 				{plugin}
+				buildTool={selectedBuildTool}
 				bind:metricsInstantiated
 				status={metricsInstantiated ? 'done' : metricsIncluded ? 'active' : 'locked'}
 			/>

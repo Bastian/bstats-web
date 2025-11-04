@@ -9,6 +9,7 @@
 	export type InstantiateMetricsStepProps = {
 		platform: Platform | null;
 		status: StepStatus;
+		buildTool: BuildTool | null;
 		plugin?: {
 			pluginName: string;
 			pluginId: number;
@@ -21,22 +22,45 @@
 	import WizardStep from './WizardStep.svelte';
 	import Button from '$lib/components/Button.svelte';
 	import CodeBlock from '$lib/components/CodeBlock.svelte';
+	import type { BuildTool } from './BuildToolSelectStep.svelte';
+	import type { ShikiTransformer } from 'shiki';
 
 	let {
 		platform,
 		status,
+		buildTool,
 		plugin,
 		metricsInstantiated = $bindable()
 	}: InstantiateMetricsStepProps = $props();
 
 	function processCode(code: string): string {
-		return code
-			.replace('{{platform}}', platform ?? 'unknown')
-			.replace(
-				'{{pluginId}}',
-				!plugin ? '/* INSERT PLUGIN ID HERE */' : plugin.pluginId.toFixed(0)
-			);
+		return (
+			code
+				.replace('{{platform}}', platform ?? 'unknown')
+				.replace(
+					'{{pluginId}}',
+					!plugin ? '/* INSERT PLUGIN ID HERE */' : plugin.pluginId.toFixed(0)
+				)
+				// On copy-and-paste Metrics classes, custom charts are inner classes of Metrics
+				.replace(
+					'Metrics.SimplePie',
+					buildTool === 'copy-and-paste' ? 'Metrics.SimplePie' : 'SimplePie'
+				)
+		);
 	}
+
+	const codeTransformers: ShikiTransformer[] = [
+		{
+			name: 'highlight-placeholder-comment',
+			postprocess(html) {
+				// Highlight the placeholder comment in green and bold
+				return html.replace(
+					/\/\* INSERT PLUGIN ID HERE \*\//g,
+					'<span class="font-bold text-green-400">/* INSERT PLUGIN ID HERE */<\/span>'
+				);
+			}
+		}
+	];
 </script>
 
 <WizardStep index={5} title="Instantiate Metrics" {status}>
@@ -48,7 +72,11 @@
 					<code class="font-mono text-slate-700">onEnable()</code>
 					method.
 				</p>
-				<CodeBlock code={processCode(instantiateBukkit)} lang="java" />
+				<CodeBlock
+					code={processCode(instantiateBukkit)}
+					lang="java"
+					transformers={codeTransformers}
+				/>
 			</div>
 		{:else if platform === 'bungeecord'}
 			<div class="space-y-4">
@@ -57,7 +85,11 @@
 					<code class="font-mono text-slate-700">onEnable()</code>
 					method.
 				</p>
-				<CodeBlock code={processCode(instantiateBungeeCord)} lang="java" />
+				<CodeBlock
+					code={processCode(instantiateBungeeCord)}
+					lang="java"
+					transformers={codeTransformers}
+				/>
 			</div>
 		{:else if platform === 'sponge'}
 			<div class="space-y-4">
@@ -67,7 +99,11 @@
 					instance. Then instantiate the Metrics class in your plugin's
 					<code class="font-mono text-slate-700">onServerStart(...)</code> method.
 				</p>
-				<CodeBlock code={processCode(instantiateSponge)} lang="java" />
+				<CodeBlock
+					code={processCode(instantiateSponge)}
+					lang="java"
+					transformers={codeTransformers}
+				/>
 			</div>
 		{:else if platform === 'velocity'}
 			<div class="space-y-4">
@@ -77,7 +113,11 @@
 					instance in your plugin's constructor. Then instantiate the Metrics class in your plugin's
 					<code class="font-mono text-slate-700">onProxyInitialization(...)</code> method.
 				</p>
-				<CodeBlock code={processCode(instantiateVelocity)} lang="java" />
+				<CodeBlock
+					code={processCode(instantiateVelocity)}
+					lang="java"
+					transformers={codeTransformers}
+				/>
 			</div>
 		{:else if platform === 'server-implementation'}
 			<div class="max-w-prose space-y-4">
