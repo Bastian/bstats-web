@@ -66,64 +66,44 @@
 				If you've waited the expected time and still don't see any data, check these common issues:
 			</p>
 			<Accordion.Root class="space-y-3">
-				<Accordion.Item value="debug-1" title="Enable debug logging">
-					<div class="max-w-prose space-y-2">
-						<p>
-							Enable debug logging in the bStats configuration file by setting
-							<code class="font-mono text-slate-700">logFailedRequests</code>,
-							<code class="font-mono text-slate-700">logSentData</code>, and
-							<code class="font-mono text-slate-700">logResponseStatusText</code> to
-							<code class="font-mono text-slate-700">true</code>.
-						</p>
-					</div>
+				<Accordion.Item title="Enable debug logging" contentClass="max-w-prose">
+					Enable debug logging in the bStats configuration file by setting
+					<code class="font-mono text-slate-700">logFailedRequests</code>,
+					<code class="font-mono text-slate-700">logSentData</code>, and
+					<code class="font-mono text-slate-700">logResponseStatusText</code> to
+					<code class="font-mono text-slate-700">true</code>.
 				</Accordion.Item>
 
-				<Accordion.Item value="debug-2" title="Ratelimits">
-					<div class="max-w-prose">
-						<p>
-							Plugins are limited to sending data once per 30-minute interval (hh:00 and hh:30).
-							When you have debug logging enabled and see
-							<code class="font-mono text-slate-700">429 Too Many Requests</code> in the logs, it
-							means your plugin is being ratelimited. <strong>This is completely normal</strong> and
-							can be safely ignored.
-						</p>
-					</div>
+				<Accordion.Item title="Ratelimits" contentClass="max-w-prose">
+					Plugins are limited to sending data once per 30-minute interval (hh:00 and hh:30). When
+					you have debug logging enabled and see
+					<code class="font-mono text-slate-700">429 Too Many Requests</code> in the logs, it means
+					your plugin is being ratelimited. <strong>This is completely normal</strong> and can be safely
+					ignored.
 				</Accordion.Item>
 
-				<Accordion.Item value="debug-3" title="Metrics class not instantiated">
-					<div class="max-w-prose space-y-2">
-						<p>
-							Verify that you're actually creating an instance of the
-							<code class="font-mono text-slate-700">Metrics</code> class in your plugin's initialization
-							code. Simply including the class file isn't enough. You must instantiate it with your plugin
-							ID.
-						</p>
-					</div>
+				<Accordion.Item title="Metrics class not instantiated" contentClass="max-w-prose">
+					Verify that you're actually creating an instance of the
+					<code class="font-mono text-slate-700">Metrics</code> class in your plugin's initialization
+					code. Simply including the class file isn't enough. You must instantiate it with your plugin
+					ID.
 				</Accordion.Item>
 
-				<Accordion.Item value="debug-4" title="Wrong plugin ID">
-					<p class="max-w-prose">
-						Double-check that the plugin ID in your code matches the ID shown on your plugin's
-						dashboard.
-					</p>
+				<Accordion.Item title="Wrong plugin ID" contentClass="max-w-prose">
+					Double-check that the plugin ID in your code matches the ID shown on your plugin's
+					dashboard.
 				</Accordion.Item>
 
-				<Accordion.Item value="debug-5" title="Metrics disabled in config">
-					<p class="max-w-prose">
-						Server owners can disable bStats by editing. Check that
-						<code class="font-mono text-slate-700">enabled</code>
-						is set to
-						<code class="font-mono text-slate-700">true</code>.
-					</p>
+				<Accordion.Item title="Metrics disabled in config" contentClass="max-w-prose">
+					Server owners can disable bStats by editing. Check that
+					<code class="font-mono text-slate-700">enabled</code>
+					is set to
+					<code class="font-mono text-slate-700">true</code>.
 				</Accordion.Item>
 
-				<Accordion.Item value="debug-6" title="Firewall or network blocking">
-					<div class="max-w-prose space-y-2">
-						<p>
-							Ensure that your server can reach the bStats servers. A common issue is PiHole or
-							other ad-blocking software blocking the connection.
-						</p>
-					</div>
+				<Accordion.Item title="Firewall or network blocking" contentClass="max-w-prose">
+					Ensure that your server can reach the bStats servers. A common issue is PiHole or other
+					ad-blocking software blocking the connection.
 				</Accordion.Item>
 			</Accordion.Root>
 		</article>

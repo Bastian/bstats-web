@@ -143,7 +143,7 @@
 					<p class="mt-4 text-base leading-relaxed text-slate-600">
 						View the
 						<a href={resolve('/docs')} class="font-semibold text-brand-600 hover:text-brand-700">
-							getting started guide
+							documentation
 						</a>
 						for detailed instructions.
 					</p>
@@ -212,7 +212,7 @@
 							</span>
 						</div>
 						<div
-							class="relative mt-4 max-w-full overflow-x-auto rounded-xl bg-slate-900 px-3 py-4 text-sm leading-relaxed shadow-inner sm:px-4 sm:py-6 [&>*]:bg-slate-900!"
+							class="relative mt-4 max-w-full overflow-x-auto rounded-xl bg-slate-900 px-3 py-4 text-sm leading-relaxed shadow-inner sm:px-5 sm:py-4 [&>*]:bg-slate-900!"
 						>
 							<!-- eslint-disable-next-line svelte/no-at-html-tags -->
 							{@html data.highlightedCode}
@@ -220,18 +220,6 @@
 						<p class="mt-3 text-xs text-slate-400">
 							Works across Bukkit, Spigot, Paper, Velocity and more.
 						</p>
-					</div>
-
-					<div
-						class="mt-6 flex flex-wrap items-center justify-between gap-4 rounded-2xl bg-slate-100 px-5 py-4 text-sm text-slate-600"
-					>
-						<a
-							href={resolve('/docs')}
-							class="inline-flex items-center gap-2 font-semibold text-brand-600 hover:text-brand-700"
-						>
-							Read the full guide
-							<IconArrowRight size={18} />
-						</a>
 					</div>
 				</div>
 			</div>

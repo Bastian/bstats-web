@@ -22,7 +22,7 @@
 			<h1 class="font-display text-4xl font-semibold tracking-tight text-slate-900 sm:text-5xl">
 				{@render title()}
 			</h1>
-			<p class="text-base leading-relaxed text-slate-600">
+			<p class="max-w-prose text-base leading-relaxed text-slate-600">
 				{@render content()}
 			</p>
 			{#if extra}

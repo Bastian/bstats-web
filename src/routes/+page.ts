@@ -19,12 +19,12 @@ async function getHighlightedExampleCode() {
 	const exampleCode = `public class MyPlugin extends JavaPlugin {
   @Override
   public void onEnable() {
-    int pluginId = 12345; // your unique plugin ID
+    int pluginId = 12345; // Your unique plugin ID
     Metrics metrics = new Metrics(this, pluginId);
 
-    // Example Custom Chart
+    // Example custom chart
     metrics.addCustomChart(
-      new Metrics.SimplePie("my_chart", () -> "My Value")
+      new SimplePie("my_chart", () -> "My Value")
     );
   }
 }`;

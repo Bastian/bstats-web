@@ -27,8 +27,8 @@
 			<article class="doc-card space-y-4">
 				<h2 class="doc-card-title">Add your plugin</h2>
 				<p class="max-w-prose text-sm leading-relaxed text-slate-600">
-					Ready to start collecting metrics? Our step-by-step wizard will guide you through creating
-					an account, registering your plugin, and integrating the Metrics class into your code.
+					Ready to start collecting metrics? Our step-by-step wizard will guide you through
+					registering your plugin and integrating the Metrics class into your code.
 				</p>
 				<div class="mt-6">
 					<Button href={resolve('/add-plugin')} size="large">

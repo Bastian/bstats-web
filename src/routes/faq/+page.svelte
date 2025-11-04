@@ -31,18 +31,21 @@
 		<article class="doc-card space-y-4">
 			<h2 class="doc-card-title">General</h2>
 			<Accordion.Root class="space-y-3">
-				<Accordion.Item value="general-1" title="Will bStats stay free?">
+				<Accordion.Item title="Will bStats stay free?" contentClass="max-w-prose">
 					bStats has no plans to charge for existing features. Thanks to our sponsor
 					<a class="font-semibold text-brand-600 hover:text-brand-700" href={resolve('/credits')}>
 						GameHosting
 					</a>
 					the platform runs without subscription income. Any future premium functionality would be optional.
 				</Accordion.Item>
-				<Accordion.Item value="general-2" title="Why isn't there a &quot;Universal&quot; category?">
+				<Accordion.Item
+					title="Why isn't there a &quot;Universal&quot; category?"
+					contentClass="max-w-prose"
+				>
 					Mixing Bukkit, BungeeCord, and more in a single bucket would double-count players and
 					break comparisons. Separate categories keep charts accurate and easy to read.
 				</Accordion.Item>
-				<Accordion.Item value="general-3" title="Is there an API?">
+				<Accordion.Item title="Is there an API?" contentClass="max-w-prose">
 					Yes. bStats exposes a lightweight REST API for public metrics. Start here:
 					<a
 						class="font-semibold text-brand-600 hover:text-brand-700"
@@ -57,7 +60,10 @@
 		<article class="doc-card space-y-4">
 			<h2 class="doc-card-title">Map Charts</h2>
 			<Accordion.Root class="space-y-3">
-				<Accordion.Item value="maps-1" title="Why are certain borders displayed this way?">
+				<Accordion.Item
+					title="Why are certain borders displayed this way?"
+					contentClass="max-w-prose"
+				>
 					Map data is provided by Natural Earth, and we follow <a
 						class="font-semibold text-brand-600 hover:text-brand-700"
 						href="https://www.naturalearthdata.com/about/disputed-boundaries-policy/"
@@ -75,11 +81,11 @@
 		<article class="doc-card space-y-4">
 			<h2 class="doc-card-title">Account</h2>
 			<Accordion.Root class="space-y-3">
-				<Accordion.Item value="account-1" title="How do I change my password?">
+				<Accordion.Item title="How do I change my password?" contentClass="max-w-prose">
 					We don't support self-service password changes yet. If you urgently need an update,
 					contact the maintainers and we'll help manually.
 				</Accordion.Item>
-				<Accordion.Item value="account-2" title="I forgot my password!">
+				<Accordion.Item title="I forgot my password!" contentClass="max-w-prose">
 					Drop us a message on Discord or via GitHub Issues. We'll verify your ownership and reset
 					the account for you.
 				</Accordion.Item>
@@ -89,7 +95,7 @@
 		<article class="doc-card space-y-4">
 			<h2 class="doc-card-title">Metrics class</h2>
 			<Accordion.Root class="space-y-3">
-				<Accordion.Item value="metrics-1" title="How do I add bStats to my plugin?">
+				<Accordion.Item title="How do I add bStats to my plugin?" contentClass="max-w-prose">
 					Head over to the
 					<a
 						class="font-semibold text-brand-600 hover:text-brand-700"
@@ -99,7 +105,10 @@
 					</a>
 					for Maven and manual instructions.
 				</Accordion.Item>
-				<Accordion.Item value="metrics-2" title="Where do I report bugs or request features?">
+				<Accordion.Item
+					title="Where do I report bugs or request features?"
+					contentClass="max-w-prose"
+				>
 					Website feedback lives on
 					<a
 						class="font-semibold text-brand-600 hover:text-brand-700"

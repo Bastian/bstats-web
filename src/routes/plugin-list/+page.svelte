@@ -23,7 +23,7 @@
 	let hasError = $state(false);
 	let page = $state(1);
 
-	const perPage = 20;
+	const perPage = 10;
 	const formatter = new Intl.NumberFormat();
 
 	let paginatedPlugins = $derived.by(() => {
@@ -79,8 +79,8 @@
 		{#snippet badge()}<Badge>Directory</Badge>{/snippet}
 		{#snippet title()}Plugin list{/snippet}
 		{#snippet content()}
-			Search thousands of plugins reporting metrics to bStats. Sort by servers, players, and
-			software to spot what's trending.
+			Search thousands of plugins reporting metrics to bStats. Shows plugins with at least one
+			server.
 		{/snippet}
 	</PageHero>
 
