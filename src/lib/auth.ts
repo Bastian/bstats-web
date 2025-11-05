@@ -37,6 +37,7 @@ export const auth = betterAuth({
 		enabled: true,
 		requireEmailVerification: false,
 		autoSignIn: true,
+		minPasswordLength: 8,
 		password: {
 			// Old passwords are bcrypt hashed, so we need to use bcrypt here
 			hash: async (password: string) => bcrypt.hash(password, 12),
@@ -58,7 +59,10 @@ export const auth = betterAuth({
 		// Username plugin allows login with username instead of email
 		// Needed for maintaining compatibility with old username-only system
 		username(),
-		haveIBeenPwned(),
+		haveIBeenPwned({
+			customPasswordCompromisedMessage:
+				'Password has been found in a data breach. Choose another one.'
+		}),
 		twoFactor({ issuer: 'bStats' }),
 		sveltekitCookies(getRequestEvent),
 		captcha({

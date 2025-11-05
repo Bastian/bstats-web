@@ -28,7 +28,7 @@
 	});
 
 	let isFormValid = $derived(
-		currentPassword.length > 0 && newPassword.length >= 6 && newPassword === confirmPassword
+		currentPassword.length > 0 && newPassword.length >= 8 && newPassword === confirmPassword
 	);
 </script>
 
@@ -88,11 +88,11 @@
 							type="password"
 							name="newPassword"
 							class="input-control"
-							minlength="6"
+							minlength="8"
 							bind:value={newPassword}
 							required
 						/>
-						<p class="form-helper">Minimum 6 characters</p>
+						<p class="form-helper">Minimum 8 characters</p>
 					</div>
 					<div class="input-group">
 						<label class="input-label" for="confirmPassword">Confirm password</label>
