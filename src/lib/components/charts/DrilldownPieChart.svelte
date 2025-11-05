@@ -2,6 +2,7 @@
 	import * as echarts from 'echarts';
 	import { onMount, onDestroy } from 'svelte';
 	import { getEChartsTheme } from '$lib/charts/echarts-theme';
+	import { accessibilityPreferences } from '$lib/stores/accessibility';
 
 	interface Props {
 		data: {
@@ -31,7 +32,7 @@
 
 		// Initialize chart
 		chartInstance = echarts.init(chartContainer);
-		updateChart();
+		updateChart(accessibilityPreferences.current.showChartPatterns);
 
 		// Handle click events for drilldown
 		chartInstance.on('click', (params) => {
@@ -45,7 +46,7 @@
 			}
 			if (currentDrilldown === null && typeof params.data.drilldown === 'string') {
 				currentDrilldown = params.data.drilldown;
-				updateChart();
+				updateChart(accessibilityPreferences.current.showChartPatterns);
 			}
 		});
 
@@ -61,14 +62,14 @@
 		}
 	});
 
-	// Update chart when data or drilldown state changes
+	// Update chart when data, drilldown state, or accessibility preferences change
 	$effect(() => {
 		if (chartInstance && data) {
-			updateChart();
+			updateChart(accessibilityPreferences.current.showChartPatterns);
 		}
 	});
 
-	function updateChart() {
+	function updateChart(showPatterns: boolean) {
 		if (!chartInstance || !data) return;
 
 		const theme = getEChartsTheme();
@@ -98,10 +99,51 @@
 			}
 		}
 
+		// Build a descriptive summary for screen readers
+		let description: string;
+		if (chartData.length === 0) {
+			description = 'Drilldown pie chart. No data available.';
+		} else if (currentDrilldown === null) {
+			const total = chartData.reduce((sum, item) => sum + item.value, 0);
+			const topItems = chartData.slice(0, 5);
+			const itemsDescription = topItems
+				.map((item) => {
+					const percentage = ((item.value / total) * 100).toFixed(1);
+					return `${item.name}: ${item.value} (${percentage}%)`;
+				})
+				.join(', ');
+
+			const hasMore = chartData.length > 5;
+			description = `Drilldown pie chart showing ${chartData.length} ${chartData.length === 1 ? 'category' : 'categories'}. Click on a slice to view details. Total: ${total}. ${hasMore ? 'Top categories: ' : 'Categories: '}${itemsDescription}${hasMore ? `, and ${chartData.length - 5} more` : ''}.`;
+		} else {
+			const drilldownLevel = data.drilldownData.find((d) => d.id === currentDrilldown);
+			const parentName = drilldownLevel?.name || currentDrilldown;
+			const total = chartData.reduce((sum, item) => sum + item.value, 0);
+			const topItems = chartData.slice(0, 5);
+			const itemsDescription = topItems
+				.map((item) => {
+					const percentage = ((item.value / total) * 100).toFixed(1);
+					return `${item.name}: ${item.value} (${percentage}%)`;
+				})
+				.join(', ');
+
+			const hasMore = chartData.length > 5;
+			description = `Detailed view of ${parentName} showing ${chartData.length} ${chartData.length === 1 ? 'item' : 'items'}. Total: ${total}. ${hasMore ? 'Top items: ' : 'Items: '}${itemsDescription}${hasMore ? `, and ${chartData.length - 5} more` : ''}.`;
+		}
+
 		const option: echarts.EChartsOption = {
 			color: theme.color,
 			backgroundColor: theme.backgroundColor,
 			textStyle: theme.textStyle,
+			aria: {
+				enabled: true,
+				decal: {
+					show: showPatterns
+				},
+				label: {
+					description: description
+				}
+			},
 			tooltip: {
 				...theme.tooltip,
 				trigger: 'item',
@@ -133,6 +175,10 @@
 							shadowColor: 'rgba(0, 0, 0, 0.5)'
 						}
 					},
+					itemStyle: {
+						borderColor: `#fff`,
+						borderWidth: 1
+					},
 					label: {
 						show: !isMobile,
 						formatter: '{b}: {d}%',
@@ -147,7 +193,7 @@
 
 	function goBack() {
 		currentDrilldown = null;
-		updateChart();
+		updateChart(accessibilityPreferences.current.showChartPatterns);
 	}
 </script>
 

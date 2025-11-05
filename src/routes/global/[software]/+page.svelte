@@ -179,7 +179,12 @@
 		</div>
 		<div class="mt-8 grid gap-8 md:grid-cols-2">
 			{#each charts as chart (chart.id)}
-				<ChartCard title={chart.title} chartId={chart.id} colSpan={getColSpan(chart.type)}>
+				<ChartCard
+					title={chart.title}
+					chartId={chart.id}
+					colSpan={getColSpan(chart.type)}
+					supportsPatterns={chart.type !== 'simple_map' && chart.type !== 'advanced_map'}
+				>
 					{#if chartDataMap[chart.uid]}
 						{#if chart.type === 'simple_pie' || chart.type === 'advanced_pie'}
 							<PieChart data={chartDataMap[chart.uid] as SimplePieChartData[]} />

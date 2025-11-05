@@ -106,10 +106,34 @@
 		const values = data.map((d) => d.value);
 		const maxValue = Math.max(...values, 1);
 
+		// Build a descriptive summary for screen readers
+		let description: string;
+		if (data.length === 0) {
+			description = `World map showing ${valueName} distribution. No data available.`;
+		} else {
+			// Sort countries by value to show top contributors
+			const sortedData = [...data].sort((a, b) => b.value - a.value);
+			const topCountries = sortedData.slice(0, 5);
+			const topCountriesDescription = topCountries
+				.map((d) => {
+					const countryName = A3_TO_NAME[mapIso2ToA3(d.code)] || d.code;
+					return `${countryName}: ${d.value}`;
+				})
+				.join(', ');
+
+			description = `World map showing ${valueName} distribution across ${data.length} ${data.length === 1 ? 'country' : 'countries'}. Top ${data.length === 1 ? 'country' : 'countries'} by ${valueName}: ${topCountriesDescription}.`;
+		}
+
 		const option: echarts.EChartsOption = {
 			color: theme.color,
 			backgroundColor: theme.backgroundColor,
 			textStyle: theme.textStyle,
+			aria: {
+				enabled: true,
+				label: {
+					description: description
+				}
+			},
 			tooltip: {
 				...theme.tooltip,
 				trigger: 'item',

@@ -2,6 +2,7 @@
 	import * as echarts from 'echarts';
 	import { onMount, onDestroy } from 'svelte';
 	import { getEChartsTheme } from '$lib/charts/echarts-theme';
+	import { accessibilityPreferences } from '$lib/stores/accessibility';
 
 	interface Props {
 		data: { name: string; y: number }[];
@@ -28,7 +29,7 @@
 
 		// Initialize chart
 		chartInstance = echarts.init(chartContainer);
-		updateChart();
+		updateChart(accessibilityPreferences.current.showChartPatterns);
 
 		return () => {
 			window.removeEventListener('resize', handleResize);
@@ -42,24 +43,51 @@
 		}
 	});
 
-	// Update chart when data changes
+	// Update chart when data or accessibility preferences change
 	$effect(() => {
 		if (chartInstance && data) {
-			updateChart();
+			updateChart(accessibilityPreferences.current.showChartPatterns);
 		}
 	});
 
-	function updateChart() {
+	function updateChart(showPatterns: boolean) {
 		if (!chartInstance || !data) return;
 
 		// Sort data by value descending
 		const sortedData = [...data].sort((a, b) => b.y - a.y);
+
+		// Build a descriptive summary for screen readers
+		let description: string;
+		if (sortedData.length === 0) {
+			description = 'Pie chart showing distribution. No data available.';
+		} else {
+			const total = sortedData.reduce((sum, item) => sum + item.y, 0);
+			const topItems = sortedData.slice(0, 5);
+			const itemsDescription = topItems
+				.map((item) => {
+					const percentage = ((item.y / total) * 100).toFixed(1);
+					return `${item.name}: ${item.y} (${percentage}%)`;
+				})
+				.join(', ');
+
+			const hasMore = sortedData.length > 5;
+			description = `Pie chart showing distribution across ${sortedData.length} ${sortedData.length === 1 ? 'category' : 'categories'}. Total: ${total}. ${hasMore ? 'Top categories: ' : 'Categories: '}${itemsDescription}${hasMore ? `, and ${sortedData.length - 5} more` : ''}.`;
+		}
 
 		const theme = getEChartsTheme();
 		const option: echarts.EChartsOption = {
 			color: theme.color,
 			backgroundColor: theme.backgroundColor,
 			textStyle: theme.textStyle,
+			aria: {
+				enabled: true,
+				decal: {
+					show: showPatterns
+				},
+				label: {
+					description: description
+				}
+			},
 			tooltip: {
 				...theme.tooltip,
 				trigger: 'item',
@@ -87,6 +115,10 @@
 						name: item.name,
 						value: item.y
 					})),
+					itemStyle: {
+						borderColor: `#fff`,
+						borderWidth: 1
+					},
 					emphasis: {
 						itemStyle: {
 							shadowBlur: 10,

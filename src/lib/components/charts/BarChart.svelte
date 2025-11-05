@@ -2,6 +2,7 @@
 	import * as echarts from 'echarts';
 	import { onMount, onDestroy } from 'svelte';
 	import { getEChartsTheme } from '$lib/charts/echarts-theme';
+	import { accessibilityPreferences } from '$lib/stores/accessibility';
 
 	interface Props {
 		data: { name: string; data: number[] }[];
@@ -33,7 +34,7 @@
 
 		// Initialize chart
 		chartInstance = echarts.init(chartContainer);
-		updateChart();
+		updateChart(accessibilityPreferences.current.showChartPatterns);
 
 		return () => {
 			window.removeEventListener('resize', handleResize);
@@ -47,20 +48,48 @@
 		}
 	});
 
-	// Update chart when data changes
+	// Update chart when data or accessibility preferences change
 	$effect(() => {
 		if (chartInstance && data) {
-			updateChart();
+			updateChart(accessibilityPreferences.current.showChartPatterns);
 		}
 	});
 
-	function updateChart() {
+	function updateChart(showPatterns: boolean) {
 		if (!chartInstance || !data || !categories) return;
 
 		const theme = getEChartsTheme();
 
+		// Build a descriptive summary for screen readers
+		const seriesNames = data.map((s) => s.name).join(', ');
+		const categoryList = categories.slice(0, 3).join(', ');
+		const hasMore = categories.length > 3;
+
+		// Add sample data points (first 2 categories)
+		let dataDescription = '';
+		const maxCategoriesToDescribe = Math.min(10, categories.length);
+		for (let i = 0; i < maxCategoriesToDescribe; i++) {
+			const categoryName = categories[i];
+			const values = data.map((series) => `${series.name}: ${series.data[i]}`).join(', ');
+			dataDescription += ` ${categoryName} has ${values}.`;
+		}
+		if (categories.length > maxCategoriesToDescribe) {
+			dataDescription += ` And ${categories.length - maxCategoriesToDescribe} more categories.`;
+		}
+
+		const description = `Bar chart comparing ${valueName} across ${categories.length} categories${hasMore ? ` (${categoryList}, and ${categories.length - 3} more)` : `: ${categoryList}`}. Shows ${data.length} data series: ${seriesNames}.${dataDescription}`;
+
 		const option: echarts.EChartsOption = {
 			...theme,
+			aria: {
+				enabled: true,
+				decal: {
+					show: showPatterns
+				},
+				label: {
+					description: description
+				}
+			},
 			tooltip: {
 				...theme.tooltip,
 				trigger: 'axis',

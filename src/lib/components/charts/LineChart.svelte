@@ -3,6 +3,7 @@
 	import { onMount, onDestroy } from 'svelte';
 	import { getEChartsTheme } from '$lib/charts/echarts-theme';
 	import { Button } from 'bits-ui';
+	import { accessibilityPreferences } from '$lib/stores/accessibility';
 
 	interface Props {
 		data: [number, number][]; // [timestamp, value][]
@@ -26,7 +27,7 @@
 
 		// Initialize chart
 		chartInstance = echarts.init(chartContainer);
-		updateChart();
+		updateChart(accessibilityPreferences.current.showChartPatterns);
 
 		return () => {
 			window.removeEventListener('resize', handleResize);
@@ -40,10 +41,10 @@
 		}
 	});
 
-	// Update chart when data changes
+	// Update chart when data or accessibility preferences change
 	$effect(() => {
 		if (chartInstance && data) {
-			updateChart();
+			updateChart(accessibilityPreferences.current.showChartPatterns);
 		}
 	});
 
@@ -106,7 +107,7 @@
 		});
 	}
 
-	function updateChart() {
+	function updateChart(showPatterns: boolean) {
 		if (!chartInstance || !data) return;
 
 		const theme = getEChartsTheme();
@@ -123,8 +124,37 @@
 			startPercent = Math.max(0, ((oneMonthAgo - dataStart) / (dataEnd - dataStart)) * 100);
 		}
 
+		// Build a descriptive summary for screen readers
+		let description: string;
+		if (data.length === 0) {
+			description = `Line chart showing ${lineName} over time. No data available.`;
+		} else {
+			const latestValue = data[data.length - 1][1];
+			const latestDate = new Date(data[data.length - 1][0]).toLocaleDateString();
+			const firstValue = data[0][1];
+			const firstDate = new Date(data[0][0]).toLocaleDateString();
+			const change = latestValue - firstValue;
+			const changeText =
+				change > 0
+					? `increased by ${change}`
+					: change < 0
+						? `decreased by ${Math.abs(change)}`
+						: 'remained stable';
+
+			description = `Line chart showing ${lineName} over time with ${data.length} data points from ${firstDate} to ${latestDate}. Initial value: ${firstValue}. Latest value: ${latestValue}. Overall trend: ${changeText}.`;
+		}
+
 		const option: echarts.EChartsOption = {
 			...theme,
+			aria: {
+				enabled: true,
+				decal: {
+					show: showPatterns
+				},
+				label: {
+					description: description
+				}
+			},
 			tooltip: {
 				...theme.tooltip,
 				trigger: 'axis',
