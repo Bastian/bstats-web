@@ -1,12 +1,12 @@
 import { PersistedState } from 'runed';
 
 interface AccessibilityPreferences {
-	showChartPatterns: boolean;
+    showChartPatterns: boolean;
 }
 
 export const accessibilityPreferences = new PersistedState<AccessibilityPreferences>(
-	'bstats-accessibility-preferences',
-	{
-		showChartPatterns: false
-	}
+    'bstats-accessibility-preferences',
+    {
+        showChartPatterns: false
+    }
 );

@@ -3,28 +3,30 @@ import { getAllSoftware } from '$lib/server/redis/software.js';
 import { getPluginsOfUser } from '$lib/server/redis/plugins.js';
 
 export const load: PageServerLoad = async ({ params }) => {
-	const { username } = params;
+    const { username } = params;
 
-	// Get all plugins by the user
-	const pluginsRaw = await getPluginsOfUser(username);
+    // Get all plugins by the user
+    const pluginsRaw = await getPluginsOfUser(username);
 
-	// Get all software to map plugin software IDs to software objects
-	const allSoftware = await getAllSoftware();
+    // Get all software to map plugin software IDs to software objects
+    const allSoftware = await getAllSoftware();
 
-	// Replace software IDs with software objects
-	const plugins = pluginsRaw.map((plugin) => {
-		const software = allSoftware.find((s) => s.id === plugin.software);
-		if (!software) {
-			throw new Error(`Software with ID ${plugin.software} not found for plugin ${plugin.name}`);
-		}
-		return {
-			...plugin,
-			software
-		};
-	});
+    // Replace software IDs with software objects
+    const plugins = pluginsRaw.map((plugin) => {
+        const software = allSoftware.find((s) => s.id === plugin.software);
+        if (!software) {
+            throw new Error(
+                `Software with ID ${plugin.software} not found for plugin ${plugin.name}`
+            );
+        }
+        return {
+            ...plugin,
+            software
+        };
+    });
 
-	return {
-		username,
-		plugins
-	};
+    return {
+        username,
+        plugins
+    };
 };

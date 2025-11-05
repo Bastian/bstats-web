@@ -9,25 +9,25 @@ const SMTP_USER = env.SMTP_USER;
 const SMTP_PASSWORD = env.SMTP_PASSWORD;
 
 if (!SMTP_HOST || !SMTP_PORT || !SMTP_USER || !SMTP_PASSWORD) {
-	console.error('SMTP configuration environment variables are not properly set.');
-	process.exit(1);
+    console.error('SMTP configuration environment variables are not properly set.');
+    process.exit(1);
 }
 
 const SENDER_MAIL = env.SENDER_MAIL;
 
 if (!SENDER_MAIL) {
-	console.error('SENDER_MAIL environment variable is not set.');
-	process.exit(1);
+    console.error('SENDER_MAIL environment variable is not set.');
+    process.exit(1);
 }
 
 const transporter = nodemailer.createTransport({
-	host: SMTP_HOST,
-	port: SMTP_PORT,
-	secure: SMTP_SECURE,
-	auth: {
-		user: SMTP_USER,
-		pass: SMTP_PASSWORD
-	}
+    host: SMTP_HOST,
+    port: SMTP_PORT,
+    secure: SMTP_SECURE,
+    auth: {
+        user: SMTP_USER,
+        pass: SMTP_PASSWORD
+    }
 });
 
 /**
@@ -37,8 +37,8 @@ const transporter = nodemailer.createTransport({
  * @returns Promise resolving to the result of the sendMail operation.
  */
 export async function sendEmail(opts: Exclude<Mail.Options, 'from'>) {
-	return transporter.sendMail({
-		...opts,
-		from: `"bStats" <${SENDER_MAIL}>`
-	});
+    return transporter.sendMail({
+        ...opts,
+        from: `"bStats" <${SENDER_MAIL}>`
+    });
 }

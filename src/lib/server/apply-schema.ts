@@ -9,20 +9,20 @@ import { join } from 'path';
 let schemaApplied = false;
 
 export async function ensureSchema() {
-	// Only apply schema once per server instance
-	if (schemaApplied) {
-		return;
-	}
+    // Only apply schema once per server instance
+    if (schemaApplied) {
+        return;
+    }
 
-	const pool = new Pool({
-		connectionString:
-			process.env.DATABASE_URL || 'postgresql://bstats:bstats@localhost:5432/bstats_auth'
-	});
+    const pool = new Pool({
+        connectionString:
+            process.env.DATABASE_URL || 'postgresql://bstats:bstats@localhost:5432/bstats_auth'
+    });
 
-	const client = await pool.connect();
-	try {
-		// Check if tables already exist
-		const result = await client.query(`
+    const client = await pool.connect();
+    try {
+        // Check if tables already exist
+        const result = await client.query(`
 			SELECT EXISTS (
 				SELECT FROM information_schema.tables
 				WHERE table_schema = 'public'
@@ -30,43 +30,43 @@ export async function ensureSchema() {
 			);
 		`);
 
-		if (result.rows[0].exists) {
-			console.log('✅ Better Auth schema already exists');
-			schemaApplied = true;
-			return;
-		}
+        if (result.rows[0].exists) {
+            console.log('✅ Better Auth schema already exists');
+            schemaApplied = true;
+            return;
+        }
 
-		console.log('📦 Applying Better Auth schema...');
+        console.log('📦 Applying Better Auth schema...');
 
-		// Find the latest migration file
-		const migrationsDir = join(process.cwd(), 'better-auth_migrations');
+        // Find the latest migration file
+        const migrationsDir = join(process.cwd(), 'better-auth_migrations');
 
-		if (!existsSync(migrationsDir)) {
-			throw new Error('Migration directory not found. Run: npx @better-auth/cli generate');
-		}
+        if (!existsSync(migrationsDir)) {
+            throw new Error('Migration directory not found. Run: npx @better-auth/cli generate');
+        }
 
-		const files = readdirSync(migrationsDir)
-			.filter((f) => f.endsWith('.sql'))
-			.sort()
-			.reverse();
+        const files = readdirSync(migrationsDir)
+            .filter((f) => f.endsWith('.sql'))
+            .sort()
+            .reverse();
 
-		if (files.length === 0) {
-			throw new Error('No migration files found. Run: npx @better-auth/cli generate');
-		}
+        if (files.length === 0) {
+            throw new Error('No migration files found. Run: npx @better-auth/cli generate');
+        }
 
-		const latestMigration = files[0];
-		const sql = readFileSync(join(migrationsDir, latestMigration), 'utf-8');
+        const latestMigration = files[0];
+        const sql = readFileSync(join(migrationsDir, latestMigration), 'utf-8');
 
-		console.log(`   Applying migration: ${latestMigration}`);
-		await client.query(sql);
+        console.log(`   Applying migration: ${latestMigration}`);
+        await client.query(sql);
 
-		console.log('✅ Better Auth schema applied successfully');
-		schemaApplied = true;
-	} catch (error) {
-		console.error('❌ Error applying schema:', error);
-		throw error;
-	} finally {
-		client.release();
-		await pool.end();
-	}
+        console.log('✅ Better Auth schema applied successfully');
+        schemaApplied = true;
+    } catch (error) {
+        console.error('❌ Error applying schema:', error);
+        throw error;
+    } finally {
+        client.release();
+        await pool.end();
+    }
 }

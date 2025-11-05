@@ -2,10 +2,10 @@ import { highlightCode } from '$lib/utils/shiki';
 import type { PageLoad } from './$types';
 
 export const load: PageLoad = async ({ data }) => {
-	return {
-		highlightedCode: await getHighlightedExampleCode(),
-		spotlightPlugin: data.spotlightPlugin
-	};
+    return {
+        highlightedCode: await getHighlightedExampleCode(),
+        spotlightPlugin: data.spotlightPlugin
+    };
 };
 
 let _highlightedCode: string;
@@ -16,7 +16,7 @@ let _highlightedCode: string;
  * Caches the result to avoid redundant work and speed up page load.
  */
 async function getHighlightedExampleCode() {
-	const exampleCode = `public class MyPlugin extends JavaPlugin {
+    const exampleCode = `public class MyPlugin extends JavaPlugin {
   @Override
   public void onEnable() {
     int pluginId = 12345; // Your unique plugin ID
@@ -29,9 +29,9 @@ async function getHighlightedExampleCode() {
   }
 }`;
 
-	if (!_highlightedCode) {
-		// Pre-render the code with syntax highlighting during SSR
-		_highlightedCode = await highlightCode(exampleCode, 'java');
-	}
-	return _highlightedCode;
+    if (!_highlightedCode) {
+        // Pre-render the code with syntax highlighting during SSR
+        _highlightedCode = await highlightCode(exampleCode, 'java');
+    }
+    return _highlightedCode;
 }

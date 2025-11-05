@@ -6,10 +6,10 @@ import HeaderCell from './HeaderCell.svelte';
 import Cell from './Cell.svelte';
 
 export const Table = {
-	Root,
-	Header,
-	Body,
-	Row,
-	HeaderCell,
-	Cell
+    Root,
+    Header,
+    Body,
+    Row,
+    HeaderCell,
+    Cell
 };

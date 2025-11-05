@@ -1,28 +1,28 @@
 <script lang="ts">
-	import { tabbableIfOverflow } from '$lib/attachments/tabbable-if-overflow';
-	import { highlightCode } from '$lib/utils/shiki';
-	import type { BundledLanguage, ShikiTransformer } from 'shiki';
+    import { tabbableIfOverflow } from '$lib/attachments/tabbable-if-overflow';
+    import { highlightCode } from '$lib/utils/shiki';
+    import type { BundledLanguage, ShikiTransformer } from 'shiki';
 
-	type CodeBlockProps = {
-		code: string;
-		lang: BundledLanguage;
-		transformers?: ShikiTransformer[];
-	};
+    type CodeBlockProps = {
+        code: string;
+        lang: BundledLanguage;
+        transformers?: ShikiTransformer[];
+    };
 
-	let { code, lang, transformers }: CodeBlockProps = $props();
-	let highlightPromise = $derived(highlightCode(code, lang, transformers));
+    let { code, lang, transformers }: CodeBlockProps = $props();
+    let highlightPromise = $derived(highlightCode(code, lang, transformers));
 </script>
 
 <div
-	{@attach tabbableIfOverflow}
-	class="relative overflow-x-auto rounded-xl bg-slate-900 px-4 py-5 text-sm leading-relaxed shadow-inner focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:outline-none sm:px-6 sm:py-6 [&>*]:bg-slate-900!"
+    {@attach tabbableIfOverflow}
+    class="relative overflow-x-auto rounded-xl bg-slate-900 px-4 py-5 text-sm leading-relaxed shadow-inner focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:outline-none sm:px-6 sm:py-6 [&>*]:bg-slate-900!"
 >
-	{#await highlightPromise}
-		<pre class="text-slate-100"><code>{code}</code></pre>
-	{:then html}
-		<!-- eslint-disable-next-line svelte/no-at-html-tags -->
-		{@html html}
-	{:catch}
-		<pre class="text-slate-100"><code>{code}</code></pre>
-	{/await}
+    {#await highlightPromise}
+        <pre class="text-slate-100"><code>{code}</code></pre>
+    {:then html}
+        <!-- eslint-disable-next-line svelte/no-at-html-tags -->
+        {@html html}
+    {:catch}
+        <pre class="text-slate-100"><code>{code}</code></pre>
+    {/await}
 </div>
