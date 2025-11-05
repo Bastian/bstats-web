@@ -56,7 +56,7 @@
 				// Highlight the placeholder comment in green and bold
 				return html.replace(
 					/\/\* INSERT PLUGIN ID HERE \*\//g,
-					'<span class="font-bold text-green-400">/* INSERT PLUGIN ID HERE */<\/span>'
+					'<span class="font-bold text-green-400">/* INSERT PLUGIN ID HERE */</span>'
 				);
 			}
 		}
