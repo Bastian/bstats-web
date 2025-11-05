@@ -56,6 +56,11 @@
 		// Sort data by value descending
 		const sortedData = [...data].sort((a, b) => b.y - a.y);
 
+		// Names are considered long if the 75th percentile length exceeds 15 characters
+		const nameLengths = sortedData.map((item) => item.name.length).sort((a, b) => a - b);
+		const index75 = Math.floor(nameLengths.length * 0.75);
+		const namesAreLong = (nameLengths[index75] || 0) > 15;
+
 		// Build a descriptive summary for screen readers
 		let description: string;
 		if (sortedData.length === 0) {
@@ -110,7 +115,7 @@
 			series: [
 				{
 					type: 'pie',
-					radius: '70%',
+					radius: '65%',
 					data: sortedData.map((item) => ({
 						name: item.name,
 						value: item.y
@@ -130,6 +135,13 @@
 						show: !isMobile,
 						formatter: '{b}: {d}%',
 						fontSize: 12
+					},
+					labelLine: {
+						show: !isMobile,
+						// When names are long, make the lines shorter to reduce
+						// likelihood of label truncation
+						length: namesAreLong ? 10 : 15,
+						length2: namesAreLong ? 15 : 20
 					}
 				}
 			]
@@ -139,4 +151,4 @@
 	}
 </script>
 
-<div bind:this={chartContainer} class="h-72 w-full"></div>
+<div bind:this={chartContainer} class="-mx-[1rem] h-72 w-[calc(100%+2rem)]"></div>

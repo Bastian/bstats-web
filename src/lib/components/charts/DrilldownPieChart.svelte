@@ -99,6 +99,11 @@
 			}
 		}
 
+		// Names are considered long if the 75th percentile length exceeds 15 characters
+		const nameLengths = chartData.map((item) => item.name.length).sort((a, b) => a - b);
+		const index75 = Math.floor(nameLengths.length * 0.75);
+		const namesAreLong = (nameLengths[index75] || 0) > 15;
+
 		// Build a descriptive summary for screen readers
 		let description: string;
 		if (chartData.length === 0) {
@@ -166,7 +171,7 @@
 			series: [
 				{
 					type: 'pie',
-					radius: '70%',
+					radius: '65%',
 					data: chartData,
 					emphasis: {
 						itemStyle: {
@@ -183,6 +188,13 @@
 						show: !isMobile,
 						formatter: '{b}: {d}%',
 						fontSize: 12
+					},
+					labelLine: {
+						show: !isMobile,
+						// When names are long, make the lines shorter to reduce
+						// likelihood of label truncation
+						length: namesAreLong ? 10 : 15,
+						length2: namesAreLong ? 15 : 20
 					}
 				}
 			]

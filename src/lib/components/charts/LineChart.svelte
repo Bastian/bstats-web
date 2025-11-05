@@ -283,7 +283,7 @@
 	</Button.Root>
 {/snippet}
 
-<div>
+<div class="p-1 sm:p-2">
 	<div class="relative mb-2 flex justify-center gap-1">
 		{@render ChartButton('1d', { onclick: () => setTimeRange('1d') })}
 		{@render ChartButton('1w', { onclick: () => setTimeRange('1w') })}
