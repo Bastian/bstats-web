@@ -19,6 +19,9 @@
 	} from '$lib/charts/chart-data';
 	import type { PageData } from './$types';
 	import { onMount } from 'svelte';
+	import IconServer from '@tabler/icons-svelte/icons/server';
+	import IconUsers from '@tabler/icons-svelte/icons/users';
+	import ChartBadge from '$lib/components/ChartBadge.svelte';
 
 	let { data }: { data: PageData } = $props();
 
@@ -147,54 +150,34 @@
 <main class="pb-24">
 	<PageHero>
 		{#snippet badge()}<Badge>Global stats</Badge>{/snippet}
-		{#snippet title()}{data.software.name} usage at scale{/snippet}
+		{#snippet title()}{data.software.name}{/snippet}
 		{#snippet content()}
 			Aggregated metrics across every plugin reporting through bStats on {data.software.name}.
 		{/snippet}
 		{#snippet extra()}
-			<div class="grid gap-4 sm:w-80">
-				<article
-					class="min-w-0 rounded-2xl border border-slate-200 bg-white px-5 py-4 text-sm text-slate-600 shadow-sm"
-				>
-					<span class="text-[11px] tracking-[0.25em] text-slate-500 uppercase">Servers</span>
-					<div class="mt-2 flex items-baseline gap-3">
-						<span id="serversCurrent" class="font-display text-4xl font-semibold text-slate-900">
-							{serversCurrent}
-						</span>
-						<span class="text-[11px] tracking-[0.2em] text-slate-500 uppercase">current</span>
-					</div>
-					<div class="mt-2 text-xs tracking-[0.18em] text-slate-500 uppercase">Record</div>
-					<div id="serversRecord" class="text-sm font-semibold text-slate-600">
-						{serversRecord}
-					</div>
-				</article>
-				<article
-					class="min-w-0 rounded-2xl border border-slate-200 bg-white px-5 py-4 text-sm text-slate-600 shadow-sm"
-				>
-					<span class="text-[11px] tracking-[0.25em] text-slate-500 uppercase">Players</span>
-					<div class="mt-2 flex items-baseline gap-3">
-						<span id="playersCurrent" class="font-display text-4xl font-semibold text-slate-900">
-							{playersCurrent}
-						</span>
-						<span class="text-[11px] tracking-[0.2em] text-slate-500 uppercase">current</span>
-					</div>
-					<div class="mt-2 text-xs tracking-[0.18em] text-slate-500 uppercase">Record</div>
-					<div id="playersRecord" class="text-sm font-semibold text-slate-600">
-						{playersRecord}
-					</div>
-				</article>
+			<div class="mt-6 grid w-full max-w-3xl gap-4 sm:grid-cols-2">
+				<ChartBadge title="Servers" current={serversCurrent} record={serversRecord}>
+					{#snippet icon()}
+						<IconServer size={16} />
+					{/snippet}
+				</ChartBadge>
+				<ChartBadge title="Players" current={playersCurrent} record={playersRecord}>
+					{#snippet icon()}
+						<IconUsers size={16} />
+					{/snippet}
+				</ChartBadge>
 			</div>
 		{/snippet}
 	</PageHero>
 
-	<section class="doc-container mt-12 space-y-10">
+	<section class="mx-auto mt-16 max-w-6xl px-4 sm:px-6">
 		<div class="flex flex-col gap-3 sm:gap-2">
-			<h2 class="font-display text-3xl font-semibold text-slate-900">Live charts</h2>
+			<h2 class="font-display text-3xl font-semibold text-slate-900">Charts</h2>
 			<p class="text-sm text-slate-500">
-				Hover, zoom, and drill into the metrics shaping the {data.software.name} ecosystem.
+				Data updates every 30 minutes, on the hour and half hour.
 			</p>
 		</div>
-		<div class="grid gap-8 md:grid-cols-2">
+		<div class="mt-8 grid gap-8 md:grid-cols-2">
 			{#each charts as chart (chart.id)}
 				<ChartCard title={chart.title} chartId={chart.id} colSpan={getColSpan(chart.type)}>
 					{#if chartDataMap[chart.uid]}

@@ -21,6 +21,10 @@
 	import PieChart from '$lib/components/charts/PieChart.svelte';
 	import { onMount } from 'svelte';
 	import type { PageData } from './$types';
+	import IconServer from '@tabler/icons-svelte/icons/server';
+	import IconUsers from '@tabler/icons-svelte/icons/users';
+	import IconTool from '@tabler/icons-svelte/icons/edit';
+	import ChartBadge from '$lib/components/ChartBadge.svelte';
 
 	let { data }: { data: PageData } = $props();
 
@@ -177,88 +181,52 @@
 	</main>
 {:else}
 	<main class="pb-24">
-		<section
-			class="relative overflow-hidden border-b border-slate-200 bg-gradient-to-br from-brand-50 via-white to-sky-100"
-		>
-			<div
-				class="absolute top-[-12rem] left-1/2 h-96 w-96 -translate-x-1/2 rounded-full bg-brand-200/60 blur-3xl"
-			></div>
-			<div
-				class="absolute top-1/2 right-[-10rem] h-80 w-80 -translate-y-1/2 rounded-full bg-sky-200/60 blur-3xl"
-			></div>
-			<div class="relative mx-auto max-w-6xl px-4 py-16 sm:px-6 lg:py-20">
-				<div class="flex flex-col gap-10 lg:flex-row lg:items-start">
-					<div class="max-w-3xl">
-						<Badge>{data.software?.name}</Badge>
-						<div class="mt-6 flex items-center gap-4">
-							<h1
-								class="font-display text-4xl font-semibold tracking-tight text-slate-900 sm:text-5xl"
-							>
-								{data.plugin?.name}
-							</h1>
-							{#if data.isOwner && data.plugin && data.software}
-								<a
-									href={resolve(
-										`/editPlugin/${data.software.url}/${data.plugin.name}/${data.plugin.id}`
-									)}
-									class="inline-flex items-center justify-center rounded-full border border-slate-300 bg-white px-3 py-2 text-sm font-semibold text-slate-600 transition hover:border-brand-300 hover:text-brand-700"
-								>
-									Edit
-								</a>
-							{/if}
-						</div>
-						<div class="mt-4 flex flex-wrap items-center gap-4 text-sm text-slate-500">
-							<span>
-								by <a
-									class="font-semibold text-brand-600 hover:text-brand-700"
-									href={resolve(`/author/${data.plugin?.owner}`)}>{data.plugin?.owner}</a
-								>
-							</span>
-							<span class="hidden h-1 w-1 rounded-full bg-slate-300 sm:inline-block"></span>
-						</div>
-					</div>
+		<PageHero>
+			{#snippet badge()}<Badge>{data.software?.name}</Badge>{/snippet}
+			{#snippet title()}
+				{data.plugin?.name}
+			{/snippet}
+			{#snippet content()}
+				by
+				<a
+					class="font-semibold text-brand-600 hover:text-brand-700"
+					href={resolve(`/author/${data.plugin?.owner}`)}
+				>
+					{data.plugin?.owner}
+				</a>
+			{/snippet}
+			{#snippet titleExtra()}
+				{#if data.isOwner && data.plugin && data.software}
+					<a
+						href={resolve(`/editPlugin/${data.software.url}/${data.plugin.name}/${data.plugin.id}`)}
+						class="inline-flex items-center justify-center gap-2 rounded-full border border-slate-300 bg-white px-3 py-2 text-sm font-semibold text-slate-600 transition hover:border-brand-300 hover:text-brand-700"
+					>
+						<IconTool size={16} />
+						Edit
+					</a>
+				{/if}
+			{/snippet}
+			{#snippet extra()}
+				<div class="mt-6 grid w-full max-w-3xl gap-4 sm:grid-cols-2">
+					<ChartBadge title="Servers" current={serversCurrent} record={serversRecord}>
+						{#snippet icon()}
+							<IconServer size={16} />
+						{/snippet}
+					</ChartBadge>
+					<ChartBadge title="Players" current={playersCurrent} record={playersRecord}>
+						{#snippet icon()}
+							<IconUsers size={16} />
+						{/snippet}
+					</ChartBadge>
 				</div>
-
-				<div class="mt-12 grid gap-4 sm:grid-cols-2">
-					<article class="min-w-0 rounded-2xl border border-slate-200 bg-white px-5 py-4 shadow-sm">
-						<span class="text-[11px] tracking-[0.25em] text-slate-500 uppercase">Servers</span>
-						<div class="mt-4 flex items-baseline gap-2">
-							<span id="serversCurrent" class="font-display text-4xl font-semibold text-slate-900"
-								>{serversCurrent}</span
-							>
-							<span class="text-[11px] tracking-[0.2em] text-slate-500 uppercase">current</span>
-						</div>
-						<div
-							class="mt-3 flex items-center justify-between rounded-lg border border-slate-200 bg-slate-50 px-3 py-2 text-xs text-slate-500"
-						>
-							<span class="tracking-[0.18em] uppercase">record</span>
-							<span id="serversRecord" class="font-semibold text-slate-600">{serversRecord}</span>
-						</div>
-					</article>
-					<article class="min-w-0 rounded-2xl border border-slate-200 bg-white px-5 py-4 shadow-sm">
-						<span class="text-[11px] tracking-[0.25em] text-slate-500 uppercase">Players</span>
-						<div class="mt-4 flex items-baseline gap-2">
-							<span id="playersCurrent" class="font-display text-4xl font-semibold text-slate-900"
-								>{playersCurrent}</span
-							>
-							<span class="text-[11px] tracking-[0.2em] text-slate-500 uppercase">current</span>
-						</div>
-						<div
-							class="mt-3 flex items-center justify-between rounded-lg border border-slate-200 bg-slate-50 px-3 py-2 text-xs text-slate-500"
-						>
-							<span class="tracking-[0.18em] uppercase">record</span>
-							<span id="playersRecord" class="font-semibold text-slate-600">{playersRecord}</span>
-						</div>
-					</article>
-				</div>
-			</div>
-		</section>
+			{/snippet}
+		</PageHero>
 
 		<section class="mx-auto mt-16 max-w-6xl px-4 sm:px-6">
 			<div class="flex flex-col gap-3 sm:gap-2">
-				<h2 class="font-display text-3xl font-semibold text-slate-900">Live charts</h2>
+				<h2 class="font-display text-3xl font-semibold text-slate-900">Charts</h2>
 				<p class="text-sm text-slate-500">
-					Hover, zoom, and drill into the data. Updated every 30 minutes.
+					Data updates every 30 minutes, on the hour and half hour.
 				</p>
 			</div>
 			<div class="mt-8 grid gap-8 md:grid-cols-2">
