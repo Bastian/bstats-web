@@ -8,7 +8,6 @@
 
 	import githubIcon from '../../static/images/github-mark.svg';
 	import discordIcon from '../../static/images/Discord-Symbol-White.svg';
-	import gamehostingLogo from '$lib/assets/images/logos/gamehosting.png';
 
 	let { data }: { data: PageData } = $props();
 
@@ -307,9 +306,14 @@
 						href="https://www.gamehosting.it/"
 						target="_blank"
 						rel="noopener noreferrer"
-						class="block rounded-2xl bg-slate-900 px-12 py-10 transition hover:scale-105"
+						class="block rounded-2xl px-12 transition hover:scale-105"
+						aria-hidden="true"
 					>
-						<img src={gamehostingLogo} alt="GameHosting.it" class="h-32 w-auto" />
+						<enhanced:img
+							src="$lib/assets/images/logos/gamehosting-gradient.png"
+							alt="GameHosting.it"
+							class="h-full max-h-64 w-auto"
+						/>
 					</a>
 				</div>
 			</div>
