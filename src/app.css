@@ -85,7 +85,7 @@
     }
 
     body {
-        @apply bg-slate-50 font-body text-slate-900 antialiased;
+        @apply font-body bg-slate-50 text-slate-900 antialiased;
     }
 
     a {
@@ -164,7 +164,7 @@
     }
 
     .form-input {
-        @apply w-full rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-900 shadow-sm transition focus:border-brand-300 focus:ring-2 focus:ring-brand-200 focus:outline-none;
+        @apply focus:border-brand-300 focus:ring-brand-200 w-full rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-900 shadow-sm transition focus:outline-none focus:ring-2;
     }
 
     .form-helper {
@@ -180,10 +180,10 @@
     }
 
     .input-label {
-        @apply text-xs font-semibold tracking-[0.2em] text-slate-500 uppercase;
+        @apply text-xs font-semibold uppercase tracking-[0.2em] text-slate-500;
     }
 
     .input-control {
-        @apply w-full rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-900 shadow-sm transition focus:border-brand-300 focus:ring-2 focus:ring-brand-200 focus:outline-none;
+        @apply focus:border-brand-300 focus:ring-brand-200 w-full rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-900 shadow-sm transition focus:outline-none focus:ring-2;
     }
 }

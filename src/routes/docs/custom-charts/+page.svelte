@@ -121,7 +121,7 @@
             </p>
             <ol class="list-decimal space-y-2 pl-6 text-sm text-slate-600">
                 <li>Navigate to your plugin page and click <strong>Edit</strong>.</li>
-                <li>Add a new chart, pick a type, and assign the chart ID you use in code.</li>
+                <li>Add a new chart and assign the chart ID you use in code.</li>
             </ol>
         </article>
 
