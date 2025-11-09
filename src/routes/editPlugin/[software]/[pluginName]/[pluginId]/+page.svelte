@@ -123,7 +123,7 @@
                 </article>
 
                 <!-- Transfer Ownership Card (Admin Only) -->
-                {#if data.user?.admin}
+                {#if data.user?.role === 'admin'}
                     <article class="doc-card space-y-4">
                         <div>
                             <h2 class="font-display text-xl font-semibold text-slate-900">

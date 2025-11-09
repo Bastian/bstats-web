@@ -19,7 +19,7 @@ export const transferOwnership = (async ({ request, locals, params }) => {
         return fail(404, { form, error: 'Plugin not found' });
     }
 
-    if (!locals.user.admin) {
+    if (locals.user.role !== 'admin') {
         return fail(401, {
             form,
             error: 'You are not allowed to transfer ownership of this plugin'

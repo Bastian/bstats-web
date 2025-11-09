@@ -32,7 +32,7 @@ export const deletePlugin = (async ({ request, locals, params }) => {
 
     const form = await superValidate(request, zod4(deletePluginSchema(plugin.name)));
 
-    if (plugin.owner.toLowerCase() !== locals.user.username && !locals.user.admin) {
+    if (plugin.owner.toLowerCase() !== locals.user.username && locals.user.role !== 'admin') {
         return fail(401, { form, error: 'You are not allowed to delete this plugin' });
     }
 

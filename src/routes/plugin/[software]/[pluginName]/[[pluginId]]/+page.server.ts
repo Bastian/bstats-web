@@ -61,7 +61,7 @@ export const load: PageServerLoad = async ({ params, locals }) => {
         locals.user && locals.user.username
             ? locals.user.username.toLowerCase() === plugin.owner.toLowerCase()
             : false;
-    const isAdmin = locals.user && locals.user.admin;
+    const isAdmin = locals.user?.role === 'admin';
 
     return {
         unknownPlugin: false,

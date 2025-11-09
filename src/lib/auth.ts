@@ -1,5 +1,5 @@
 import { betterAuth } from 'better-auth';
-import { username, twoFactor, haveIBeenPwned, captcha } from 'better-auth/plugins';
+import { username, twoFactor, haveIBeenPwned, captcha, admin } from 'better-auth/plugins';
 import { Pool } from 'pg';
 import { sveltekitCookies } from 'better-auth/svelte-kit';
 import { getRequestEvent } from '$app/server';
@@ -44,21 +44,12 @@ export const auth = betterAuth({
             verify: async ({ hash, password }) => bcrypt.compare(password, hash)
         }
     },
-    user: {
-        additionalFields: {
-            admin: {
-                type: 'boolean',
-                required: false,
-                defaultValue: false,
-                input: false // Don't allow users to set their own admin status
-            }
-        }
-    },
     secret: BETTER_AUTH_SECRET,
     plugins: [
         // Username plugin allows login with username instead of email
         // Needed for maintaining compatibility with old username-only system
         username(),
+        admin(),
         haveIBeenPwned({
             customPasswordCompromisedMessage:
                 'Password has been found in a data breach. Choose another one.'

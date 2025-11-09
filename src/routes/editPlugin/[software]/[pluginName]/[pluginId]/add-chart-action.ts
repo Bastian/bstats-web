@@ -33,7 +33,7 @@ export const addChart = (async ({ request, locals, params }) => {
         return fail(404, { form, error: 'Plugin not found' });
     }
 
-    if (plugin.owner?.toLowerCase() !== locals.user.username && !locals.user.admin) {
+    if (plugin.owner?.toLowerCase() !== locals.user.username && locals.user.role !== 'admin') {
         return fail(401, { form, error: 'You are not allowed to edit this plugin' });
     }
 

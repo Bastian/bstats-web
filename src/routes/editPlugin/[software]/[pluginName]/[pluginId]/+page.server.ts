@@ -51,7 +51,7 @@ export const load: PageServerLoad = async ({ params, locals }) => {
 
     // Check ownership
     const isOwner = plugin.owner?.toLowerCase() === locals.user.username;
-    const canEdit = isOwner || locals.user.admin;
+    const canEdit = isOwner || locals.user.role === 'admin';
 
     // Get all charts for the plugin
     const chartsArray = await Promise.all(
@@ -118,7 +118,7 @@ export const actions = {
             return fail(404, { error: 'Plugin not found' });
         }
 
-        if (plugin.owner?.toLowerCase() !== locals.user.username && !locals.user.admin) {
+        if (plugin.owner?.toLowerCase() !== locals.user.username && locals.user.role !== 'admin') {
             return fail(401, { error: 'You are not allowed to edit this plugin' });
         }
 
@@ -183,7 +183,7 @@ export const actions = {
             return fail(404, { error: 'Plugin not found' });
         }
 
-        if (plugin.owner?.toLowerCase() !== locals.user.username && !locals.user.admin) {
+        if (plugin.owner?.toLowerCase() !== locals.user.username && locals.user.role !== 'admin') {
             return fail(401, { error: 'You are not allowed to edit this plugin' });
         }
 

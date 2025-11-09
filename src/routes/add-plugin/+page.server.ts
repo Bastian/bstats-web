@@ -66,7 +66,7 @@ export const actions: Actions = {
             return fail(404, { error: 'softwareNotFound' });
         }
 
-        if (software.globalPlugin === null && !locals?.user?.admin) {
+        if (software.globalPlugin === null && locals?.user?.role !== 'admin') {
             return fail(403, { error: 'notAllowed' });
         }
 
