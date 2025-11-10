@@ -36,6 +36,13 @@
     const plugins = $derived(myPlugins || []);
     const username = $derived(user?.name ?? '');
     const usernameInitial = $derived(username ? username.charAt(0).toUpperCase() : '🙂');
+    const isAdmin = $derived(() => {
+        if (!user?.role) return false;
+        return user.role
+            .split(',')
+            .map((value) => value.trim().toLowerCase())
+            .includes('admin');
+    });
 
     let mobileNavOpen = $state(false);
 
@@ -186,6 +193,16 @@
                                             My page
                                         </NavigationMenu.Link>
                                     </li>
+                                    {#if isAdmin}
+                                        <li>
+                                            <NavigationMenu.Link
+                                                href={resolve('/admin/users')}
+                                                class="block rounded-md px-3 py-2 transition hover:bg-slate-100 hover:text-slate-900"
+                                            >
+                                                Admin
+                                            </NavigationMenu.Link>
+                                        </li>
+                                    {/if}
 
                                     <li>
                                         <NavigationMenu.Link
@@ -320,6 +337,14 @@
                         >
                             My page
                         </a>
+                        {#if isAdmin}
+                            <a
+                                href={resolve('/admin/users')}
+                                class="block rounded-lg border border-slate-200 px-4 py-3 text-center text-sm font-semibold text-slate-600 transition hover:border-brand-300 hover:text-brand-700"
+                            >
+                                Admin
+                            </a>
+                        {/if}
                         <a
                             href={resolve('/change-password')}
                             class="block rounded-lg border border-slate-200 px-4 py-3 text-center text-sm font-semibold text-slate-600 transition hover:border-brand-300 hover:text-brand-700"

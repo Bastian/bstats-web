@@ -1,9 +1,9 @@
 import { createAuthClient } from 'better-auth/svelte';
-import { usernameClient } from 'better-auth/client/plugins';
+import { usernameClient, adminClient } from 'better-auth/client/plugins';
 import { invalidate } from '$app/navigation';
 
 const client = createAuthClient({
-    plugins: [usernameClient()]
+    plugins: [usernameClient(), adminClient()]
 });
 
 export const authClient = {
@@ -37,5 +37,6 @@ export const authClient = {
             return response;
         }
     },
-    changePassword: client.changePassword
+    changePassword: client.changePassword,
+    admin: client.admin
 };
