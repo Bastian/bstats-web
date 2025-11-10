@@ -129,11 +129,15 @@
                 </p>
                 <p>
                     Please note that server implementations come with very little default charts due
-                    to their generic nature. Most notably, the player count chart is not included
-                    and must be added as a custom chart. It is very likely that the original server
-                    implementation already has code setup for custom charts. However, you still need
-                    to add the custom charts on the bStats site. It is highly recommended to set a
-                    filter for the player chart (min 0 and max to a reasonable value).
+                    to their generic nature.
+                    <strong>
+                        Most notably, the player count chart is not included and must be added as a
+                        custom chart.
+                    </strong>
+                    It is very likely that the original server implementation already has code setup
+                    for custom charts. However, you still need to add the custom charts on the bStats
+                    site. It is highly recommended to set a filter for the player chart (min 0 and max
+                    to a reasonable value).
                 </p>
                 <p class="text-sm font-medium text-red-600">
                     If you are creating a new server implementation instead of forking an existing
