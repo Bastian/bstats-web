@@ -76,11 +76,18 @@
         ]
     };
 
-    // Generate example line chart data for the last 7 days
+    // Random-walk line chart data
     const lineData: [number, number][] = [];
-    const base = new Date().getTime();
-    for (let i = 200; i >= 0; i--) {
-        lineData.push([base - i * 86400000, Math.round(100 + Math.random() * 60)]);
+    const now = Date.now();
+    const points = 24 * 2 * 365 * 1; // 1 year of half-day intervals
+    let value = 350; // starting value
+    const drift = 0; // average daily change
+    const volatility = 16; // max per point daily change
+
+    for (let i = points; i >= 0; i--) {
+        const step = drift + (Math.random() * 2 - 1) * volatility; // [-volatility, +volatility]
+        value = Math.max(0, value + step); // keep non-negative
+        lineData.push([now - (i * 86400000) / 48, Math.round(value)]);
     }
 
     const barData = [
