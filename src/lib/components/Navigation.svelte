@@ -24,7 +24,7 @@
         myPlugins = [],
         user
     }: {
-        user: User | null;
+        user: App.Locals['user'];
         allSoftware?: Software[];
         myPlugins?: Plugin[];
     } = $props();
@@ -36,13 +36,6 @@
     const plugins = $derived(myPlugins || []);
     const username = $derived(user?.name ?? '');
     const usernameInitial = $derived(username ? username.charAt(0).toUpperCase() : '🙂');
-    const isAdmin = $derived(() => {
-        if (!user?.role) return false;
-        return user.role
-            .split(',')
-            .map((value) => value.trim().toLowerCase())
-            .includes('admin');
-    });
 
     let mobileNavOpen = $state(false);
 
@@ -193,7 +186,7 @@
                                             My page
                                         </NavigationMenu.Link>
                                     </li>
-                                    {#if isAdmin}
+                                    {#if user.role === 'admin'}
                                         <li>
                                             <NavigationMenu.Link
                                                 href={resolve('/admin/users')}
@@ -337,7 +330,7 @@
                         >
                             My page
                         </a>
-                        {#if isAdmin}
+                        {#if user.role === 'admin'}
                             <a
                                 href={resolve('/admin/users')}
                                 class="block rounded-lg border border-slate-200 px-4 py-3 text-center text-sm font-semibold text-slate-600 transition hover:border-brand-300 hover:text-brand-700"
