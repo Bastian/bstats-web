@@ -5,6 +5,7 @@
     import { Table } from '$lib/components/table';
     import Pagination from '$lib/components/Pagination.svelte';
     import { onMount } from 'svelte';
+    import { TextInput } from '$lib/components/input/text';
 
     interface PluginListItem {
         pluginId: number;
@@ -86,16 +87,15 @@
 
     <section class="doc-container mt-12 space-y-6">
         <div class="grid gap-4 lg:flex lg:items-end lg:justify-between">
-            <div class="input-group lg:w-80">
-                <label class="input-label" for="pluginSearch">Search</label>
-                <input
-                    id="pluginSearch"
+            <TextInput.Root class="lg:w-80">
+                <label for="plugin-search">Search</label>
+                <TextInput.Input
+                    id="plugin-search"
                     type="text"
-                    class="input-control"
                     placeholder="Filter by name, owner, or software"
                     bind:value={searchValue}
                 />
-            </div>
+            </TextInput.Root>
             <div class="flex items-center gap-3 text-xs tracking-[0.2em] text-slate-500 uppercase">
                 <span>
                     {#if isLoading}

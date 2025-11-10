@@ -9,6 +9,7 @@
     import type { PageData } from './$types';
     import type { User } from 'better-auth';
     import { SvelteURLSearchParams } from 'svelte/reactivity';
+    import { TextInput } from '$lib/components/input/text';
 
     const PAGE_SIZE = 15;
 
@@ -311,16 +312,16 @@
             class="flex flex-col gap-3 sm:flex-row sm:items-end sm:gap-4"
             onsubmit={handleSearchSubmit}
         >
-            <div class="flex-1 space-y-2">
-                <label class="input-label" for="adminUserSearch">Search users</label>
-                <input
-                    id="adminUserSearch"
+            <TextInput.Root>
+                <label for="admin-user-search">Search users</label>
+                <TextInput.Input
+                    id="admin-user-search"
                     type="text"
                     placeholder="Search by display name"
                     class="input-control"
                     bind:value={searchInput}
                 />
-            </div>
+            </TextInput.Root>
             <div class="flex gap-3">
                 <Button type="submit" size="medium">Apply</Button>
                 <button

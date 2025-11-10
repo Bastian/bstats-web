@@ -2,10 +2,11 @@
     import { resolve } from '$app/paths';
     import Badge from '$lib/components/Badge.svelte';
     import Button from '$lib/components/Button.svelte';
-    import Checkbox from '$lib/components/Checkbox.svelte';
+    import { Checkbox } from '$lib/components/input/checkbox';
     import PageHero from '$lib/components/PageHero.svelte';
     import { authClient } from '$lib/auth.client.js';
     import type { SvelteHTMLElements } from 'svelte/elements';
+    import { TextInput } from '$lib/components/input/text';
 
     let error: string | undefined = $state(undefined);
 
@@ -72,29 +73,30 @@
                     class="space-y-5"
                     onsubmit={async (event) => handleFormSubmit(event)}
                 >
-                    <div class="input-group">
-                        <label class="input-label" for="username">Username</label>
-                        <input
+                    <TextInput.Root>
+                        <label for="username">Username</label>
+                        <TextInput.Input
                             id="username"
                             type="text"
                             name="username"
                             autocomplete="username"
-                            class="input-control"
                             required
                         />
-                    </div>
-                    <div class="input-group">
-                        <label class="input-label" for="password">Password</label>
-                        <input
+                    </TextInput.Root>
+                    <TextInput.Root>
+                        <label for="password">Password</label>
+                        <TextInput.Input
                             id="password"
                             type="password"
                             name="password"
                             autocomplete="current-password"
-                            class="input-control"
                             required
                         />
-                    </div>
-                    <Checkbox id="remember-me" class="mt-1" label="Remember me" />
+                    </TextInput.Root>
+                    <Checkbox.Root>
+                        <Checkbox.Input id="remember-me" name="remember-me" />
+                        <label for="remember-me">Remember me</label>
+                    </Checkbox.Root>
                     <Button fullWidth size="large" type="submit" name="btn_login">Sign in</Button>
                 </form>
 

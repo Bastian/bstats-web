@@ -27,7 +27,7 @@
                 {/snippet}
             </Control>
         </Root>
-        <FieldErrors class="text-xs text-red-700" />
+        <FieldErrors class="text-xs font-semibold text-rose-600" />
         {#if description}
             <Description class="text-xs text-gray-500">{description}</Description>
         {/if}

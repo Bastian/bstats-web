@@ -1,6 +1,7 @@
 <script lang="ts">
     import { resolve } from '$app/paths';
     import Badge from '$lib/components/Badge.svelte';
+    import { TextInput } from '$lib/components/input/text';
     import PageHero from '$lib/components/PageHero.svelte';
     import { Table } from '$lib/components/table';
     import type { PageData } from './$types';
@@ -44,16 +45,16 @@
     </PageHero>
 
     <section class="doc-container mt-12 space-y-6">
-        <div class="flex flex-col gap-3 sm:gap-2">
-            <label class="input-label" for="authorPluginSearch">Filter plugins</label>
-            <input
-                id="authorPluginSearch"
+        <TextInput.Root>
+            <label for="author-plugin-search">Filter plugins</label>
+            <TextInput.Input
+                id="author-plugin-search"
                 type="text"
                 class="input-control"
                 placeholder="Search by name or software"
                 bind:value={searchValue}
             />
-        </div>
+        </TextInput.Root>
         <div class="overflow-x-auto">
             <Table.Root>
                 <Table.Header>

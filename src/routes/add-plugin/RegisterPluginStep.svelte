@@ -18,6 +18,7 @@
     import { enhance } from '$app/forms';
     import type { ActionData } from './$types';
     import IconArrowRight from '@tabler/icons-svelte/icons/arrow-right';
+    import { TextInput } from '$lib/components/input/text';
 
     const alertId = $props.id();
 
@@ -59,15 +60,15 @@
     </p>
     {#if !form?.pluginId && platform && session}
         <form method="post" action="?/addPlugin" class="mt-8" use:enhance>
-            <div class="input-group">
-                <label class="input-label" for="pluginName">Plugin name</label>
-                <input
-                    id="pluginName"
+            <TextInput.Root>
+                <label for="plugin-name">Plugin name</label>
+                <TextInput.Input
+                    id="plugin-name"
                     type="text"
                     name="pluginName"
-                    maxlength="48"
-                    class="input-control"
+                    maxlength={48}
                     placeholder="My Awesome Plugin"
+                    class="max-w-96"
                     required
                     {...['missingData', 'duplicatePlugin', 'invalidName'].includes(
                         form?.error ?? ''
@@ -75,7 +76,7 @@
                         ? { 'aria-invalid': 'true', 'aria-describedby': alertId }
                         : {}}
                 />
-            </div>
+            </TextInput.Root>
             <input type="hidden" name="platform" value={platform} />
             <div class="mt-4 flex flex-wrap items-center gap-3">
                 <Button type="submit" size="large">Register plugin</Button>

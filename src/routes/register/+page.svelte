@@ -2,11 +2,12 @@
     import { resolve } from '$app/paths';
     import Badge from '$lib/components/Badge.svelte';
     import Button from '$lib/components/Button.svelte';
-    import Checkbox from '$lib/components/Checkbox.svelte';
+    import { Checkbox } from '$lib/components/input/checkbox';
     import PageHero from '$lib/components/PageHero.svelte';
     import { env } from '$env/dynamic/public';
     import HCaptcha from '$lib/components/HCaptcha.svelte';
     import { authClient } from '$lib/auth.client';
+    import { TextInput } from '$lib/components/input/text';
 
     let error = $state('');
     let sentVerificationEmail = $state(false);
@@ -103,73 +104,64 @@
                     }}
                 >
                     <!-- TODO Enable
-					<div class="input-group">
-						<label class="input-label" for="email">Email</label>
-						<input
-							id="email"
-							type="email"
-							name="email"
-							autocomplete="email"
-							maxlength="256"
-							class="input-control"
-							bind:value={email}
-							required
-						/>
-					</div>
+                     <TextInput.Root>
+                        <label for="email">Email</label>
+                        <TextInput.Input
+                            id="email"
+                            type="email"
+                            name="email"
+                            autocomplete="email"
+                            maxlength={256}
+                            bind:value={email}
+                            required
+                        />
+                    </TextInput.Root>
 					 -->
-                    <div class="input-group">
-                        <label class="input-label" for="username">Username</label>
-                        <input
+                    <TextInput.Root>
+                        <label for="username">Username</label>
+                        <TextInput.Input
                             id="username"
                             type="text"
                             name="username"
                             autocomplete="username"
-                            maxlength="32"
-                            class="input-control"
+                            maxlength={32}
                             bind:value={username}
                             required
                         />
-                    </div>
-                    <div class="input-group">
-                        <label class="input-label" for="password">Password</label>
-                        <input
+                    </TextInput.Root>
+                    <TextInput.Root>
+                        <label for="password">Password</label>
+                        <TextInput.Input
                             id="password"
                             type="password"
                             name="password"
                             autocomplete="new-password"
-                            class="input-control"
                             bind:value={password}
                             required
                         />
-                    </div>
-
-                    <div class="input-group">
-                        <label class="input-label" for="password_confirm">Confirm password</label>
-                        <input
+                    </TextInput.Root>
+                    <TextInput.Root>
+                        <label for="password_confirm">Confirm password</label>
+                        <TextInput.Input
                             id="password_confirm"
                             type="password"
                             autocomplete="new-password"
-                            class="input-control"
                             bind:value={confirmPassword}
                             required
                         />
                         {#if passwordMismatch}
                             <p class="form-error">Passwords do not match.</p>
                         {/if}
-                    </div>
-
-                    <Checkbox
-                        id="accept-privacy-policy"
-                        class="mt-1"
-                        bind:checked={privacyAccepted}
-                    >
-                        {#snippet label()}
+                    </TextInput.Root>
+                    <Checkbox.Root>
+                        <Checkbox.Input id="accept-privacy-policy" bind:checked={privacyAccepted} />
+                        <label for="accept-privacy-policy">
                             I accept the <a
                                 class="font-semibold text-brand-600 hover:text-brand-700"
                                 href={resolve('/privacy-policy')}>privacy policy</a
                             >.
-                        {/snippet}
-                    </Checkbox>
+                        </label>
+                    </Checkbox.Root>
 
                     <div class="flex justify-center">
                         <HCaptcha

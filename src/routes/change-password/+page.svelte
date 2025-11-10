@@ -3,6 +3,7 @@
     import { authClient } from '$lib/auth.client.js';
     import Badge from '$lib/components/Badge.svelte';
     import Button from '$lib/components/Button.svelte';
+    import { TextInput } from '$lib/components/input/text';
     import PageHero from '$lib/components/PageHero.svelte';
 
     let { data } = $props();
@@ -15,11 +16,11 @@
     let success = $state('');
 
     let hint = $derived.by(() => {
-        if (!error || !currentPassword || !newPassword || !confirmPassword) {
-            return { text: '', type: '' };
-        }
         if (error) {
             return { text: error, type: 'error' };
+        }
+        if (!currentPassword || !newPassword || !confirmPassword) {
+            return { text: '', type: '' };
         }
         if (newPassword === confirmPassword) {
             return { text: 'Passwords match', type: 'success' };
@@ -70,37 +71,35 @@
                         }
                     }}
                 >
-                    <div class="input-group">
-                        <label class="input-label" for="currentPassword">Current password</label>
-                        <input
-                            id="currentPassword"
+                    <TextInput.Root>
+                        <label for="current-password">Current password</label>
+                        <TextInput.Input
+                            id="current-password"
                             type="password"
                             name="currentPassword"
-                            class="input-control"
                             bind:value={currentPassword}
                             required
                         />
-                    </div>
-                    <div class="input-group">
-                        <label class="input-label" for="newPassword">New password</label>
-                        <input
-                            id="newPassword"
+                    </TextInput.Root>
+                    <TextInput.Root>
+                        <label for="new-password">New password</label>
+                        <TextInput.Input
+                            id="new-password"
                             type="password"
+                            autocomplete="new-password"
                             name="newPassword"
-                            class="input-control"
-                            minlength="8"
+                            minlength={8}
                             bind:value={newPassword}
                             required
                         />
                         <p class="form-helper">Minimum 8 characters</p>
-                    </div>
-                    <div class="input-group">
-                        <label class="input-label" for="confirmPassword">Confirm password</label>
-                        <input
-                            id="confirmPassword"
+                    </TextInput.Root>
+                    <TextInput.Root>
+                        <label for="confirm-password">Confirm new password</label>
+                        <TextInput.Input
+                            id="confirm-password"
                             type="password"
                             name="confirmPassword"
-                            class="input-control"
                             bind:value={confirmPassword}
                             required
                         />
@@ -113,7 +112,7 @@
                                 {hint.text}
                             </p>
                         {/if}
-                    </div>
+                    </TextInput.Root>
                     <Button fullWidth size="large" type="submit" disabled={!isFormValid}>
                         Change password
                     </Button>

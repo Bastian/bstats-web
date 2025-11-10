@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { Checkbox as Checkbox2 } from '$lib/components/input/checkbox';
+    import { Checkbox } from '$lib/components/input/checkbox';
     import { TextInput } from '$lib/components/input/text';
     import { Control, Description, ElementField, Field, FieldErrors, Label } from 'formsnap';
     import { superForm } from 'sveltekit-superforms';
@@ -23,7 +23,9 @@
         <Field {form} name="chartType">
             <Control>
                 {#snippet children({ props })}
-                    <Label class="input-label">Chart Type</Label>
+                    <Label class="text-sm font-semibold tracking-wide text-slate-700">
+                        Chart Type
+                    </Label>
                     <select class="input-control" {...props} bind:value={$formData.chartType}>
                         <option value="" disabled>Choose a chart type</option>
                         <optgroup label="Pies">
@@ -72,7 +74,7 @@
         {/if}
     </div>
     <div class="space-y-5 rounded-xl border border-slate-200 bg-slate-50 p-4">
-        <Checkbox2.Formsnap
+        <Checkbox.Formsnap
             {form}
             label="Enable filters"
             name="filterEnabled"
@@ -174,7 +176,7 @@
                     <FieldErrors class="text-xs text-red-700" />
                 </Field>
 
-                <Checkbox2.Formsnap
+                <Checkbox.Formsnap
                     {form}
                     label="Use blocklist mode"
                     name="blacklistEnabled"
@@ -183,7 +185,7 @@
                 />
 
                 <!--  Currently not supported by the backend for performance reasons
-                <Checkbox2.Formsnap
+                <Checkbox.Formsnap
                     {form}
                     label="Use regex"
                     name="regexEnabled"
