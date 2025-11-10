@@ -15,6 +15,8 @@ interface DefaultChart {
     data?: Record<string, unknown>;
 }
 
+const ALLOWED_PLATFORMS = ['bukkit', 'bungeecord', 'sponge', 'velocity', 'server-implementation'];
+
 export const load: PageServerLoad = async ({ url }) => {
     // Check if user just added a plugin (from query params)
     const addedPlugin = url.searchParams.get('addedPlugin') === 'true';
@@ -66,7 +68,7 @@ export const actions: Actions = {
             return fail(404, { error: 'softwareNotFound' });
         }
 
-        if (software.globalPlugin === null && locals?.user?.role !== 'admin') {
+        if (!ALLOWED_PLATFORMS.includes(software.url) && locals?.user?.role !== 'admin') {
             return fail(403, { error: 'notAllowed' });
         }
 
