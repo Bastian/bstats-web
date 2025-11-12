@@ -1,7 +1,7 @@
 <script lang="ts">
     import '../app.css';
-    import Navigation from '$lib/components/Navigation.svelte';
-    import Footer from '$lib/components/Footer.svelte';
+    import Header from '$lib/components/layout/Header.svelte';
+    import Footer from '$lib/components/layout/Footer.svelte';
 
     let { data, children } = $props();
 </script>
@@ -33,12 +33,10 @@
 {/if}
 -->
 
-<Navigation user={data.user} allSoftware={data.allSoftware} myPlugins={data.myPlugins} />
+<Header user={data.user} allSoftware={data.allSoftware} myPlugins={data.myPlugins} />
 
 <main>
     {@render children?.()}
 </main>
 
 <Footer loggedIn={!!data.session} />
-
-<GlobalScripts />
