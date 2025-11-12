@@ -109,18 +109,6 @@ export function getEChartsTheme() {
                 fontSize: 13,
                 fontWeight: 500
             }
-        },
-
-        // Series defaults
-        series: [
-            {
-                // Line chart
-                lineStyle: {
-                    width: 2
-                },
-                symbolSize: 6,
-                smooth: true
-            }
-        ]
+        }
     } as const satisfies EChartsOption;
 }

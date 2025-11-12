@@ -155,6 +155,9 @@
                     description: description
                 }
             },
+            legend: {
+                show: false
+            },
             tooltip: {
                 ...theme.tooltip,
                 trigger: 'axis',
@@ -216,8 +219,8 @@
                     type: 'slider',
                     start: startPercent,
                     end: 100,
-                    height: 20,
-                    bottom: 50,
+                    height: 30,
+                    bottom: 40,
                     textStyle: {
                         color: '#64748b'
                     },
@@ -244,8 +247,7 @@
                     name: lineName,
                     type: 'line',
                     smooth: true,
-                    symbol: 'circle',
-                    symbolSize: 4,
+                    showSymbol: false,
                     sampling: 'lttb',
                     itemStyle: {
                         color: '#10b981'
@@ -293,5 +295,5 @@
         {@render ChartButton('All', { onclick: () => setTimeRange('all') })}
         {@render ChartButton('Reset', { onclick: resetZoom, class: 'absolute right-0' })}
     </div>
-    <div bind:this={chartContainer} class="-mx-4 -mb-4 h-96 w-[calc(100%+2rem)]"></div>
+    <div bind:this={chartContainer} class="-mx-4 -mb-8 h-96 w-[calc(100%+2rem)]"></div>
 </div>
