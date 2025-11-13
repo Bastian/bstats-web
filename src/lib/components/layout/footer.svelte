@@ -80,8 +80,8 @@
             {@render FooterSection('Get started', [
                 { href: resolve('/docs'), label: 'Documentation' },
                 { href: resolve('/faq'), label: 'FAQ' },
-                { href: resolve('/add-plugin'), label: 'Add Plugin' },
-                { href: resolve('/docs/custom-charts'), label: 'Custom Charts' },
+                { href: resolve('/add-plugin'), label: 'Add plugin' },
+                { href: resolve('/docs/custom-charts'), label: 'Custom charts' },
                 { href: resolve('/docs/rest-api'), label: 'REST API' }
             ])}
 
@@ -89,7 +89,7 @@
                 'Account',
                 loggedIn
                     ? [
-                          { href: resolve('/add-plugin'), label: 'Add Plugin' },
+                          { href: resolve('/add-plugin'), label: 'Add plugin' },
                           { href: resolve('/change-password'), label: 'Change password' },
                           { href: resolve('/logout'), label: 'Logout' },
                           { href: resolve('/what-is-my-plugin-id'), label: 'What is my plugin id?' }
@@ -101,8 +101,8 @@
             )}
 
             {@render FooterSection('Legal & more', [
-                { href: resolve('/terms-of-use'), label: 'Terms of Use' },
-                { href: resolve('/privacy-policy'), label: 'Privacy Policy' },
+                { href: resolve('/terms-of-use'), label: 'Terms of use' },
+                { href: resolve('/privacy-policy'), label: 'Privacy policy' },
                 { href: resolve('/imprint'), label: 'Imprint' },
                 { href: resolve('/credits'), label: 'Credits' }
             ])}

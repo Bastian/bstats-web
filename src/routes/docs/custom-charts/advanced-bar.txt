@@ -5,4 +5,4 @@ metrics.addCustomChart(new AdvancedBarChart("features", () -> {
     map.put("Feature B", new int[]{1, 0});
     return map;
 }));
-// If you use the Copy & Paste Metrics classes, use `Metrics.AdvancedBarChart` instead
+// If you use the copy & paste Metrics classes, use `Metrics.AdvancedBarChart` instead

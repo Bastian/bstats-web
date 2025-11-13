@@ -290,7 +290,7 @@
 </script>
 
 <svelte:head>
-    <title>bStats - User Management</title>
+    <title>bStats - User management</title>
     <meta
         name="description"
         content="Manage bStats users, reset passwords, and handle bans from a single admin dashboard."
@@ -300,7 +300,7 @@
 <main class="pb-24">
     <PageHero>
         {#snippet badge()}<Badge>Admin</Badge>{/snippet}
-        {#snippet title()}User Management{/snippet}
+        {#snippet title()}User management{/snippet}
         {#snippet content()}
             View all registered users, ban or unban accounts, and generate temporary passwords for
             account recovery.

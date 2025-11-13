@@ -18,4 +18,4 @@ metrics.addCustomChart(new DrilldownPie("java_version", () -> {
 
     return data;
 }));
-// If you use the Copy & Paste Metrics classes, use `Metrics.DrilldownPie` instead
+// If you use the copy & paste Metrics classes, use `Metrics.DrilldownPie` instead

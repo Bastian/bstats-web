@@ -42,7 +42,7 @@
 <main class="pb-24">
     <PageHero>
         {#snippet badge()}<Badge>Documentation</Badge>{/snippet}
-        {#snippet title()}Add Plugin{/snippet}
+        {#snippet title()}Add plugin{/snippet}
         {#snippet content()}
             A guided flow for including bStats into your plugin. Pick the platform, register the
             plugin, add the bStats dependency and instantiate the Metrics class in your code.

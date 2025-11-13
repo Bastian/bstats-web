@@ -19,7 +19,7 @@
 
     <section class="doc-container mt-12">
         <article class="doc-card prose" style="max-width: none">
-            <h2>Contact Information</h2>
+            <h2>Contact information</h2>
             <p class="no-copy">
                 <strong
                     ><span class="ltr-text"
@@ -64,7 +64,7 @@
 
             <h2>Disclaimer</h2>
 
-            <h3>Liability for Content</h3>
+            <h3>Liability for content</h3>
             <p>
                 The content of this website has been created with the utmost care. However, we
                 cannot guarantee that the content is accurate, complete, or up to date. Pursuant to
@@ -76,7 +76,7 @@
                 applicable laws remain unaffected.
             </p>
 
-            <h3>Liability for Links</h3>
+            <h3>Liability for links</h3>
             <p>
                 Our website may contain links to external websites operated by third parties. We
                 have no influence on the content of these external sites; therefore, we accept no

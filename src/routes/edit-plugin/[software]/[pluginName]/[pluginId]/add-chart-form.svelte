@@ -24,17 +24,17 @@
             <Control>
                 {#snippet children({ props })}
                     <Label class="text-sm font-semibold tracking-wide text-slate-700">
-                        Chart Type
+                        Chart type
                     </Label>
                     <select class="input-control" {...props} bind:value={$formData.chartType}>
                         <option value="" disabled>Choose a chart type</option>
                         <optgroup label="Pies">
-                            <option value="simple_pie">Simple Pie</option>
-                            <option value="advanced_pie">Advanced Pie</option>
-                            <option value="drilldown_pie">Drilldown Pie</option>
+                            <option value="simple_pie">Simple pie</option>
+                            <option value="advanced_pie">Advanced pie</option>
+                            <option value="drilldown_pie">Drilldown pie</option>
                         </optgroup>
-                        <optgroup label="Line Charts">
-                            <option value="single_linechart">Single Line Chart</option>
+                        <optgroup label="Line charts">
+                            <option value="single_linechart">Single line chart</option>
                         </optgroup>
                     </select>
                 {/snippet}
@@ -47,9 +47,9 @@
         <TextInput.Formsnap
             {form}
             name="chartTitle"
-            label="Chart Title"
+            label="Chart title"
             description="The display name for the chart (shown above the chart)."
-            inputProps={{ placeholder: 'My Chart' }}
+            inputProps={{ placeholder: 'My chart' }}
             bind:value={$formData.chartTitle}
         />
 
@@ -66,9 +66,9 @@
             <TextInput.Formsnap
                 {form}
                 name="lineName"
-                label="Line Name"
+                label="Line name"
                 description="Shown in the legend and tooltips."
-                inputProps={{ placeholder: 'My Line' }}
+                inputProps={{ placeholder: 'My line' }}
                 bind:value={$formData.lineName}
             />
         {/if}
@@ -87,7 +87,7 @@
                 <TextInput.Formsnap
                     {form}
                     name="minValue"
-                    label="Min Value"
+                    label="Min value"
                     description="The minimum value per data submission. Lower values will be clamped to this value."
                     inputProps={{ type: 'number', placeholder: '0' }}
                     bind:value={$formData.minValue}
@@ -96,7 +96,7 @@
                 <TextInput.Formsnap
                     {form}
                     name="maxValue"
-                    label="Max Value"
+                    label="Max value"
                     description="The maximum value per data submission. Higher values will be clamped to this value."
                     inputProps={{ type: 'number', placeholder: '100' }}
                     bind:value={$formData.maxValue}
@@ -106,7 +106,7 @@
                 <TextInput.Formsnap
                     {form}
                     name="maxValue"
-                    label="Max Value"
+                    label="Max value"
                     description="The maximum value per data submission. Higher values will be clamped to this value."
                     inputProps={{ type: 'number', placeholder: '100' }}
                     bind:value={$formData.maxValue}
@@ -197,5 +197,5 @@
         {/if}
     </div>
 
-    <Button type="submit" fullWidth>Save Chart</Button>
+    <Button type="submit" fullWidth>Save chart</Button>
 </form>

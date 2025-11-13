@@ -25,5 +25,5 @@
         bind:value={$formData.ownerName}
     />
 
-    <Button type="submit" fullWidth>Transfer Ownership</Button>
+    <Button type="submit" fullWidth>Transfer ownership</Button>
 </form>

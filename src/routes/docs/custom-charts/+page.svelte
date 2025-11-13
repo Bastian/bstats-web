@@ -99,7 +99,7 @@
 </script>
 
 <svelte:head>
-    <title>bStats - Custom Charts</title>
+    <title>bStats - Custom charts</title>
     <meta name="description" content="Examples for custom charts." />
 </svelte:head>
 
@@ -144,8 +144,8 @@
                 <PieChart data={pieData} />
             </div>
             <div class="space-y-4">
-                {@render Example('Simple Pie', codeSimplePie)}
-                {@render Example('Advanced Pie', codeAdvancedPie)}
+                {@render Example('Simple pie', codeSimplePie)}
+                {@render Example('Advanced pie', codeAdvancedPie)}
             </div>
         </article>
 
@@ -159,7 +159,7 @@
             <div class="rounded-2xl border border-slate-200 bg-white p-4 md:p-6">
                 <DrilldownPieChart data={drilldownPieData} />
             </div>
-            {@render Example('Drilldown Pie', codeDrilldownPie)}
+            {@render Example('Drilldown pie', codeDrilldownPie)}
         </article>
 
         <article class="doc-card space-y-6">
@@ -175,10 +175,10 @@
                 <LineChart data={lineData} lineName="Players" />
             </div>
             <div class="space-y-4">
-                {@render Example('Single Line Chart', codeSingleLine)}
-                {@render Example('Multi Line Chart', codeMultiLine)}
+                {@render Example('Single line chart', codeSingleLine)}
+                {@render Example('Multi line chart', codeMultiLine)}
                 <p class="text-sm text-slate-500 italic">
-                    (Note: Multi Line Charts are still in development)
+                    (Note: Multi line charts are still in development)
                 </p>
             </div>
         </article>
@@ -194,8 +194,8 @@
             <div class="rounded-2xl border border-slate-200 bg-white p-4 md:p-6">
                 <BarChart data={barData} categories={barCategories} valueName="Servers" />
             </div>
-            {@render Example('Simple Bar Chart', codeSimpleBarChart)}
-            {@render Example('Advanced Bar Chart', codeAdvancedBarChart)}
+            {@render Example('Simple bar chart', codeSimpleBarChart)}
+            {@render Example('Advanced bar chart', codeAdvancedBarChart)}
         </article>
     </section>
 </main>

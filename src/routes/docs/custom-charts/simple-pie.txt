@@ -1,4 +1,4 @@
 metrics.addCustomChart(new SimplePie("used_language", () -> {
     return config.getString("language", "English");
 }));
-// If you use the Copy & Paste Metrics classes, use `Metrics.SimplePie` instead
+// If you use the copy & paste Metrics classes, use `Metrics.SimplePie` instead

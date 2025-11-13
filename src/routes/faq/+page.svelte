@@ -63,7 +63,7 @@
         </article>
 
         <article class="doc-card space-y-4">
-            <h2 class="doc-card-title">Map Charts</h2>
+            <h2 class="doc-card-title">Map charts</h2>
             <Accordion.Root class="space-y-3">
                 <Accordion.Item
                     title="Why are certain borders displayed this way?"

@@ -3,4 +3,4 @@ metrics.addCustomChart(new SingleLineChart("players", () -> {
     // default. This is just an example.
     return Bukkit.getOnlinePlayers().size();
 }));
-// If you use the Copy & Paste Metrics classes, use `Metrics.SingleLineChart` instead
+// If you use the copy & paste Metrics classes, use `Metrics.SingleLineChart` instead

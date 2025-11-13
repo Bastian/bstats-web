@@ -5,14 +5,14 @@
 </script>
 
 <svelte:head>
-    <meta name="description" content="Terms of Use" />
-    <title>bStats - Terms of Use</title>
+    <meta name="description" content="Terms of use" />
+    <title>bStats - Terms of use</title>
 </svelte:head>
 
 <main class="pb-24">
     <PageHero>
         {#snippet badge()}<Badge>Legal</Badge>{/snippet}
-        {#snippet title()}Terms of Use{/snippet}
+        {#snippet title()}Terms of use{/snippet}
         {#snippet content()}
             Please read these terms carefully before using bStats. By accessing or using any part of
             the Service, you agree to be bound by these Terms of Use.
@@ -21,7 +21,7 @@
 
     <section class="doc-container mt-12">
         <article class="doc-card prose" style="max-width: none">
-            <p class="text-sm text-slate-500 italic"><strong>Last Updated:</strong> 2025/03/13</p>
+            <p class="text-sm text-slate-500 italic"><strong>Last updated:</strong> 2025/03/13</p>
 
             <h2>1. Introduction</h2>
             <p>
@@ -48,35 +48,35 @@
                 If you do not agree, you must discontinue use of the Service immediately.
             </p>
 
-            <h2>2. Scope and Eligibility</h2>
-            <h3>Who Is Covered</h3>
+            <h2>2. Scope and eligibility</h2>
+            <h3>Who is covered</h3>
             <ul>
                 <li>
-                    <strong>Plugin Developers:</strong> Individuals or entities who include bStats Code
+                    <strong>Plugin developers:</strong> Individuals or entities who include bStats Code
                     in their plugins or mods.
                 </li>
                 <li>
-                    <strong>Server Owners:</strong> Individuals or entities who operate game servers
+                    <strong>Server owners:</strong> Individuals or entities who operate game servers
                     (e.g., Minecraft servers) running plugins that include bStats Code.
                 </li>
                 <li>
-                    <strong>Website Visitors:</strong> Anyone who visits the Site to view analytics or
+                    <strong>Website visitors:</strong> Anyone who visits the Site to view analytics or
                     other information.
                 </li>
             </ul>
-            <h3>Age Restrictions</h3>
+            <h3>Age restrictions</h3>
             <p>
                 bStats is not intended for use by anyone under the age of 13 (or 16, depending on
                 local regulations). If you are a minor under applicable law, you may only use bStats
                 under the supervision of a parent or legal guardian who agrees to be bound by these
                 TOS on your behalf. Please see our
-                <a href={resolve('/privacy-policy')} target="_blank">Privacy Policy</a>
+                <a href={resolve('/privacy-policy')} target="_blank">privacy policy</a>
                 for more information regarding children's privacy.
             </p>
 
-            <h2>3. Open-Source Licensing and Ownership</h2>
+            <h2>3. Open-source licensing and ownership</h2>
             <p>
-                <strong>Open-Source Code:</strong> The bStats Code is provided under an open-source license,
+                <strong>Open-source code:</strong> The bStats Code is provided under an open-source license,
                 which is separate from these TOS. Your use of bStats Code is governed by that open-source
                 license.
             </p>
@@ -86,9 +86,9 @@
                 to bStats.
             </p>
 
-            <h2>4. Prohibited Modifications and Data Collection</h2>
+            <h2>4. Prohibited modifications and data collection</h2>
             <p>
-                <strong>Metrics Class Modifications:</strong>
+                <strong>Metrics class modifications:</strong>
             </p>
             <ul>
                 <li>
@@ -114,17 +114,17 @@
                 </li>
             </ul>
             <p>
-                <strong>Prohibited Data in Custom Charts:</strong>
+                <strong>Prohibited data in custom charts:</strong>
             </p>
             <ul>
                 <li>
-                    <strong>Personal Data:</strong> You must not configure or use bStats to collect data
+                    <strong>Personal data:</strong> You must not configure or use bStats to collect data
                     that could be considered personal under the GDPR or similar privacy regulations.
                     This includes, but is not limited to, IP addresses or any identifiers traceable to
                     an individual.
                 </li>
                 <li>
-                    <strong>Sensitive Server Data:</strong> You must not include server IP addresses
+                    <strong>Sensitive server data:</strong> You must not include server IP addresses
                     or other sensitive server-specific information in custom charts.
                 </li>
                 <li>
@@ -133,64 +133,64 @@
                 </li>
             </ul>
 
-            <h2>5. User Responsibilities</h2>
+            <h2>5. User responsibilities</h2>
             <ul>
                 <li>
-                    <strong>Compliance with Laws:</strong> You agree to use the Service only in compliance
+                    <strong>Compliance with laws:</strong> You agree to use the Service only in compliance
                     with all applicable laws and regulations, including data protection laws relevant
                     to your jurisdiction.
                 </li>
                 <li>
-                    <strong>Accurate Information:</strong> If you create an account on the Site, you
+                    <strong>Accurate information:</strong> If you create an account on the Site, you
                     must provide accurate and truthful information (e.g., username). You are responsible
                     for maintaining the confidentiality of your login credentials.
                 </li>
                 <li>
-                    <strong>No Abuse of Service:</strong> You will not attempt to access any non-public
+                    <strong>No abuse of service:</strong> You will not attempt to access any non-public
                     areas of our Service, interfere with bStats infrastructure, attempt to reverse engineer
                     or circumvent any security features, or otherwise exploit the Service in an unauthorized
                     manner.
                 </li>
             </ul>
 
-            <h2>6. Privacy Policy</h2>
+            <h2>6. Privacy policy</h2>
             <p>
                 Your use of the Service is also governed by our
-                <a href={resolve('/privacy-policy')} target="_blank">Privacy Policy</a>, which
+                <a href={resolve('/privacy-policy')} target="_blank">privacy policy</a>, which
                 explains how we collect, use, and protect data. In the event of a conflict between
-                these TOS and our Privacy Policy regarding data handling, the Privacy Policy
+                these TOS and our privacy policy regarding data handling, the privacy policy
                 prevails.
             </p>
 
-            <h2>7. Disclaimers of Warranties</h2>
+            <h2>7. Disclaimers of warranties</h2>
             <ul>
                 <li>
                     <strong>"As-Is" and "As Available":</strong> The Service and all associated software
                     (including bStats Code) are provided on an "as-is" and "as available" basis.
                 </li>
                 <li>
-                    <strong>No Warranty:</strong> To the fullest extent permitted by applicable law,
+                    <strong>No warranty:</strong> To the fullest extent permitted by applicable law,
                     we disclaim all warranties and conditions, whether express, implied, statutory, or
                     otherwise, including any implied warranties of merchantability, fitness for a particular
                     purpose, and non-infringement.
                 </li>
                 <li>
-                    <strong>Open-Source Nature:</strong> bStats is open-source software maintained by
+                    <strong>Open-source nature:</strong> bStats is open-source software maintained by
                     volunteers and contributors. We do not guarantee that the Service or code will be
                     free from defects or available without interruption.
                 </li>
             </ul>
 
-            <h2>8. Limitation of Liability</h2>
+            <h2>8. Limitation of liability</h2>
             <ul>
                 <li>
-                    <strong>Exclusion of Damages:</strong> To the fullest extent permitted by applicable
+                    <strong>Exclusion of damages:</strong> To the fullest extent permitted by applicable
                     law, bStats shall not be liable for any indirect, incidental, consequential, or special
                     damages, loss of data, loss of profits, or costs of procurement of substitute goods
                     or services, arising out of or related to your use of (or inability to use) the Service.
                 </li>
                 <li>
-                    <strong>Aggregate Liability Cap:</strong> In no event shall bStats' total liability
+                    <strong>Aggregate liability cap:</strong> In no event shall bStats' total liability
                     to you for all claims arising out of or relating to these TOS exceed the amount you
                     paid (if any) for using the Service in the preceding twelve (12) months (or EUR €0.00
                     if you have not paid any fees).
@@ -205,25 +205,25 @@
             <h2>9. Termination</h2>
             <ul>
                 <li>
-                    <strong>Termination by You:</strong> You may stop using the Service at any time.
+                    <strong>Termination by you:</strong> You may stop using the Service at any time.
                     If you have an account on our Site, you may delete it.
                 </li>
                 <li>
-                    <strong>Termination by Us:</strong> We reserve the right to suspend or terminate
+                    <strong>Termination by us:</strong> We reserve the right to suspend or terminate
                     your access to the Service, or to specific functionality, at any time if we reasonably
                     believe you have violated these TOS or engaged in fraudulent or illegal conduct.
                 </li>
                 <li>
-                    <strong>Effect of Termination:</strong> Upon termination, your right to access or
+                    <strong>Effect of termination:</strong> Upon termination, your right to access or
                     use the Service immediately ceases. Any clauses in these TOS that by their nature
                     should survive termination (e.g., disclaimers, limitation of liability) shall remain
                     in effect.
                 </li>
             </ul>
 
-            <h2>10. Governing Law and Jurisdiction</h2>
+            <h2>10. Governing law and jurisdiction</h2>
             <p>
-                <strong>Governing Law:</strong> These TOS are governed by and construed in accordance
+                <strong>Governing law:</strong> These TOS are governed by and construed in accordance
                 with the laws of the Federal Republic of Germany, without regard to conflict-of-law principles.
             </p>
             <p>
@@ -232,18 +232,18 @@
                 located in Germany, unless otherwise required by a mandatory law of your jurisdiction.
             </p>
 
-            <h2>11. Changes to the Terms of Use</h2>
+            <h2>11. Changes to the terms of use</h2>
             <p>
                 We may update or modify these TOS from time to time at our discretion. The "Last
-                Updated" date at the top of this page indicates when changes were made. We encourage
+                updated" date at the top of this page indicates when changes were made. We encourage
                 you to review the TOS periodically. Your continued use of the Service following any
                 changes signifies your acceptance of the revised TOS.
             </p>
 
-            <h2>12. Support and Contact</h2>
+            <h2>12. Support and contact</h2>
             <ul>
                 <li>
-                    <strong>Support and Issue Tracking:</strong> If you need assistance or wish to
+                    <strong>Support and issue tracking:</strong> If you need assistance or wish to
                     report a bug, please reach out via our
                     <a href="https://discord.gg/qTXtXuf" target="_blank"> Discord channel </a>
                     or by opening an issue on our
@@ -252,16 +252,16 @@
                     </a>.
                 </li>
                 <li>
-                    <strong>Legal Inquiries:</strong> For legal inquiries, please refer to the
+                    <strong>Legal inquiries:</strong> For legal inquiries, please refer to the
                     contact information provided in the bStats
-                    <a href={resolve('/privacy-policy')} target="_blank">Privacy Policy</a>.
+                    <a href={resolve('/privacy-policy')} target="_blank">privacy policy</a>.
                 </li>
             </ul>
 
-            <h2>13. Entire Agreement and Severability</h2>
+            <h2>13. Entire agreement and severability</h2>
             <ul>
                 <li>
-                    <strong>Entire Agreement:</strong> These TOS, together with our Privacy Policy and
+                    <strong>Entire agreement:</strong> These TOS, together with our privacy policy and
                     any relevant open-source license terms, constitute the entire agreement between you
                     and bStats concerning the Service.
                 </li>
@@ -273,8 +273,8 @@
             </ul>
 
             <p class="text-sm text-slate-500 italic">
-                Thank you for using bStats! If you have any questions about these Terms of Use or
-                the Privacy Policy, please contact us as set out in our Privacy Policy.
+                Thank you for using bStats! If you have any questions about these terms of use or
+                the privacy policy, please contact us as set out in our privacy policy.
             </p>
         </article>
     </section>

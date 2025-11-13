@@ -20,11 +20,11 @@
     <TextInput.Formsnap
         {form}
         name="pluginName"
-        label="Plugin Name"
+        label="Plugin name"
         description="Confirm deletion by entering the plugin name."
         inputProps={{ placeholder: plugin.name }}
         bind:value={$formData.pluginName}
     />
 
-    <Button type="submit" fullWidth>Delete Plugin</Button>
+    <Button type="submit" fullWidth>Delete plugin</Button>
 </form>

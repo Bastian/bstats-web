@@ -10,13 +10,13 @@
         name="description"
         content="Information for Minecraft server owners about bStats metrics collection."
     />
-    <title>bStats - Server Owners</title>
+    <title>bStats - Server owners</title>
 </svelte:head>
 
 <main class="pb-24">
     <PageHero>
         {#snippet badge()}<Badge>Documentation</Badge>{/snippet}
-        {#snippet title()}For Server Owners{/snippet}
+        {#snippet title()}For server owners{/snippet}
         {#snippet content()}
             Understanding bStats metrics collection, what data is shared, and how to manage your
             preferences.

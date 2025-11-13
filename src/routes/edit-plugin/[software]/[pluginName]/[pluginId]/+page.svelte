@@ -21,7 +21,7 @@
 <main class="pb-24">
     {#if !data.canEdit}
         <PageHero>
-            {#snippet badge()}<Badge type="error">Access Denied</Badge>{/snippet}
+            {#snippet badge()}<Badge type="error">Access denied</Badge>{/snippet}
             {#snippet title()}Nice try!{/snippet}
             {#snippet content()}
                 Only the owner of

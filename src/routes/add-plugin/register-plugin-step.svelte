@@ -67,7 +67,7 @@
                     type="text"
                     name="pluginName"
                     maxlength={48}
-                    placeholder="My Awesome Plugin"
+                    placeholder="My awesome plugin"
                     class="max-w-96"
                     required
                     {...['missingData', 'duplicatePlugin', 'invalidName'].includes(

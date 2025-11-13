@@ -5,7 +5,7 @@
 
 <svelte:head>
     <meta name="description" content="Our privacy policy." />
-    <title>bStats - Privacy Policy</title>
+    <title>bStats - Privacy policy</title>
 </svelte:head>
 
 <main class="pb-24">
@@ -24,17 +24,17 @@
             class="doc-card prose space-y-6"
             style="max-width: none"
         >
-            <p class="text-sm text-slate-500 italic"><strong>Last Updated:</strong> 2025/11/10</p>
-            <h2 class="doc-card-title">bStats Plugin Privacy Policy</h2>
+            <p class="text-sm text-slate-500 italic"><strong>Last updated:</strong> 2025/11/10</p>
+            <h2 class="doc-card-title">bStats plugin privacy policy</h2>
 
             <p>
                 If you are a server owner installing a plugin that uses bStats or a casual site
                 visitor, this policy explains what data is collected, why, and how long it is
                 retained. If you are a plugin developer registering an account on the bStats.org
-                website, please refer to the <strong>bStats Website Privacy Policy</strong> below.
+                website, please refer to the <strong>bStats website privacy policy</strong> below.
             </p>
 
-            <h3>1. Who We Are (Data Controller)</h3>
+            <h3>1. Who we are (data controller)</h3>
             <p>
                 <strong>bStats</strong> ("we," "us," or "our") refers to the open-source service that
                 plugin developers embed into their game server plugins/mods for analytics. The data controller
@@ -80,28 +80,28 @@
                 </p>
             </blockquote>
 
-            <h3>2. Scope: What This Policy Covers</h3>
+            <h3>2. Scope: What this policy covers</h3>
             <ul>
                 <li>
-                    <strong>bStats Plugin Embedding</strong>: This policy covers data collected when
+                    <strong>bStats plugin embedding</strong>: This policy covers data collected when
                     plugins that include the bStats script are run on a server.
                 </li>
                 <li>
-                    <strong>Server Owners</strong>: Typically, you (as the server owner) do not
+                    <strong>Server owners</strong>: Typically, you (as the server owner) do not
                     provide any personal data to bStats; only technical data about the server
                     environment is transmitted.
                 </li>
                 <li>
-                    <strong>Custom Metrics</strong>: Developers can add custom charts or metrics
+                    <strong>Custom metrics</strong>: Developers can add custom charts or metrics
                     beyond bStats' default collection. We prohibit collecting personal information.
                     We remove or ban offending plugins/authors if we discover misuse.
                 </li>
             </ul>
 
-            <h3>3. Data We Collect and Why</h3>
+            <h3>3. Data we collect and why</h3>
             <ol>
                 <li>
-                    <p><strong>Technical Server Data</strong></p>
+                    <p><strong>Technical server data</strong></p>
                     <ul>
                         <li>
                             Examples: Operating System (OS), Java version, CPU architecture, server
@@ -117,7 +117,7 @@
                     </ul>
                 </li>
                 <li>
-                    <p><strong>IP Address (Short-Term Storage)</strong></p>
+                    <p><strong>IP address (short-term storage)</strong></p>
                     <ul>
                         <li>
                             bStats receives an IP address with each data transmission for
@@ -129,13 +129,13 @@
                             They are never linked to accounts or personal profiles.
                         </li>
                         <li>
-                            <strong>Legal Basis</strong>: Our legitimate interest in ensuring stable
+                            <strong>Legal basis</strong>: Our legitimate interest in ensuring stable
                             service, preventing spam/abuse, and securing our infrastructure.
                         </li>
                     </ul>
                 </li>
                 <li>
-                    <p><strong>Prohibited Personal Data in Custom Metrics</strong></p>
+                    <p><strong>Prohibited personal data in custom metrics</strong></p>
                     <ul>
                         <li>
                             Developers must not send personal data (names, emails, IPs, device
@@ -146,42 +146,42 @@
                 </li>
             </ol>
 
-            <h3>4. Legal Bases for Processing (GDPR/UK GDPR)</h3>
+            <h3>4. Legal bases for processing (GDPR/UK GDPR)</h3>
             <ul>
                 <li>
-                    <strong>Legitimate Interests</strong>: Processing IP addresses briefly and using
+                    <strong>Legitimate interests</strong>: Processing IP addresses briefly and using
                     pseudonymous server identifiers to prevent abuse and measure plugin usage for
                     service integrity and security.
                 </li>
                 <li>
-                    <strong>Right to Object</strong>: Where we rely on legitimate interests, you may
+                    <strong>Right to object</strong>: Where we rely on legitimate interests, you may
                     object at any time. Practically, server owners can disable telemetry (see
                     Section 5).
                 </li>
             </ul>
 
-            <h3>5. How to Opt Out</h3>
+            <h3>5. How to opt out</h3>
             <ul>
                 <li>
-                    <strong>Configuration File</strong>: Each plugin that includes bStats typically
+                    <strong>Configuration file</strong>: Each plugin that includes bStats typically
                     generates a global config file. You can disable bStats here, preventing any
                     further data transmission from any plugin.
                 </li>
             </ul>
 
-            <h3>6. Data Retention</h3>
+            <h3>6. Data retention</h3>
             <ul>
                 <li>
-                    <strong>Server Metrics</strong>: Aggregated, de-identified metrics
+                    <strong>Server metrics</strong>: Aggregated, de-identified metrics
                     (non-personal) may remain in our databases indefinitely to track historical
                     trends.
                 </li>
                 <li>
-                    <strong>IP Addresses (our systems)</strong>: Stored only up to
+                    <strong>IP addresses (our systems)</strong>: Stored only up to
                     <strong>60 minutes</strong> in a rate-limiting mechanism, then automatically erased.
                 </li>
                 <li>
-                    <strong>Provider Security Logs</strong>: Our CDN/WAF and hosting providers may
+                    <strong>Provider security logs</strong>: Our CDN/WAF and hosting providers may
                     retain limited security logs for short periods consistent with their policies
                     and our configurations. We configure the shortest practical retention and do not
                     use provider security logs to profile users.
@@ -192,23 +192,23 @@
                 </li>
             </ul>
 
-            <h3>7. Security Measures</h3>
+            <h3>7. Security measures</h3>
             <ul>
                 <li>
-                    <strong>Secure Transmission</strong>: Data is sent over secure channels
+                    <strong>Secure transmission</strong>: Data is sent over secure channels
                     (HTTPS/SSL).
                 </li>
                 <li>
-                    <strong>Access Controls</strong>: Only authorized personnel (e.g., site
+                    <strong>Access controls</strong>: Only authorized personnel (e.g., site
                     maintainers) can access raw logs.
                 </li>
                 <li>
-                    <strong>Infrastructure Safeguards</strong>: We employ measures such as
+                    <strong>Infrastructure safeguards</strong>: We employ measures such as
                     firewalling, intrusion detection, and regular security reviews where feasible.
                 </li>
             </ul>
 
-            <h3>8. Third-Party Services, Subprocessors, and International Transfers</h3>
+            <h3>8. Third-party services, subprocessors, and international transfers</h3>
             <ul>
                 <li>
                     <strong>Hosting</strong>: Our infrastructure is hosted by
@@ -221,7 +221,7 @@
                     related connection data and set strictly necessary cookies.
                 </li>
                 <li>
-                    <strong>International Transfers</strong>: Where data is transferred outside your
+                    <strong>International transfers</strong>: Where data is transferred outside your
                     jurisdiction (e.g., EU/EEA/UK to other countries), we rely on an appropriate
                     mechanism: adequacy decisions (including recognized frameworks), the EU 2021
                     Standard Contractual Clauses (and UK Addendum/IDTA, as applicable), and routine
@@ -230,7 +230,7 @@
                 </li>
             </ul>
 
-            <h3>9. Your Rights (GDPR and Similar Laws)</h3>
+            <h3>9. Your rights (GDPR and similar laws)</h3>
             <p>
                 Depending on your local laws (e.g., GDPR in the EU/UK), you may have rights over
                 personal data that we hold or process.:
@@ -238,7 +238,7 @@
             <ul>
                 <li><strong>Access</strong>: Confirm whether we process your personal data.</li>
                 <li>
-                    <strong>Erasure/Rectification</strong>: Given the 60-minute retention window,
+                    <strong>Erasure/rectification</strong>: Given the 60-minute retention window,
                     data will likely already be purged, but you can still contact us.
                 </li>
                 <li>
@@ -254,7 +254,7 @@
                 We respond to GDPR/UK GDPR requests within one month (extendable where permitted).
             </p>
 
-            <h3>10. Children's Privacy</h3>
+            <h3>10. Children's privacy</h3>
             <p>
                 bStats does not knowingly collect personal data from children under the age of 13
                 (or 16 in certain jurisdictions). The service is generally aimed at adult server
@@ -276,7 +276,7 @@
                 >.
             </p>
 
-            <h3>11. Prohibited Personal Data in Custom Metrics and Enforcement</h3>
+            <h3>11. Prohibited personal data in custom metrics and enforcement</h3>
             <ul>
                 <li>
                     If you suspect a plugin is using bStats to gather personal data, please contact
@@ -298,7 +298,7 @@
                 </li>
             </ul>
 
-            <h3>12. California Privacy Disclosures (CPRA/CCPA)</h3>
+            <h3>12. California privacy disclosures (CPRA/CCPA)</h3>
             <ul>
                 <li>
                     <strong>Categories collected</strong>: Identifiers (IP address in transient
@@ -313,7 +313,7 @@
                     <strong>Sensitive personal information</strong>: Not sought or used.
                 </li>
                 <li>
-                    <strong>Sale/Sharing</strong>: We <u>do not sell</u> or <u>share</u> personal information
+                    <strong>Sale/sharing</strong>: We <u>do not sell</u> or <u>share</u> personal information
                     as defined by the CPRA and do not engage in cross-context behavioral advertising.
                 </li>
                 <li>
@@ -323,7 +323,7 @@
                 </li>
             </ul>
 
-            <h3>13. Law Enforcement and Legal Requests</h3>
+            <h3>13. Law enforcement and legal requests</h3>
             <p>
                 We may preserve and disclose information if required by law or in good-faith belief
                 that such action is reasonably necessary to comply with legal obligations, respond
@@ -331,7 +331,7 @@
                 or the public.
             </p>
 
-            <h3>14. Changes to This Plugin Privacy Policy</h3>
+            <h3>14. Changes to this plugin privacy policy</h3>
             <p>
                 We may modify this document from time to time to stay up to date with new legal
                 requirements or operational changes. We will post updated texts on our site with a
@@ -339,7 +339,7 @@
                 notice.
             </p>
 
-            <h3>15. Contact Information</h3>
+            <h3>15. Contact information</h3>
             <p>
                 If you have questions or concerns about how bStats processes server data, or if you
                 suspect misuse by a plugin developer, please email us:
@@ -365,10 +365,10 @@
             class="doc-card prose space-y-6"
             style="max-width: none"
         >
-            <p class="text-sm text-slate-500 italic"><strong>Last Updated:</strong> 2025/11/10</p>
-            <h2 class="doc-card-title">bStats Website Privacy Policy</h2>
+            <p class="text-sm text-slate-500 italic"><strong>Last updated:</strong> 2025/11/10</p>
+            <h2 class="doc-card-title">bStats website privacy policy</h2>
 
-            <h3>1. Who We Are (Data Controller)</h3>
+            <h3>1. Who we are (data controller)</h3>
             <p>
                 This policy covers <strong>bStats.org</strong>, where plugin developers can register
                 an account to view or manage plugin analytics. The data controller is:
@@ -413,14 +413,14 @@
                 </p>
             </blockquote>
 
-            <h3>2. Scope: Website Visitors and Registered Users</h3>
+            <h3>2. Scope: Website visitors and registered users</h3>
             <ul>
                 <li>
-                    <strong>Public Visitors</strong>: Anyone can visit bStats.org and view plugin
+                    <strong>Public visitors</strong>: Anyone can visit bStats.org and view plugin
                     statistics without creating an account.
                 </li>
                 <li>
-                    <strong>Registered Users (Plugin Developers)</strong>: You can create an account
+                    <strong>Registered users (plugin developers)</strong>: You can create an account
                     using a username and password and/or by linking an identity provider (e.g.,
                     GitHub). <strong>Providing an email address is optional</strong>. If you choose
                     to add an email, we will store it and its verification status to support account
@@ -428,10 +428,14 @@
                 </li>
             </ul>
 
-            <h3>3. Information Collected</h3>
+            <h3>3. Information collected</h3>
             <ol>
                 <li>
-                    <p><strong>Account Registration & Profile</strong></p>
+                    <p>
+                        <strong
+                            >Account registration <strong>Account registration & profile</strong> profile</strong
+                        >
+                    </p>
                     <ul>
                         <li>
                             <strong>Data</strong>: Unique user ID; display name; optional username
@@ -445,14 +449,14 @@
                             per-user salts. We never store plaintext passwords.
                         </li>
                         <li>
-                            <strong>Purpose/Legal Basis</strong>: Contractual necessity to provide
+                            <strong>Purpose/legal basis</strong>: Contractual necessity to provide
                             and secure your account; legitimate interests for platform security.
                         </li>
                     </ul>
                 </li>
 
                 <li>
-                    <p><strong>Authentication Sessions and Audit</strong></p>
+                    <p><strong>Authentication sessions and audit</strong></p>
                     <ul>
                         <li>
                             <strong>Data</strong>: Session ID and token, creation/last activity
@@ -466,7 +470,7 @@
                             cookie for that purpose.
                         </li>
                         <li>
-                            <strong>Purpose/Legal Basis</strong>: Contractual necessity to maintain
+                            <strong>Purpose/legal basis</strong>: Contractual necessity to maintain
                             your session; legitimate interests in fraud prevention, abuse
                             mitigation, troubleshooting, and account support.
                         </li>
@@ -474,7 +478,7 @@
                 </li>
 
                 <li>
-                    <p><strong>Linked Accounts (OAuth/Social Sign-In)</strong></p>
+                    <p><strong>Linked accounts (OAuth/social sign-in)</strong></p>
                     <ul>
                         <li>
                             <strong>Data</strong>: Provider identifier and your account ID at that
@@ -487,7 +491,7 @@
                             can unlink a provider at any time.
                         </li>
                         <li>
-                            <strong>Legal Basis</strong>: Contractual necessity and your
+                            <strong>Legal basis</strong>: Contractual necessity and your
                             request/consent to link a provider.
                         </li>
                     </ul>
@@ -509,7 +513,7 @@
                 </li>
 
                 <li>
-                    <p><strong>Two-Factor Authentication (2FA)</strong></p>
+                    <p><strong>Two-factor authentication (2FA)</strong></p>
                     <ul>
                         <li>
                             <strong>Data</strong>: 2FA secret and backup codes when you enable 2FA.
@@ -520,33 +524,33 @@
                             at any time.
                         </li>
                         <li>
-                            <strong>Legal Basis</strong>: Legitimate interests in account security
+                            <strong>Legal basis</strong>: Legitimate interests in account security
                             and your request to enable 2FA.
                         </li>
                     </ul>
                 </li>
 
                 <li>
-                    <p><strong>Cookies and Related Technologies</strong></p>
+                    <p><strong>Cookies and related technologies</strong></p>
                     <ul>
                         <li>
-                            <strong>Session Cookies</strong>: Strictly necessary cookies keep you
+                            <strong>Session cookies</strong>: Strictly necessary cookies keep you
                             logged in and remember preferences. We do not use third-party
                             marketing/behavioral tracking cookies.
                         </li>
                         <li>
-                            <strong>Security/Edge Cookies</strong>: Our CDN/WAF may set necessary
+                            <strong>Security/edge cookies</strong>: Our CDN/WAF may set necessary
                             cookies for bot management and challenge passes.
                         </li>
                         <li>
-                            <strong>Legal Basis</strong>: Strictly necessary cookies typically do
+                            <strong>Legal basis</strong>: Strictly necessary cookies typically do
                             not require consent.
                         </li>
                     </ul>
                 </li>
 
                 <li>
-                    <p><strong>Basic Server/Access Logs</strong></p>
+                    <p><strong>Basic server/access logs</strong></p>
                     <ul>
                         <li>
                             Minimal access logs (including IPs) may be processed for security and
@@ -556,34 +560,34 @@
                 </li>
             </ol>
 
-            <h3>4. How We Use Your Data</h3>
+            <h3>4. How we use your data</h3>
             <ul>
                 <li>
-                    <strong>Provide Website Services</strong>: Secure login (password and/or OAuth),
+                    <strong>Provide website services</strong>: Secure login (password and/or OAuth),
                     maintain sessions, support 2FA, link/unlink providers, associate plugin pages
                     with your account, and display analytics.
                 </li>
                 <li>
-                    <strong>Security and Reliability</strong>: Detect abuse, rate-limit requests,
+                    <strong>Security and reliability</strong>: Detect abuse, rate-limit requests,
                     protect our infrastructure, and troubleshoot issues. Limited, role-based staff
                     may review session IP/user-agent data for security.
                 </li>
                 <li>
-                    <strong>Transactional Communications</strong>: If you provide an email, we may
+                    <strong>Transactional communications</strong>: If you provide an email, we may
                     send verification, password reset, or security notices. We do not send marketing
                     emails. Email is optional.
                 </li>
             </ul>
 
-            <h3>5. Third-Party Processing, Subprocessors, and International Transfers</h3>
+            <h3>5. Third-party processing, subprocessors, and international transfers</h3>
             <ul>
                 <li>
-                    <strong>Account Management Software</strong>: We operate authentication and
+                    <strong>Account management software</strong>: We operate authentication and
                     account features on our own infrastructure. Your account data remains in our
                     databases.
                 </li>
                 <li>
-                    <strong>OAuth Identity Providers (if you choose to link)</strong>: For example,
+                    <strong>OAuth identity providers (if you choose to link)</strong>: For example,
                     GitHub or Google. We receive your provider identifier and tokens necessary for
                     sign-in and store them to maintain your login. You can revoke access via bStats
                     or your provider settings. Your provider's privacy policy applies to their
@@ -598,7 +602,7 @@
                     IP addresses and related connection data and may set strictly necessary cookies.
                 </li>
                 <li>
-                    <strong>Email Delivery (if email is used)</strong>: We send verification and
+                    <strong>Email delivery (if email is used)</strong>: We send verification and
                     security emails using Amazon Simple Email Service (<em>Amazon SES</em>, part of
                     Amazon Web Services). When emails are sent, your <strong>email address</strong>,
                     <strong>message content</strong>, and related <strong>metadata</strong> (e.g.,
@@ -611,17 +615,17 @@
                     (via account settings or by contacting us).
                 </li>
                 <li>
-                    <strong>International Transfers</strong>: Where applicable, we rely on adequacy
+                    <strong>International transfers</strong>: Where applicable, we rely on adequacy
                     decisions or recognized frameworks, the EU 2021 Standard Contractual Clauses,
                     and, for the UK, the UK Addendum/IDTA. We conduct transfer risk assessments and
                     apply encryption, access controls, and minimization.
                 </li>
             </ul>
 
-            <h3>6. Data Retention and Deletion</h3>
+            <h3>6. Data retention and deletion</h3>
             <ul>
                 <li>
-                    <strong>Account Data</strong>: Your profile (display name, username, optional
+                    <strong>Account data</strong>: Your profile (display name, username, optional
                     email, optional image) and account state (role, ban status) remain until you
                     delete your account. Deleted data is removed from active systems promptly and
                     purged from backups over our regular rotation cycle.
@@ -632,25 +636,25 @@
                     as part of the session record.
                 </li>
                 <li>
-                    <strong>Linked Accounts/Tokens</strong>: Retained until you unlink the provider
+                    <strong>Linked accounts/tokens</strong>: Retained until you unlink the provider
                     or your account is deleted.
                 </li>
                 <li>
-                    <strong>2FA Secrets/Backup Codes</strong>: Retained until you disable 2FA or
+                    <strong>2FA secrets/backup codes</strong>: Retained until you disable 2FA or
                     regenerate codes.
                 </li>
                 <li>
-                    <strong>Access/Security Logs</strong>: Retained for short periods consistent
+                    <strong>Access/security logs</strong>: Retained for short periods consistent
                     with operational security and provider policies; configured to the shortest
                     practical duration.
                 </li>
             </ul>
 
-            <h3>7. Security Measures</h3>
+            <h3>7. Security measures</h3>
             <ul>
-                <li><strong>Password Protection</strong>: Hashing and salting (see Section 3).</li>
+                <li><strong>Password protection</strong>: Hashing and salting (see Section 3).</li>
                 <li>
-                    <strong>2FA Material</strong>: 2FA secrets and backup codes are stored securely
+                    <strong>2FA material</strong>: 2FA secrets and backup codes are stored securely
                     (hashed and/or encrypted) and used only for authentication.
                 </li>
                 <li>
@@ -658,13 +662,13 @@
                     tokens are stored in secure, HttpOnly cookies.
                 </li>
                 <li>
-                    <strong>Access Control</strong>: Only authorized personnel can manage the
+                    <strong>Access control</strong>: Only authorized personnel can manage the
                     website's infrastructure and stored data; security incidents are investigated
                     and, where legally required, we notify users/regulators.
                 </li>
             </ul>
 
-            <h3>8. Your Rights (GDPR, UK GDPR, and Similar Laws)</h3>
+            <h3>8. Your rights (GDPR, UK GDPR, and similar laws)</h3>
             <p>
                 Depending on your jurisdiction, you may have the right to access, rectify, erase,
                 restrict, or object to processing, as well as data portability and the right to
@@ -673,7 +677,7 @@
             </p>
             <p>We respond to verified requests within one month (extendable as permitted).</p>
 
-            <h3>9. California Privacy Disclosures (CPRA/CCPA)</h3>
+            <h3>9. California privacy disclosures (CPRA/CCPA)</h3>
             <ul>
                 <li>
                     <strong>Categories collected</strong>: Identifiers (user ID, username; optional
@@ -691,7 +695,7 @@
                     operational analytics.
                 </li>
                 <li>
-                    <strong>Sale/Sharing</strong>: We <u>do not sell</u> or <u>share</u> personal information
+                    <strong>Sale/sharing</strong>: We <u>do not sell</u> or <u>share</u> personal information
                     (as defined) and do not engage in cross-context behavioral advertising.
                 </li>
                 <li>
@@ -701,7 +705,7 @@
                 </li>
             </ul>
 
-            <h3>10. Children's Privacy</h3>
+            <h3>10. Children's privacy</h3>
             <p>
                 bStats does not knowingly collect personal data from children under the age of 13
                 (or 16 in certain jurisdictions). The service is generally aimed at adult server
@@ -723,7 +727,7 @@
                 >.
             </p>
 
-            <h3>11. Data Protection Officer / EU/UK Representative</h3>
+            <h3>11. Data protection officer / EU/UK representative</h3>
             <ul>
                 <li>
                     We currently do not have a Data Protection Officer (DPO). If your jurisdiction
@@ -750,7 +754,7 @@
                 </li>
             </ul>
 
-            <h3>12. Law Enforcement and Legal Requests</h3>
+            <h3>12. Law enforcement and legal requests</h3>
             <p>
                 We may preserve and disclose information if required by law or where we believe in
                 good faith that it is necessary to comply with legal obligations, respond to lawful
@@ -758,14 +762,14 @@
                 public.
             </p>
 
-            <h3>13. Changes to This Website Privacy Policy</h3>
+            <h3>13. Changes to this website privacy policy</h3>
             <p>
                 We may update this policy as needed—for example, to reflect legal changes or
                 evolving service features. We will post updated texts on our site with a revised
                 "Last updated" date.
             </p>
 
-            <h3>14. How to Contact Us</h3>
+            <h3>14. How to contact us</h3>
             <p>
                 For questions, concerns, or requests related to privacy on bStats.org:
                 <strong class="no-copy"

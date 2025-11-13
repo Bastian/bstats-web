@@ -8,4 +8,4 @@ metrics.addCustomChart(new Metrics.AdvancedPie("player_gamemodes", () -> {
     
     return gamemodeMap;
 }));
-// If you use the Copy & Paste Metrics classes, use `Metrics.AdvancedPie` instead
+// If you use the copy & paste Metrics classes, use `Metrics.AdvancedPie` instead

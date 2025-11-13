@@ -34,7 +34,7 @@
         },
         {
             id: 'server-implementation',
-            label: 'Server Implementation',
+            label: 'Server implementation',
             icon: IconTerminal2,
             description:
                 'Select when not a plugin but a server implementation (e.g., a fork of Paper or other similar projects).'

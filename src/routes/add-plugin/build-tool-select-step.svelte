@@ -8,7 +8,7 @@
     const buildToolOptions = [
         {
             id: 'copy-and-paste',
-            label: 'Copy & Paste',
+            label: 'Copy & paste',
             description: 'Copy the Metrics.java into your project manually.',
             icon: IconCopy
         },

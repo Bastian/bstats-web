@@ -63,7 +63,7 @@
     ];
 </script>
 
-<WizardStep index={5} title="Instantiate Metrics" {status}>
+<WizardStep index={5} title="Instantiate metrics" {status}>
     {#if (status === 'active' || status === 'done') && platform}
         {#if platform === 'bukkit'}
             <div class="space-y-4">
