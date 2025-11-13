@@ -1,6 +1,6 @@
 <script lang="ts" module>
-    import type { Platform } from './PlatformSelectStep.svelte';
-    import type { StepStatus } from './WizardStep.svelte';
+    import type { Platform } from './platform-select-step.svelte';
+    import type { StepStatus } from './wizard-step.svelte';
     import instantiateBukkit from './_instantiate-bukkit.txt?raw';
     import instantiateBungeeCord from './_instantiate-bungeecord.txt?raw';
     import instantiateSponge from './_instantiate-sponge.txt?raw';
@@ -19,10 +19,10 @@
 </script>
 
 <script lang="ts">
-    import WizardStep from './WizardStep.svelte';
-    import Button from '$lib/components/Button.svelte';
-    import CodeBlock from '$lib/components/CodeBlock.svelte';
-    import type { BuildTool } from './BuildToolSelectStep.svelte';
+    import WizardStep from './wizard-step.svelte';
+    import Button from '$lib/components/button.svelte';
+    import CodeBlock from '$lib/components/code-block.svelte';
+    import type { BuildTool } from './build-tool-select-step.svelte';
     import type { ShikiTransformer } from 'shiki';
 
     let {

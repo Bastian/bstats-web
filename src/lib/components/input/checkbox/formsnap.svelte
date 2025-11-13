@@ -1,20 +1,20 @@
 <script lang="ts" generics="T extends Record<string, unknown>, U extends FormPath<T>">
-    import type { FormPath } from 'sveltekit-superforms';
-    import Input from '$lib/components/input/text/Input.svelte';
-    import Root from '$lib/components/input/text/Root.svelte';
+    import Input from '$lib/components/input/checkbox/input.svelte';
+    import Root from '$lib/components/input/checkbox/root.svelte';
     import { Control, Description, Field, FieldErrors, Label, type FieldProps } from 'formsnap';
     import type { HTMLInputAttributes } from 'svelte/elements';
+    import type { FormPath } from 'sveltekit-superforms';
 
     interface Props {
         form: FieldProps<T, U>['form'];
         name: FieldProps<T, U>['name'];
-        value: HTMLInputAttributes['value'];
+        checked: boolean;
         label: string;
         description?: string;
         inputProps?: HTMLInputAttributes;
     }
 
-    let { form, name, value = $bindable(), label, description, inputProps }: Props = $props();
+    let { form, name, checked = $bindable(), label, description, inputProps }: Props = $props();
 </script>
 
 <div class="space-y-1.5">
@@ -22,8 +22,9 @@
         <Root>
             <Control>
                 {#snippet children({ props })}
+                    <!-- eslint-disable-next-line @typescript-eslint/no-explicit-any -->
+                    <Input {...props} bind:checked {...inputProps as any} />
                     <Label>{label}</Label>
-                    <Input {...props} bind:value {...inputProps} />
                 {/snippet}
             </Control>
         </Root>

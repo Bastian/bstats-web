@@ -1,8 +1,8 @@
-import Root from './Root.svelte';
-import List from './List.svelte';
-import Item from './Item.svelte';
-import Trigger from './Trigger.svelte';
-import Content from './Content.svelte';
-import Link from './Link.svelte';
+import Root from './root.svelte';
+import List from './list.svelte';
+import Item from './item.svelte';
+import Trigger from './trigger.svelte';
+import Content from './content.svelte';
+import Link from './link.svelte';
 
 export const NavigationMenu = { Root, List, Item, Trigger, Content, Link };

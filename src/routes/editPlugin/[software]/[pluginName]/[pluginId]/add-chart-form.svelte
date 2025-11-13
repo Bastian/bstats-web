@@ -6,7 +6,7 @@
     import { zod4Client } from 'sveltekit-superforms/adapters';
     import type { PageData } from './$types';
     import { addChartSchema } from './add-chart-schema';
-    import Button from '$lib/components/Button.svelte';
+    import Button from '$lib/components/button.svelte';
 
     let { schema }: { schema: PageData['addChartSchema'] } = $props();
 

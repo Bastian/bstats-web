@@ -1,11 +1,11 @@
 <script lang="ts">
     import { resolve } from '$app/paths';
-    import Button from '$lib/components/Button.svelte';
+    import Button from '$lib/components/button.svelte';
     import IconChevronRight from '@tabler/icons-svelte/icons/chevron-right';
 
     import { onNavigate } from '$app/navigation';
     import { authClient } from '$lib/auth.client';
-    import Header from '$lib/components/layout/Header.svelte';
+    import Header from '$lib/components/layout/header.svelte';
     import type { ComponentProps } from 'svelte';
     import { Dialog } from 'bits-ui';
     import { fade, fly } from 'svelte/transition';

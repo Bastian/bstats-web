@@ -1,11 +1,11 @@
 <script lang="ts">
-    import Badge from '$lib/components/Badge.svelte';
-    import CodeBlock from '$lib/components/CodeBlock.svelte';
-    import PageHero from '$lib/components/PageHero.svelte';
-    import BarChart from '$lib/components/charts/BarChart.svelte';
-    import DrilldownPieChart from '$lib/components/charts/DrilldownPieChart.svelte';
-    import LineChart from '$lib/components/charts/LineChart.svelte';
-    import PieChart from '$lib/components/charts/PieChart.svelte';
+    import Badge from '$lib/components/badge.svelte';
+    import CodeBlock from '$lib/components/code-block.svelte';
+    import PageHero from '$lib/components/page-hero.svelte';
+    import BarChart from '$lib/components/charts/bar-chart.svelte';
+    import DrilldownPieChart from '$lib/components/charts/drilldown-pie-chart.svelte';
+    import LineChart from '$lib/components/charts/line-chart.svelte';
+    import PieChart from '$lib/components/charts/pie-chart.svelte';
     import codeAdvancedBarChart from './advanced-bar.txt?raw';
     import codeAdvancedPie from './advanced-pie.txt?raw';
     import codeDrilldownPie from './drilldown-pie.txt?raw';

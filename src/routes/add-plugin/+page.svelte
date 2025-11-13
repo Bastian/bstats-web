@@ -1,14 +1,14 @@
 <script lang="ts">
     import { resolve } from '$app/paths';
-    import Badge from '$lib/components/Badge.svelte';
-    import PageHero from '$lib/components/PageHero.svelte';
+    import Badge from '$lib/components/badge.svelte';
+    import PageHero from '$lib/components/page-hero.svelte';
     import type { PageProps } from './$types';
-    import BuildToolSelectStep, { type BuildTool } from './BuildToolSelectStep.svelte';
-    import IncludeMetricsStep from './IncludeMetricsStep.svelte';
-    import InstantiateMetricsStep from './InstantiateMetricsStep.svelte';
-    import PlatformSelectStep, { type Platform } from './PlatformSelectStep.svelte';
-    import RegisterPluginStep from './RegisterPluginStep.svelte';
-    import WizardStep from './WizardStep.svelte';
+    import BuildToolSelectStep, { type BuildTool } from './build-tool-select-step.svelte';
+    import IncludeMetricsStep from './include-metrics-step.svelte';
+    import InstantiateMetricsStep from './instantiate-metrics-step.svelte';
+    import PlatformSelectStep, { type Platform } from './platform-select-step.svelte';
+    import RegisterPluginStep from './register-plugin-step.svelte';
+    import WizardStep from './wizard-step.svelte';
     import IconArrowRight from '@tabler/icons-svelte/icons/arrow-right';
 
     let { data, form }: PageProps = $props();

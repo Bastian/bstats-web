@@ -1,9 +1,9 @@
-import Root from './Root.svelte';
-import Header from './Header.svelte';
-import Body from './Body.svelte';
-import Row from './Row.svelte';
-import HeaderCell from './HeaderCell.svelte';
-import Cell from './Cell.svelte';
+import Root from './root.svelte';
+import Header from './header.svelte';
+import Body from './body.svelte';
+import Row from './row.svelte';
+import HeaderCell from './header-cell.svelte';
+import Cell from './cell.svelte';
 
 export const Table = {
     Root,

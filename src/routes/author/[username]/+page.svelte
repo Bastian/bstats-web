@@ -1,8 +1,8 @@
 <script lang="ts">
     import { resolve } from '$app/paths';
-    import Badge from '$lib/components/Badge.svelte';
+    import Badge from '$lib/components/badge.svelte';
     import { TextInput } from '$lib/components/input/text';
-    import PageHero from '$lib/components/PageHero.svelte';
+    import PageHero from '$lib/components/page-hero.svelte';
     import { Table } from '$lib/components/table';
     import type { PageData } from './$types';
 

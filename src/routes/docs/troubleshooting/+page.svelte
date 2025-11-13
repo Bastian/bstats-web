@@ -1,7 +1,7 @@
 <script>
-    import Badge from '$lib/components/Badge.svelte';
-    import Button from '$lib/components/Button.svelte';
-    import PageHero from '$lib/components/PageHero.svelte';
+    import Badge from '$lib/components/badge.svelte';
+    import Button from '$lib/components/button.svelte';
+    import PageHero from '$lib/components/page-hero.svelte';
     import { Accordion } from '$lib/components/accordion';
     import IconArrowRight from '@tabler/icons-svelte/icons/arrow-right';
 </script>

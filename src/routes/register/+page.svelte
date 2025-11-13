@@ -1,11 +1,11 @@
 <script lang="ts">
     import { resolve } from '$app/paths';
-    import Badge from '$lib/components/Badge.svelte';
-    import Button from '$lib/components/Button.svelte';
+    import Badge from '$lib/components/badge.svelte';
+    import Button from '$lib/components/button.svelte';
     import { Checkbox } from '$lib/components/input/checkbox';
-    import PageHero from '$lib/components/PageHero.svelte';
+    import PageHero from '$lib/components/page-hero.svelte';
     import { env } from '$env/dynamic/public';
-    import HCaptcha from '$lib/components/HCaptcha.svelte';
+    import HCaptcha from '$lib/components/h-captcha.svelte';
     import { authClient } from '$lib/auth.client';
     import { TextInput } from '$lib/components/input/text';
 

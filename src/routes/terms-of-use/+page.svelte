@@ -1,7 +1,7 @@
 <script>
     import { resolve } from '$app/paths';
-    import Badge from '$lib/components/Badge.svelte';
-    import PageHero from '$lib/components/PageHero.svelte';
+    import Badge from '$lib/components/badge.svelte';
+    import PageHero from '$lib/components/page-hero.svelte';
 </script>
 
 <svelte:head>

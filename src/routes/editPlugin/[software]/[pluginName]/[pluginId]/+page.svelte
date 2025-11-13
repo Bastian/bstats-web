@@ -1,9 +1,9 @@
 <script lang="ts">
     import { resolve } from '$app/paths';
-    import Badge from '$lib/components/Badge.svelte';
-    import Button from '$lib/components/Button.svelte';
+    import Badge from '$lib/components/badge.svelte';
+    import Button from '$lib/components/button.svelte';
 
-    import PageHero from '$lib/components/PageHero.svelte';
+    import PageHero from '$lib/components/page-hero.svelte';
     import type { PageData } from './$types';
     import AddChartForm from './add-chart-form.svelte';
     import DeletePluginForm from './delete-plugin-form.svelte';

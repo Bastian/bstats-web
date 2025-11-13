@@ -1,7 +1,7 @@
 <script lang="ts" module>
-    import type { Platform } from './PlatformSelectStep.svelte';
-    import type { BuildTool } from './BuildToolSelectStep.svelte';
-    import type { StepStatus } from './WizardStep.svelte';
+    import type { Platform } from './platform-select-step.svelte';
+    import type { BuildTool } from './build-tool-select-step.svelte';
+    import type { StepStatus } from './wizard-step.svelte';
     import mavenDependency from './_maven-dependency.xml?raw';
     import mavenShade from './_maven-shade.xml?raw';
     import mavenFull from './_maven-full.xml?raw';
@@ -22,9 +22,9 @@
 </script>
 
 <script lang="ts">
-    import WizardStep from './WizardStep.svelte';
-    import Button from '$lib/components/Button.svelte';
-    import CodeBlock from '$lib/components/CodeBlock.svelte';
+    import WizardStep from './wizard-step.svelte';
+    import Button from '$lib/components/button.svelte';
+    import CodeBlock from '$lib/components/code-block.svelte';
     import { Collapsible } from 'bits-ui';
 
     let {

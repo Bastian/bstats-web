@@ -1,5 +1,5 @@
 <script lang="ts">
-    import Badge from '$lib/components/Badge.svelte';
+    import Badge from '$lib/components/badge.svelte';
     import { resolve } from '$app/paths';
 
     let { loggedIn = false } = $props<{

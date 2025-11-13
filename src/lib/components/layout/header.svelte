@@ -1,8 +1,8 @@
 <script lang="ts">
     import { resolve } from '$app/paths';
 
-    import DesktopNavigation from '$lib/components/layout/DesktopNavigation.svelte';
-    import MobileNavigation from '$lib/components/layout/MobileNavigation.svelte';
+    import DesktopNavigation from '$lib/components/layout/desktop-navigation.svelte';
+    import MobileNavigation from '$lib/components/layout/mobile-navigation.svelte';
     import type { Software } from '$lib/server/redis/software';
 
     type Plugin = {

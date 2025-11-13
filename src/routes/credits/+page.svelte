@@ -1,6 +1,6 @@
 <script lang="ts">
-    import Badge from '$lib/components/Badge.svelte';
-    import PageHero from '$lib/components/PageHero.svelte';
+    import Badge from '$lib/components/badge.svelte';
+    import PageHero from '$lib/components/page-hero.svelte';
     import IconExternalLink from '@tabler/icons-svelte/icons/external-link';
 </script>
 

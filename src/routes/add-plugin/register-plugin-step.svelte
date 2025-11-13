@@ -1,6 +1,6 @@
 <script lang="ts" module>
     import type { Session } from 'better-auth';
-    import type { Platform } from './PlatformSelectStep.svelte';
+    import type { Platform } from './platform-select-step.svelte';
 
     export type RegisterPluginStepProps = {
         session: Session | null;
@@ -12,8 +12,8 @@
 </script>
 
 <script lang="ts">
-    import Button from '$lib/components/Button.svelte';
-    import WizardStep, { type StepStatus } from './WizardStep.svelte';
+    import Button from '$lib/components/button.svelte';
+    import WizardStep, { type StepStatus } from './wizard-step.svelte';
     import { resolve } from '$app/paths';
     import { enhance } from '$app/forms';
     import type { ActionData } from './$types';

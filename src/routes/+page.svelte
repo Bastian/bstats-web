@@ -1,7 +1,7 @@
 <script lang="ts">
     import { resolve } from '$app/paths';
-    import Badge from '$lib/components/Badge.svelte';
-    import Button from '$lib/components/Button.svelte';
+    import Badge from '$lib/components/badge.svelte';
+    import Button from '$lib/components/button.svelte';
     import type { Snippet } from 'svelte';
     import type { PageData } from './$types';
     import IconArrowRight from '@tabler/icons-svelte/icons/arrow-right';

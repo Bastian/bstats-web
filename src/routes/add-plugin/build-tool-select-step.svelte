@@ -28,8 +28,8 @@
 </script>
 
 <script lang="ts">
-    import OptionCard from './OptionCard.svelte';
-    import WizardStep, { type StepStatus } from './WizardStep.svelte';
+    import OptionCard from './option-card.svelte';
+    import WizardStep, { type StepStatus } from './wizard-step.svelte';
 
     let {
         selectedBuildTool = $bindable(),

@@ -1,9 +1,9 @@
 <script lang="ts">
     import { page } from '$app/stores';
     import { resolve } from '$app/paths';
-    import Badge from '$lib/components/Badge.svelte';
-    import Button from '$lib/components/Button.svelte';
-    import PageHero from '$lib/components/PageHero.svelte';
+    import Badge from '$lib/components/badge.svelte';
+    import Button from '$lib/components/button.svelte';
+    import PageHero from '$lib/components/page-hero.svelte';
 
     // Access error from page store
     let errorStatus = $derived($page.status);

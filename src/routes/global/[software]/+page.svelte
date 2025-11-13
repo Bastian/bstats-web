@@ -1,12 +1,12 @@
 <script lang="ts">
-    import Badge from '$lib/components/Badge.svelte';
-    import PageHero from '$lib/components/PageHero.svelte';
-    import ChartCard from '$lib/components/charts/ChartCard.svelte';
-    import PieChart from '$lib/components/charts/PieChart.svelte';
-    import DrilldownPieChart from '$lib/components/charts/DrilldownPieChart.svelte';
-    import LineChart from '$lib/components/charts/LineChart.svelte';
-    import BarChart from '$lib/components/charts/BarChart.svelte';
-    import MapChart from '$lib/components/charts/MapChart.svelte';
+    import Badge from '$lib/components/badge.svelte';
+    import PageHero from '$lib/components/page-hero.svelte';
+    import ChartCard from '$lib/components/charts/chart-card.svelte';
+    import PieChart from '$lib/components/charts/pie-chart.svelte';
+    import DrilldownPieChart from '$lib/components/charts/drilldown-pie-chart.svelte';
+    import LineChart from '$lib/components/charts/line-chart.svelte';
+    import BarChart from '$lib/components/charts/bar-chart.svelte';
+    import MapChart from '$lib/components/charts/map-chart.svelte';
     import { fetchCharts, fetchChartData } from '$lib/charts/chart-data';
     import type {
         LineChartData,
@@ -21,7 +21,7 @@
     import { onMount } from 'svelte';
     import IconServer from '@tabler/icons-svelte/icons/server';
     import IconUsers from '@tabler/icons-svelte/icons/users';
-    import ChartBadge from '$lib/components/ChartBadge.svelte';
+    import ChartBadge from '$lib/components/chart-badge.svelte';
 
     let { data }: { data: PageData } = $props();
 

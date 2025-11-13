@@ -1,5 +1,5 @@
-import Root from './Root.svelte';
-import Item from './Item.svelte';
+import Root from './root.svelte';
+import Item from './item.svelte';
 
 export const Accordion = {
     Root,

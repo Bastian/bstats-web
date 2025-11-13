@@ -1,8 +1,8 @@
 <script lang="ts">
     import { resolve } from '$app/paths';
-    import Badge from '$lib/components/Badge.svelte';
-    import Button from '$lib/components/Button.svelte';
-    import PageHero from '$lib/components/PageHero.svelte';
+    import Badge from '$lib/components/badge.svelte';
+    import Button from '$lib/components/button.svelte';
+    import PageHero from '$lib/components/page-hero.svelte';
     import IconArrowRight from '@tabler/icons-svelte/icons/arrow-right';
 </script>
 

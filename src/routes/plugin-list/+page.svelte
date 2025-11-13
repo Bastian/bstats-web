@@ -1,9 +1,9 @@
 <script lang="ts">
     import { resolve } from '$app/paths';
-    import Badge from '$lib/components/Badge.svelte';
-    import PageHero from '$lib/components/PageHero.svelte';
+    import Badge from '$lib/components/badge.svelte';
+    import PageHero from '$lib/components/page-hero.svelte';
     import { Table } from '$lib/components/table';
-    import Pagination from '$lib/components/Pagination.svelte';
+    import Pagination from '$lib/components/pagination.svelte';
     import { onMount } from 'svelte';
     import { TextInput } from '$lib/components/input/text';
 

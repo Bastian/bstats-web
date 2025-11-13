@@ -1,7 +1,7 @@
 <script>
-    import Badge from '$lib/components/Badge.svelte';
-    import PageHero from '$lib/components/PageHero.svelte';
-    import CodeBlock from '$lib/components/CodeBlock.svelte';
+    import Badge from '$lib/components/badge.svelte';
+    import PageHero from '$lib/components/page-hero.svelte';
+    import CodeBlock from '$lib/components/code-block.svelte';
 </script>
 
 <svelte:head>

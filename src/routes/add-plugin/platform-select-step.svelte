@@ -43,9 +43,9 @@
 </script>
 
 <script lang="ts">
-    import OptionCard from './OptionCard.svelte';
+    import OptionCard from './option-card.svelte';
 
-    import WizardStep from './WizardStep.svelte';
+    import WizardStep from './wizard-step.svelte';
     import IconTerminal2 from '@tabler/icons-svelte/icons/terminal-2';
 
     let {

@@ -1,10 +1,10 @@
 <script lang="ts">
     import { resolve } from '$app/paths';
-    import Header from '$lib/components/layout/Header.svelte';
+    import Header from '$lib/components/layout/header.svelte';
     import { NavigationMenu } from '$lib/components/navigation-menu';
     import type { ComponentProps } from 'svelte';
     import IconChevronDown from '@tabler/icons-svelte/icons/chevron-down';
-    import Button from '$lib/components/Button.svelte';
+    import Button from '$lib/components/button.svelte';
     import { authClient } from '$lib/auth.client';
 
     interface Props {

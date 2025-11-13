@@ -1,9 +1,9 @@
 <script lang="ts">
     import { onMount } from 'svelte';
-    import Badge from '$lib/components/Badge.svelte';
-    import Button from '$lib/components/Button.svelte';
-    import PageHero from '$lib/components/PageHero.svelte';
-    import Pagination from '$lib/components/Pagination.svelte';
+    import Badge from '$lib/components/badge.svelte';
+    import Button from '$lib/components/button.svelte';
+    import PageHero from '$lib/components/page-hero.svelte';
+    import Pagination from '$lib/components/pagination.svelte';
     import { Table } from '$lib/components/table';
     import { authClient } from '$lib/auth.client.js';
     import type { PageData } from './$types';
