@@ -200,7 +200,7 @@
                 {#if data.isOwner && data.plugin && data.software}
                     <a
                         href={resolve(
-                            `/editPlugin/${data.software.url}/${data.plugin.name}/${data.plugin.id}`
+                            `/edit-plugin/${data.software.url}/${data.plugin.name}/${data.plugin.id}`
                         )}
                         class="inline-flex items-center justify-center gap-2 rounded-full border border-slate-300 bg-white px-3 py-2 text-sm font-semibold text-slate-600 transition hover:border-brand-300 hover:text-brand-700"
                     >

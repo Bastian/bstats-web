@@ -46,7 +46,7 @@ export const load: PageServerLoad = async ({ params, locals }) => {
 
     // Redirect if plugin name doesn't match
     if (plugin.name !== pluginName) {
-        throw redirect(303, `/editPlugin/${softwareUrl}/${plugin.name}/${pluginId}`);
+        throw redirect(303, `/edit-plugin/${softwareUrl}/${plugin.name}/${pluginId}`);
     }
 
     // Check ownership
