@@ -16,6 +16,10 @@
     let chartContainer: HTMLDivElement;
     let chartInstance: echarts.ECharts | null = null;
 
+    const DEFAULT_ZOOM = '1m';
+
+    let zoom = $state<string | null>(DEFAULT_ZOOM);
+
     onMount(() => {
         const handleResize = () => {
             if (chartInstance) {
@@ -28,6 +32,22 @@
         // Initialize chart
         chartInstance = echarts.init(chartContainer);
         updateChart(accessibilityPreferences.current.showChartPatterns);
+        setTimeRange(DEFAULT_ZOOM);
+
+        chartInstance.on('dataZoom', () => {
+            const option = chartInstance?.getOption();
+            const dataZoom = option?.dataZoom as echarts.DataZoomComponentOption[];
+            if (dataZoom && dataZoom.length > 0 && data) {
+                const start = dataZoom[0].start ?? 0;
+                const end = dataZoom[0].end ?? 100;
+
+                // Detect which preset range this corresponds to
+                const detectedRange = detectZoomRange(data, start, end);
+                zoom = detectedRange;
+            } else {
+                zoom = null;
+            }
+        });
 
         return () => {
             window.removeEventListener('resize', handleResize);
@@ -45,84 +65,147 @@
     $effect(() => {
         if (chartInstance && data) {
             updateChart(accessibilityPreferences.current.showChartPatterns);
+            setTimeRange(DEFAULT_ZOOM);
         }
     });
+
+    function detectZoomRange(
+        data: [number, number][],
+        startPercent: number,
+        endPercent: number
+    ): string | null {
+        if (!data || data.length === 0) {
+            return null;
+        }
+
+        if (startPercent <= 2.5 && endPercent >= 97.5) {
+            return 'all';
+        }
+
+        const displayedRange = endPercent - startPercent;
+
+        for (const preset of ['1d', '1w', '1m', '3m', '1y']) {
+            const rangeMs = getRangeMilliseconds(preset);
+            if (rangeMs === null) continue;
+
+            // Get the expected range percentage for this preset
+            const expected = calculateZoomPercentages(data, rangeMs);
+            const expectedRange = expected.end - expected.start;
+
+            // Calculate relative difference (as a percentage of the expected range)
+            // E.g., if expected is 10% and displayed is 11%, that's a 10% relative difference
+            const relativeDiff = Math.abs(expectedRange - displayedRange) / expectedRange;
+
+            // Allow 10% relative tolerance
+            const tolerance = 0.1;
+
+            if (relativeDiff <= tolerance) {
+                return preset;
+            }
+        }
+
+        return null;
+    }
+
+    function calculateZoomPercentages(
+        data: [number, number][],
+        rangeMs: number | null
+    ): { start: number; end: number } {
+        if (!data || data.length === 0) {
+            return { start: 0, end: 100 };
+        }
+
+        const firstDate = data[0][0];
+        const lastDate = data[data.length - 1][0];
+        const dataStart = Math.min(firstDate, lastDate);
+        const dataEnd = Math.max(firstDate, lastDate);
+        const totalRange = dataEnd - dataStart;
+
+        if (rangeMs === null || totalRange === 0) {
+            return { start: 0, end: 100 };
+        }
+
+        // If we have less data than the requested range, show all data
+        if (rangeMs >= totalRange) {
+            return { start: 0, end: 100 };
+        }
+
+        // Calculate how much of the data to show (from the end)
+        const percentageToShow = (rangeMs / totalRange) * 100;
+        return {
+            start: Math.max(0, 100 - percentageToShow),
+            end: 100
+        };
+    }
+
+    function getRangeMilliseconds(range: string): number | null {
+        switch (range) {
+            case '1d':
+                return 1 * 24 * 60 * 60 * 1000;
+            case '1w':
+                return 7 * 24 * 60 * 60 * 1000;
+            case '1m':
+                return 30 * 24 * 60 * 60 * 1000;
+            case '3m':
+                return 90 * 24 * 60 * 60 * 1000;
+            case '1y':
+                return 365 * 24 * 60 * 60 * 1000;
+            case 'all':
+                return null;
+            default:
+                return null;
+        }
+    }
 
     function setTimeRange(range: string) {
         if (!chartInstance || !data) return;
 
-        const firstDate = data.length > 0 ? data[0][0] : Date.now();
-        const lastDate = data.length > 0 ? data[data.length - 1][0] : Date.now();
+        // Get current zoom state
+        const option = chartInstance.getOption();
+        const currentDataZoom = option?.dataZoom as echarts.DataZoomComponentOption[];
+        let currentEnd = 100;
 
-        // Data might be in reverse order, so find actual min/max
-        const dataStart = Math.min(firstDate, lastDate);
-        const dataEnd = Math.max(firstDate, lastDate);
-        let start = dataStart;
-
-        switch (range) {
-            case '1d':
-                start = Math.max(dataStart, dataEnd - 1 * 24 * 60 * 60 * 1000);
-                break;
-            case '1w':
-                start = Math.max(dataStart, dataEnd - 7 * 24 * 60 * 60 * 1000);
-                break;
-            case '1m':
-                start = Math.max(dataStart, dataEnd - 30 * 24 * 60 * 60 * 1000);
-                break;
-            case '3m':
-                start = Math.max(dataStart, dataEnd - 90 * 24 * 60 * 60 * 1000);
-                break;
-            case '1y':
-                start = Math.max(dataStart, dataEnd - 365 * 24 * 60 * 60 * 1000);
-                break;
-            case 'all':
-                start = dataStart;
-                break;
+        if (currentDataZoom && currentDataZoom.length > 0) {
+            currentEnd = currentDataZoom[0].end ?? 100;
         }
 
-        const startPercent =
-            dataEnd - dataStart > 0 ? ((start - dataStart) / (dataEnd - dataStart)) * 100 : 0;
+        // Get the new range size
+        const rangeMs = getRangeMilliseconds(range);
+        const expectedPercentages = calculateZoomPercentages(data, rangeMs);
+        const newRangeSize = expectedPercentages.end - expectedPercentages.start;
 
-        // Update dataZoom using setOption
+        // Try to preserve the right edge position
+        let newEnd = currentEnd;
+        let newStart = newEnd - newRangeSize;
+
+        if (newStart < 0) {
+            // Hit left edge, have to grow to the right
+            newStart = 0;
+            newEnd = Math.min(100, newRangeSize);
+        }
+
         chartInstance.setOption({
             dataZoom: [
                 {
-                    start: Math.max(0, startPercent),
-                    end: 100
+                    start: newStart,
+                    end: newEnd
                 },
                 {
-                    start: Math.max(0, startPercent),
-                    end: 100
+                    start: newStart,
+                    end: newEnd
                 }
             ]
         });
-    }
 
-    function resetZoom() {
-        if (!chartInstance) return;
-        chartInstance.dispatchAction({
-            type: 'dataZoom',
-            start: 0,
-            end: 100
-        });
+        zoom = range;
     }
 
     function updateChart(showPatterns: boolean) {
-        if (!chartInstance || !data) return;
+        if (!chartInstance || !data) {
+            return;
+        }
 
         const theme = getEChartsTheme();
-
-        // Calculate default zoom to show last month
-        const now = Date.now();
-        const oneMonthAgo = now - 30 * 24 * 60 * 60 * 1000;
-        const dataStart = data.length > 0 ? data[0][0] : now;
-        const dataEnd = data.length > 0 ? data[data.length - 1][0] : now;
-
-        // Calculate start percentage for dataZoom (default to last month)
-        let startPercent = 0;
-        if (dataEnd - dataStart > 0) {
-            startPercent = Math.max(0, ((oneMonthAgo - dataStart) / (dataEnd - dataStart)) * 100);
-        }
 
         // Build a descriptive summary for screen readers
         let description: string;
@@ -217,7 +300,7 @@
             dataZoom: [
                 {
                     type: 'slider',
-                    start: startPercent,
+                    start: 0,
                     end: 100,
                     height: 30,
                     bottom: 40,
@@ -238,7 +321,7 @@
                 },
                 {
                     type: 'inside',
-                    start: startPercent,
+                    start: 0,
                     end: 100
                 }
             ],
@@ -278,6 +361,9 @@
         {...props}
         class={[
             'rounded border border-slate-200 bg-white px-2 py-1 text-xs font-medium text-slate-600 transition hover:border-brand-300 hover:bg-brand-50 hover:text-brand-700 focus-visible:ring-2 focus-visible:ring-brand-500 focus-visible:outline-none',
+            {
+                'bg-brand-50! font-medium! text-brand-700!': zoom === label
+            },
             props?.class
         ]}
     >
@@ -286,14 +372,13 @@
 {/snippet}
 
 <div class="p-1 sm:p-2">
-    <div class="relative mb-2 flex justify-center gap-1">
+    <div class="mb-2 flex flex-wrap justify-center gap-1">
         {@render ChartButton('1d', { onclick: () => setTimeRange('1d') })}
         {@render ChartButton('1w', { onclick: () => setTimeRange('1w') })}
         {@render ChartButton('1m', { onclick: () => setTimeRange('1m') })}
         {@render ChartButton('3m', { onclick: () => setTimeRange('3m') })}
         {@render ChartButton('1y', { onclick: () => setTimeRange('1y') })}
         {@render ChartButton('All', { onclick: () => setTimeRange('all') })}
-        {@render ChartButton('Reset', { onclick: resetZoom, class: 'absolute right-0' })}
     </div>
-    <div bind:this={chartContainer} class="-mx-4 -mb-8 h-96 w-[calc(100%+2rem)]"></div>
+    <div bind:this={chartContainer} class="-mb-8 h-96 w-full sm:-mx-4 sm:w-[calc(100%+2rem)]"></div>
 </div>
