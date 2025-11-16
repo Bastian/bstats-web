@@ -3,6 +3,10 @@
     import Badge from '$lib/components/badge.svelte';
     import PageHero from '$lib/components/page-hero.svelte';
     import { Accordion } from '$lib/components/accordion';
+    import UsersGroup from '@tabler/icons-svelte/icons/users-group';
+    import IconBattery4 from '@tabler/icons-svelte/icons/battery-4';
+    import IconFreeRights from '@tabler/icons-svelte/icons/free-rights';
+    import IconLabelImportant from '@tabler/icons-svelte/icons/label-important';
 </script>
 
 <svelte:head>
@@ -24,20 +28,6 @@
     </PageHero>
 
     <section class="doc-container mt-12 space-y-10">
-        <article class="doc-card space-y-4">
-            <h2 class="doc-card-title">What is bStats?</h2>
-            <p class="max-w-prose text-sm leading-relaxed text-slate-600">
-                bStats is a free metrics service for Minecraft server plugins. When plugin authors
-                integrate bStats into their plugins, they can see how many servers use their work,
-                which Minecraft versions are popular, and how their plugins are configured.
-            </p>
-            <p class="max-w-prose text-sm leading-relaxed text-slate-600">
-                As a server owner, your server automatically shares basic usage statistics with
-                plugin authors when you install plugins that use bStats. This happens in the
-                background and doesn't affect your server's performance.
-            </p>
-        </article>
-
         <article class="doc-callout doc-callout-info">
             <div class="flex items-start gap-3">
                 <svg
@@ -75,10 +65,26 @@
         </article>
 
         <article class="doc-card space-y-4">
+            <h2 class="doc-card-title">What is bStats?</h2>
+            <p class="max-w-prose text-sm leading-relaxed text-slate-600">
+                bStats is a free metrics service for Minecraft server plugins. When plugin authors
+                integrate bStats into their plugins, they can see how many servers use their work,
+                which Minecraft versions are popular, and how their plugins are configured.
+            </p>
+            <p class="max-w-prose text-sm leading-relaxed text-slate-600">
+                As a server owner, your server automatically shares basic usage statistics with
+                plugin authors when you install plugins that use bStats. This happens in the
+                background and doesn't affect your server's performance. The data collected is
+                anonymous and not linked to your individual server.
+            </p>
+        </article>
+
+        <article class="doc-card space-y-4">
             <h2 class="doc-card-title">What data is collected?</h2>
             <p class="max-w-prose text-sm leading-relaxed text-slate-600">
-                bStats collects only non-personal, aggregate metrics. We never collect player names,
-                chat logs, world data, or any personally identifiable information.
+                bStats collects only non-personal data and shows them as aggregated metrics. We
+                never collect player names, chat logs, world data, or any personally identifiable
+                information.
             </p>
             <div class="mt-4 space-y-3">
                 <div class="rounded-2xl border border-slate-200 bg-slate-50 p-4 sm:p-5">
@@ -102,7 +108,7 @@
                         </li>
                         <li class="flex gap-2">
                             <span class="text-brand-600">•</span>
-                            <span>Server location (country only, from IP geolocation)</span>
+                            <span>Server location (country only)</span>
                         </li>
                     </ul>
                 </div>
@@ -130,42 +136,18 @@
             <div class="mt-4 grid gap-4 md:grid-cols-2">
                 <div class="rounded-2xl border border-slate-200 bg-slate-50 p-4 sm:p-5">
                     <h3 class="flex items-center gap-2 text-sm font-semibold text-slate-700">
-                        <svg
-                            class="h-5 w-5 text-brand-600"
-                            fill="none"
-                            viewBox="0 0 24 24"
-                            stroke="currentColor"
-                        >
-                            <path
-                                stroke-linecap="round"
-                                stroke-linejoin="round"
-                                stroke-width="2"
-                                d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
-                            />
-                        </svg>
-                        Motivates developers
+                        <UsersGroup size={24} class="text-brand-600" />
+                        Supports the community
                     </h3>
                     <p class="mt-2 max-w-prose text-sm text-slate-600">
-                        Seeing real usage statistics encourages plugin authors to continue
-                        maintaining and improving their plugins. It's incredibly motivating to see
-                        thousands of servers using your work.
+                        Many plugin authors maintain their plugins for free. Metrics provide a
+                        tangible way to show appreciation and validate the time they invest in the
+                        community.
                     </p>
                 </div>
                 <div class="rounded-2xl border border-slate-200 bg-slate-50 p-4 sm:p-5">
                     <h3 class="flex items-center gap-2 text-sm font-semibold text-slate-700">
-                        <svg
-                            class="h-5 w-5 text-brand-600"
-                            fill="none"
-                            viewBox="0 0 24 24"
-                            stroke="currentColor"
-                        >
-                            <path
-                                stroke-linecap="round"
-                                stroke-linejoin="round"
-                                stroke-width="2"
-                                d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"
-                            />
-                        </svg>
+                        <IconLabelImportant size={24} class="text-brand-600" />
                         Guides development priorities
                     </h3>
                     <p class="mt-2 max-w-prose text-sm text-slate-600">
@@ -176,47 +158,24 @@
                 </div>
                 <div class="rounded-2xl border border-slate-200 bg-slate-50 p-4 sm:p-5">
                     <h3 class="flex items-center gap-2 text-sm font-semibold text-slate-700">
-                        <svg
-                            class="h-5 w-5 text-brand-600"
-                            fill="none"
-                            viewBox="0 0 24 24"
-                            stroke="currentColor"
-                        >
-                            <path
-                                stroke-linecap="round"
-                                stroke-linejoin="round"
-                                stroke-width="2"
-                                d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
-                            />
-                        </svg>
-                        Identifies compatibility issues
+                        <IconFreeRights size={24} class="text-brand-600" />
+                        Privacy-first and community-run
                     </h3>
                     <p class="mt-2 max-w-prose text-sm text-slate-600">
-                        By seeing which server versions and configurations are common, developers
-                        can test and fix bugs more effectively, improving stability for your server.
+                        bStats is open source and run by volunteers, not a company. It collects only
+                        minimal, anonymous data, and the code is public so you can verify exactly
+                        what's shared.
                     </p>
                 </div>
                 <div class="rounded-2xl border border-slate-200 bg-slate-50 p-4 sm:p-5">
                     <h3 class="flex items-center gap-2 text-sm font-semibold text-slate-700">
-                        <svg
-                            class="h-5 w-5 text-brand-600"
-                            fill="none"
-                            viewBox="0 0 24 24"
-                            stroke="currentColor"
-                        >
-                            <path
-                                stroke-linecap="round"
-                                stroke-linejoin="round"
-                                stroke-width="2"
-                                d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"
-                            />
-                        </svg>
-                        Supports the community
+                        <IconBattery4 size={24} class="text-brand-600" />
+                        Motivates developers
                     </h3>
                     <p class="mt-2 max-w-prose text-sm text-slate-600">
-                        Many plugin authors maintain their plugins for free. Metrics provide a
-                        tangible way to show appreciation and validate the time they invest in the
-                        community.
+                        Seeing real usage statistics encourages plugin authors to continue
+                        maintaining and improving their plugins. It's incredibly motivating to see
+                        other people actually using your work.
                     </p>
                 </div>
             </div>
@@ -234,20 +193,23 @@
                         Step 1: Locate the config file
                     </h3>
                     <p class="mt-2 max-w-prose text-sm text-slate-600">
-                        Navigate to your server directory and find the bStats configuration file at:
+                        Navigate to your server directory and find the bStats configuration file
+                        usually at:
                     </p>
                     <code
                         class="mt-2 block rounded-lg bg-slate-900 px-4 py-3 font-mono text-sm text-slate-100"
                     >
                         /plugins/bStats/config.yml
                     </code>
+                    <span class="text-xs text-slate-500">
+                        Location might differ depending on server platform.
+                    </span>
                 </div>
                 <div class="rounded-2xl border border-slate-200 bg-slate-50 p-4 sm:p-5">
                     <h3 class="text-sm font-semibold text-slate-700">Step 2: Edit the config</h3>
                     <p class="mt-2 max-w-prose text-sm text-slate-600">
-                        Open the file with any text editor and change <code
-                            class="font-mono text-slate-700">enabled</code
-                        >
+                        Open the file with any text editor and change
+                        <code class="font-mono text-slate-700">enabled</code>
                         to <code class="font-mono text-slate-700">false</code>:
                     </p>
                     <pre
@@ -294,9 +256,8 @@
                 </Accordion.Item>
 
                 <Accordion.Item title="Who can see my server's data?" contentClass="max-w-prose">
-                    No one can identify your specific server. All data is aggregated across
-                    thousands of servers and displayed as charts showing overall trends. Individual
-                    server data points are never exposed.
+                    No one can identify your specific server. All data is aggregated and displayed
+                    as charts showing overall trends.
                 </Accordion.Item>
 
                 <Accordion.Item
