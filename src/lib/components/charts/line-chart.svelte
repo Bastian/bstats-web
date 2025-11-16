@@ -15,13 +15,17 @@
 
     let chartContainer: HTMLDivElement;
     let chartInstance: echarts.ECharts | null = null;
+    let isMobile = $state(false);
 
     const DEFAULT_ZOOM = '1m';
 
     let zoom = $state<string | null>(DEFAULT_ZOOM);
 
     onMount(() => {
+        isMobile = window.innerWidth <= 600;
+
         const handleResize = () => {
+            isMobile = window.innerWidth <= 600;
             if (chartInstance) {
                 chartInstance.resize();
             }
@@ -290,7 +294,10 @@
                 splitLine: theme.yAxis?.splitLine,
                 nameTextStyle: theme.yAxis?.nameTextStyle,
                 axisLabel: {
-                    color: theme.yAxis?.axisLabel?.color,
+                    inside: isMobile ? true : false,
+                    // On mobile, use a darker color for better contrast because
+                    // the labels are inside the chart area
+                    color: isMobile ? '#222222' : theme.yAxis?.axisLabel?.color,
                     fontSize: theme.yAxis?.axisLabel?.fontSize,
                     formatter: (value: number) => {
                         return value % 1 === 0 ? value.toString() : '';
