@@ -35,14 +35,7 @@
     let charts = $state<ChartMetadata[]>([]);
     let chartDataMap = $state<Record<number, ChartData>>({});
 
-    onMount(() => {
-        // Load flag CSS for maps
-        const link = document.createElement('link');
-        link.rel = 'stylesheet';
-        link.href = 'https://cloud.github.com/downloads/lafeber/world-flags-sprite/flags32.css';
-        document.head.appendChild(link);
-
-        // Fetch and initialize charts
+    $effect(() => {
         initializeCharts();
     });
 
