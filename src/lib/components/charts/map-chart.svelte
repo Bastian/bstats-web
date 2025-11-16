@@ -208,7 +208,7 @@
 </script>
 
 <div class="p-1 sm:p-2">
-    <div class="relative -m-4 h-[30rem] w-[calc(100%+2rem)]">
+    <div class="relative -m-4 h-80 w-[calc(100%+2rem)] sm:h-[30rem]">
         <button
             onclick={resetMap}
             class="absolute top-4 right-4 z-10 rounded border border-slate-200 bg-white px-2 py-1 text-xs font-medium text-slate-600 shadow-sm transition hover:border-brand-300 hover:bg-brand-50 hover:text-brand-700"

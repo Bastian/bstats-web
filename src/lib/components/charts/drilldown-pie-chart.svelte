@@ -171,7 +171,8 @@
             series: [
                 {
                     type: 'pie',
-                    radius: '65%',
+                    radius: isMobile ? '60%' : '65%',
+                    top: isMobile ? '-20%' : undefined,
                     data: chartData,
                     emphasis: {
                         itemStyle: {
@@ -209,17 +210,17 @@
     }
 </script>
 
-<div class="relative h-72 w-full">
+<div class="relative -mx-[1rem] h-80 w-[calc(100%+2rem)] sm:h-72">
     <div bind:this={chartContainer} class="h-full w-full"></div>
     {#if currentDrilldown}
         <button
             onclick={goBack}
-            class="absolute top-2 left-2 rounded-lg border border-slate-200 bg-white px-3 py-1.5 text-sm font-semibold text-slate-600 shadow-sm transition hover:border-brand-300 hover:text-brand-700"
+            class="absolute top-2 left-6 rounded-lg border border-slate-200 bg-white px-3 py-1.5 text-sm font-semibold text-slate-600 shadow-sm transition hover:border-brand-300 hover:text-brand-700"
         >
             ← Back
         </button>
     {:else}
-        <div class="absolute top-2 right-0 left-0 text-center text-sm text-slate-500">
+        <div class="absolute top-0 right-0 left-0 text-center text-xs text-slate-500 sm:text-sm">
             Click the slices to view details
         </div>
     {/if}

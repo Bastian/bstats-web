@@ -115,7 +115,8 @@
             series: [
                 {
                     type: 'pie',
-                    radius: '65%',
+                    radius: isMobile ? '60%' : '65%',
+                    top: isMobile ? '-20%' : undefined,
                     data: sortedData.map((item) => ({
                         name: item.name,
                         value: item.y
@@ -151,4 +152,4 @@
     }
 </script>
 
-<div bind:this={chartContainer} class="-mx-[1rem] h-72 w-[calc(100%+2rem)]"></div>
+<div bind:this={chartContainer} class="-mx-[1rem] h-80 w-[calc(100%+2rem)] sm:h-72"></div>

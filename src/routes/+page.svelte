@@ -43,7 +43,7 @@
             class="absolute right-[-6rem] bottom-[-6rem] h-64 w-64 rounded-full bg-sky-200/50 blur-3xl"
         ></div>
         <div
-            class="relative mx-auto flex max-w-6xl flex-col gap-16 px-4 py-24 sm:px-6 lg:flex-row lg:items-center lg:py-28"
+            class="relative mx-auto flex max-w-6xl flex-col gap-16 px-4 py-16 sm:px-6 sm:py-24 lg:flex-row lg:items-center lg:py-28"
         >
             <div class="max-w-2xl">
                 <h1
@@ -57,12 +57,12 @@
                     privacy, and integrates in minutes.
                 </p>
                 <div class="mt-10 flex flex-wrap gap-4">
-                    <Button href={resolve('/add-plugin')} size="large"
-                        >Get started in minutes</Button
-                    >
+                    <Button href={resolve('/add-plugin')} size="large" class="w-full sm:w-auto">
+                        Get started in minutes
+                    </Button>
                     <a
                         href={resolve('/plugin-list')}
-                        class="inline-flex items-center gap-2 text-sm font-semibold text-slate-600 transition hover:text-brand-700"
+                        class="mx-auto inline-flex items-center gap-2 text-sm font-semibold text-slate-600 transition hover:text-brand-700 sm:mx-0"
                     >
                         Browse plugin list
                         <IconArrowRight size={18} />
@@ -87,9 +87,7 @@
                                 class="flex items-center justify-between text-xs tracking-wide text-slate-500 uppercase"
                             >
                                 <span>Plugin spotlight</span>
-                                <span class="rounded-full bg-brand-100 px-3 py-1 text-brand-700"
-                                    >Top 100</span
-                                >
+                                <Badge size="small">Top 100</Badge>
                             </div>
                             <h3
                                 class="mt-4 font-display text-2xl font-semibold break-words text-slate-900"
@@ -171,52 +169,56 @@
                         class="mt-8 space-y-5 lg:grid lg:grid-cols-2 lg:gap-8 xl:block xl:gap-0"
                     >
                         <li
-                            class="flex gap-4 rounded-2xl border border-slate-200 bg-white p-5 lg:h-full xl:h-auto"
+                            class="gap-4 rounded-2xl border border-slate-200 bg-white p-5 lg:h-full xl:h-auto"
                         >
-                            <div
-                                aria-hidden="true"
-                                class="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-brand-100 font-semibold text-brand-700"
-                            >
-                                1
-                            </div>
-                            <div>
+                            <div class="flex gap-4">
+                                <div
+                                    aria-hidden="true"
+                                    class="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-brand-100 font-semibold text-brand-700"
+                                >
+                                    1
+                                </div>
                                 <h3 class="text-lg font-semibold text-slate-900">
                                     Register your plugin
                                 </h3>
-                                <p class="mt-2 max-w-prose text-sm leading-relaxed text-slate-600">
+                            </div>
+                            <div class="mt-4 sm:-mt-1.5 sm:pl-14">
+                                <p class="max-w-prose text-sm leading-relaxed text-slate-600">
                                     Sign up for free and add your plugin to receive a unique
                                     plugin&nbsp;ID.
                                 </p>
                                 {#if !data.session}
                                     <div class="mt-3">
-                                        <Button href={resolve('/register')} variant="primary"
-                                            >Create account</Button
-                                        >
+                                        <Button href={resolve('/register')} variant="primary">
+                                            Create account
+                                        </Button>
                                     </div>
                                 {:else}
                                     <div class="mt-3">
-                                        <Button href={resolve('/add-plugin')} variant="primary"
-                                            >Add plugin</Button
-                                        >
+                                        <Button href={resolve('/add-plugin')} variant="primary">
+                                            Add plugin
+                                        </Button>
                                     </div>
                                 {/if}
                             </div>
                         </li>
 
                         <li
-                            class="flex gap-4 rounded-2xl border border-slate-200 bg-white p-5 lg:h-full xl:h-auto"
+                            class="gap-4 rounded-2xl border border-slate-200 bg-white p-5 lg:h-full xl:h-auto"
                         >
-                            <div
-                                aria-hidden="true"
-                                class="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-brand-100 font-semibold text-brand-700"
-                            >
-                                2
-                            </div>
-                            <div>
+                            <div class="flex gap-4">
+                                <div
+                                    aria-hidden="true"
+                                    class="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-brand-100 font-semibold text-brand-700"
+                                >
+                                    2
+                                </div>
                                 <h3 class="text-lg font-semibold text-slate-900">
                                     Add bStats to your code
                                 </h3>
-                                <p class="mt-2 max-w-prose text-sm leading-relaxed text-slate-600">
+                            </div>
+                            <div class="mt-4 sm:-mt-1.5 sm:pl-14">
+                                <p class="max-w-prose text-sm leading-relaxed text-slate-600">
                                     Include the `Metrics` class and initialize it with your plugin
                                     ID. Supports all major platforms and build tools.
                                 </p>
@@ -409,14 +411,18 @@
                 {/snippet}
 
                 {#snippet GitHubIcon()}
-                    <img alt="GitHub" src={githubIcon} class="h-12 w-12 rounded-full" />
+                    <img
+                        alt="GitHub"
+                        src={githubIcon}
+                        class="size-10 shrink-0 rounded-full sm:size-12"
+                    />
                 {/snippet}
 
                 {#snippet DiscordIcon()}
                     <span
-                        class="inline-flex h-12 w-12 items-center justify-center rounded-full bg-discord-blurple text-white"
+                        class="inline-flex size-10 shrink-0 items-center justify-center rounded-full bg-discord-blurple text-white sm:size-12"
                     >
-                        <img alt="Discord" src={discordIcon} class="h-7 w-7" />
+                        <img alt="Discord" src={discordIcon} class="size-6 sm:size-7" />
                     </span>
                 {/snippet}
 

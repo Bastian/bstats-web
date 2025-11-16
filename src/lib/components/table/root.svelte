@@ -11,7 +11,10 @@
 </script>
 
 <div
-    class={['overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm', className]}
+    class={[
+        'overflow-hidden overflow-x-auto rounded-2xl border border-slate-200 bg-white shadow-sm',
+        className
+    ]}
     {...restProps}
 >
     <table class={['min-w-full divide-y divide-slate-200 text-sm', tableClass]}>
