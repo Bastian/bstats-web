@@ -22,7 +22,7 @@
     <section class="doc-container mt-12">
         <article class="doc-card prose" style="max-width: none">
             <p class="text-sm text-slate-500 italic">
-                <strong>Last updated:</strong> 2025/11/13
+                <strong>Last updated:</strong> 2025/11/16
             </p>
 
             <h2>1. Introduction</h2>
@@ -187,8 +187,9 @@
                     and designs the Service to avoid processing personal data. For service and
                     security data that bStats collects directly (e.g., server logs, abuse signals),
                     bStats acts as an independent controller. bStats is <em>not</em> a processor for
-                    Developer-submitted telemetry unless the parties execute a separate data processing
-                    agreement (DPA).
+                    Developer-submitted telemetry. No controller-processor relationship is created by
+                    your use of the Service, and bStats will not enter into a Data Processing Agreement
+                    (DPA). If you require a processor or a DPA, you must not use the Service.
                 </li>
                 <li>
                     <strong>Obligations.</strong> For any data you send, you represent that you have

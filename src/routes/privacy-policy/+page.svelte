@@ -24,7 +24,7 @@
             class="doc-card prose space-y-6"
             style="max-width: none"
         >
-            <p class="text-sm text-slate-500 italic"><strong>Last updated:</strong> 2025/11/10</p>
+            <p class="text-sm text-slate-500 italic"><strong>Last updated:</strong> 2025/11/16</p>
             <h2 class="doc-card-title">bStats plugin privacy policy</h2>
 
             <p>
@@ -104,15 +104,19 @@
                     <p><strong>Technical server data</strong></p>
                     <ul>
                         <li>
-                            Examples: Operating System (OS), Java version, CPU architecture, server
-                            version (e.g., Minecraft version), plugin/mod version, and a
-                            pseudonymous server identifier for deduplication and anti-abuse.
+                            <strong>Examples</strong>: Operating System (OS), Java version, CPU
+                            architecture, server version (e.g., Minecraft version), plugin/mod
+                            version, and a pseudonymous server identifier for deduplication and
+                            anti-abuse.
                         </li>
                         <li>
-                            <strong>Purpose</strong>: Provide analytics to plugin developers about
-                            usage and popularity (legitimate interests under GDPR/UK GDPR for our
-                            controller purposes, and contractual/legitimate interests for developers
-                            as controllers when we act as their processor).
+                            <strong>Purpose / legal basis</strong>: Provide analytics to plugin
+                            developers and operate, protect, and improve the Service. For this
+                            processing,
+                            <strong>bStats acts as an independent controller</strong>
+                            relying on <em>legitimate interests</em> under the GDPR/UK GDPR. Developers
+                            remain separate controllers and must ensure they do not send personal data
+                            to bStats.
                         </li>
                     </ul>
                 </li>
@@ -432,9 +436,7 @@
             <ol>
                 <li>
                     <p>
-                        <strong
-                            >Account registration <strong>Account registration & profile</strong> profile</strong
-                        >
+                        <strong>Account registration & profile</strong>
                     </p>
                     <ul>
                         <li>
