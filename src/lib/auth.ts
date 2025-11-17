@@ -8,10 +8,12 @@ import bcrypt from 'bcryptjs';
 import { env } from '$env/dynamic/private';
 import { env as publicEnv } from '$env/dynamic/public';
 
-const pool = new Pool({
-    connectionString:
-        process.env.DATABASE_URL || 'postgresql://bstats:bstats@localhost:5432/bstats_auth'
-});
+const BETTER_AUTH_DATABASE_URL = env.BETTER_AUTH_DATABASE_URL;
+
+if (!BETTER_AUTH_DATABASE_URL) {
+    console.error('BETTER_AUTH_DATABASE_URL environment variable is not set.');
+    process.exit(1);
+}
 
 const BETTER_AUTH_SECRET = env.BETTER_AUTH_SECRET;
 
@@ -29,6 +31,10 @@ if (!publicEnv.PUBLIC_HCAPTCHA_SITE_KEY) {
     console.error('PUBLIC_HCAPTCHA_SITE_KEY environment variable is not set.');
     process.exit(1);
 }
+
+const pool = new Pool({
+    connectionString: BETTER_AUTH_DATABASE_URL
+});
 
 export const auth = betterAuth({
     database: pool,

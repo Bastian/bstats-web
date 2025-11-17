@@ -5,6 +5,14 @@
 import { Pool } from 'pg';
 import { readFileSync, readdirSync, existsSync } from 'fs';
 import { join } from 'path';
+import { env } from '$env/dynamic/private';
+
+const BETTER_AUTH_DATABASE_URL = env.BETTER_AUTH_DATABASE_URL;
+
+if (!BETTER_AUTH_DATABASE_URL) {
+    console.error('BETTER_AUTH_DATABASE_URL environment variable is not set.');
+    process.exit(1);
+}
 
 let schemaApplied = false;
 
@@ -15,8 +23,7 @@ export async function ensureSchema() {
     }
 
     const pool = new Pool({
-        connectionString:
-            process.env.DATABASE_URL || 'postgresql://bstats:bstats@localhost:5432/bstats_auth'
+        connectionString: BETTER_AUTH_DATABASE_URL
     });
 
     const client = await pool.connect();

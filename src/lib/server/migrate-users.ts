@@ -1,15 +1,25 @@
 /**
  * User migration script
+ *
  * Migrates users from Redis to PostgreSQL/Better Auth
  * Preserves usernames, passwords (bcrypt hashes), and admin roles
+ *
+ * TODO Remove once all users have been migrated
  */
 import { Pool } from 'pg';
 import { randomUUID } from 'crypto';
 import * as databaseManager from './databaseManager.js';
+import { env } from '$env/dynamic/private';
+
+const BETTER_AUTH_DATABASE_URL = env.BETTER_AUTH_DATABASE_URL;
+
+if (!BETTER_AUTH_DATABASE_URL) {
+    console.error('BETTER_AUTH_DATABASE_URL environment variable is not set.');
+    process.exit(1);
+}
 
 const pool = new Pool({
-    connectionString:
-        process.env.DATABASE_URL || 'postgresql://bstats:bstats@localhost:5432/bstats_auth'
+    connectionString: BETTER_AUTH_DATABASE_URL
 });
 
 export async function migrateUsers() {
