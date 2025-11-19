@@ -71,14 +71,8 @@
                             return;
                         }
 
-                        const sanitizedUsername = username
-                            .toLowerCase()
-                            .replace(/[^a-z0-9._-]/g, '-') // Replace invalid chars with hyphen
-                            .replace(/^[.-]+|[.-]+$/g, '') // Remove leading/trailing dots or hyphens
-                            .replace(/\.{2,}/g, '.') // Replace multiple dots with single dot
-                            .substring(0, 64); // Max length for email local part
-
-                        const fakeEmail = `${sanitizedUsername}@legacy-account.bstats.org`;
+                        // better-auth requires an email, but we allow registration without one
+                        const fakeEmail = `${Math.random().toString(36).substring(2, 12)}@internal.bstats.org`;
 
                         const response = await authClient.signUp.email({
                             email: fakeEmail, // TODO Replace with real email

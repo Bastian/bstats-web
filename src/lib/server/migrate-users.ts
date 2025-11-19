@@ -85,17 +85,8 @@ export async function migrateUsers() {
                 const userId = randomUUID();
                 const now = new Date();
 
-                // Sanitize username for email - remove/replace invalid characters
-                // Email local parts can contain: letters, numbers, dots, hyphens, underscores
-                const sanitizedUsername = username
-                    .toLowerCase()
-                    .replace(/[^a-z0-9._-]/g, '-') // Replace invalid chars with hyphen
-                    .replace(/^[.-]+|[.-]+$/g, '') // Remove leading/trailing dots or hyphens
-                    .replace(/\.{2,}/g, '.') // Replace multiple dots with single dot
-                    .substring(0, 64); // Max length for email local part
-
                 // Create fake email for legacy accounts
-                const fakeEmail = `${sanitizedUsername}@legacy-account.bstats.org`;
+                const fakeEmail = `${Math.random().toString(36).substring(2, 12)}@internal.bstats.org`;
 
                 // Insert user into PostgreSQL
                 await pgClient.query(
