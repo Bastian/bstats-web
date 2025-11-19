@@ -4,86 +4,83 @@ import { Pool } from 'pg';
 import { sveltekitCookies } from 'better-auth/svelte-kit';
 import { getRequestEvent } from '$app/server';
 import bcrypt from 'bcryptjs';
+import { building } from '$app/environment';
 
 import { env } from '$env/dynamic/private';
 import { env as publicEnv } from '$env/dynamic/public';
 
-const BETTER_AUTH_DATABASE_URL = env.BETTER_AUTH_DATABASE_URL;
+export type AppAuth = ReturnType<typeof createAuth>;
 
-if (!BETTER_AUTH_DATABASE_URL) {
-    console.error('BETTER_AUTH_DATABASE_URL environment variable is not set.');
-    process.exit(1);
-}
+let _auth: AppAuth | null = null;
 
-const BETTER_AUTH_SECRET = env.BETTER_AUTH_SECRET;
-
-if (!BETTER_AUTH_SECRET) {
-    console.error('BETTER_AUTH_SECRET environment variable is not set.');
-    process.exit(1);
-}
-
-if (!env.HCAPTCHA_SECRET_KEY) {
-    console.error('HCAPTCHA_SECRET_KEY environment variable is not set.');
-    process.exit(1);
-}
-
-if (!publicEnv.PUBLIC_HCAPTCHA_SITE_KEY) {
-    console.error('PUBLIC_HCAPTCHA_SITE_KEY environment variable is not set.');
-    process.exit(1);
-}
-
-const pool = new Pool({
-    connectionString: BETTER_AUTH_DATABASE_URL
-});
-
-export const auth = betterAuth({
-    database: pool,
-    appName: 'bStats',
-    emailAndPassword: {
-        enabled: true,
-        requireEmailVerification: false,
-        autoSignIn: true,
-        minPasswordLength: 8,
-        password: {
-            // Old passwords are bcrypt hashed, so we need to use bcrypt here
-            hash: async (password: string) => bcrypt.hash(password, 12),
-            verify: async ({ hash, password }) => bcrypt.compare(password, hash)
-        }
-    },
-    secret: BETTER_AUTH_SECRET,
-    plugins: [
-        // Username plugin allows login with username instead of email
-        // Needed for maintaining compatibility with old username-only system
-        username(),
-        admin(),
-        haveIBeenPwned({
-            customPasswordCompromisedMessage:
-                'Password has been found in a data breach. Choose another one.'
-        }),
-        twoFactor({ issuer: 'bStats' }),
-        sveltekitCookies(getRequestEvent),
-        captcha({
-            provider: 'hcaptcha',
-            secretKey: env.HCAPTCHA_SECRET_KEY,
-            siteKey: publicEnv.PUBLIC_HCAPTCHA_SITE_KEY,
-            endpoints: ['/sign-up/email', '/forget-password']
-        })
-    ],
-    /* TODO Enable
-	emailVerification: {
-		sendVerificationEmail: async (data) => {
-			// TODO Style email using MJML
-			await sendEmail({
-				to: data.user.email,
-				subject: 'Verify your email address',
-				text: `Click the link to verify your email: ${data.url}`
-			});
-		},
-		autoSignInAfterVerification: true,
-		sendOnSignUp: true
-	},
-	*/
-    advanced: {
-        useSecureCookies: true
+export function getAuth(): AppAuth {
+    if (building) {
+        // Should never be called during Vite/SvelteKit build
+        throw new Error('getAuth() was called while building');
     }
-});
+    if (!_auth) {
+        _auth = createAuth();
+    }
+    return _auth;
+}
+
+function createAuth() {
+    if (!env.BETTER_AUTH_DATABASE_URL) throw new Error('BETTER_AUTH_DATABASE_URL is not set');
+    if (!env.BETTER_AUTH_SECRET) throw new Error('BETTER_AUTH_SECRET is not set');
+    if (!env.HCAPTCHA_SECRET_KEY) throw new Error('HCAPTCHA_SECRET_KEY is not set');
+    if (!publicEnv.PUBLIC_HCAPTCHA_SITE_KEY) throw new Error('PUBLIC_HCAPTCHA_SITE_KEY is not set');
+
+    const pool = new Pool({ connectionString: env.BETTER_AUTH_DATABASE_URL });
+
+    return betterAuth({
+        database: pool,
+        appName: 'bStats',
+        emailAndPassword: {
+            enabled: true,
+            requireEmailVerification: false,
+            autoSignIn: true,
+            minPasswordLength: 8,
+            password: {
+                // Old passwords are bcrypt hashed, so we need to use bcrypt here
+                hash: async (password: string) => bcrypt.hash(password, 12),
+                verify: async ({ hash, password }) => bcrypt.compare(password, hash)
+            }
+        },
+        secret: env.BETTER_AUTH_SECRET,
+        plugins: [
+            // Username plugin allows login with username instead of email
+            // Needed for maintaining compatibility with old username-only system
+            username(),
+            admin(),
+            haveIBeenPwned({
+                customPasswordCompromisedMessage:
+                    'Password has been found in a data breach. Choose another one.'
+            }),
+            twoFactor({ issuer: 'bStats' }),
+            sveltekitCookies(getRequestEvent),
+            captcha({
+                provider: 'hcaptcha',
+                secretKey: env.HCAPTCHA_SECRET_KEY,
+                siteKey: publicEnv.PUBLIC_HCAPTCHA_SITE_KEY,
+                endpoints: ['/sign-up/email', '/forget-password']
+            })
+        ],
+        /* TODO Enable
+        emailVerification: {
+            sendVerificationEmail: async (data) => {
+                // TODO Style email using MJML
+                await sendEmail({
+                    to: data.user.email,
+                    subject: 'Verify your email address',
+                    text: `Click the link to verify your email: ${data.url}`
+                });
+            },
+            autoSignInAfterVerification: true,
+            sendOnSignUp: true
+        },
+        */
+        advanced: {
+            useSecureCookies: true
+        }
+    });
+}

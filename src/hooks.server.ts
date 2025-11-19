@@ -1,7 +1,7 @@
 import type { Handle } from '@sveltejs/kit';
 import { ensureSchema } from '$lib/server/apply-schema';
 import { migrateUsers } from '$lib/server/migrate-users';
-import { auth } from '$lib/auth';
+import { getAuth } from '$lib/auth';
 import { svelteKitHandler } from 'better-auth/svelte-kit';
 import { building } from '$app/environment';
 
@@ -28,7 +28,7 @@ if (!initializationStarted) {
 
 export const handle: Handle = async ({ event, resolve }) => {
     // Fetch current session from Better Auth
-    const session = await auth.api.getSession({
+    const session = await getAuth().api.getSession({
         headers: event.request.headers
     });
 
@@ -38,5 +38,5 @@ export const handle: Handle = async ({ event, resolve }) => {
         event.locals.user = session.user;
     }
     console.error('Handling request for:', event.url.pathname);
-    return svelteKitHandler({ event, resolve, auth, building });
+    return svelteKitHandler({ event, resolve, auth: getAuth(), building });
 };
