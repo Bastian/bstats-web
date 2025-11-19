@@ -1,5 +1,12 @@
-import { betterAuth } from 'better-auth';
-import { username, twoFactor, haveIBeenPwned, captcha, admin } from 'better-auth/plugins';
+import { APIError, betterAuth } from 'better-auth';
+import {
+    username,
+    twoFactor,
+    haveIBeenPwned,
+    captcha,
+    admin,
+    createAuthMiddleware
+} from 'better-auth/plugins';
 import { Pool } from 'pg';
 import { sveltekitCookies } from 'better-auth/svelte-kit';
 import { getRequestEvent } from '$app/server';
@@ -46,6 +53,12 @@ function createAuth() {
                 verify: async ({ hash, password }) => bcrypt.compare(password, hash)
             }
         },
+        user: {
+            deleteUser: {
+                // TODO Enable once we have hooks to cleanup user data in Redis
+                enabled: false
+            }
+        },
         secret: env.BETTER_AUTH_SECRET,
         plugins: [
             // Username plugin allows login with username instead of email
@@ -81,6 +94,28 @@ function createAuth() {
         */
         advanced: {
             useSecureCookies: true
+        },
+        hooks: {
+            before: createAuthMiddleware(async (ctx) => {
+                if (ctx.path === '/update-user' && typeof ctx.body?.username !== 'undefined') {
+                    // TODO Allow username changes in the future
+                    throw new APIError('FORBIDDEN', { message: 'Username changes are disabled.' });
+                }
+            })
+        },
+        databaseHooks: {
+            user: {
+                update: {
+                    before: async (data) => {
+                        if ('username' in data) {
+                            throw new APIError('FORBIDDEN', {
+                                message: 'Username changes are disabled.'
+                            });
+                        }
+                        return { data };
+                    }
+                }
+            }
         }
     });
 }
