@@ -7,10 +7,7 @@ import { getLimitedLineChartData } from '$lib/server/redis/chart-data.js';
 
 export const GET: RequestHandler = async () => {
     try {
-        // Get all plugin IDs
         const pluginIds = await getAllPluginIds();
-
-        // Get all software to map IDs to names
         const allSoftware = await getAllSoftware();
 
         // Create a map for quick lookups
@@ -22,7 +19,6 @@ export const GET: RequestHandler = async () => {
         // Get plugin data with server and player counts
         const pluginPromises = pluginIds.map(async (pluginId) => {
             try {
-                // Get plugin basic data
                 const plugin = await getPluginById(pluginId);
 
                 if (!plugin || plugin.name === null) {
@@ -50,6 +46,11 @@ export const GET: RequestHandler = async () => {
                     }
                 } catch {
                     // Ignore errors for individual chart data
+                }
+
+                if (servers === 0) {
+                    // We don't want to show plugins with 0 servers
+                    return null;
                 }
 
                 // Get player count (from 'players' chart, latest data point)
@@ -85,10 +86,7 @@ export const GET: RequestHandler = async () => {
             }
         });
 
-        // Wait for all plugins to be processed
         const results = await Promise.all(pluginPromises);
-
-        // Filter out null results
         const validResults = results.filter((r) => r !== null);
 
         return json(validResults);
