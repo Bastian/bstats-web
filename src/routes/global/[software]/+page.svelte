@@ -1,6 +1,9 @@
 <script lang="ts">
+    import { page } from '$app/state';
     import Badge from '$lib/components/badge.svelte';
     import PageHero from '$lib/components/page-hero.svelte';
+    import { MetaTags } from 'svelte-meta-tags';
+    import { getCanonicalUrl } from '$lib/utils/url';
     import ChartCard from '$lib/components/charts/chart-card.svelte';
     import PieChart from '$lib/components/charts/pie-chart.svelte';
     import DrilldownPieChart from '$lib/components/charts/drilldown-pie-chart.svelte';
@@ -128,18 +131,19 @@
     }
 </script>
 
-<svelte:head>
-    <meta name="description" content="bStats global stats." />
-    <title>bStats - Global {data.software.name} stats</title>
-    <meta name="twitter:card" content="summary" />
-    <meta name="twitter:site" content="@btobastian" />
-    <meta name="twitter:title" content="bStats - Plugin Metrics made with <3" />
-    <meta
-        name="twitter:description"
-        content="bStats collects data for plugin authors. It's free and easy to use!"
-    />
-    <meta name="twitter:image" content="https://bstats.org/images/Twitter.jpg" />
-</svelte:head>
+<MetaTags
+    title="Global {data.software.name} stats - bStats"
+    description="View aggregated metrics across every plugin on bStats for {data.software
+        .name} platform."
+    openGraph={{
+        title: `Global ${data.software.name} stats`,
+        description: `View aggregated metrics across every plugin on bStats for ${data.software.name} platform.`,
+        type: 'website',
+        url: getCanonicalUrl(page.url),
+        siteName: 'bStats',
+        locale: 'en_US'
+    }}
+/>
 
 <main class="pb-24">
     <PageHero>

@@ -1,21 +1,30 @@
 <script>
     import { resolve } from '$app/paths';
+    import { page } from '$app/state';
     import Badge from '$lib/components/badge.svelte';
     import PageHero from '$lib/components/page-hero.svelte';
     import { Accordion } from '$lib/components/accordion';
+    import { MetaTags } from 'svelte-meta-tags';
+    import { getCanonicalUrl } from '$lib/utils/url';
     import UsersGroup from '@tabler/icons-svelte/icons/users-group';
     import IconBattery4 from '@tabler/icons-svelte/icons/battery-4';
     import IconFreeRights from '@tabler/icons-svelte/icons/free-rights';
     import IconLabelImportant from '@tabler/icons-svelte/icons/label-important';
 </script>
 
-<svelte:head>
-    <meta
-        name="description"
-        content="Information for Minecraft server owners about bStats metrics collection."
-    />
-    <title>bStats - Server owners</title>
-</svelte:head>
+<MetaTags
+    title="For server owners - bStats"
+    description="Learn what bStats collects, why it matters, and how to manage your privacy preferences."
+    openGraph={{
+        title: 'For server owners',
+        description:
+            'Learn what bStats collects, why it matters, and how to manage your privacy preferences.',
+        type: 'website',
+        url: getCanonicalUrl(page.url),
+        siteName: 'bStats',
+        locale: 'en_US'
+    }}
+/>
 
 <main class="pb-24">
     <PageHero>

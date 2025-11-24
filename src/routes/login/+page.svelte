@@ -1,5 +1,6 @@
 <script lang="ts">
     import { resolve } from '$app/paths';
+    import { page } from '$app/state';
     import Badge from '$lib/components/badge.svelte';
     import Button from '$lib/components/button.svelte';
     import { Checkbox } from '$lib/components/input/checkbox';
@@ -7,6 +8,8 @@
     import { authClient } from '$lib/auth.client.js';
     import type { SvelteHTMLElements } from 'svelte/elements';
     import { TextInput } from '$lib/components/input/text';
+    import { MetaTags } from 'svelte-meta-tags';
+    import { getCanonicalUrl } from '$lib/utils/url';
 
     let error: string | undefined = $state(undefined);
 
@@ -43,10 +46,18 @@
     };
 </script>
 
-<svelte:head>
-    <meta name="description" content="Login into your bStats account." />
-    <title>bStats - Login</title>
-</svelte:head>
+<MetaTags
+    title="Login - bStats"
+    description="Sign in to register plugins, add charts, and manage your bStats account."
+    openGraph={{
+        title: 'Login',
+        description: 'Sign in to register plugins, add charts, and manage your bStats account.',
+        type: 'website',
+        url: getCanonicalUrl(page.url),
+        siteName: 'bStats',
+        locale: 'en_US'
+    }}
+/>
 
 <main class="pb-24">
     <PageHero>

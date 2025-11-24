@@ -1,7 +1,10 @@
 <script lang="ts">
     import { resolve } from '$app/paths';
+    import { page } from '$app/state';
     import Badge from '$lib/components/badge.svelte';
     import PageHero from '$lib/components/page-hero.svelte';
+    import { MetaTags } from 'svelte-meta-tags';
+    import { getCanonicalUrl } from '$lib/utils/url';
     import type { PageProps } from './$types';
     import BuildToolSelectStep, { type BuildTool } from './build-tool-select-step.svelte';
     import IncludeMetricsStep from './include-metrics-step.svelte';
@@ -31,13 +34,19 @@
     let metricsInstantiated = $state<boolean>(false);
 </script>
 
-<svelte:head>
-    <title>bStats - Add plugin</title>
-    <meta
-        name="description"
-        content="Follow the step-by-step guide to add bStats Metrics to your plugin."
-    />
-</svelte:head>
+<MetaTags
+    title="Add plugin - bStats"
+    description="A guided walkthrough for integrating bStats into your plugin. Choose your platform, register, include the dependency, and instantiate the Metrics class."
+    openGraph={{
+        title: 'Add plugin',
+        description:
+            'A guided walkthrough for integrating bStats into your plugin. Choose your platform, register, include the dependency, and instantiate the Metrics class.',
+        type: 'website',
+        url: getCanonicalUrl(page.url),
+        siteName: 'bStats',
+        locale: 'en_US'
+    }}
+/>
 
 <main class="pb-24">
     <PageHero>

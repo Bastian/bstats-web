@@ -1,15 +1,26 @@
 <script lang="ts">
     import { resolve } from '$app/paths';
+    import { page } from '$app/state';
     import Badge from '$lib/components/badge.svelte';
     import Button from '$lib/components/button.svelte';
     import PageHero from '$lib/components/page-hero.svelte';
     import IconArrowRight from '@tabler/icons-svelte/icons/arrow-right';
+    import { MetaTags } from 'svelte-meta-tags';
+    import { getCanonicalUrl } from '$lib/utils/url';
 </script>
 
-<svelte:head>
-    <meta name="description" content="Documentation for bStats - plugin metrics made easy." />
-    <title>bStats - Documentation</title>
-</svelte:head>
+<MetaTags
+    title="Documentation - bStats"
+    description="The bStats documentation for plugin developers and server owners."
+    openGraph={{
+        title: 'Documentation',
+        description: 'The bStats documentation for plugin developers and server owners.',
+        type: 'website',
+        url: getCanonicalUrl(page.url),
+        siteName: 'bStats',
+        locale: 'en_US'
+    }}
+/>
 
 <main class="pb-24">
     <PageHero>

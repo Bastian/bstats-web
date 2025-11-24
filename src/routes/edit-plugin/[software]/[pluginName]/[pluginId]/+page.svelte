@@ -1,8 +1,10 @@
 <script lang="ts">
     import { resolve } from '$app/paths';
+    import { page } from '$app/state';
     import Badge from '$lib/components/badge.svelte';
     import Button from '$lib/components/button.svelte';
-
+    import { MetaTags } from 'svelte-meta-tags';
+    import { getCanonicalUrl } from '$lib/utils/url';
     import PageHero from '$lib/components/page-hero.svelte';
     import type { PageData } from './$types';
     import AddChartForm from './add-chart-form.svelte';
@@ -13,10 +15,18 @@
     let { data }: { data: PageData } = $props();
 </script>
 
-<svelte:head>
-    <title>bStats - Edit {data.plugin.name}</title>
-    <meta name="description" content="Edit your plugin" />
-</svelte:head>
+<MetaTags
+    title="Edit {data.plugin.name} - bStats"
+    description="Configure settings for your plugin {data.plugin.name}."
+    openGraph={{
+        title: `Edit ${data.plugin.name}`,
+        description: `Configure settings for your plugin ${data.plugin.name}.`,
+        type: 'website',
+        url: getCanonicalUrl(page.url),
+        siteName: 'bStats',
+        locale: 'en_US'
+    }}
+/>
 
 <main class="pb-24">
     {#if !data.canEdit}

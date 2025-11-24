@@ -1,10 +1,13 @@
 <script lang="ts">
     import { resolve } from '$app/paths';
+    import { page } from '$app/state';
     import Badge from '$lib/components/badge.svelte';
     import Button from '$lib/components/button.svelte';
     import { TextInput } from '$lib/components/input/text';
     import PageHero from '$lib/components/page-hero.svelte';
     import { Table } from '$lib/components/table';
+    import { MetaTags } from 'svelte-meta-tags';
+    import { getCanonicalUrl } from '$lib/utils/url';
     import type { PageData } from './$types';
 
     let { data }: { data: PageData } = $props();
@@ -34,10 +37,19 @@
     }
 </script>
 
-<svelte:head>
-    <meta name="description" content="A list with the plugin ids of all your plugins." />
-    <title>bStats - What is my plugin ID?</title>
-</svelte:head>
+<MetaTags
+    title="Plugin IDs - bStats"
+    description="View and copy plugin IDs for all your registered plugins. Use these IDs when instantiating the Metrics class."
+    openGraph={{
+        title: 'Plugin IDs',
+        description:
+            'View and copy plugin IDs for all your registered plugins. Use these IDs when instantiating the Metrics class.',
+        type: 'website',
+        url: getCanonicalUrl(page.url),
+        siteName: 'bStats',
+        locale: 'en_US'
+    }}
+/>
 
 <main class="pb-24">
     <PageHero>

@@ -1,5 +1,6 @@
 <script lang="ts">
     import { resolve } from '$app/paths';
+    import { page } from '$app/state';
     import Badge from '$lib/components/badge.svelte';
     import Button from '$lib/components/button.svelte';
     import { Checkbox } from '$lib/components/input/checkbox';
@@ -8,6 +9,8 @@
     import HCaptcha from '$lib/components/h-captcha.svelte';
     import { authClient } from '$lib/auth.client';
     import { TextInput } from '$lib/components/input/text';
+    import { MetaTags } from 'svelte-meta-tags';
+    import { getCanonicalUrl } from '$lib/utils/url';
 
     let error = $state('');
     let sentVerificationEmail = $state(false);
@@ -27,10 +30,18 @@
     let captcha = $state<ReturnType<typeof HCaptcha> | undefined>();
 </script>
 
-<svelte:head>
-    <meta name="description" content="Create a new bStats account." />
-    <title>bStats - Register</title>
-</svelte:head>
+<MetaTags
+    title="Register - bStats"
+    description="Create an account to register plugins and add custom charts."
+    openGraph={{
+        title: 'Register',
+        description: 'Create an account to register plugins and add custom charts.',
+        type: 'website',
+        url: getCanonicalUrl(page.url),
+        siteName: 'bStats',
+        locale: 'en_US'
+    }}
+/>
 
 <main class="pb-24">
     <PageHero>

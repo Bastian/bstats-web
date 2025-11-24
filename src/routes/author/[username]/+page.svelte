@@ -4,7 +4,10 @@
     import { TextInput } from '$lib/components/input/text';
     import PageHero from '$lib/components/page-hero.svelte';
     import { Table } from '$lib/components/table';
+    import { MetaTags } from 'svelte-meta-tags';
     import type { PageData } from './$types';
+    import { page } from '$app/state';
+    import { getCanonicalUrl } from '$lib/utils/url';
 
     let { data }: { data: PageData } = $props();
 
@@ -21,18 +24,18 @@
     );
 </script>
 
-<svelte:head>
-    <meta
-        name="description"
-        content="bStats collects data for plugin authors. It's free and easy to use!"
-    />
-    <title>bStats - {data.username}</title>
-    <meta name="twitter:card" content="summary" />
-    <meta name="twitter:site" content="@btobastian" />
-    <meta name="twitter:title" content="{data.username} | bStats" />
-    <meta name="twitter:description" content="Statistics about {data.username}!" />
-    <meta name="twitter:image" content="https://bstats.org/images/Twitter.jpg" />
-</svelte:head>
+<MetaTags
+    title="{data.username} - bStats"
+    description="View plugins maintained by {data.username} on bStats."
+    openGraph={{
+        title: data.username,
+        description: `View plugins maintained by ${data.username} on bStats.`,
+        type: 'website',
+        url: getCanonicalUrl(page.url),
+        siteName: 'bStats',
+        locale: 'en_US'
+    }}
+/>
 
 <main class="pb-24">
     <PageHero>

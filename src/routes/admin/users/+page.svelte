@@ -1,11 +1,14 @@
 <script lang="ts">
     import { onMount } from 'svelte';
+    import { page } from '$app/state';
     import Badge from '$lib/components/badge.svelte';
     import Button from '$lib/components/button.svelte';
     import PageHero from '$lib/components/page-hero.svelte';
     import Pagination from '$lib/components/pagination.svelte';
     import { Table } from '$lib/components/table';
     import { authClient } from '$lib/auth.client.js';
+    import { MetaTags } from 'svelte-meta-tags';
+    import { getCanonicalUrl } from '$lib/utils/url';
     import type { PageData } from './$types';
     import type { User } from 'better-auth';
     import { SvelteURLSearchParams } from 'svelte/reactivity';
@@ -289,13 +292,19 @@
     });
 </script>
 
-<svelte:head>
-    <title>bStats - User management</title>
-    <meta
-        name="description"
-        content="Manage bStats users, reset passwords, and handle bans from a single admin dashboard."
-    />
-</svelte:head>
+<MetaTags
+    title="User management - bStats"
+    description="Manage bStats users, reset passwords, and handle bans from the admin dashboard."
+    openGraph={{
+        title: 'User management',
+        description:
+            'Manage bStats users, reset passwords, and handle bans from the admin dashboard.',
+        type: 'website',
+        url: getCanonicalUrl(page.url),
+        siteName: 'bStats',
+        locale: 'en_US'
+    }}
+/>
 
 <main class="pb-24">
     <PageHero>

@@ -1,7 +1,10 @@
 <script lang="ts">
+    import { page } from '$app/state';
     import Badge from '$lib/components/badge.svelte';
     import CodeBlock from '$lib/components/code-block.svelte';
     import PageHero from '$lib/components/page-hero.svelte';
+    import { MetaTags } from 'svelte-meta-tags';
+    import { getCanonicalUrl } from '$lib/utils/url';
     import BarChart from '$lib/components/charts/bar-chart.svelte';
     import DrilldownPieChart from '$lib/components/charts/drilldown-pie-chart.svelte';
     import LineChart from '$lib/components/charts/line-chart.svelte';
@@ -98,10 +101,18 @@
     const barCategories = ['Feature A', 'Feature B'];
 </script>
 
-<svelte:head>
-    <title>bStats - Custom charts</title>
-    <meta name="description" content="Examples for custom charts." />
-</svelte:head>
+<MetaTags
+    title="Custom charts - bStats"
+    description="Learn how to integrate custom charts into your plugin."
+    openGraph={{
+        title: 'Custom charts',
+        description: 'Learn how to integrate custom charts into your plugin.',
+        type: 'website',
+        url: getCanonicalUrl(page.url),
+        siteName: 'bStats',
+        locale: 'en_US'
+    }}
+/>
 
 {#snippet Example(title: string, code: string)}
     <h3 class="mb-1.5 text-sm font-semibold tracking-[0.2em] text-slate-500 uppercase">

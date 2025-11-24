@@ -1,5 +1,6 @@
 <script lang="ts">
     import { resolve } from '$app/paths';
+    import { MetaTags } from 'svelte-meta-tags';
     import Badge from '$lib/components/badge.svelte';
     import Button from '$lib/components/button.svelte';
     import type { Snippet } from 'svelte';
@@ -8,29 +9,27 @@
 
     import githubIcon from '../../static/images/github-mark.svg';
     import discordIcon from '../../static/images/Discord-Symbol-White.svg';
+    import { page } from '$app/state';
+    import { getCanonicalUrl } from '$lib/utils/url';
 
     let { data }: { data: PageData } = $props();
 
     const formatter = new Intl.NumberFormat();
 </script>
 
-<svelte:head>
-    <!-- Twitter stuff -->
-    <meta name="twitter:card" content="summary" />
-    <meta name="twitter:site" content="@btobastian" />
-    <meta name="twitter:title" content="bStats - Plugin Metrics made with <3" />
-    <meta
-        name="twitter:description"
-        content="bStats collects data for plugin authors. It's free and easy to use!"
-    />
-    <meta name="twitter:image" content="https://bstats.org/images/Twitter.jpg" />
-
-    <meta
-        name="description"
-        content="bStats collects data for plugin authors. It's free and easy to use!"
-    />
-    <title>bStats</title>
-</svelte:head>
+<MetaTags
+    title="bStats"
+    description="bStats collects metrics for Minecraft server plugins. Free to use, respects privacy, and integrates in minutes."
+    openGraph={{
+        title: 'bStats',
+        description:
+            'bStats collects metrics for Minecraft server plugins. Free to use, respects privacy, and integrates in minutes.',
+        type: 'website',
+        url: getCanonicalUrl(page.url),
+        siteName: 'bStats',
+        locale: 'en_US'
+    }}
+/>
 
 <main>
     <!-- Hero -->

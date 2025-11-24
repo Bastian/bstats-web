@@ -1,14 +1,25 @@
 <script>
     import { resolve } from '$app/paths';
+    import { page } from '$app/state';
     import Badge from '$lib/components/badge.svelte';
     import PageHero from '$lib/components/page-hero.svelte';
     import { Accordion } from '$lib/components/accordion';
+    import { MetaTags } from 'svelte-meta-tags';
+    import { getCanonicalUrl } from '$lib/utils/url';
 </script>
 
-<svelte:head>
-    <meta name="description" content="Frequently asked questions about bStats." />
-    <title>bStats - FAQ</title>
-</svelte:head>
+<MetaTags
+    title="Frequently Asked Questions - bStats"
+    description="Answers to common questions about bStats, accounts, and the Metrics class."
+    openGraph={{
+        title: 'Frequently Asked Questions',
+        description: 'Answers to common questions about bStats, accounts, and the Metrics class.',
+        type: 'website',
+        url: getCanonicalUrl(page.url),
+        siteName: 'bStats',
+        locale: 'en_US'
+    }}
+/>
 
 <main class="pb-24">
     <PageHero>

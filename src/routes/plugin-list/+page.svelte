@@ -1,11 +1,14 @@
 <script lang="ts">
     import { resolve } from '$app/paths';
+    import { page } from '$app/state';
     import Badge from '$lib/components/badge.svelte';
     import PageHero from '$lib/components/page-hero.svelte';
     import { Table } from '$lib/components/table';
     import Pagination from '$lib/components/pagination.svelte';
     import { onMount } from 'svelte';
     import { TextInput } from '$lib/components/input/text';
+    import { MetaTags } from 'svelte-meta-tags';
+    import { getCanonicalUrl } from '$lib/utils/url';
 
     interface PluginListItem {
         pluginId: number;
@@ -22,13 +25,13 @@
     let filteredPlugins = $state<PluginListItem[]>([]);
     let isLoading = $state(true);
     let hasError = $state(false);
-    let page = $state(1);
+    let paginationPage = $state(1);
 
     const perPage = 10;
     const formatter = new Intl.NumberFormat();
 
     let paginatedPlugins = $derived.by(() => {
-        const start = (page - 1) * perPage;
+        const start = (paginationPage - 1) * perPage;
         const end = start + perPage;
         return filteredPlugins.slice(start, end);
     });
@@ -37,7 +40,7 @@
         const query = searchValue.trim().toLowerCase();
         if (!query) {
             filteredPlugins = plugins;
-            page = 1;
+            paginationPage = 1;
             return;
         }
         filteredPlugins = plugins.filter((plugin) => {
@@ -47,7 +50,7 @@
                 plugin.ownerName.toLowerCase().includes(query)
             );
         });
-        page = 1;
+        paginationPage = 1;
     }
 
     onMount(() => {
@@ -70,10 +73,19 @@
     });
 </script>
 
-<svelte:head>
-    <meta name="description" content="Browse plugins reporting to bStats." />
-    <title>bStats - Plugin list</title>
-</svelte:head>
+<MetaTags
+    title="Plugin list - bStats"
+    description="Browse thousands of plugins reporting metrics to bStats. Search by name, owner, or platform."
+    openGraph={{
+        title: 'Plugin list',
+        description:
+            'Browse thousands of plugins reporting metrics to bStats. Search by name, owner, or platform.',
+        type: 'website',
+        url: getCanonicalUrl(page.url),
+        siteName: 'bStats',
+        locale: 'en_US'
+    }}
+/>
 
 <main class="pb-24">
     <PageHero>
@@ -176,7 +188,7 @@
 
         {#if !isLoading && !hasError && filteredPlugins.length > 0}
             <div class="mt-6">
-                <Pagination count={filteredPlugins.length} {perPage} bind:page />
+                <Pagination count={filteredPlugins.length} {perPage} bind:page={paginationPage} />
             </div>
         {/if}
     </section>

@@ -1,13 +1,25 @@
 <script>
     import { resolve } from '$app/paths';
+    import { page } from '$app/state';
     import Badge from '$lib/components/badge.svelte';
     import PageHero from '$lib/components/page-hero.svelte';
+    import { MetaTags } from 'svelte-meta-tags';
+    import { getCanonicalUrl } from '$lib/utils/url';
 </script>
 
-<svelte:head>
-    <meta name="description" content="Terms of use" />
-    <title>bStats - Terms of use</title>
-</svelte:head>
+<MetaTags
+    title="Terms of use - bStats"
+    description="Terms governing access to and use of the bStats website, analytics service, and Metrics class."
+    openGraph={{
+        title: 'Terms of use',
+        description:
+            'Terms governing access to and use of the bStats website, analytics service, and Metrics class.',
+        type: 'website',
+        url: getCanonicalUrl(page.url),
+        siteName: 'bStats',
+        locale: 'en_US'
+    }}
+/>
 
 <main class="pb-24">
     <PageHero>

@@ -1,12 +1,23 @@
 <script>
+    import { page } from '$app/state';
     import Badge from '$lib/components/badge.svelte';
     import PageHero from '$lib/components/page-hero.svelte';
+    import { MetaTags } from 'svelte-meta-tags';
+    import { getCanonicalUrl } from '$lib/utils/url';
 </script>
 
-<svelte:head>
-    <meta name="description" content="The imprint." />
-    <title>bStats - Imprint</title>
-</svelte:head>
+<MetaTags
+    title="Imprint - bStats"
+    description="Information in accordance with Section 5 of the German Telemedia Act (TMG)."
+    openGraph={{
+        title: 'Imprint',
+        description: 'Information in accordance with Section 5 of the German Telemedia Act (TMG).',
+        type: 'website',
+        url: getCanonicalUrl(page.url),
+        siteName: 'bStats',
+        locale: 'en_US'
+    }}
+/>
 
 <main class="pb-24">
     <PageHero>

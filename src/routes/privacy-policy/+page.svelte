@@ -1,12 +1,24 @@
 <script>
+    import { page } from '$app/state';
     import Badge from '$lib/components/badge.svelte';
     import PageHero from '$lib/components/page-hero.svelte';
+    import { MetaTags } from 'svelte-meta-tags';
+    import { getCanonicalUrl } from '$lib/utils/url';
 </script>
 
-<svelte:head>
-    <meta name="description" content="Our privacy policy." />
-    <title>bStats - Privacy policy</title>
-</svelte:head>
+<MetaTags
+    title="Privacy policy - bStats"
+    description="bStats collects only the information needed to provide useful metrics. Details for both plugin telemetry and website accounts."
+    openGraph={{
+        title: 'Privacy policy',
+        description:
+            'bStats collects only the information needed to provide useful metrics. Details for both plugin telemetry and website accounts.',
+        type: 'website',
+        url: getCanonicalUrl(page.url),
+        siteName: 'bStats',
+        locale: 'en_US'
+    }}
+/>
 
 <main class="pb-24">
     <PageHero>

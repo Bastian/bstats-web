@@ -1,13 +1,24 @@
 <script lang="ts">
+    import { page } from '$app/state';
     import Badge from '$lib/components/badge.svelte';
     import PageHero from '$lib/components/page-hero.svelte';
     import IconExternalLink from '@tabler/icons-svelte/icons/external-link';
+    import { MetaTags } from 'svelte-meta-tags';
+    import { getCanonicalUrl } from '$lib/utils/url';
 </script>
 
-<svelte:head>
-    <meta name="description" content="Acknowledgements and sponsors behind bStats." />
-    <title>bStats - Credits</title>
-</svelte:head>
+<MetaTags
+    title="Credits - bStats"
+    description="The people and sponsors behind bStats."
+    openGraph={{
+        title: 'Credits',
+        description: 'The people and sponsors behind bStats.',
+        type: 'website',
+        url: getCanonicalUrl(page.url),
+        siteName: 'bStats',
+        locale: 'en_US'
+    }}
+/>
 
 <main class="pb-24">
     <PageHero>

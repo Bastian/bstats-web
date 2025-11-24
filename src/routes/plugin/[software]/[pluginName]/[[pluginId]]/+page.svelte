@@ -1,5 +1,6 @@
 <script lang="ts">
     import { resolve } from '$app/paths';
+    import { page } from '$app/state';
     import type {
         LineChartData,
         ChartMetadata,
@@ -12,6 +13,8 @@
     import { fetchChartData, fetchCharts } from '$lib/charts/chart-data';
     import Badge from '$lib/components/badge.svelte';
     import Button from '$lib/components/button.svelte';
+    import { MetaTags } from 'svelte-meta-tags';
+    import { getCanonicalUrl } from '$lib/utils/url';
     import PageHero from '$lib/components/page-hero.svelte';
     import BarChart from '$lib/components/charts/bar-chart.svelte';
     import ChartCard from '$lib/components/charts/chart-card.svelte';
@@ -133,20 +136,36 @@
     }
 </script>
 
-<svelte:head>
-    {#if data.unknownPlugin}
-        <meta name="description" content="We don't have stats about {data.pluginName}." />
-        <title>bStats - Unknown plugin</title>
-    {:else}
-        <meta name="description" content="Some stats about {data.plugin?.name}." />
-        <title>bStats - {data.plugin?.name}</title>
-        <meta name="twitter:card" content="summary" />
-        <meta name="twitter:site" content="@btobastian" />
-        <meta name="twitter:title" content="{data.plugin?.name} | bStats" />
-        <meta name="twitter:description" content="Statistics about {data.plugin?.name}!" />
-        <meta name="twitter:image" content="https://bstats.org/images/Twitter.jpg" />
-    {/if}
-</svelte:head>
+{#if data.unknownPlugin}
+    <MetaTags
+        title="Unknown plugin - bStats"
+        description="We don't have stats about {data.pluginName}."
+        openGraph={{
+            title: 'Unknown plugin',
+            description: `We don't have stats about ${data.pluginName}.`,
+            type: 'website',
+            url: getCanonicalUrl(page.url),
+            siteName: 'bStats',
+            locale: 'en_US'
+        }}
+    />
+{:else}
+    <MetaTags
+        title="{data.plugin?.name} - bStats"
+        description="View statistics for {data.plugin?.name} by {data.plugin?.owner} on {data
+            .software?.name}."
+        openGraph={{
+            title: data.plugin?.name,
+            description: `View statistics for ${data.plugin?.name} by ${data.plugin?.owner} on ${
+                data.software?.name
+            }.`,
+            type: 'website',
+            url: getCanonicalUrl(page.url),
+            siteName: 'bStats',
+            locale: 'en_US'
+        }}
+    />
+{/if}
 
 {#if data.unknownPlugin}
     <main>

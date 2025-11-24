@@ -1,15 +1,26 @@
 <script>
+    import { page } from '$app/state';
     import Badge from '$lib/components/badge.svelte';
     import Button from '$lib/components/button.svelte';
     import PageHero from '$lib/components/page-hero.svelte';
     import { Accordion } from '$lib/components/accordion';
+    import { MetaTags } from 'svelte-meta-tags';
+    import { getCanonicalUrl } from '$lib/utils/url';
     import IconArrowRight from '@tabler/icons-svelte/icons/arrow-right';
 </script>
 
-<svelte:head>
-    <meta name="description" content="Troubleshooting guide for bStats integration issues." />
-    <title>bStats - Troubleshooting</title>
-</svelte:head>
+<MetaTags
+    title="Troubleshooting - bStats"
+    description="Common issues and solutions for integrating bStats."
+    openGraph={{
+        title: 'Troubleshooting',
+        description: 'Common issues and solutions for integrating bStats.',
+        type: 'website',
+        url: getCanonicalUrl(page.url),
+        siteName: 'bStats',
+        locale: 'en_US'
+    }}
+/>
 
 <main class="pb-24">
     <PageHero>

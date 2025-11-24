@@ -1,13 +1,25 @@
 <script>
+    import { page } from '$app/state';
     import Badge from '$lib/components/badge.svelte';
     import PageHero from '$lib/components/page-hero.svelte';
     import CodeBlock from '$lib/components/code-block.svelte';
+    import { MetaTags } from 'svelte-meta-tags';
+    import { getCanonicalUrl } from '$lib/utils/url';
 </script>
 
-<svelte:head>
-    <title>bStats - REST API</title>
-    <meta name="description" content="REST documentation for bStats." />
-</svelte:head>
+<MetaTags
+    title="REST API - bStats"
+    description="Use the bStats REST API to embed plugin metrics in your site or tooling. All endpoints are read-only and return JSON."
+    openGraph={{
+        title: 'REST API',
+        description:
+            'Use the bStats REST API to embed plugin metrics in your site or tooling. All endpoints are read-only and return JSON.',
+        type: 'website',
+        url: getCanonicalUrl(page.url),
+        siteName: 'bStats',
+        locale: 'en_US'
+    }}
+/>
 
 <main class="pb-24">
     <PageHero>

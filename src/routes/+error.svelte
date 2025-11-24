@@ -4,6 +4,8 @@
     import Badge from '$lib/components/badge.svelte';
     import Button from '$lib/components/button.svelte';
     import PageHero from '$lib/components/page-hero.svelte';
+    import { MetaTags } from 'svelte-meta-tags';
+    import { getCanonicalUrl } from '$lib/utils/url';
 
     // Access error from page store
     let errorStatus = $derived($page.status);
@@ -11,10 +13,7 @@
     let is404 = $derived(errorStatus === 404);
 </script>
 
-<svelte:head>
-    <title>bStats - {is404 ? 'Page not found' : 'Error'}</title>
-    <meta name="description" content="Error page" />
-</svelte:head>
+<MetaTags title="{is404 ? 'Page not found' : 'Error'} - bStats" description="Error page" />
 
 <div>
     <PageHero>
