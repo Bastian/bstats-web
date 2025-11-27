@@ -4,24 +4,10 @@
     import PageHero from '$lib/components/page-hero.svelte';
     import { MetaTags } from 'svelte-meta-tags';
     import { getCanonicalUrl } from '$lib/utils/url';
-    import ChartCard from '$lib/components/charts/chart-card.svelte';
-    import PieChart from '$lib/components/charts/pie-chart.svelte';
-    import DrilldownPieChart from '$lib/components/charts/drilldown-pie-chart.svelte';
-    import LineChart from '$lib/components/charts/line-chart.svelte';
-    import BarChart from '$lib/components/charts/bar-chart.svelte';
-    import MapChart from '$lib/components/charts/map-chart.svelte';
-    import { fetchCharts, fetchChartData } from '$lib/charts/chart-data';
-    import type {
-        LineChartData,
-        ChartMetadata,
-        ChartData,
-        BarChartData,
-        SimplePieChartData,
-        DrilldownPieChartData,
-        MapChartData
-    } from '$lib/charts/chart-data';
+    import ChartCardWithData from '$lib/components/chart-card-with-data.svelte';
+    import { fetchCharts } from '$lib/charts/chart-data';
+    import type { LineChartData, ChartMetadata, ChartData } from '$lib/charts/chart-data';
     import type { PageData } from './$types';
-    import { onMount } from 'svelte';
     import IconServer from '@tabler/icons-svelte/icons/server';
     import IconUsers from '@tabler/icons-svelte/icons/users';
     import ChartBadge from '$lib/components/chart-badge.svelte';
@@ -36,7 +22,6 @@
     let playersRecord = $state('--');
 
     let charts = $state<ChartMetadata[]>([]);
-    let chartDataMap = $state<Record<number, ChartData>>({});
 
     $effect(() => {
         initializeCharts();
@@ -60,25 +45,6 @@
                 data: chartsData[id].data
             }));
 
-            // Fetch data for each chart
-            for (const chart of charts) {
-                try {
-                    const maxElements =
-                        chart.type === 'single_linechart' ? 2 * 24 * 31 * 1 : undefined;
-                    const data = await fetchChartData(chart.uid, maxElements);
-                    chartDataMap[chart.uid] = data;
-
-                    // Update badges for special charts
-                    if (chart.id === 'players' && Array.isArray(data) && data.length > 0) {
-                        updatePlayersBadge(data as LineChartData);
-                    } else if (chart.id === 'servers' && Array.isArray(data) && data.length > 0) {
-                        updateServersBadge(data as LineChartData);
-                    }
-                } catch (error) {
-                    console.error(`Failed to fetch data for chart ${chart.id}:`, error);
-                }
-            }
-
             // Scroll to anchor if present
             if (window.location.hash) {
                 setTimeout(() => {
@@ -90,6 +56,15 @@
             }
         } catch (error) {
             console.error('Failed to initialize charts:', error);
+        }
+    }
+
+    function handleDataLoaded(chartId: string, chartData: ChartData) {
+        // Update badges for special charts
+        if (chartId === 'players' && Array.isArray(chartData) && chartData.length > 0) {
+            updatePlayersBadge(chartData as LineChartData);
+        } else if (chartId === 'servers' && Array.isArray(chartData) && chartData.length > 0) {
+            updateServersBadge(chartData as LineChartData);
         }
     }
 
@@ -115,19 +90,6 @@
         );
         serversCurrent = formatter.format(current);
         serversRecord = formatter.format(record);
-    }
-
-    function getColSpan(chartType: string): 'single' | 'double' {
-        switch (chartType) {
-            case 'single_linechart':
-            case 'simple_map':
-            case 'advanced_map':
-            case 'simple_bar':
-            case 'advanced_bar':
-                return 'double';
-            default:
-                return 'single';
-        }
     }
 </script>
 
@@ -177,44 +139,12 @@
         </div>
         <div class="mt-8 grid gap-8 md:grid-cols-2">
             {#each charts as chart (chart.id)}
-                <ChartCard
-                    title={chart.title}
-                    chartId={chart.id}
-                    colSpan={getColSpan(chart.type)}
-                    supportsPatterns={chart.type !== 'simple_map' && chart.type !== 'advanced_map'}
-                >
-                    {#if chartDataMap[chart.uid]}
-                        {#if chart.type === 'simple_pie' || chart.type === 'advanced_pie'}
-                            <PieChart data={chartDataMap[chart.uid] as SimplePieChartData[]} />
-                        {:else if chart.type === 'drilldown_pie'}
-                            <DrilldownPieChart
-                                data={chartDataMap[chart.uid] as DrilldownPieChartData}
-                            />
-                        {:else if chart.type === 'single_linechart'}
-                            <LineChart
-                                data={chartDataMap[chart.uid] as LineChartData}
-                                lineName={chart.data?.lineName as string | undefined}
-                            />
-                        {:else if chart.type === 'simple_bar' || chart.type === 'advanced_bar'}
-                            <BarChart
-                                data={chartDataMap[chart.uid] as BarChartData[]}
-                                categories={(chartDataMap[chart.uid] as BarChartData[])?.map(
-                                    (d: BarChartData) => d.name
-                                ) || []}
-                                valueName={chart.data?.valueName as string | undefined}
-                            />
-                        {:else if chart.type === 'simple_map' || chart.type === 'advanced_map'}
-                            <MapChart
-                                data={chartDataMap[chart.uid] as MapChartData[]}
-                                valueName={chart.data?.valueName as string | undefined}
-                            />
-                        {/if}
-                    {:else}
-                        <div class="flex h-72 items-center justify-center text-slate-500">
-                            Loading chart data...
-                        </div>
-                    {/if}
-                </ChartCard>
+                <ChartCardWithData
+                    {chart}
+                    defaultMaxElements={2 * 24 * 365}
+                    fullDataMaxElements={2 * 24 * 365 * 5}
+                    onDataLoaded={handleDataLoaded}
+                />
             {/each}
         </div>
     </section>

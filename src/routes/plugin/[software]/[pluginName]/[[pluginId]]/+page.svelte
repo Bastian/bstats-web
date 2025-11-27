@@ -1,34 +1,18 @@
 <script lang="ts">
     import { resolve } from '$app/paths';
     import { page } from '$app/state';
-    import type {
-        LineChartData,
-        ChartMetadata,
-        ChartData,
-        BarChartData,
-        SimplePieChartData,
-        DrilldownPieChartData,
-        MapChartData
-    } from '$lib/charts/chart-data';
-    import { fetchChartData, fetchCharts } from '$lib/charts/chart-data';
+    import type { LineChartData, ChartMetadata, ChartData } from '$lib/charts/chart-data';
+    import { fetchCharts } from '$lib/charts/chart-data';
     import Badge from '$lib/components/badge.svelte';
     import Button from '$lib/components/button.svelte';
     import { MetaTags } from 'svelte-meta-tags';
     import { getCanonicalUrl } from '$lib/utils/url';
     import PageHero from '$lib/components/page-hero.svelte';
-    import BarChart from '$lib/components/charts/bar-chart.svelte';
-    import ChartCard from '$lib/components/charts/chart-card.svelte';
-    import DrilldownPieChart from '$lib/components/charts/drilldown-pie-chart.svelte';
-    import LineChart from '$lib/components/charts/line-chart.svelte';
-    import MapChart from '$lib/components/charts/map-chart.svelte';
-    import PieChart from '$lib/components/charts/pie-chart.svelte';
+    import ChartCardWithData from '$lib/components/chart-card-with-data.svelte';
     import type { PageData } from './$types';
     import IconServer from '@tabler/icons-svelte/icons/server';
     import IconUsers from '@tabler/icons-svelte/icons/users';
     import IconTool from '@tabler/icons-svelte/icons/edit';
-    import IconLoader2 from '@tabler/icons-svelte/icons/loader-2';
-    import IconDatabase from '@tabler/icons-svelte/icons/database';
-    import IconAlertCircle from '@tabler/icons-svelte/icons/alert-circle';
     import ChartBadge from '$lib/components/chart-badge.svelte';
 
     let { data }: { data: PageData } = $props();
@@ -41,10 +25,6 @@
     let playersRecord = $state('--');
 
     let charts = $state<ChartMetadata[]>([]);
-    let chartDataMap = $state<Record<number, ChartData>>({});
-    let fullDataLoadingMap = $state<Record<number, boolean>>({});
-    let fullDataLoadedMap = $state<Record<number, boolean>>({});
-    let fullDataErrorMap = $state<Record<number, string | null>>({});
 
     $effect(() => {
         initializeCharts();
@@ -70,25 +50,6 @@
                 data: chartsData[id].data
             }));
 
-            // Fetch data for each chart
-            for (const chart of charts) {
-                try {
-                    const maxElements =
-                        chart.type === 'single_linechart' ? 2 * 24 * 365 : undefined;
-                    const data = await fetchChartData(chart.uid, maxElements);
-                    chartDataMap[chart.uid] = data;
-
-                    // Update badges for special charts
-                    if (chart.id === 'players' && Array.isArray(data) && data.length > 0) {
-                        updatePlayersBadge(data as LineChartData);
-                    } else if (chart.id === 'servers' && Array.isArray(data) && data.length > 0) {
-                        updateServersBadge(data as LineChartData);
-                    }
-                } catch (error) {
-                    console.error(`Failed to fetch data for chart ${chart.id}:`, error);
-                }
-            }
-
             // Scroll to anchor if present
             if (window.location.hash) {
                 setTimeout(() => {
@@ -100,6 +61,15 @@
             }
         } catch (error) {
             console.error('Failed to initialize charts:', error);
+        }
+    }
+
+    function handleDataLoaded(chartId: string, chartData: ChartData) {
+        // Update badges for special charts
+        if (chartId === 'players' && Array.isArray(chartData) && chartData.length > 0) {
+            updatePlayersBadge(chartData as LineChartData);
+        } else if (chartId === 'servers' && Array.isArray(chartData) && chartData.length > 0) {
+            updateServersBadge(chartData as LineChartData);
         }
     }
 
@@ -125,45 +95,6 @@
         );
         serversCurrent = formatter.format(current);
         serversRecord = formatter.format(record);
-    }
-
-    async function loadFullChartData(chart: ChartMetadata) {
-        fullDataLoadingMap[chart.uid] = true;
-        fullDataErrorMap[chart.uid] = null;
-
-        try {
-            const maxElements = 2 * 24 * 365 * 5; // 5 years (backend limit)
-            const fullData = await fetchChartData(chart.uid, maxElements);
-
-            chartDataMap[chart.uid] = fullData; // Triggers reactive chart update
-            fullDataLoadedMap[chart.uid] = true;
-
-            // Update badges if needed
-            if (chart.id === 'players' && Array.isArray(fullData) && fullData.length > 0) {
-                updatePlayersBadge(fullData as LineChartData);
-            } else if (chart.id === 'servers' && Array.isArray(fullData) && fullData.length > 0) {
-                updateServersBadge(fullData as LineChartData);
-            }
-        } catch (error) {
-            console.error(`Failed to load full data for chart ${chart.id}:`, error);
-            fullDataErrorMap[chart.uid] =
-                error instanceof Error ? error.message : 'Failed to load full data';
-        } finally {
-            fullDataLoadingMap[chart.uid] = false;
-        }
-    }
-
-    function getColSpan(chartType: string): 'single' | 'double' {
-        switch (chartType) {
-            case 'single_linechart':
-            case 'simple_map':
-            case 'advanced_map':
-            case 'simple_bar':
-            case 'advanced_bar':
-                return 'double';
-            default:
-                return 'single';
-        }
     }
 </script>
 
@@ -275,81 +206,12 @@
             </div>
             <div class="mt-8 grid gap-8 md:grid-cols-2">
                 {#each charts as chart (chart.id)}
-                    <ChartCard
-                        title={chart.title}
-                        chartId={chart.id}
-                        colSpan={getColSpan(chart.type)}
-                        supportsPatterns={chart.type !== 'simple_map' &&
-                            chart.type !== 'advanced_map'}
-                    >
-                        {#snippet additionalButtons()}
-                            {#if chartDataMap[chart.uid] && chart.type === 'single_linechart' && !fullDataLoadedMap[chart.uid]}
-                                {@const isLoading = fullDataLoadingMap[chart.uid]}
-                                {@const hasError = fullDataErrorMap[chart.uid]}
-                                <button
-                                    onclick={() => loadFullChartData(chart)}
-                                    disabled={isLoading}
-                                    class="inline-flex items-center gap-2 rounded-full border px-2 py-1 text-xs font-semibold transition focus-visible:ring-2 focus-visible:ring-brand-500 focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-60"
-                                    class:border-slate-200={!hasError}
-                                    class:text-slate-500={!hasError && !isLoading}
-                                    class:hover:border-slate-300={!hasError && !isLoading}
-                                    class:hover:text-slate-600={!hasError && !isLoading}
-                                    class:border-red-200={hasError}
-                                    class:text-red-600={hasError}
-                                    class:hover:border-red-300={hasError && !isLoading}
-                                    class:hover:text-red-700={hasError && !isLoading}
-                                    title={hasError
-                                        ? `Error: ${hasError}`
-                                        : 'Load all available historical data (up to 5 years)'}
-                                    aria-label={hasError
-                                        ? `Error loading data: ${hasError}. Click to retry.`
-                                        : 'Load full data'}
-                                >
-                                    {#if isLoading}
-                                        <IconLoader2 size={14} class="animate-spin" />
-                                        Loading...
-                                    {:else if hasError}
-                                        <IconAlertCircle size={14} />
-                                        Retry
-                                    {:else}
-                                        <IconDatabase size={14} />
-                                        Load full data
-                                    {/if}
-                                </button>
-                            {/if}
-                        {/snippet}
-                        {#if chartDataMap[chart.uid]}
-                            {#if chart.type === 'simple_pie' || chart.type === 'advanced_pie'}
-                                <PieChart data={chartDataMap[chart.uid] as SimplePieChartData[]} />
-                            {:else if chart.type === 'drilldown_pie'}
-                                <DrilldownPieChart
-                                    data={chartDataMap[chart.uid] as DrilldownPieChartData}
-                                />
-                            {:else if chart.type === 'single_linechart'}
-                                <LineChart
-                                    data={chartDataMap[chart.uid] as LineChartData}
-                                    lineName={chart.data?.lineName as string | undefined}
-                                />
-                            {:else if chart.type === 'simple_bar' || chart.type === 'advanced_bar'}
-                                <BarChart
-                                    data={chartDataMap[chart.uid] as BarChartData[]}
-                                    categories={(chartDataMap[chart.uid] as BarChartData[])?.map(
-                                        (d: BarChartData) => d.name
-                                    ) || []}
-                                    valueName={chart.data?.valueName as string | undefined}
-                                />
-                            {:else if chart.type === 'simple_map' || chart.type === 'advanced_map'}
-                                <MapChart
-                                    data={chartDataMap[chart.uid] as MapChartData[]}
-                                    valueName={chart.data?.valueName as string | undefined}
-                                />
-                            {/if}
-                        {:else}
-                            <div class="flex h-72 items-center justify-center text-slate-500">
-                                Loading chart data...
-                            </div>
-                        {/if}
-                    </ChartCard>
+                    <ChartCardWithData
+                        {chart}
+                        defaultMaxElements={2 * 24 * 365}
+                        fullDataMaxElements={2 * 24 * 365 * 5}
+                        onDataLoaded={handleDataLoaded}
+                    />
                 {/each}
             </div>
         </section>
