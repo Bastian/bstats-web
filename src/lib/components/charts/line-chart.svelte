@@ -8,10 +8,9 @@
     interface Props {
         data: [number, number][]; // [timestamp, value][]
         lineName?: string;
-        onLoadFullData?: () => void;
     }
 
-    let { data, lineName = 'Value', onLoadFullData }: Props = $props();
+    let { data, lineName = 'Value' }: Props = $props();
 
     let chartContainer: HTMLDivElement;
     let chartInstance: echarts.ECharts | null = null;
@@ -259,20 +258,6 @@
                     return `<strong>${date}</strong><br/>${lineName}: ${param.value[1]}`;
                 }
             },
-            toolbox: onLoadFullData
-                ? {
-                      feature: {
-                          myLoadFullData: {
-                              show: true,
-                              title: 'Load full data',
-                              icon: 'path://M512 128l256 256-256 256-45.248-45.248L666.752 512 466.752 173.248z M192 128l256 256-256 256-45.248-45.248L346.752 512 146.752 173.248z',
-                              onclick: onLoadFullData
-                          }
-                      },
-                      right: 20,
-                      top: 10
-                  }
-                : undefined,
             grid: {
                 left: '2%',
                 right: '2%',

@@ -9,10 +9,18 @@
         chartId: string;
         colSpan?: 'single' | 'double';
         children: Snippet;
+        additionalButtons?: Snippet;
         supportsPatterns?: boolean;
     }
 
-    let { title, chartId, colSpan = 'single', children, supportsPatterns }: Props = $props();
+    let {
+        title,
+        chartId,
+        colSpan = 'single',
+        children,
+        additionalButtons,
+        supportsPatterns
+    }: Props = $props();
 
     const colClass =
         colSpan === 'double' ? 'col-span-1 min-w-0 md:col-span-2' : 'col-span-1 min-w-0';
@@ -26,6 +34,7 @@
             </h3>
         </div>
         <div class="flex items-center gap-2">
+            {@render additionalButtons?.()}
             {#if supportsPatterns}
                 <button
                     onclick={() => {
