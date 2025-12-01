@@ -2,8 +2,25 @@
     import '../app.css';
     import Header from '$lib/components/layout/header.svelte';
     import Footer from '$lib/components/layout/footer.svelte';
+    import TosAcceptanceModal from '$lib/components/tos-acceptance-modal.svelte';
+    import { page } from '$app/state';
 
     let { data, children } = $props();
+
+    // Pages that should be accessible even without accepting TOS
+    const legalPages = ['/terms-of-use', '/privacy-policy', '/imprint'];
+
+    // Show TOS modal when:
+    // - User is logged in
+    // - TOS required version is set
+    // - User hasn't accepted the required version yet
+    // - User is NOT on a legal page (allow them to read those)
+    const shouldShowTosModal = $derived(
+        data.user &&
+            data.tosRequiredVersion &&
+            (!data.user.tosAccepted || data.user.tosAccepted < data.tosRequiredVersion) &&
+            !legalPages.includes(page.url.pathname)
+    );
 </script>
 
 <svelte:head>
@@ -40,3 +57,7 @@
 </main>
 
 <Footer loggedIn={!!data.session} />
+
+{#if shouldShowTosModal}
+    <TosAcceptanceModal />
+{/if}

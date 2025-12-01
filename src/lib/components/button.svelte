@@ -9,10 +9,18 @@
         fullWidth?: boolean;
     };
 
-    let { children, size, fullWidth, variant, ...restProps }: Props = $props();
+    let {
+        children,
+        size,
+        fullWidth,
+        variant,
+        ref = $bindable(null),
+        ...restProps
+    }: Props = $props();
 </script>
 
 <Button.Root
+    bind:ref
     {...restProps}
     class={[
         'cursor-pointer justify-center disabled:cursor-not-allowed disabled:opacity-50',

@@ -1,6 +1,7 @@
 import type { LayoutServerLoad } from './$types';
 import { getAllSoftware } from '$lib/server/redis/software.js';
 import { getPluginsOfUser } from '$lib/server/redis/plugins.js';
+import { env } from '$env/dynamic/public';
 
 export const load: LayoutServerLoad = async ({ locals, depends }) => {
     depends('app:session');
@@ -25,10 +26,16 @@ export const load: LayoutServerLoad = async ({ locals, depends }) => {
         };
     });
 
+    // Parse TOS required version (if set)
+    const tosRequiredVersion = env.PUBLIC_TOS_REQUIRED_VERSION
+        ? parseInt(env.PUBLIC_TOS_REQUIRED_VERSION, 10)
+        : null;
+
     return {
         user: locals.user,
         session: locals.session,
         allSoftware,
-        myPlugins
+        myPlugins,
+        tosRequiredVersion
     };
 };

@@ -57,6 +57,14 @@ function createAuth() {
             deleteUser: {
                 // TODO Enable once we have hooks to cleanup user data in Redis
                 enabled: false
+            },
+            additionalFields: {
+                tosAccepted: {
+                    type: 'number',
+                    input: false,
+                    required: false,
+                    bigint: true
+                }
             }
         },
         secret: env.BETTER_AUTH_SECRET,
@@ -105,6 +113,17 @@ function createAuth() {
         },
         databaseHooks: {
             user: {
+                create: {
+                    before: async (user) => {
+                        // Set tosAccepted to current timestamp on account creation
+                        return {
+                            data: {
+                                ...user,
+                                tosAccepted: Date.now()
+                            }
+                        };
+                    }
+                },
                 update: {
                     before: async (data) => {
                         if ('username' in data) {

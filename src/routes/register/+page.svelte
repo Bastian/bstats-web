@@ -163,7 +163,7 @@
                         <label for="accept-privacy-policy">
                             I accept the <a
                                 class="font-semibold text-brand-600 hover:text-brand-700"
-                                href={resolve('/privacy-policy')}>privacy policy</a
+                                href={resolve('/terms-of-use')}>terms of use</a
                             >.
                         </label>
                     </Checkbox.Root>
