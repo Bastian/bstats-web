@@ -28,24 +28,16 @@ export async function ensureSchema() {
 
     const client = await pool.connect();
     try {
-        // Check if tables already exist
-        const result = await client.query(`
-			SELECT EXISTS (
-				SELECT FROM information_schema.tables
-				WHERE table_schema = 'public'
-				AND table_name = 'user'
-			);
-		`);
+        // Create migrations tracking table if it doesn't exist
+        await client.query(`
+            CREATE TABLE IF NOT EXISTS _better_auth_migrations (
+                id SERIAL PRIMARY KEY,
+                name TEXT NOT NULL UNIQUE,
+                applied_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
+            );
+        `);
 
-        if (result.rows[0].exists) {
-            console.log('✅ Better Auth schema already exists');
-            schemaApplied = true;
-            return;
-        }
-
-        console.log('📦 Applying Better Auth schema...');
-
-        // Find the latest migration file
+        // Find migration files
         const migrationsDir = join(process.cwd(), 'better-auth_migrations');
 
         if (!existsSync(migrationsDir)) {
@@ -54,18 +46,43 @@ export async function ensureSchema() {
 
         const files = readdirSync(migrationsDir)
             .filter((f) => f.endsWith('.sql'))
-            .sort()
-            .reverse();
+            .sort(); // Sort chronologically (oldest first)
 
         if (files.length === 0) {
             throw new Error('No migration files found. Run: npx @better-auth/cli generate');
         }
 
-        const latestMigration = files[0];
-        const sql = readFileSync(join(migrationsDir, latestMigration), 'utf-8');
+        // Get already applied migrations
+        const appliedResult = await client.query('SELECT name FROM _better_auth_migrations');
+        const appliedMigrations = new Set(appliedResult.rows.map((r) => r.name));
 
-        console.log(`   Applying migration: ${latestMigration}`);
-        await client.query(sql);
+        // Apply pending migrations
+        const pendingMigrations = files.filter((f) => !appliedMigrations.has(f));
+
+        if (pendingMigrations.length === 0) {
+            console.log('✅ Better Auth schema is up to date');
+            schemaApplied = true;
+            return;
+        }
+
+        console.log(`📦 Applying ${pendingMigrations.length} migration(s)...`);
+
+        for (const migration of pendingMigrations) {
+            const sql = readFileSync(join(migrationsDir, migration), 'utf-8');
+            console.log(`   Applying: ${migration}`);
+
+            await client.query('BEGIN');
+            try {
+                await client.query(sql);
+                await client.query('INSERT INTO _better_auth_migrations (name) VALUES ($1)', [
+                    migration
+                ]);
+                await client.query('COMMIT');
+            } catch (error) {
+                await client.query('ROLLBACK');
+                throw error;
+            }
+        }
 
         console.log('✅ Better Auth schema applied successfully');
         schemaApplied = true;
