@@ -4,9 +4,9 @@
     import PageHero from '$lib/components/page-hero.svelte';
     import { MetaTags } from 'svelte-meta-tags';
     import { getCanonicalUrl } from '$lib/utils/url';
+    import ChartCard from '$lib/components/charts/chart-card.svelte';
     import ChartCardWithData from '$lib/components/chart-card-with-data.svelte';
-    import { fetchCharts } from '$lib/charts/chart-data';
-    import type { LineChartData, ChartMetadata, ChartData } from '$lib/charts/chart-data';
+    import type { LineChartData, ChartData } from '$lib/charts/chart-data';
     import type { PageData } from './$types';
     import IconServer from '@tabler/icons-svelte/icons/server';
     import IconUsers from '@tabler/icons-svelte/icons/users';
@@ -21,43 +21,38 @@
     let playersCurrent = $state('--');
     let playersRecord = $state('--');
 
-    let charts = $state<ChartMetadata[]>([]);
-
+    // Scroll to anchor if present (client-side only)
     $effect(() => {
-        initializeCharts();
+        if (typeof window !== 'undefined' && window.location.hash) {
+            setTimeout(() => {
+                const target = document.querySelector(window.location.hash);
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            }, 800);
+        }
     });
 
-    async function initializeCharts() {
-        try {
-            // Fetch chart metadata
-            const chartsData = await fetchCharts(data.plugin.id);
-            const chartIds = Object.keys(chartsData).sort(
-                (a, b) => chartsData[a].position - chartsData[b].position
-            );
+    // Update badges when server data arrives
+    $effect(() => {
+        if (!data.chartDataPromises) return;
 
-            // Build charts array with metadata
-            charts = chartIds.map((id) => ({
-                id,
-                uid: chartsData[id].uid,
-                type: chartsData[id].type,
-                title: chartsData[id].title,
-                position: chartsData[id].position,
-                data: chartsData[id].data
-            }));
-
-            // Scroll to anchor if present
-            if (window.location.hash) {
-                setTimeout(() => {
-                    const target = document.querySelector(window.location.hash);
-                    if (target) {
-                        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        // Find players and servers charts and update badges when promises resolve
+        data.chartMetadata?.forEach(async (chart) => {
+            try {
+                const chartData = await data.chartDataPromises?.[chart.uid];
+                if (chartData && Array.isArray(chartData) && chartData.length > 0) {
+                    if (chart.id === 'players') {
+                        updatePlayersBadge(chartData as LineChartData);
+                    } else if (chart.id === 'servers') {
+                        updateServersBadge(chartData as LineChartData);
                     }
-                }, 800);
+                }
+            } catch {
+                // Ignore errors - will be handled by component
             }
-        } catch (error) {
-            console.error('Failed to initialize charts:', error);
-        }
-    }
+        });
+    });
 
     function handleDataLoaded(chartId: string, chartData: ChartData) {
         // Update badges for special charts
@@ -138,13 +133,43 @@
             </p>
         </div>
         <div class="mt-8 grid gap-8 md:grid-cols-2">
-            {#each charts as chart (chart.id)}
-                <ChartCardWithData
-                    {chart}
-                    defaultMaxElements={2 * 24 * 365}
-                    fullDataMaxElements={2 * 24 * 365 * 5}
-                    onDataLoaded={handleDataLoaded}
-                />
+            {#each data.chartMetadata ?? [] as chart (chart.id)}
+                {#await data.chartDataPromises?.[chart.uid]}
+                    <!-- Loading state - just show empty card structure -->
+                    <ChartCard
+                        title={chart.title}
+                        chartId={chart.id}
+                        colSpan={chart.type === 'single_linechart' ||
+                        chart.type === 'simple_map' ||
+                        chart.type === 'advanced_map' ||
+                        chart.type === 'simple_bar' ||
+                        chart.type === 'advanced_bar'
+                            ? 'double'
+                            : 'single'}
+                        supportsPatterns={chart.type !== 'simple_map' &&
+                            chart.type !== 'advanced_map'}
+                    >
+                        <div class="flex h-72 items-center justify-center text-slate-500">
+                            Loading chart data...
+                        </div>
+                    </ChartCard>
+                {:then chartData}
+                    <ChartCardWithData
+                        {chart}
+                        initialData={chartData}
+                        defaultMaxElements={2 * 24 * 365}
+                        fullDataMaxElements={2 * 24 * 365 * 5}
+                        onDataLoaded={handleDataLoaded}
+                    />
+                {:catch}
+                    <!-- Error - fallback to client-side fetch -->
+                    <ChartCardWithData
+                        {chart}
+                        defaultMaxElements={2 * 24 * 365}
+                        fullDataMaxElements={2 * 24 * 365 * 5}
+                        onDataLoaded={handleDataLoaded}
+                    />
+                {/await}
             {/each}
         </div>
     </section>

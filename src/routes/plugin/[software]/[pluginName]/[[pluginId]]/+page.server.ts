@@ -6,10 +6,12 @@ import {
     getPluginById,
     getAllPluginIds
 } from '$lib/server/redis/plugins.js';
-import { getChartUidByPluginIdAndChartId } from '$lib/server/redis/charts.js';
+import { getChartUidByPluginIdAndChartId, getChartsByPluginId } from '$lib/server/redis/charts.js';
 import { getLimitedLineChartData } from '$lib/server/redis/chart-data.js';
+import type { ChartData } from '$lib/charts/chart-data';
+import { env } from '$env/dynamic/private';
 
-export const load: PageServerLoad = async ({ params, locals }) => {
+export const load: PageServerLoad = async ({ params, locals, fetch }) => {
     const { software: softwareUrl, pluginName, pluginId } = params;
 
     // Handle "random" plugin
@@ -63,11 +65,54 @@ export const load: PageServerLoad = async ({ params, locals }) => {
             : false;
     const isAdmin = locals.user?.role === 'admin';
 
+    // Fetch chart metadata from Redis
+    const charts = await getChartsByPluginId(plugin.id);
+    const chartMetadata =
+        charts
+            ?.map((chart) => ({
+                uid: chart.uid,
+                id: chart.id,
+                type: chart.type,
+                title: chart.title,
+                position: chart.position,
+                data: chart.data as Record<string, unknown> | undefined
+            }))
+            .sort((a, b) => a.position - b.position) || [];
+
+    if (!env.BACKEND_URL) {
+        throw new Error('BACKEND_URL environment variable is not set.');
+    }
+
+    // Create promises for chart data that can be streamed to the client
+    const chartDataPromises: Record<number, Promise<ChartData>> = {};
+
+    for (const chart of chartMetadata) {
+        const maxElements = chart.type === 'single_linechart' ? 2 * 24 * 365 : undefined;
+        const chartDataUrl = maxElements
+            ? `${env.BACKEND_URL}/charts/${chart.uid}/data?maxElements=${maxElements}`
+            : `${env.BACKEND_URL}/charts/${chart.uid}/data`;
+
+        chartDataPromises[chart.uid] = fetch(chartDataUrl)
+            .then((res) => {
+                if (!res.ok) {
+                    throw new Error(`Failed to fetch chart ${chart.id}: ${res.statusText}`);
+                }
+                return res.json();
+            })
+            .catch((error) => {
+                console.error(`Error fetching chart ${chart.id}:`, error);
+                // Reject promise to trigger catch block on client (will fallback to client-side fetch)
+                throw error;
+            });
+    }
+
     return {
         unknownPlugin: false,
         plugin,
         software,
-        isOwner: isOwner || isAdmin
+        isOwner: isOwner || isAdmin,
+        chartMetadata,
+        chartDataPromises
     };
 };
 

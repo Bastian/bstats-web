@@ -21,6 +21,7 @@
 
     interface Props {
         chart: ChartMetadata;
+        initialData?: ChartData | null;
         defaultMaxElements?: number;
         fullDataMaxElements?: number;
         onDataLoaded?: (chartId: string, data: ChartData) => void;
@@ -28,19 +29,22 @@
 
     let {
         chart,
+        initialData = null,
         defaultMaxElements,
         fullDataMaxElements = 2 * 24 * 365 * 5,
         onDataLoaded
     }: Props = $props();
 
-    let chartData = $state<ChartData | null>(null);
-    let isLoading = $state(true);
+    let chartData = $state<ChartData | null>(initialData);
+    let isLoading = $state(!initialData);
     let fullDataLoading = $state(false);
     let fullDataLoaded = $state(false);
     let fullDataError = $state<string | null>(null);
 
     $effect(() => {
-        loadInitialData();
+        if (!initialData) {
+            loadInitialData();
+        }
     });
 
     async function loadInitialData() {
