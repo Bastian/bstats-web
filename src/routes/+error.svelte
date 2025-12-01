@@ -5,7 +5,6 @@
     import Button from '$lib/components/button.svelte';
     import PageHero from '$lib/components/page-hero.svelte';
     import { MetaTags } from 'svelte-meta-tags';
-    import { getCanonicalUrl } from '$lib/utils/url';
 
     // Access error from page store
     let errorStatus = $derived($page.status);
