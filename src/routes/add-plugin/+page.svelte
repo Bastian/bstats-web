@@ -134,7 +134,7 @@
                             href={resolve(
                                 `/plugin/${plugin.platform}/${plugin.pluginName}/${plugin.pluginId}`
                             )}
-                            class="inline-block text-sm font-semibold text-brand-600 underline hover:text-brand-800"
+                            class="inline-flex gap-2 text-sm font-semibold text-brand-600 underline hover:text-brand-800"
                         >
                             View your plugin on bStats <IconArrowRight size={18} />
                         </a>
