@@ -25,6 +25,11 @@ export const GET: RequestHandler = async () => {
                     return null; // Skip invalid plugins
                 }
 
+                // Skip global plugins
+                if (plugin.global) {
+                    return null;
+                }
+
                 // Get software name
                 const software = softwareMap.get(plugin.software);
                 const softwareName = software ? software.name : 'Unknown';
