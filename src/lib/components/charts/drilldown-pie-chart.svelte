@@ -2,6 +2,10 @@
     import * as echarts from 'echarts';
     import { onMount, onDestroy } from 'svelte';
     import { getEChartsTheme } from '$lib/charts/echarts-theme';
+    import {
+        groupSmallItemsIntoOther,
+        groupSmallDrilldownItemsIntoOther
+    } from '$lib/charts/chart-data';
     import { accessibilityPreferences } from '$lib/stores/accessibility';
 
     interface Props {
@@ -77,7 +81,8 @@
 
         if (currentDrilldown === null) {
             // Show top-level data
-            chartData = data.seriesData
+            const groupedSeriesData = groupSmallItemsIntoOther(data.seriesData);
+            chartData = groupedSeriesData
                 .map((item) => ({
                     name: item.name,
                     value: item.y,
@@ -88,7 +93,8 @@
             // Show drilled-down data
             const drilldownLevel = data.drilldownData.find((d) => d.id === currentDrilldown);
             if (drilldownLevel) {
-                chartData = drilldownLevel.data
+                const groupedData = groupSmallDrilldownItemsIntoOther(drilldownLevel.data);
+                chartData = groupedData
                     .map(([name, value]) => ({
                         name,
                         value

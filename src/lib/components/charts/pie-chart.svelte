@@ -2,6 +2,7 @@
     import * as echarts from 'echarts';
     import { onMount, onDestroy } from 'svelte';
     import { getEChartsTheme } from '$lib/charts/echarts-theme';
+    import { groupSmallItemsIntoOther } from '$lib/charts/chart-data';
     import { accessibilityPreferences } from '$lib/stores/accessibility';
 
     interface Props {
@@ -53,8 +54,9 @@
     function updateChart(showPatterns: boolean) {
         if (!chartInstance || !data) return;
 
-        // Sort data by value descending
-        const sortedData = [...data].sort((a, b) => b.y - a.y);
+        // Group small items into "Other" and sort by value descending
+        const groupedData = groupSmallItemsIntoOther(data);
+        const sortedData = [...groupedData].sort((a, b) => b.y - a.y);
 
         // Names are considered long if the 75th percentile length exceeds 15 characters
         const nameLengths = sortedData.map((item) => item.name.length).sort((a, b) => a - b);

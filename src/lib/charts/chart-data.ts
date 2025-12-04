@@ -72,3 +72,71 @@ export async function fetchCharts(pluginId: number): Promise<Record<string, Char
 
     return response.json();
 }
+
+/**
+ * Group small items into an "Other" category for pie charts.
+ * Only applies when there are more than 20 items.
+ * Items with less than 0.5% of the total are grouped into "Other".
+ *
+ * @param data - Array of items with name and value
+ * @returns New array with small items grouped into "Other"
+ */
+export function groupSmallItemsIntoOther<T extends { name: string; y: number }>(data: T[]): T[] {
+    if (data.length <= 20) {
+        return data;
+    }
+
+    const total = data.reduce((sum, item) => sum + item.y, 0);
+    const threshold = total / 200; // 0.5%
+
+    const result: T[] = [];
+    let otherCount = 0;
+
+    for (const item of data) {
+        if (item.y < threshold) {
+            otherCount += item.y;
+        } else {
+            result.push(item);
+        }
+    }
+
+    if (otherCount > 0) {
+        result.push({ name: 'Other', y: otherCount } as T);
+    }
+
+    return result;
+}
+
+/**
+ * Group small items into an "Other" category for drilldown data.
+ * Only applies when there are more than 20 items.
+ * Items with less than 0.5% of the total are grouped into "Other".
+ *
+ * @param data - Array of [name, value] tuples
+ * @returns New array with small items grouped into "Other"
+ */
+export function groupSmallDrilldownItemsIntoOther(data: [string, number][]): [string, number][] {
+    if (data.length <= 20) {
+        return data;
+    }
+
+    const total = data.reduce((sum, [, value]) => sum + value, 0);
+    const threshold = total / 200; // 0.5%
+
+    const result: [string, number][] = [];
+    let otherCount = 0;
+
+    for (const [name, value] of data) {
+        if (value < threshold) {
+            otherCount += value;
+        } else {
+            result.push([name, value]);
+        }
+    }
+
+    if (otherCount > 0) {
+        result.push(['Other', otherCount]);
+    }
+
+    return result;
+}
