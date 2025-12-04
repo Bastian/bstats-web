@@ -11,7 +11,7 @@ import { Pool } from 'pg';
 import { sveltekitCookies } from 'better-auth/svelte-kit';
 import { getRequestEvent } from '$app/server';
 import bcrypt from 'bcryptjs';
-import { building } from '$app/environment';
+import { building, dev } from '$app/environment';
 
 import { env } from '$env/dynamic/private';
 import { env as publicEnv } from '$env/dynamic/public';
@@ -42,8 +42,8 @@ function createAuth() {
     return betterAuth({
         database: pool,
         appName: 'bStats',
-        baseURL: publicEnv.PUBLIC_BASE_URL,
-        trustedOrigins: [publicEnv.PUBLIC_BASE_URL],
+        baseURL: dev ? undefined : publicEnv.PUBLIC_BASE_URL,
+        trustedOrigins: dev ? undefined : [publicEnv.PUBLIC_BASE_URL],
         emailAndPassword: {
             enabled: true,
             requireEmailVerification: false,
