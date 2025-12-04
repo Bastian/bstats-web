@@ -42,6 +42,8 @@ function createAuth() {
     return betterAuth({
         database: pool,
         appName: 'bStats',
+        baseURL: publicEnv.PUBLIC_BASE_URL,
+        trustedOrigins: [publicEnv.PUBLIC_BASE_URL],
         emailAndPassword: {
             enabled: true,
             requireEmailVerification: false,
