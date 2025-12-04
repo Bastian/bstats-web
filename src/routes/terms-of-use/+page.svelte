@@ -34,7 +34,7 @@
     <section class="doc-container mt-12">
         <article class="doc-card prose" style="max-width: none">
             <p class="text-sm text-slate-500 italic">
-                <strong>Last updated:</strong> 2025/11/16
+                <strong>Last updated:</strong> 2025/12/04
             </p>
 
             <h2>1. Introduction</h2>

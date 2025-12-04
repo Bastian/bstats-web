@@ -36,7 +36,7 @@
             class="doc-card prose space-y-6"
             style="max-width: none"
         >
-            <p class="text-sm text-slate-500 italic"><strong>Last updated:</strong> 2025/11/16</p>
+            <p class="text-sm text-slate-500 italic"><strong>Last updated:</strong> 2025/12/04</p>
             <h2 class="doc-card-title">bStats plugin privacy policy</h2>
 
             <p>
