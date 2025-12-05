@@ -158,7 +158,7 @@
                         {chart}
                         initialData={chartData}
                         defaultMaxElements={2 * 24 * 365}
-                        fullDataMaxElements={2 * 24 * 365 * 5}
+                        fullDataMaxElements={2 * 24 * 365 * 15}
                         onDataLoaded={handleDataLoaded}
                     />
                 {:catch}
@@ -166,7 +166,7 @@
                     <ChartCardWithData
                         {chart}
                         defaultMaxElements={2 * 24 * 365}
-                        fullDataMaxElements={2 * 24 * 365 * 5}
+                        fullDataMaxElements={2 * 24 * 365 * 15}
                         onDataLoaded={handleDataLoaded}
                     />
                 {/await}

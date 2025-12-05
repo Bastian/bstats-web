@@ -31,7 +31,7 @@
         chart,
         initialData = null,
         defaultMaxElements,
-        fullDataMaxElements = 2 * 24 * 365 * 5,
+        fullDataMaxElements = 2 * 24 * 365 * 15,
         onDataLoaded
     }: Props = $props();
 
