@@ -32,7 +32,7 @@
         chart,
         initialData = null,
         defaultMaxElements,
-        fullDataMaxElements = 2 * 24 * 365 * daysSince('2016-08-25'),
+        fullDataMaxElements = 2 * 24 * daysSince('2016-08-25'),
         onDataLoaded
     }: Props = $props();
 
