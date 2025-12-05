@@ -18,6 +18,7 @@
     import IconLoader2 from '@tabler/icons-svelte/icons/loader-2';
     import IconDatabase from '@tabler/icons-svelte/icons/database';
     import IconAlertCircle from '@tabler/icons-svelte/icons/alert-circle';
+    import { daysSince } from '$lib/utils/time';
 
     interface Props {
         chart: ChartMetadata;
@@ -31,7 +32,7 @@
         chart,
         initialData = null,
         defaultMaxElements,
-        fullDataMaxElements = 2 * 24 * 365 * 15,
+        fullDataMaxElements = 2 * 24 * 365 * daysSince('2016-08-25'),
         onDataLoaded
     }: Props = $props();
 

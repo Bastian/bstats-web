@@ -11,6 +11,7 @@
     import IconServer from '@tabler/icons-svelte/icons/server';
     import IconUsers from '@tabler/icons-svelte/icons/users';
     import ChartBadge from '$lib/components/chart-badge.svelte';
+    import { daysSince } from '$lib/utils/time';
 
     let { data }: { data: PageData } = $props();
 
@@ -158,7 +159,6 @@
                         {chart}
                         initialData={chartData}
                         defaultMaxElements={2 * 24 * 365}
-                        fullDataMaxElements={2 * 24 * 365 * 15}
                         onDataLoaded={handleDataLoaded}
                     />
                 {:catch}
@@ -166,7 +166,6 @@
                     <ChartCardWithData
                         {chart}
                         defaultMaxElements={2 * 24 * 365}
-                        fullDataMaxElements={2 * 24 * 365 * 15}
                         onDataLoaded={handleDataLoaded}
                     />
                 {/await}
