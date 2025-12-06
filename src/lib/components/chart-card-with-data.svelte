@@ -115,7 +115,7 @@
                 class:hover:text-red-700={fullDataError && !fullDataLoading}
                 title={fullDataError
                     ? `Error: ${fullDataError}`
-                    : 'Load all available historical data (up to 5 years)'}
+                    : 'Load all available historical data'}
                 aria-label={fullDataError
                     ? `Error loading data: ${fullDataError}. Click to retry.`
                     : 'Load full data'}
