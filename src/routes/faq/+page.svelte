@@ -99,8 +99,13 @@
             <h2 class="doc-card-title">Account</h2>
             <Accordion.Root class="space-y-3">
                 <Accordion.Item title="How do I change my password?" contentClass="max-w-prose">
-                    We don't support self-service password changes yet. If you urgently need an
-                    update, contact the maintainers and we'll help manually.
+                    You can change your password on the
+                    <a
+                        class="font-semibold text-brand-600 hover:text-brand-700"
+                        href={resolve('/change-password')}
+                    >
+                        change password page
+                    </a>.
                 </Accordion.Item>
                 <Accordion.Item title="I forgot my password!" contentClass="max-w-prose">
                     Drop us a message on Discord or via GitHub Issues. We'll verify your ownership
