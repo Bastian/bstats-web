@@ -42,9 +42,9 @@
     let activeSearch = $state(data.search ?? '');
     let pendingAction = $state<{ userId: string; type: 'ban' | 'unban' | 'reset' } | null>(null);
     let watchersReady = $state(false);
-    let lastParams = $derived<{ page: number; search: string }>({
-        page: currentPage,
-        search: activeSearch
+    let lastParams = $state<{ page: number; search: string }>({
+        page: data.page ?? 1,
+        search: data.search ?? ''
     });
 
     const rolesFor = (role?: string | null) =>
