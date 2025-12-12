@@ -57,7 +57,7 @@
             {form}
             name="chartId"
             label="Chart ID"
-            description="Technical ID used in code and URLs. Use camelCase."
+            description="Technical ID used in code and URLs. Use camelCase or snake_case."
             inputProps={{ placeholder: 'myChart' }}
             bind:value={$formData.chartId}
         />

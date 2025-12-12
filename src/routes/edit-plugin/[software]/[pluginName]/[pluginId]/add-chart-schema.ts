@@ -7,7 +7,7 @@ const common = {
         .nonempty('Must not be empty')
         .max(50)
         .regex(/^\S*$/, 'Must not contain spaces')
-        .regex(/^[a-zA-Z0-9 ]*$/, 'Can only contain letters and numbers'),
+        .regex(/^[a-zA-Z0-9_ ]*$/, 'Can only contain letters, numbers, and underscores'),
     chartTitle: z
         .string()
         .trim()
