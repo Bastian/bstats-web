@@ -74,6 +74,7 @@ function createAuth() {
             // Username plugin allows login with username instead of email
             // Needed for maintaining compatibility with old username-only system
             username({
+                minUsernameLength: 2,
                 usernameValidator: (username) => {
                     return /^[a-zA-Z0-9_\- ]+$/.test(username);
                 }
