@@ -1,9 +1,8 @@
 // See https://svelte.dev/docs/kit/types#app.d.ts
 // for information about these interfaces
-import type { getAuth } from '$lib/auth';
+import type { AppAuth } from '$lib/auth';
 
-type Auth = NonNullable<ReturnType<typeof getAuth>>;
-type Session = Auth['$Infer']['Session'];
+type Session = AppAuth['$Infer']['Session'];
 
 declare global {
     namespace App {

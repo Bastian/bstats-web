@@ -1,9 +1,10 @@
 import { createAuthClient } from 'better-auth/svelte';
-import { usernameClient, adminClient } from 'better-auth/client/plugins';
+import { usernameClient, adminClient, inferAdditionalFields } from 'better-auth/client/plugins';
 import { invalidate } from '$app/navigation';
+import type { AppAuth } from './auth';
 
 const client = createAuthClient({
-    plugins: [usernameClient(), adminClient()]
+    plugins: [usernameClient(), adminClient(), inferAdditionalFields<AppAuth>()]
 });
 
 export const authClient = {

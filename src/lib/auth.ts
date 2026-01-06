@@ -43,7 +43,7 @@ function createAuth() {
         database: pool,
         appName: 'bStats',
         baseURL: dev ? undefined : publicEnv.PUBLIC_BASE_URL,
-        trustedOrigins: dev ? undefined : [publicEnv.PUBLIC_BASE_URL],
+        trustedOrigins: dev || !publicEnv.PUBLIC_BASE_URL ? undefined : [publicEnv.PUBLIC_BASE_URL],
         emailAndPassword: {
             enabled: true,
             requireEmailVerification: false,
