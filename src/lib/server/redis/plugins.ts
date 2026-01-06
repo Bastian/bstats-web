@@ -165,3 +165,25 @@ export async function transferPluginOwnership(
         updatePluginOwner(pluginId, newOwner)
     ]);
 }
+
+export async function migratePluginOwnership(
+    oldUsername: string,
+    newUsername: string
+): Promise<void> {
+    const plugins = await getPluginsOfUser(oldUsername);
+
+    if (plugins.length === 0) {
+        return;
+    }
+
+    // Move each plugin from old username to new username
+    await Promise.all(
+        plugins.map((plugin) =>
+            Promise.all([
+                removePluginFromUser(oldUsername, plugin.id),
+                addPluginToUser(newUsername, plugin.id),
+                updatePluginOwner(plugin.id, newUsername)
+            ])
+        )
+    );
+}

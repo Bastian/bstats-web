@@ -167,6 +167,12 @@
                                             My page
                                         </a>
                                         <a
+                                            href={resolve('/change-username')}
+                                            class="link link-wrapper"
+                                        >
+                                            Change username
+                                        </a>
+                                        <a
                                             href={resolve('/change-password')}
                                             class="link link-wrapper"
                                         >

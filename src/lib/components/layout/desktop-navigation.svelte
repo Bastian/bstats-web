@@ -140,6 +140,14 @@
 
                             <li>
                                 <NavigationMenu.Link
+                                    href={resolve('/change-username')}
+                                    class="block rounded-md px-3 py-2 transition hover:bg-slate-100 hover:text-slate-900"
+                                >
+                                    Change username
+                                </NavigationMenu.Link>
+                            </li>
+                            <li>
+                                <NavigationMenu.Link
                                     href={resolve('/change-password')}
                                     class="block rounded-md px-3 py-2 transition hover:bg-slate-100 hover:text-slate-900"
                                 >

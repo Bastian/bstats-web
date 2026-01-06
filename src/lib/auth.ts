@@ -111,9 +111,16 @@ function createAuth() {
         },
         hooks: {
             before: createAuthMiddleware(async (ctx) => {
+                // Block direct HTTP calls to /update-user with username changes.
+                // Username changes must go through the /change-username page which
+                // uses auth.api.updateUser() with a secret token and syncs Redis.
                 if (ctx.path === '/update-user' && typeof ctx.body?.username !== 'undefined') {
-                    // TODO Allow username changes in the future
-                    throw new APIError('FORBIDDEN', { message: 'Username changes are disabled.' });
+                    const internalToken = ctx.headers?.get('x-internal-username-change');
+                    if (internalToken !== env.BETTER_AUTH_SECRET) {
+                        throw new APIError('FORBIDDEN', {
+                            message: 'Use the change username page to change your username.'
+                        });
+                    }
                 }
             })
         },
@@ -128,16 +135,6 @@ function createAuth() {
                                 tosAccepted: Date.now()
                             }
                         };
-                    }
-                },
-                update: {
-                    before: async (data) => {
-                        if ('username' in data) {
-                            throw new APIError('FORBIDDEN', {
-                                message: 'Username changes are disabled.'
-                            });
-                        }
-                        return { data };
                     }
                 }
             }
