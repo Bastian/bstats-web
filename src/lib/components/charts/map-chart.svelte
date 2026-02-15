@@ -165,7 +165,7 @@
                 calculable: true,
                 inRange: {
                     color: dark
-                        ? ['#450A0A', '#B91C1C', '#DC2626']
+                        ? ['#252732', '#DC2626']
                         : ['#FFCDD2', '#EF5350', '#C62828', '#B71C1C']
                 },
                 outOfRange: {
