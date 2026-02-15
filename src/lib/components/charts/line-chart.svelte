@@ -4,6 +4,7 @@
     import { getEChartsTheme } from '$lib/charts/echarts-theme';
     import { Button } from 'bits-ui';
     import { accessibilityPreferences } from '$lib/stores/accessibility';
+    import { isDark } from '$lib/stores/theme.svelte';
 
     interface Props {
         data: [number, number][]; // [timestamp, value][]
@@ -64,8 +65,9 @@
         }
     });
 
-    // Update chart when data or accessibility preferences change
+    // Update chart when data, accessibility preferences, or theme change
     $effect(() => {
+        void isDark.current;
         if (chartInstance && data) {
             updateChart(accessibilityPreferences.current.showChartPatterns);
             setTimeRange(DEFAULT_ZOOM);
@@ -208,7 +210,8 @@
             return;
         }
 
-        const theme = getEChartsTheme();
+        const dark = isDark.current;
+        const theme = getEChartsTheme(dark);
 
         // Build a descriptive summary for screen readers
         let description: string;
@@ -281,8 +284,12 @@
                 axisLabel: {
                     inside: isMobile ? true : false,
                     // On mobile, use a darker color for better contrast because
-                    // the labels are inside the chart area
-                    color: isMobile ? '#222222' : theme.yAxis?.axisLabel?.color,
+                    // the labels are inside the chart area (but keep it light in dark mode)
+                    color: isMobile
+                        ? dark
+                            ? '#94a3b8'
+                            : '#222222'
+                        : theme.yAxis?.axisLabel?.color,
                     fontSize: theme.yAxis?.axisLabel?.fontSize,
                     formatter: (value: number) => {
                         return value % 1 === 0 ? value.toString() : '';
@@ -297,7 +304,7 @@
                     height: 30,
                     bottom: 40,
                     textStyle: {
-                        color: '#64748b'
+                        color: dark ? '#94a3b8' : '#64748b'
                     },
                     handleStyle: {
                         color: '#10b981'
@@ -352,9 +359,10 @@
     <Button.Root
         {...props}
         class={[
-            'rounded border border-slate-200 bg-white px-2 py-1 text-xs font-medium text-slate-600 transition hover:border-brand-300 hover:bg-brand-50 hover:text-brand-700 focus-visible:ring-2 focus-visible:ring-brand-500 focus-visible:outline-none',
+            'rounded border border-slate-200 bg-white px-2 py-1 text-xs font-medium text-slate-600 transition hover:border-brand-300 hover:bg-brand-50 hover:text-brand-700 focus-visible:ring-2 focus-visible:ring-brand-500 focus-visible:outline-none dark:border-dark-600 dark:bg-dark-700 dark:text-slate-400 dark:hover:border-brand-700 dark:hover:bg-brand-950/50 dark:hover:text-brand-400',
             {
-                'bg-brand-50! font-medium! text-brand-700!': zoom === label
+                'bg-brand-50! font-medium! text-brand-700! dark:bg-brand-950/50! dark:text-brand-400!':
+                    zoom === label
             },
             props?.class
         ]}

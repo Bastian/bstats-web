@@ -3,6 +3,7 @@
     import { onMount, onDestroy } from 'svelte';
     import { getEChartsTheme } from '$lib/charts/echarts-theme';
     import world110m from '$lib/assets/geo-json/world-110m.json';
+    import { isDark } from '$lib/stores/theme.svelte';
 
     // Our backend returns ISO2 country codes, but our geoJSON has incomplete
     // ISO2 codes for countries with territories (e.g. France). So we need a
@@ -65,8 +66,9 @@
         }
     });
 
-    // Update chart when data changes or map loads
+    // Update chart when data changes, map loads, or theme changes
     $effect(() => {
+        void isDark.current;
         if (mapLoaded && chartInstance && data) {
             updateChart();
         }
@@ -102,7 +104,8 @@
     function updateChart() {
         if (!chartInstance || !data || !mapLoaded) return;
 
-        const theme = getEChartsTheme();
+        const dark = isDark.current;
+        const theme = getEChartsTheme(dark);
 
         // Calculate min and max for color scale
         const values = data.map((d) => d.value);
@@ -161,11 +164,22 @@
                 realtime: false,
                 calculable: true,
                 inRange: {
-                    color: ['#FFCDD2', '#EF5350', '#C62828', '#B71C1C']
+                    color: dark
+                        ? ['#4a2020', '#C62828', '#EF5350', '#FFCDD2']
+                        : ['#FFCDD2', '#EF5350', '#C62828', '#B71C1C']
+                },
+                outOfRange: {
+                    color: dark ? '#252732' : '#e2e8f0' // dark-700 / slate-200
                 },
                 textStyle: {
-                    color: '#475569'
+                    color: dark ? '#94a3b8' : '#475569' // slate-400 / slate-600
                 },
+                handleStyle: dark
+                    ? {
+                          color: '#94a3b8',
+                          borderColor: '#64748b'
+                      }
+                    : undefined,
                 left: 'left',
                 bottom: 20
             },
@@ -177,8 +191,8 @@
                     roam: true,
                     nameProperty: 'ADM0_A3_US',
                     itemStyle: {
-                        areaColor: '#f1f5f9',
-                        borderColor: '#cbd5e1'
+                        areaColor: dark ? '#252732' : '#f1f5f9', // dark-700 / slate-100
+                        borderColor: dark ? '#3b3c45' : '#cbd5e1' // dark-500 / slate-300
                     },
                     emphasis: {
                         label: {
@@ -211,7 +225,7 @@
     <div class="relative -m-4 h-80 w-[calc(100%+2rem)] sm:h-[30rem]">
         <button
             onclick={resetMap}
-            class="absolute top-4 right-4 z-10 rounded border border-slate-200 bg-white px-2 py-1 text-xs font-medium text-slate-600 shadow-sm transition hover:border-brand-300 hover:bg-brand-50 hover:text-brand-700"
+            class="absolute top-4 right-4 z-10 rounded border border-slate-200 bg-white px-2 py-1 text-xs font-medium text-slate-600 shadow-sm transition hover:border-brand-300 hover:bg-brand-50 hover:text-brand-700 dark:border-dark-600 dark:bg-dark-700 dark:text-slate-400 dark:hover:border-dark-500 dark:hover:bg-dark-600 dark:hover:text-slate-200"
             title="Reset zoom and position"
         >
             Reset

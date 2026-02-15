@@ -7,6 +7,7 @@
         groupSmallDrilldownItemsIntoOther
     } from '$lib/charts/chart-data';
     import { accessibilityPreferences } from '$lib/stores/accessibility';
+    import { isDark } from '$lib/stores/theme.svelte';
 
     interface Props {
         data: {
@@ -66,8 +67,9 @@
         }
     });
 
-    // Update chart when data, drilldown state, or accessibility preferences change
+    // Update chart when data, drilldown state, accessibility preferences, or theme change
     $effect(() => {
+        void isDark.current;
         if (chartInstance && data) {
             updateChart(accessibilityPreferences.current.showChartPatterns);
         }
@@ -76,7 +78,8 @@
     function updateChart(showPatterns: boolean) {
         if (!chartInstance || !data) return;
 
-        const theme = getEChartsTheme();
+        const dark = isDark.current;
+        const theme = getEChartsTheme(dark);
         let chartData: { name: string; value: number; drilldown?: string }[] = [];
 
         if (currentDrilldown === null) {
@@ -180,6 +183,9 @@
                     radius: isMobile ? '60%' : '65%',
                     top: isMobile ? '-20%' : undefined,
                     data: chartData,
+                    emptyCircleStyle: {
+                        color: dark ? '#252732' : '#e2e8f0' // dark-700 / slate-200
+                    },
                     emphasis: {
                         itemStyle: {
                             shadowBlur: 10,
@@ -188,13 +194,14 @@
                         }
                     },
                     itemStyle: {
-                        borderColor: `#fff`,
+                        borderColor: dark ? '#161822' : '#fff', // dark-800 / white
                         borderWidth: 1
                     },
                     label: {
                         show: !isMobile,
                         formatter: '{b}: {d}%',
-                        fontSize: 12
+                        fontSize: 12,
+                        color: dark ? '#cbd5e1' : undefined // slate-300 for dark mode
                     },
                     labelLine: {
                         show: !isMobile,
@@ -221,12 +228,14 @@
     {#if currentDrilldown}
         <button
             onclick={goBack}
-            class="absolute top-2 left-6 rounded-lg border border-slate-200 bg-white px-3 py-1.5 text-sm font-semibold text-slate-600 shadow-sm transition hover:border-brand-300 hover:text-brand-700"
+            class="absolute top-2 left-6 rounded-lg border border-slate-200 bg-white px-3 py-1.5 text-sm font-semibold text-slate-600 shadow-sm transition hover:border-brand-300 hover:text-brand-700 dark:border-dark-600 dark:bg-dark-700 dark:text-slate-400 dark:hover:border-dark-500 dark:hover:text-slate-200"
         >
             ← Back
         </button>
     {:else}
-        <div class="absolute top-0 right-0 left-0 text-center text-xs text-slate-500 sm:text-sm">
+        <div
+            class="absolute top-0 right-0 left-0 text-center text-xs text-slate-500 sm:text-sm dark:text-slate-400"
+        >
             Click the slices to view details
         </div>
     {/if}

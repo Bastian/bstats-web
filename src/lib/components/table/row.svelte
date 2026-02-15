@@ -9,6 +9,9 @@
     let { children, class: className, ...restProps }: Props = $props();
 </script>
 
-<tr class={['transition-colors hover:bg-slate-50', className]} {...restProps}>
+<tr
+    class={['transition-colors hover:bg-slate-50 dark:hover:bg-dark-700/50', className]}
+    {...restProps}
+>
     {@render children()}
 </tr>

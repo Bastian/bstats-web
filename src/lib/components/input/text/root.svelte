@@ -17,6 +17,6 @@
     @reference "$lib/../app.css";
 
     div :global(label) {
-        @apply text-sm font-semibold tracking-wide text-slate-700;
+        @apply text-sm font-semibold tracking-wide text-slate-700 dark:text-slate-300;
     }
 </style>

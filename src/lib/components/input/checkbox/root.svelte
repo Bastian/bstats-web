@@ -17,6 +17,6 @@
     @reference "$lib/../app.css";
 
     div :global(label) {
-        @apply text-sm leading-none font-medium text-slate-700 peer-disabled:cursor-not-allowed peer-disabled:opacity-70;
+        @apply text-sm leading-none font-medium text-slate-700 peer-disabled:cursor-not-allowed peer-disabled:opacity-70 dark:text-slate-300;
     }
 </style>

@@ -27,7 +27,7 @@
     {value}
     {disabled}
     class={[
-        'group rounded-2xl border border-slate-200 bg-slate-50',
+        'group rounded-2xl border border-slate-200 bg-slate-50 dark:border-dark-700 dark:bg-dark-800',
         'transition-shadow has-[:focus-visible]:ring-2 has-[:focus-visible]:ring-brand-500/70 has-[:focus-visible]:ring-offset-2',
         itemClass
     ]}
@@ -36,7 +36,7 @@
     <BitsAccordion.Header>
         <BitsAccordion.Trigger
             class={[
-                'flex w-full cursor-pointer items-center justify-between p-4 text-left text-sm font-semibold text-slate-700 sm:p-5',
+                'flex w-full cursor-pointer items-center justify-between p-4 text-left text-sm font-semibold text-slate-700 sm:p-5 dark:text-slate-200',
                 'rounded-2xl outline-none',
                 summaryClass
             ]}
@@ -53,7 +53,7 @@
     </BitsAccordion.Header>
     <BitsAccordion.Content
         class={[
-            'overflow-hidden text-sm leading-relaxed text-slate-600',
+            'overflow-hidden text-sm leading-relaxed text-slate-600 dark:text-slate-400',
             'data-[state=closed]:animate-accordion-up data-[state=open]:animate-accordion-down',
             contentClass
         ]}

@@ -9,6 +9,9 @@
     let { children, class: className, ...restProps }: Props = $props();
 </script>
 
-<thead class={['bg-slate-100 text-slate-500', className]} {...restProps}>
+<thead
+    class={['bg-slate-100 text-slate-500 dark:bg-dark-700 dark:text-slate-400', className]}
+    {...restProps}
+>
     {@render children()}
 </thead>

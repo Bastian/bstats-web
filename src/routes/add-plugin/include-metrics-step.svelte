@@ -72,11 +72,11 @@
                 <code>package</code> to your own package.
             </p>
             <div class="doc-callout doc-callout-warning mt-4">
-                <p class="mt-2 max-w-prose text-sm text-slate-600">
+                <p class="mt-2 max-w-prose text-sm text-slate-600 dark:text-slate-400">
                     You <b>MUST NOT</b> modify the code in any way except for the package name. Doing
                     so will result in your plugin being removed from bStats and your account being banned.
                 </p>
-                <p class="mt-2 max-w-prose text-sm text-slate-600">
+                <p class="mt-2 max-w-prose text-sm text-slate-600 dark:text-slate-400">
                     Especially, do <b>NOT</b> remove the option for users to opt-out of metrics collection.
                 </p>
             </div>
@@ -85,14 +85,20 @@
                 <p>Add the bStats dependency:</p>
                 <CodeBlock code={processCode(mavenDependency)} lang="xml" />
                 <div class="max-w-prose">
-                    Relocate <code class="font-mono text-slate-700">org.bstats</code> into your own
-                    package for example with the
-                    <code class="font-mono text-slate-700">maven-shade-plugin</code>:
+                    Relocate <code class="font-mono text-slate-700 dark:text-slate-300"
+                        >org.bstats</code
+                    >
+                    into your own package for example with the
+                    <code class="font-mono text-slate-700 dark:text-slate-300"
+                        >maven-shade-plugin</code
+                    >:
                 </div>
                 <CodeBlock code={processCode(mavenShade)} lang="xml" />
                 <Collapsible.Root class="w-full">
                     <div class="max-w-prose">
-                        That's it. Your final <code class="font-mono text-slate-700">pom.xml</code>
+                        That's it. Your final <code
+                            class="font-mono text-slate-700 dark:text-slate-300">pom.xml</code
+                        >
                         should look similar to this: <Collapsible.Trigger
                             class="cursor-pointer focus-visible:ring-2 focus-visible:ring-brand-500 focus-visible:ring-offset-2 focus-visible:outline-none"
                         >
@@ -115,15 +121,18 @@
                 <p>Add the bStats dependency:</p>
                 <CodeBlock code={processCode(gradleDependencies)} lang="kotlin" />
                 <p>
-                    Relocate <code class="font-mono text-slate-700">org.bstats</code> into your own
-                    package for example with the
-                    <code class="font-mono text-slate-700">Shadow</code> plugin:
+                    Relocate <code class="font-mono text-slate-700 dark:text-slate-300"
+                        >org.bstats</code
+                    >
+                    into your own package for example with the
+                    <code class="font-mono text-slate-700 dark:text-slate-300">Shadow</code> plugin:
                 </p>
                 <CodeBlock code={processCode(gradlePlugins)} lang="kotlin" />
                 <CodeBlock code={processCode(gradleShadowTask)} lang="kotlin" />
-                <p class="text-sm text-slate-600">
-                    Run <code class="font-mono text-slate-700">./gradlew shadowJar</code> to build a
-                    jar with Metrics included.
+                <p class="text-sm text-slate-600 dark:text-slate-400">
+                    Run <code class="font-mono text-slate-700 dark:text-slate-300"
+                        >./gradlew shadowJar</code
+                    > to build a jar with Metrics included.
                 </p>
             </div>
         {:else}

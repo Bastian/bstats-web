@@ -115,7 +115,9 @@
 />
 
 {#snippet Example(title: string, code: string)}
-    <h3 class="mb-1.5 text-sm font-semibold tracking-[0.2em] text-slate-500 uppercase">
+    <h3
+        class="mb-1.5 text-sm font-semibold tracking-[0.2em] text-slate-500 uppercase dark:text-slate-400"
+    >
         {title}
     </h3>
     <CodeBlock lang="java" {code} />
@@ -133,11 +135,11 @@
     <section class="doc-container mt-12 space-y-10">
         <article class="doc-card space-y-4">
             <h2 class="doc-card-title">Basics</h2>
-            <p class="max-w-prose text-sm leading-relaxed text-slate-600">
+            <p class="max-w-prose text-sm leading-relaxed text-slate-600 dark:text-slate-400">
                 Adding a custom chart consists of two steps: provide the data in your plugin code
                 and register the chart on the website.
             </p>
-            <ol class="list-decimal space-y-2 pl-6 text-sm text-slate-600">
+            <ol class="list-decimal space-y-2 pl-6 text-sm text-slate-600 dark:text-slate-400">
                 <li>Navigate to your plugin page and click <strong>Edit</strong>.</li>
                 <li>Add a new chart and assign the chart ID you use in code.</li>
             </ol>
@@ -146,12 +148,14 @@
         <article class="doc-card space-y-6">
             <div class="space-y-3">
                 <h2 class="doc-card-title">Pie charts</h2>
-                <p class="max-w-prose text-sm leading-relaxed text-slate-600">
+                <p class="max-w-prose text-sm leading-relaxed text-slate-600 dark:text-slate-400">
                     Great for categorical data such as configuration options Simple pies track one
                     value per server. Advanced pies let you collect multiple values per server.
                 </p>
             </div>
-            <div class="rounded-2xl border border-slate-200 bg-white p-4 md:p-6">
+            <div
+                class="rounded-2xl border border-slate-200 bg-white p-4 md:p-6 dark:border-dark-700 dark:bg-dark-800"
+            >
                 <PieChart data={pieData} />
             </div>
             <div class="space-y-4">
@@ -163,11 +167,13 @@
         <article class="doc-card space-y-6">
             <div class="space-y-3">
                 <h2 class="doc-card-title">Drilldown pie</h2>
-                <p class="max-w-prose text-sm leading-relaxed text-slate-600">
+                <p class="max-w-prose text-sm leading-relaxed text-slate-600 dark:text-slate-400">
                     Ideal when you want to group categories and drill into details.
                 </p>
             </div>
-            <div class="rounded-2xl border border-slate-200 bg-white p-4 md:p-6">
+            <div
+                class="rounded-2xl border border-slate-200 bg-white p-4 md:p-6 dark:border-dark-700 dark:bg-dark-800"
+            >
                 <DrilldownPieChart data={drilldownPieData} />
             </div>
             {@render Example('Drilldown pie', codeDrilldownPie)}
@@ -176,19 +182,21 @@
         <article class="doc-card space-y-6">
             <div class="space-y-3">
                 <h2 class="doc-card-title">Line charts</h2>
-                <p class="max-w-prose text-sm leading-relaxed text-slate-600">
+                <p class="max-w-prose text-sm leading-relaxed text-slate-600 dark:text-slate-400">
                     Track trends over time. Single line charts are perfect for players, servers, or
                     any value that has one sample per interval. Multi line charts let you compare
                     metrics side by side.
                 </p>
             </div>
-            <div class="rounded-2xl border border-slate-200 bg-white p-4 md:p-6">
+            <div
+                class="rounded-2xl border border-slate-200 bg-white p-4 md:p-6 dark:border-dark-700 dark:bg-dark-800"
+            >
                 <LineChart data={lineData} lineName="Players" />
             </div>
             <div class="space-y-4">
                 {@render Example('Single line chart', codeSingleLine)}
                 {@render Example('Multi line chart', codeMultiLine)}
-                <p class="text-sm text-slate-500 italic">
+                <p class="text-sm text-slate-500 italic dark:text-slate-400">
                     (Note: Multi line charts are still in development)
                 </p>
             </div>
@@ -197,12 +205,14 @@
         <article class="doc-card space-y-6">
             <div class="space-y-3">
                 <h2 class="doc-card-title">Bar charts</h2>
-                <p class="max-w-prose text-sm leading-relaxed text-slate-600">
+                <p class="max-w-prose text-sm leading-relaxed text-slate-600 dark:text-slate-400">
                     Surface rankings or option adoption. Simple bar charts display a single value
                     per category. Advanced bar charts support multiple bars per category.
                 </p>
             </div>
-            <div class="rounded-2xl border border-slate-200 bg-white p-4 md:p-6">
+            <div
+                class="rounded-2xl border border-slate-200 bg-white p-4 md:p-6 dark:border-dark-700 dark:bg-dark-800"
+            >
                 <BarChart data={barData} categories={barCategories} valueName="Servers" />
             </div>
             {@render Example('Simple bar chart', codeSimpleBarChart)}

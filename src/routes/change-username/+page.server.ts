@@ -53,8 +53,7 @@ export const actions: Actions = {
                 body: { username: newUsername, name: newUsername }
             });
         } catch (error) {
-            const message =
-                error instanceof Error ? error.message : 'Failed to update username';
+            const message = error instanceof Error ? error.message : 'Failed to update username';
             return fail(400, { error: message });
         }
 

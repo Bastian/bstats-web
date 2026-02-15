@@ -106,9 +106,13 @@
                 disabled={fullDataLoading}
                 class="inline-flex items-center gap-2 rounded-full border px-2 py-1 text-xs font-semibold transition focus-visible:ring-2 focus-visible:ring-brand-500 focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-60"
                 class:border-slate-200={!fullDataError}
+                class:dark:border-dark-500={!fullDataError}
                 class:text-slate-500={!fullDataError && !fullDataLoading}
+                class:dark:text-slate-400={!fullDataError && !fullDataLoading}
                 class:hover:border-slate-300={!fullDataError && !fullDataLoading}
+                class:dark:hover:border-dark-400={!fullDataError && !fullDataLoading}
                 class:hover:text-slate-600={!fullDataError && !fullDataLoading}
+                class:dark:hover:text-slate-300={!fullDataError && !fullDataLoading}
                 class:border-red-200={fullDataError}
                 class:text-red-600={fullDataError}
                 class:hover:border-red-300={fullDataError && !fullDataLoading}
@@ -135,7 +139,7 @@
     {/snippet}
 
     {#if isLoading}
-        <div class="flex h-72 items-center justify-center text-slate-500">
+        <div class="flex h-72 items-center justify-center text-slate-500 dark:text-slate-400">
             Loading chart data...
         </div>
     {:else if chartData}

@@ -32,8 +32,8 @@
     </PageHero>
 
     <section class="doc-container mt-12">
-        <article class="doc-card prose" style="max-width: none">
-            <p class="text-sm text-slate-500 italic">
+        <article class="doc-card prose dark:prose-invert" style="max-width: none">
+            <p class="text-sm text-slate-500 italic dark:text-slate-400">
                 <strong>Last updated:</strong> 2025/12/04
             </p>
 
@@ -457,7 +457,7 @@
                 </li>
             </ul>
 
-            <p class="text-sm text-slate-500 italic">
+            <p class="text-sm text-slate-500 italic dark:text-slate-400">
                 Thank you for using bStats! If you have any questions about these Terms or the
                 privacy policy, please contact us using the channels above.
             </p>

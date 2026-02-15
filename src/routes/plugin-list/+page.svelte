@@ -108,7 +108,9 @@
                     bind:value={searchValue}
                 />
             </TextInput.Root>
-            <div class="flex items-center gap-3 text-xs tracking-[0.2em] text-slate-500 uppercase">
+            <div
+                class="flex items-center gap-3 text-xs tracking-[0.2em] text-slate-500 uppercase dark:text-slate-400"
+            >
                 <span>
                     {#if isLoading}
                         &nbsp;
@@ -134,19 +136,28 @@
                 <Table.Body>
                     {#if isLoading}
                         <Table.Row>
-                            <Table.Cell colspan={5} class="py-6 text-center text-slate-500">
+                            <Table.Cell
+                                colspan={5}
+                                class="py-6 text-center text-slate-500 dark:text-slate-400"
+                            >
                                 Loading plugins…
                             </Table.Cell>
                         </Table.Row>
                     {:else if hasError}
                         <Table.Row>
-                            <Table.Cell colspan={5} class="py-6 text-center text-rose-600">
+                            <Table.Cell
+                                colspan={5}
+                                class="py-6 text-center text-rose-600 dark:text-rose-400"
+                            >
                                 Failed to load plugins. Please try again later.
                             </Table.Cell>
                         </Table.Row>
                     {:else if filteredPlugins.length === 0}
                         <Table.Row>
-                            <Table.Cell colspan={5} class="py-6 text-center text-slate-500">
+                            <Table.Cell
+                                colspan={5}
+                                class="py-6 text-center text-slate-500 dark:text-slate-400"
+                            >
                                 No plugins match your search.
                             </Table.Cell>
                         </Table.Row>
@@ -158,25 +169,32 @@
                                         href={resolve(
                                             `/plugin/${plugin.softwareUrl}/${plugin.name}/${plugin.pluginId}`
                                         )}
-                                        class="font-semibold text-slate-900 hover:text-brand-600"
+                                        class="font-semibold text-slate-900 hover:text-brand-600 dark:text-slate-100"
                                     >
                                         {plugin.name}
                                     </a>
                                 </Table.Cell>
-                                <Table.Cell class="text-slate-600">{plugin.softwareName}</Table.Cell
+                                <Table.Cell class="text-slate-600 dark:text-slate-400"
+                                    >{plugin.softwareName}</Table.Cell
                                 >
                                 <Table.Cell>
                                     <a
                                         href={resolve(`/author/${plugin.ownerName}`)}
-                                        class="text-slate-600 hover:text-brand-600"
+                                        class="text-slate-600 hover:text-brand-600 dark:text-slate-400"
                                     >
                                         {plugin.ownerName}
                                     </a>
                                 </Table.Cell>
-                                <Table.Cell align="right" class="font-semibold text-slate-900">
+                                <Table.Cell
+                                    align="right"
+                                    class="font-semibold text-slate-900 dark:text-slate-100"
+                                >
                                     {formatter.format(plugin.servers || 0)}
                                 </Table.Cell>
-                                <Table.Cell align="right" class="font-semibold text-slate-900">
+                                <Table.Cell
+                                    align="right"
+                                    class="font-semibold text-slate-900 dark:text-slate-100"
+                                >
                                     {formatter.format(plugin.players || 0)}
                                 </Table.Cell>
                             </Table.Row>

@@ -36,7 +36,7 @@
         {#if !pluginCreationSkipped}
             <button
                 type="button"
-                class="inline-flex cursor-pointer items-center gap-2 text-sm font-semibold text-slate-600 transition hover:text-slate-800"
+                class="inline-flex cursor-pointer items-center gap-2 text-sm font-semibold text-slate-600 transition hover:text-slate-800 dark:text-slate-400 dark:hover:text-slate-200"
                 onclick={() => (pluginCreationSkipped = true)}
             >
                 Skip for now <IconArrowRight size={16} />
@@ -83,7 +83,7 @@
                 {@render SkipButton()}
             </div>
             {#snippet Alert(message: string)}
-                <p role="alert" class="mt-4 text-sm text-red-600">
+                <p role="alert" class="mt-4 text-sm text-red-600 dark:text-red-400">
                     {message}
                 </p>
             {/snippet}
@@ -119,9 +119,15 @@
     {/if}
 
     {#if form?.pluginId}
-        <div id={alertId} role="alert" class="rounded-2xl border border-slate-200 bg-slate-50 p-5">
-            <h3 class="font-semibold text-slate-900">Plugin registered successfully!</h3>
-            <p class="mt-2 text-sm text-slate-600">
+        <div
+            id={alertId}
+            role="alert"
+            class="rounded-2xl border border-slate-200 bg-slate-50 p-5 dark:border-dark-700 dark:bg-dark-800"
+        >
+            <h3 class="font-semibold text-slate-900 dark:text-slate-100">
+                Plugin registered successfully!
+            </h3>
+            <p class="mt-2 text-sm text-slate-600 dark:text-slate-400">
                 Your plugin "<span class="font-medium">{form.pluginName}</span>" has been registered
                 with the ID <span class="font-medium">{form.pluginId}</span>.
             </p>

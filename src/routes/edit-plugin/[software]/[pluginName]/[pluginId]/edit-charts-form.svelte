@@ -140,9 +140,12 @@
         {@const chartId = item.chartId}
         <li
             animate:flip={{ duration: flipDurationMs }}
-            class="flex items-center gap-3 rounded-lg border border-slate-200 bg-white px-4 py-3 transition hover:border-slate-300"
+            class="flex items-center gap-3 rounded-lg border border-slate-200 bg-white px-4 py-3 transition hover:border-slate-300 dark:border-dark-700 dark:bg-dark-800 dark:hover:border-dark-600"
         >
-            <div class="cursor-move text-slate-400 hover:text-slate-600" title="Drag to reorder">
+            <div
+                class="cursor-move text-slate-400 hover:text-slate-600 dark:text-slate-500 dark:hover:text-slate-300"
+                title="Drag to reorder"
+            >
                 <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path
                         stroke-linecap="round"
@@ -157,11 +160,11 @@
                     href={resolve(
                         `/plugin/${data.softwareUrl}/${data.plugin.name}/${data.plugin.id}#${chartId}`
                     )}
-                    class="font-semibold text-slate-900 hover:text-brand-600"
+                    class="font-semibold text-slate-900 hover:text-brand-600 dark:text-slate-100"
                 >
                     {data.charts[chartId].title}
                 </a>
-                <span class="text-sm text-slate-500">(id: {chartId})</span>
+                <span class="text-sm text-slate-500 dark:text-slate-400">(id: {chartId})</span>
             </div>
             {#if !data.charts[chartId].isDefault}
                 <button
@@ -180,7 +183,10 @@
                     </svg>
                 </button>
             {:else}
-                <span class="text-slate-300" title="Default chart cannot be deleted">
+                <span
+                    class="text-slate-300 dark:text-dark-500"
+                    title="Default chart cannot be deleted"
+                >
                     <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path
                             stroke-linecap="round"

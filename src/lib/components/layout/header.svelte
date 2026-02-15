@@ -26,7 +26,9 @@
     } = $props();
 </script>
 
-<header class="sticky top-0 z-40 border-b border-slate-200 bg-white/90 backdrop-blur">
+<header
+    class="sticky top-0 z-40 border-b border-slate-200 bg-white/90 backdrop-blur dark:border-dark-700 dark:bg-dark-900/90"
+>
     <div class="mx-auto flex h-20 max-w-6xl items-center justify-between px-4 sm:px-6">
         <a href={resolve('/')} class="group flex items-center gap-3">
             <span
@@ -36,11 +38,13 @@
                 bS
             </span>
             <span class="flex flex-col leading-tight">
-                <span class="font-display text-xl font-semibold text-slate-900 md:text-2xl">
+                <span
+                    class="font-display text-xl font-semibold text-slate-900 md:text-2xl dark:text-slate-100"
+                >
                     bStats
                 </span>
                 <span
-                    class="text-xs font-medium tracking-wide text-slate-500 uppercase md:hidden lg:inline"
+                    class="text-xs font-medium tracking-wide text-slate-500 uppercase md:hidden lg:inline dark:text-slate-400"
                 >
                     Open source metrics
                 </span>

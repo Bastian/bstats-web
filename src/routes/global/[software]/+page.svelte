@@ -128,8 +128,10 @@
 
     <section class="mx-auto mt-16 max-w-6xl px-4 sm:px-6">
         <div class="flex flex-col gap-3 sm:gap-2">
-            <h2 class="font-display text-3xl font-semibold text-slate-900">Charts</h2>
-            <p class="text-sm text-slate-500">
+            <h2 class="font-display text-3xl font-semibold text-slate-900 dark:text-slate-100">
+                Charts
+            </h2>
+            <p class="text-sm text-slate-500 dark:text-slate-400">
                 Data updates every 30 minutes, on the hour and half hour.
             </p>
         </div>
@@ -150,7 +152,9 @@
                         supportsPatterns={chart.type !== 'simple_map' &&
                             chart.type !== 'advanced_map'}
                     >
-                        <div class="flex h-72 items-center justify-center text-slate-500">
+                        <div
+                            class="flex h-72 items-center justify-center text-slate-500 dark:text-slate-400"
+                        >
                             Loading chart data...
                         </div>
                     </ChartCard>

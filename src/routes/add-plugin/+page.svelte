@@ -104,17 +104,23 @@
                 </p>
 
                 <div class="doc-callout doc-callout-info mt-4">
-                    <p class="text-sm font-semibold text-slate-800">When will data show up?</p>
-                    <p class="mt-2 max-w-prose text-sm text-slate-600">
+                    <p class="text-sm font-semibold text-slate-800 dark:text-slate-200">
+                        When will data show up?
+                    </p>
+                    <p class="mt-2 max-w-prose text-sm text-slate-600 dark:text-slate-400">
                         After the server starts, the first data is sent after a random 3-6 minute
                         delay. The site publishes updates at hh:00 and hh:30, so once data is sent
                         it may take up to 30 minutes to become visible.
                     </p>
                 </div>
 
-                <div class="mt-6 rounded-2xl border border-slate-200 bg-slate-50 p-5">
-                    <h3 class="text-sm font-semibold text-slate-800">What's next?</h3>
-                    <p class="mt-2 max-w-prose text-sm text-slate-600">
+                <div
+                    class="mt-6 rounded-2xl border border-slate-200 bg-slate-50 p-5 dark:border-dark-700 dark:bg-dark-800"
+                >
+                    <h3 class="text-sm font-semibold text-slate-800 dark:text-slate-200">
+                        What's next?
+                    </h3>
+                    <p class="mt-2 max-w-prose text-sm text-slate-600 dark:text-slate-400">
                         Beyond the default metrics, you can track custom data specific to your
                         plugin with custom charts. Add pie charts for configuration options, line
                         charts for trends, or bar charts for feature adoption.

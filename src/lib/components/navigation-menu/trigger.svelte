@@ -12,7 +12,7 @@
 
 <BitsNavigationMenu.Trigger
     class={[
-        'group relative inline-flex cursor-pointer items-center gap-1 rounded-full bg-slate-100/80 px-3 py-1.5 text-slate-600 transition hover:bg-slate-200 hover:text-slate-900',
+        'group relative inline-flex cursor-pointer items-center gap-1 rounded-full bg-slate-100/80 px-3 py-1.5 text-slate-600 transition hover:bg-slate-200 hover:text-slate-900 dark:bg-dark-700/80 dark:text-slate-400 dark:hover:bg-dark-600 dark:hover:text-slate-100',
         'before:absolute before:inset-0 before:-inset-x-3 before:-inset-y-4 before:rounded-full',
         'focus-visible:ring-2 focus-visible:ring-brand-500/70 focus-visible:ring-offset-2 focus-visible:outline-none',
         'disabled:cursor-not-allowed disabled:opacity-50',

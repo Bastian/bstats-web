@@ -37,7 +37,7 @@
         <div class="grid gap-6 md:grid-cols-2">
             <article class="doc-card space-y-4">
                 <h2 class="doc-card-title">Add your plugin</h2>
-                <p class="max-w-prose text-sm leading-relaxed text-slate-600">
+                <p class="max-w-prose text-sm leading-relaxed text-slate-600 dark:text-slate-400">
                     Ready to start collecting metrics? Our step-by-step wizard will guide you
                     through registering your plugin and integrating the Metrics class into your
                     code.
@@ -51,7 +51,9 @@
             </article>
             <article class="doc-card">
                 <h2 class="doc-card-title">Custom charts</h2>
-                <p class="mt-3 max-w-prose text-sm leading-relaxed text-slate-600">
+                <p
+                    class="mt-3 max-w-prose text-sm leading-relaxed text-slate-600 dark:text-slate-400"
+                >
                     Collect the signals your plugin needs with custom charts. Build pies, lines, and
                     bar charts to highlight your feature adoption, configuration choices, or usage
                     patterns.
@@ -67,7 +69,9 @@
 
             <article class="doc-card">
                 <h2 class="doc-card-title">REST API</h2>
-                <p class="mt-3 max-w-prose text-sm leading-relaxed text-slate-600">
+                <p
+                    class="mt-3 max-w-prose text-sm leading-relaxed text-slate-600 dark:text-slate-400"
+                >
                     Use the REST API to embed plugin metrics in your site or tooling. All endpoints
                     are read-only, return JSON, and require no authentication.
                 </p>
@@ -82,7 +86,9 @@
 
             <article class="doc-card">
                 <h2 class="doc-card-title">Troubleshooting</h2>
-                <p class="mt-3 max-w-prose text-sm leading-relaxed text-slate-600">
+                <p
+                    class="mt-3 max-w-prose text-sm leading-relaxed text-slate-600 dark:text-slate-400"
+                >
                     Data not showing up? Learn how long it takes for metrics to appear and how to
                     verify your integration is working correctly.
                 </p>
@@ -97,7 +103,9 @@
 
             <article class="doc-card">
                 <h2 class="doc-card-title">FAQ</h2>
-                <p class="mt-3 max-w-prose text-sm leading-relaxed text-slate-600">
+                <p
+                    class="mt-3 max-w-prose text-sm leading-relaxed text-slate-600 dark:text-slate-400"
+                >
                     Answers to common questions about bStats, accounts, and the Metrics class. Still
                     curious? Reach out on Discord or open an issue on GitHub.
                 </p>
@@ -112,7 +120,9 @@
 
             <article class="doc-card">
                 <h2 class="doc-card-title">Server owners</h2>
-                <p class="mt-3 max-w-prose text-sm leading-relaxed text-slate-600">
+                <p
+                    class="mt-3 max-w-prose text-sm leading-relaxed text-slate-600 dark:text-slate-400"
+                >
                     Running a Minecraft server? Learn what bStats collects, why it matters, and how
                     to manage your privacy preferences.
                 </p>

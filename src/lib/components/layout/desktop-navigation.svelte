@@ -25,12 +25,18 @@
 <NavigationMenu.Root>
     <NavigationMenu.List class="hidden md:flex">
         <NavigationMenu.Item>
-            <a href={resolve('/plugin-list')} class="transition hover:text-slate-900">
+            <a
+                href={resolve('/plugin-list')}
+                class="transition hover:text-slate-900 dark:hover:text-slate-100"
+            >
                 Plugin list
             </a>
         </NavigationMenu.Item>
         <NavigationMenu.Item>
-            <a href={resolve('/docs')} class="transition hover:text-slate-900">Docs</a>
+            <a
+                href={resolve('/docs')}
+                class="transition hover:text-slate-900 dark:hover:text-slate-100">Docs</a
+            >
         </NavigationMenu.Item>
         {#if globalSoftware && globalSoftware.length}
             <NavigationMenu.Item value="global-stats">
@@ -72,7 +78,7 @@
                                 >
                                     <div class="gap-2">
                                         <span>{plugin.name}</span>
-                                        <span class="text-xs text-slate-500">
+                                        <span class="text-xs text-slate-500 dark:text-slate-400">
                                             ({plugin.software.name})
                                         </span>
                                     </div>
@@ -99,10 +105,10 @@
             <NavigationMenu.List>
                 <NavigationMenu.Item value="account">
                     <NavigationMenu.Trigger
-                        class="flex items-center gap-2 rounded-full border border-slate-200 bg-white px-3 py-1.5 text-sm font-semibold text-slate-600 transition hover:border-brand-200 hover:text-brand-700"
+                        class="flex items-center gap-2 rounded-full border border-slate-200 bg-white px-3 py-1.5 text-sm font-semibold text-slate-600 transition hover:border-brand-200 hover:text-brand-700 dark:border-dark-600 dark:bg-dark-700 dark:text-slate-300 dark:hover:border-dark-500 dark:hover:text-slate-200"
                     >
                         <span
-                            class="inline-flex h-8 w-8 items-center justify-center rounded-full bg-brand-100 font-display text-sm font-semibold text-brand-700"
+                            class="inline-flex h-8 w-8 items-center justify-center rounded-full bg-brand-100 font-display text-sm font-semibold text-brand-700 dark:bg-dark-700 dark:text-slate-300"
                         >
                             {usernameInitial}
                         </span>
@@ -113,11 +119,13 @@
                         />
                     </NavigationMenu.Trigger>
                     <NavigationMenu.Content class="w-56 text-sm" align="end">
-                        <div class="mb-2 rounded-lg bg-slate-50 p-3">
-                            <p class="text-xs tracking-wide text-slate-500 uppercase">
+                        <div class="mb-2 rounded-lg bg-slate-50 p-3 dark:bg-dark-700/50">
+                            <p
+                                class="text-xs tracking-wide text-slate-500 uppercase dark:text-slate-400"
+                            >
                                 Signed in as
                             </p>
-                            <p class="font-semibold text-slate-700">
+                            <p class="font-semibold text-slate-700 dark:text-slate-200">
                                 {user.name || 'bStats user'}
                             </p>
                         </div>
@@ -131,7 +139,7 @@
                                 <li>
                                     <NavigationMenu.Link
                                         href={resolve('/admin/users')}
-                                        class="block rounded-md px-3 py-2 transition hover:bg-slate-100 hover:text-slate-900"
+                                        class="block rounded-md px-3 py-2 transition hover:bg-slate-100 hover:text-slate-900 dark:hover:bg-dark-700 dark:hover:text-slate-100"
                                     >
                                         Admin
                                     </NavigationMenu.Link>
@@ -141,7 +149,7 @@
                             <li>
                                 <NavigationMenu.Link
                                     href={resolve('/change-username')}
-                                    class="block rounded-md px-3 py-2 transition hover:bg-slate-100 hover:text-slate-900"
+                                    class="block rounded-md px-3 py-2 transition hover:bg-slate-100 hover:text-slate-900 dark:hover:bg-dark-700 dark:hover:text-slate-100"
                                 >
                                     Change username
                                 </NavigationMenu.Link>
@@ -149,7 +157,7 @@
                             <li>
                                 <NavigationMenu.Link
                                     href={resolve('/change-password')}
-                                    class="block rounded-md px-3 py-2 transition hover:bg-slate-100 hover:text-slate-900"
+                                    class="block rounded-md px-3 py-2 transition hover:bg-slate-100 hover:text-slate-900 dark:hover:bg-dark-700 dark:hover:text-slate-100"
                                 >
                                     Change password
                                 </NavigationMenu.Link>
@@ -157,7 +165,7 @@
                             <li>
                                 <button
                                     onclick={() => authClient.signOut()}
-                                    class="block w-full appearance-none rounded-md px-3 py-2 text-start text-sm text-slate-600 transition hover:bg-slate-100 hover:text-slate-900"
+                                    class="block w-full appearance-none rounded-md px-3 py-2 text-start text-sm text-slate-600 transition hover:bg-slate-100 hover:text-slate-900 dark:text-slate-400 dark:hover:bg-dark-700 dark:hover:text-slate-100"
                                 >
                                     Logout
                                 </button>
@@ -170,7 +178,8 @@
     {:else}
         <a
             href={resolve('/login')}
-            class="text-sm font-semibold text-slate-600 transition hover:text-slate-900">Log in</a
+            class="text-sm font-semibold text-slate-600 transition hover:text-slate-900 dark:text-slate-400 dark:hover:text-slate-100"
+            >Log in</a
         >
         <Button href={resolve('/register')}>Create account</Button>
     {/if}

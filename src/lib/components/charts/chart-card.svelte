@@ -26,10 +26,13 @@
         colSpan === 'double' ? 'col-span-1 min-w-0 md:col-span-2' : 'col-span-1 min-w-0';
 </script>
 
-<article id={chartId} class="{colClass} rounded-2xl border border-slate-200 bg-white shadow-sm">
+<article
+    id={chartId}
+    class="{colClass} rounded-2xl border border-slate-200 bg-white shadow-sm dark:border-dark-700 dark:bg-dark-800"
+>
     <div class="flex items-start justify-between gap-4 px-5 pt-5">
         <div class="flex flex-col gap-2">
-            <h3 class="font-display text-lg font-semibold text-slate-900">
+            <h3 class="font-display text-lg font-semibold text-slate-900 dark:text-slate-100">
                 {title}
             </h3>
         </div>
@@ -43,7 +46,7 @@
                             showChartPatterns: !accessibilityPreferences.current.showChartPatterns
                         };
                     }}
-                    class="inline-flex items-center gap-2 rounded-full border border-slate-200 px-1 py-1 text-xs font-semibold text-slate-500 transition hover:border-slate-300 hover:text-slate-600 focus-visible:ring-2 focus-visible:ring-brand-500 focus-visible:outline-none"
+                    class="inline-flex items-center gap-2 rounded-full border border-slate-200 px-1 py-1 text-xs font-semibold text-slate-500 transition hover:border-slate-300 hover:text-slate-600 focus-visible:ring-2 focus-visible:ring-brand-500 focus-visible:outline-none dark:border-dark-500 dark:text-slate-400 dark:hover:border-dark-400 dark:hover:text-slate-300"
                     title={accessibilityPreferences.current.showChartPatterns
                         ? 'Disable patterns for color blindness'
                         : 'Enable patterns for color blindness'}
@@ -61,7 +64,9 @@
         </div>
     </div>
     <div class="px-5 pt-4 pb-6">
-        <div class="min-w-0 overflow-hidden rounded-xl border border-slate-100 bg-slate-50 p-1">
+        <div
+            class="min-w-0 overflow-hidden rounded-xl border border-slate-100 bg-slate-50 p-1 dark:border-dark-700 dark:bg-dark-800/50"
+        >
             {@render children()}
         </div>
     </div>

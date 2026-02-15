@@ -69,7 +69,7 @@
             <div class="space-y-4">
                 <p class="max-w-prose">
                     Instantiate the Metrics class in your plugin's
-                    <code class="font-mono text-slate-700">onEnable()</code>
+                    <code class="font-mono text-slate-700 dark:text-slate-300">onEnable()</code>
                     method.
                 </p>
                 <CodeBlock
@@ -82,7 +82,7 @@
             <div class="space-y-4">
                 <p class="max-w-prose">
                     Instantiate the Metrics class in your plugin's
-                    <code class="font-mono text-slate-700">onEnable()</code>
+                    <code class="font-mono text-slate-700 dark:text-slate-300">onEnable()</code>
                     method.
                 </p>
                 <CodeBlock
@@ -95,9 +95,12 @@
             <div class="space-y-4">
                 <p class="max-w-prose">
                     Use dependency injection to get a
-                    <code class="font-mono text-slate-700">Metrics.Factory</code>
+                    <code class="font-mono text-slate-700 dark:text-slate-300">Metrics.Factory</code
+                    >
                     instance. Then instantiate the Metrics class in your plugin's
-                    <code class="font-mono text-slate-700">onServerStart(...)</code> method.
+                    <code class="font-mono text-slate-700 dark:text-slate-300"
+                        >onServerStart(...)</code
+                    > method.
                 </p>
                 <CodeBlock
                     code={processCode(instantiateSponge)}
@@ -109,10 +112,13 @@
             <div class="space-y-4">
                 <p class="max-w-prose">
                     Use dependency injection to get a
-                    <code class="font-mono text-slate-700">Metrics.Factory</code>
+                    <code class="font-mono text-slate-700 dark:text-slate-300">Metrics.Factory</code
+                    >
                     instance in your plugin's constructor. Then instantiate the Metrics class in your
                     plugin's
-                    <code class="font-mono text-slate-700">onProxyInitialization(...)</code> method.
+                    <code class="font-mono text-slate-700 dark:text-slate-300"
+                        >onProxyInitialization(...)</code
+                    > method.
                 </p>
                 <CodeBlock
                     code={processCode(instantiateVelocity)}
@@ -139,14 +145,14 @@
                     site. It is highly recommended to set a filter for the player chart (min 0 and max
                     to a reasonable value).
                 </p>
-                <p class="text-sm font-medium text-red-600">
+                <p class="text-sm font-medium text-red-600 dark:text-red-400">
                     If you are creating a new server implementation instead of forking an existing
                     one, this is your last warning to not hack together your own Metrics code
                     without contacting us first.
                 </p>
             </div>
         {:else}
-            <p class="max-w-prose text-sm text-red-600">
+            <p class="max-w-prose text-sm text-red-600 dark:text-red-400">
                 Error: No instructions for selected platform. This is a bug, please report it.
             </p>
         {/if}

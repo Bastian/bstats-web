@@ -34,7 +34,7 @@
 
 <Dialog.Root bind:open>
     <Dialog.Trigger
-        class="inline-flex items-center justify-center rounded-full bg-white p-2 text-slate-600 shadow-sm ring-1 ring-slate-200 transition hover:bg-brand-50 hover:text-brand-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-500 active:scale-95 md:hidden"
+        class="inline-flex items-center justify-center rounded-full bg-white p-2 text-slate-600 shadow-sm ring-1 ring-slate-200 transition hover:bg-brand-50 hover:text-brand-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-500 active:scale-95 md:hidden dark:bg-dark-700 dark:text-slate-300 dark:ring-dark-600 dark:hover:bg-dark-700 dark:hover:text-slate-200"
     >
         <span class="sr-only">{open ? 'Close' : 'Open'} navigation</span>
         {#if open}
@@ -61,10 +61,10 @@
                     <nav
                         {...props}
                         transition:fly={{ y: -10, duration: 200 }}
-                        class="mobile-nav fixed inset-x-0 top-[81px] z-50 max-h-[calc(100vh-81px)] overflow-y-auto border-t border-slate-200 bg-white py-6 shadow-lg"
+                        class="mobile-nav fixed inset-x-0 top-[81px] z-50 max-h-[calc(100vh-81px)] overflow-y-auto border-t border-slate-200 bg-white py-6 shadow-lg dark:border-dark-700 dark:bg-dark-800"
                     >
                         <div
-                            class="mx-auto flex max-w-6xl flex-col gap-7 px-6 text-base font-medium text-slate-700"
+                            class="mx-auto flex max-w-6xl flex-col gap-7 px-6 text-base font-medium text-slate-700 dark:text-slate-300"
                         >
                             {#if !user}
                                 <section>
@@ -95,7 +95,7 @@
                                                     <div class="truncate">
                                                         {plugin.name}
                                                         <span
-                                                            class="text-xs tracking-wide text-slate-500"
+                                                            class="text-xs tracking-wide text-slate-500 dark:text-slate-400"
                                                         >
                                                             ({plugin.software.name})
                                                         </span>
@@ -206,10 +206,10 @@
     }
 
     .link-wrapper {
-        @apply w-full overflow-hidden border border-slate-200 first:rounded-t-xl last:rounded-b-xl;
+        @apply w-full overflow-hidden border border-slate-200 first:rounded-t-xl last:rounded-b-xl dark:border-dark-700;
     }
 
     .link {
-        @apply flex w-full items-center justify-between px-4 py-3 text-brand-700 transition hover:text-brand-700 focus-visible:bg-brand-100 focus-visible:text-brand-800 focus-visible:outline-none;
+        @apply flex w-full items-center justify-between px-4 py-3 text-brand-700 transition hover:text-brand-700 focus-visible:bg-brand-100 focus-visible:text-brand-800 focus-visible:outline-none dark:text-slate-300 dark:hover:text-slate-200 dark:focus-visible:bg-dark-700 dark:focus-visible:text-slate-200;
     }
 </style>

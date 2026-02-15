@@ -29,7 +29,7 @@
     </PageHero>
 
     <section class="doc-container mt-12">
-        <article class="doc-card prose" style="max-width: none">
+        <article class="doc-card prose dark:prose-invert" style="max-width: none">
             <h2>Contact information</h2>
             <p class="no-copy">
                 <strong

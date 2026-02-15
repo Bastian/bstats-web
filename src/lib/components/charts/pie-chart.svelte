@@ -4,6 +4,7 @@
     import { getEChartsTheme } from '$lib/charts/echarts-theme';
     import { groupSmallItemsIntoOther } from '$lib/charts/chart-data';
     import { accessibilityPreferences } from '$lib/stores/accessibility';
+    import { isDark } from '$lib/stores/theme.svelte';
 
     interface Props {
         data: { name: string; y: number }[];
@@ -44,8 +45,9 @@
         }
     });
 
-    // Update chart when data or accessibility preferences change
+    // Update chart when data, accessibility preferences, or theme change
     $effect(() => {
+        void isDark.current;
         if (chartInstance && data) {
             updateChart(accessibilityPreferences.current.showChartPatterns);
         }
@@ -81,7 +83,8 @@
             description = `Pie chart showing distribution across ${sortedData.length} ${sortedData.length === 1 ? 'category' : 'categories'}. Total: ${total}. ${hasMore ? 'Top categories: ' : 'Categories: '}${itemsDescription}${hasMore ? `, and ${sortedData.length - 5} more` : ''}.`;
         }
 
-        const theme = getEChartsTheme();
+        const dark = isDark.current;
+        const theme = getEChartsTheme(dark);
         const option: echarts.EChartsOption = {
             color: theme.color,
             backgroundColor: theme.backgroundColor,
@@ -123,8 +126,11 @@
                         name: item.name,
                         value: item.y
                     })),
+                    emptyCircleStyle: {
+                        color: dark ? '#252732' : '#e2e8f0' // dark-700 / slate-200
+                    },
                     itemStyle: {
-                        borderColor: `#fff`,
+                        borderColor: dark ? '#161822' : '#fff', // dark-800 / white
                         borderWidth: 1
                     },
                     emphasis: {
@@ -137,7 +143,8 @@
                     label: {
                         show: !isMobile,
                         formatter: '{b}: {d}%',
-                        fontSize: 12
+                        fontSize: 12,
+                        color: dark ? '#cbd5e1' : undefined // slate-300 for dark mode
                     },
                     labelLine: {
                         show: !isMobile,

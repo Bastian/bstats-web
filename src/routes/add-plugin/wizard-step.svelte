@@ -15,7 +15,7 @@
     let root = $state<HTMLElement | null>(null);
 
     const statusClasses = $derived([
-        'rounded-2xl border border-slate-200 bg-white p-6 shadow-sm sm:p-8 space-y-5 transition-shadow',
+        'rounded-2xl border border-slate-200 bg-white p-6 shadow-sm sm:p-8 space-y-5 transition-shadow dark:border-dark-700 dark:bg-dark-800',
         {
             'opacity-60': status === 'locked',
             'ring-2 ring-brand-400/50 shadow-md': status === 'active'
@@ -49,8 +49,10 @@
                 class={[
                     'flex h-10 w-10 shrink-0 items-center justify-center rounded-full border text-sm font-semibold',
                     {
-                        'border-brand-300 text-brand-700': status === 'active',
-                        'border-slate-300 text-slate-500': status !== 'active'
+                        'border-brand-300 text-brand-700 dark:border-brand-400/70 dark:text-brand-100':
+                            status === 'active',
+                        'border-slate-300 text-slate-500 dark:border-dark-600 dark:text-slate-400':
+                            status !== 'active'
                     }
                 ]}
             >
@@ -58,11 +60,13 @@
             </div>
         {/if}
 
-        <h2 class="font-display text-xl font-semibold text-slate-900">{title}</h2>
+        <h2 class="font-display text-xl font-semibold text-slate-900 dark:text-slate-100">
+            {title}
+        </h2>
     </div>
 
     {#if status !== 'locked'}
-        <div class="text-sm leading-relaxed text-slate-600">
+        <div class="text-sm leading-relaxed text-slate-600 dark:text-slate-400">
             {@render children()}
         </div>
     {/if}

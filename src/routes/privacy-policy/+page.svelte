@@ -33,10 +33,12 @@
     <section class="doc-container mt-12 space-y-12">
         <article
             id="plugin-privacy-policy"
-            class="doc-card prose space-y-6"
+            class="doc-card prose space-y-6 dark:prose-invert"
             style="max-width: none"
         >
-            <p class="text-sm text-slate-500 italic"><strong>Last updated:</strong> 2025/12/04</p>
+            <p class="text-sm text-slate-500 italic dark:text-slate-400">
+                <strong>Last updated:</strong> 2025/12/04
+            </p>
             <h2 class="doc-card-title">bStats plugin privacy policy</h2>
 
             <p>
@@ -378,10 +380,12 @@
 
         <article
             id="website-privacy-policy"
-            class="doc-card prose space-y-6"
+            class="doc-card prose space-y-6 dark:prose-invert"
             style="max-width: none"
         >
-            <p class="text-sm text-slate-500 italic"><strong>Last updated:</strong> 2025/11/10</p>
+            <p class="text-sm text-slate-500 italic dark:text-slate-400">
+                <strong>Last updated:</strong> 2025/11/10
+            </p>
             <h2 class="doc-card-title">bStats website privacy policy</h2>
 
             <h3>1. Who we are (data controller)</h3>

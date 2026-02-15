@@ -129,15 +129,16 @@
             {#snippet title()}We couldn't find it{/snippet}
             {#snippet content()}
                 Sorry, we don't have any stats about
-                <span class="font-semibold text-slate-900">{data.pluginName}</span>. Maybe it hasn't
-                been registered yet or the name is spelled differently
+                <span class="font-semibold text-slate-900 dark:text-slate-100"
+                    >{data.pluginName}</span
+                >. Maybe it hasn't been registered yet or the name is spelled differently
             {/snippet}
             {#snippet extra()}
                 <div class="mt-6 flex flex-wrap justify-center gap-3">
                     <Button href={resolve('/plugin-list')}>Browse plugin list</Button>
                     <a
                         href={resolve('/add-plugin')}
-                        class="inline-flex items-center gap-2 rounded-full border border-slate-200 px-5 py-3 text-sm font-semibold text-slate-600 transition hover:border-brand-200 hover:text-brand-700"
+                        class="inline-flex items-center gap-2 rounded-full border border-slate-200 px-5 py-3 text-sm font-semibold text-slate-600 transition hover:border-brand-200 hover:text-brand-700 dark:border-dark-700 dark:text-slate-400"
                     >
                         Register plugin
                     </a>
@@ -167,7 +168,7 @@
                         href={resolve(
                             `/edit-plugin/${data.software.url}/${data.plugin.name}/${data.plugin.id}`
                         )}
-                        class="inline-flex items-center justify-center gap-2 rounded-full border border-slate-300 bg-white px-3 py-2 text-sm font-semibold text-slate-600 transition hover:border-brand-300 hover:text-brand-700"
+                        class="inline-flex items-center justify-center gap-2 rounded-full border border-slate-300 bg-white px-3 py-2 text-sm font-semibold text-slate-600 transition hover:border-brand-300 hover:text-brand-700 dark:border-dark-500 dark:bg-dark-800 dark:text-slate-400 dark:hover:border-dark-400 dark:hover:text-slate-200"
                     >
                         <IconTool size={16} />
                         Edit
@@ -192,8 +193,10 @@
 
         <section class="mx-auto mt-16 max-w-6xl px-4 sm:px-6">
             <div class="flex flex-col gap-3 sm:gap-2">
-                <h2 class="font-display text-3xl font-semibold text-slate-900">Charts</h2>
-                <p class="text-sm text-slate-500">
+                <h2 class="font-display text-3xl font-semibold text-slate-900 dark:text-slate-100">
+                    Charts
+                </h2>
+                <p class="text-sm text-slate-500 dark:text-slate-400">
                     Data updates every 30 minutes, on the hour and half hour.
                 </p>
             </div>
@@ -214,7 +217,9 @@
                             supportsPatterns={chart.type !== 'simple_map' &&
                                 chart.type !== 'advanced_map'}
                         >
-                            <div class="flex h-72 items-center justify-center text-slate-500">
+                            <div
+                                class="flex h-72 items-center justify-center text-slate-500 dark:text-slate-400"
+                            >
                                 Loading chart data...
                             </div>
                         </ChartCard>

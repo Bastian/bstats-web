@@ -42,28 +42,46 @@
     <section class="doc-container mt-12 space-y-10">
         <article class="doc-card space-y-4">
             <h2 class="doc-card-title">How long until data appears?</h2>
-            <p class="max-w-prose text-sm leading-relaxed text-slate-600">
+            <p class="max-w-prose text-sm leading-relaxed text-slate-600 dark:text-slate-400">
                 Understanding the timeline for when your data becomes visible on bStats:
             </p>
             <div class="space-y-3">
-                <div class="rounded-2xl border border-slate-200 bg-slate-50 p-4 sm:p-5">
-                    <h3 class="text-sm font-semibold text-slate-700">Initial delay</h3>
-                    <p class="mt-2 max-w-prose text-sm leading-relaxed text-slate-600">
+                <div
+                    class="rounded-2xl border border-slate-200 bg-slate-50 p-4 sm:p-5 dark:border-dark-700 dark:bg-dark-800"
+                >
+                    <h3 class="text-sm font-semibold text-slate-700 dark:text-slate-300">
+                        Initial delay
+                    </h3>
+                    <p
+                        class="mt-2 max-w-prose text-sm leading-relaxed text-slate-600 dark:text-slate-400"
+                    >
                         After the server starts, the first data is sent after a random
                         <strong>3-6 minute delay</strong>.
                     </p>
                 </div>
-                <div class="rounded-2xl border border-slate-200 bg-slate-50 p-4 sm:p-5">
-                    <h3 class="text-sm font-semibold text-slate-700">Publication schedule</h3>
-                    <p class="mt-2 max-w-prose text-sm leading-relaxed text-slate-600">
+                <div
+                    class="rounded-2xl border border-slate-200 bg-slate-50 p-4 sm:p-5 dark:border-dark-700 dark:bg-dark-800"
+                >
+                    <h3 class="text-sm font-semibold text-slate-700 dark:text-slate-300">
+                        Publication schedule
+                    </h3>
+                    <p
+                        class="mt-2 max-w-prose text-sm leading-relaxed text-slate-600 dark:text-slate-400"
+                    >
                         The bStats website publishes updates at <strong>hh:00 and hh:30</strong>
                         (every half hour). Once data is sent, it may take
                         <strong>up to 30 minutes</strong> to become visible on your plugin's dashboard.
                     </p>
                 </div>
-                <div class="rounded-2xl border border-slate-200 bg-slate-50 p-4 sm:p-5">
-                    <h3 class="text-sm font-semibold text-slate-700">Total time</h3>
-                    <p class="mt-2 max-w-prose text-sm leading-relaxed text-slate-600">
+                <div
+                    class="rounded-2xl border border-slate-200 bg-slate-50 p-4 sm:p-5 dark:border-dark-700 dark:bg-dark-800"
+                >
+                    <h3 class="text-sm font-semibold text-slate-700 dark:text-slate-300">
+                        Total time
+                    </h3>
+                    <p
+                        class="mt-2 max-w-prose text-sm leading-relaxed text-slate-600 dark:text-slate-400"
+                    >
                         In total, expect to wait <strong>3-36 minutes</strong> after server startup before
                         seeing your first data point on the dashboard.
                     </p>
@@ -73,32 +91,40 @@
 
         <article class="doc-card space-y-4">
             <h2 class="doc-card-title">Data not showing up</h2>
-            <p class="max-w-prose text-sm leading-relaxed text-slate-600">
+            <p class="max-w-prose text-sm leading-relaxed text-slate-600 dark:text-slate-400">
                 If you've waited the expected time and still don't see any data, check these common
                 issues:
             </p>
             <Accordion.Root class="space-y-3">
                 <Accordion.Item title="Enable debug logging" contentClass="max-w-prose">
                     Enable debug logging in the bStats configuration file by setting
-                    <code class="font-mono text-slate-700">logFailedRequests</code>,
-                    <code class="font-mono text-slate-700">logSentData</code>, and
-                    <code class="font-mono text-slate-700">logResponseStatusText</code> to
-                    <code class="font-mono text-slate-700">true</code>.
+                    <code class="font-mono text-slate-700 dark:text-slate-300"
+                        >logFailedRequests</code
+                    >,
+                    <code class="font-mono text-slate-700 dark:text-slate-300">logSentData</code>,
+                    and
+                    <code class="font-mono text-slate-700 dark:text-slate-300"
+                        >logResponseStatusText</code
+                    >
+                    to
+                    <code class="font-mono text-slate-700 dark:text-slate-300">true</code>.
                 </Accordion.Item>
 
                 <Accordion.Item title="Ratelimits" contentClass="max-w-prose">
                     Plugins are limited to sending data once per 30-minute interval (hh:00 and
                     hh:30). When you have debug logging enabled and see
-                    <code class="font-mono text-slate-700">429 Too Many Requests</code> in the logs,
-                    it means your plugin is being ratelimited.
+                    <code class="font-mono text-slate-700 dark:text-slate-300"
+                        >429 Too Many Requests</code
+                    >
+                    in the logs, it means your plugin is being ratelimited.
                     <strong>This is completely normal</strong> and can be safely ignored.
                 </Accordion.Item>
 
                 <Accordion.Item title="Metrics class not instantiated" contentClass="max-w-prose">
                     Verify that you're actually creating an instance of the
-                    <code class="font-mono text-slate-700">Metrics</code> class in your plugin's initialization
-                    code. Simply including the class file isn't enough. You must instantiate it with
-                    your plugin ID.
+                    <code class="font-mono text-slate-700 dark:text-slate-300">Metrics</code> class in
+                    your plugin's initialization code. Simply including the class file isn't enough.
+                    You must instantiate it with your plugin ID.
                 </Accordion.Item>
 
                 <Accordion.Item title="Wrong plugin ID" contentClass="max-w-prose">
@@ -108,9 +134,9 @@
 
                 <Accordion.Item title="Metrics disabled in config" contentClass="max-w-prose">
                     Server owners can disable bStats by editing. Check that
-                    <code class="font-mono text-slate-700">enabled</code>
+                    <code class="font-mono text-slate-700 dark:text-slate-300">enabled</code>
                     is set to
-                    <code class="font-mono text-slate-700">true</code>.
+                    <code class="font-mono text-slate-700 dark:text-slate-300">true</code>.
                 </Accordion.Item>
 
                 <Accordion.Item title="Firewall or network blocking" contentClass="max-w-prose">
@@ -121,7 +147,7 @@
         </article>
         <article class="doc-card space-y-4">
             <h2 class="doc-card-title">Still having issues?</h2>
-            <p class="max-w-prose text-sm leading-relaxed text-slate-600">
+            <p class="max-w-prose text-sm leading-relaxed text-slate-600 dark:text-slate-400">
                 If you've checked everything above and still can't see your data, please reach out
                 for help:
             </p>

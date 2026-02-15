@@ -4,6 +4,8 @@
     import Footer from '$lib/components/layout/footer.svelte';
     import TosAcceptanceModal from '$lib/components/tos-acceptance-modal.svelte';
     import { page } from '$app/state';
+    import { themePreference } from '$lib/stores/theme.svelte';
+    import { browser } from '$app/environment';
 
     let { data, children } = $props();
 
@@ -21,6 +23,36 @@
             (!data.user.tosAccepted || data.user.tosAccepted < data.tosRequiredVersion) &&
             !legalPages.includes(page.url.pathname)
     );
+
+    // Sync dark mode class on <html> based on theme preference
+    $effect(() => {
+        if (!browser) return;
+
+        const pref = themePreference.current;
+
+        function apply(dark: boolean) {
+            document.documentElement.classList.toggle('dark', dark);
+        }
+
+        if (pref === 'light') {
+            apply(false);
+            return;
+        }
+
+        if (pref === 'dark') {
+            apply(true);
+            return;
+        }
+
+        // System preference
+        const mql = window.matchMedia('(prefers-color-scheme: dark)');
+        apply(mql.matches);
+
+        const handler = (e: MediaQueryListEvent) => apply(e.matches);
+        mql.addEventListener('change', handler);
+
+        return () => mql.removeEventListener('change', handler);
+    });
 </script>
 
 <svelte:head>

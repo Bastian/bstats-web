@@ -74,7 +74,9 @@
         <section class="doc-container mt-12">
             <div class="form-card space-y-6">
                 {#if error}
-                    <div class="doc-callout border-rose-200 bg-rose-50 text-rose-700">
+                    <div
+                        class="doc-callout border-rose-200 bg-rose-50 text-rose-700 dark:border-rose-900/50 dark:bg-rose-950/30 dark:text-rose-300"
+                    >
                         {error}
                     </div>
                 {/if}
@@ -111,7 +113,7 @@
                     <Button fullWidth size="large" type="submit" name="btn_login">Sign in</Button>
                 </form>
 
-                <p class="text-center text-sm text-slate-500">
+                <p class="text-center text-sm text-slate-500 dark:text-slate-400">
                     Don't have an account yet?
                     <a
                         class="font-semibold text-brand-600 hover:text-brand-700"

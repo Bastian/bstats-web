@@ -335,7 +335,7 @@
                 <Button type="submit" size="medium">Apply</Button>
                 <button
                     type="button"
-                    class="inline-flex items-center justify-center rounded-full border border-slate-200 px-4 py-2 text-sm font-semibold text-slate-600 transition hover:border-brand-200 hover:text-brand-600"
+                    class="inline-flex items-center justify-center rounded-full border border-slate-200 px-4 py-2 text-sm font-semibold text-slate-600 transition hover:border-brand-200 hover:text-brand-600 dark:border-dark-700 dark:text-slate-400"
                     onclick={handleClearSearch}
                 >
                     Clear
@@ -344,28 +344,36 @@
         </form>
 
         {#if overallError}
-            <div class="doc-callout border-rose-200 bg-rose-50 text-rose-700">{overallError}</div>
+            <div
+                class="doc-callout border-rose-200 bg-rose-50 text-rose-700 dark:border-rose-900/50 dark:bg-rose-950/30 dark:text-rose-300"
+            >
+                {overallError}
+            </div>
         {/if}
 
         {#if successMessage}
-            <div class="doc-callout border-emerald-200 bg-emerald-50 text-emerald-700">
+            <div
+                class="doc-callout border-emerald-200 bg-emerald-50 text-emerald-700 dark:border-emerald-900/50 dark:bg-emerald-950/30 dark:text-emerald-300"
+            >
                 {successMessage}
             </div>
         {/if}
 
         {#if lastReset}
-            <div class="rounded-2xl border border-amber-200 bg-amber-50 p-4 text-sm text-amber-800">
+            <div
+                class="rounded-2xl border border-amber-200 bg-amber-50 p-4 text-sm text-amber-800 dark:border-amber-900/50 dark:bg-amber-950/30 dark:text-amber-200"
+            >
                 <p class="font-semibold">{lastReset.name}</p>
-                <p class="mt-1 font-mono text-base break-all text-amber-900">
+                <p class="mt-1 font-mono text-base break-all text-amber-900 dark:text-amber-100">
                     {lastReset.password}
                 </p>
-                <p class="mt-2 text-xs text-amber-700">
+                <p class="mt-2 text-xs text-amber-700 dark:text-amber-300">
                     Share this password securely with the user; they should change it after signing
                     in.
                 </p>
                 <button
                     type="button"
-                    class="mt-3 inline-flex items-center gap-2 rounded-full border border-amber-300 px-3 py-1.5 text-xs font-semibold text-amber-800 transition hover:bg-amber-100"
+                    class="mt-3 inline-flex items-center gap-2 rounded-full border border-amber-300 px-3 py-1.5 text-xs font-semibold text-amber-800 transition hover:bg-amber-100 dark:border-amber-700 dark:text-amber-200 dark:hover:bg-amber-900"
                     onclick={(event) => copyPassword(lastReset!.password, event)}
                 >
                     Copy password
@@ -387,36 +395,46 @@
                 <Table.Body>
                     {#if loading}
                         <Table.Row>
-                            <Table.Cell colspan={5} class="py-8 text-center text-slate-500">
+                            <Table.Cell
+                                colspan={5}
+                                class="py-8 text-center text-slate-500 dark:text-slate-400"
+                            >
                                 Loading users…
                             </Table.Cell>
                         </Table.Row>
                     {:else if users.length === 0}
                         <Table.Row>
-                            <Table.Cell colspan={5} class="py-8 text-center text-slate-500">
+                            <Table.Cell
+                                colspan={5}
+                                class="py-8 text-center text-slate-500 dark:text-slate-400"
+                            >
                                 No users found.
                             </Table.Cell>
                         </Table.Row>
                     {:else}
                         {#each users as user (user.id)}
-                            <Table.Row class={user.banned ? 'bg-rose-50/60' : ''}>
+                            <Table.Row
+                                class={user.banned ? 'bg-rose-50/60 dark:bg-rose-950/40' : ''}
+                            >
                                 <Table.Cell>
-                                    <div class="font-semibold text-slate-900">
+                                    <div class="font-semibold text-slate-900 dark:text-slate-100">
                                         {displayNameFor(user)}
                                     </div>
-                                    <div class="mt-1 text-xs text-slate-500">
+                                    <div class="mt-1 text-xs text-slate-500 dark:text-slate-400">
                                         {user.username ? `@${user.username}` : '—'}
                                     </div>
                                     {#if user.id}
-                                        <div class="mt-1 font-mono text-[11px] text-slate-400">
+                                        <div
+                                            class="mt-1 font-mono text-[11px] text-slate-400 dark:text-slate-500"
+                                        >
                                             {user.id}
                                         </div>
                                     {/if}
                                 </Table.Cell>
-                                <Table.Cell class="text-slate-600">
+                                <Table.Cell class="text-slate-600 dark:text-slate-400">
                                     {user.email ?? '—'}
                                 </Table.Cell>
-                                <Table.Cell class="text-slate-600">
+                                <Table.Cell class="text-slate-600 dark:text-slate-400">
                                     {#if rolesFor(user.role).length}
                                         {rolesFor(user.role).join(', ')}
                                     {:else}
@@ -471,7 +489,7 @@
                                         {/if}
                                         <button
                                             type="button"
-                                            class="inline-flex items-center gap-2 rounded-full border border-slate-200 px-3 py-1.5 text-xs font-semibold text-slate-600 transition hover:border-brand-200 hover:text-brand-600 disabled:cursor-not-allowed disabled:opacity-50"
+                                            class="inline-flex items-center gap-2 rounded-full border border-slate-200 px-3 py-1.5 text-xs font-semibold text-slate-600 transition hover:border-brand-200 hover:text-brand-600 disabled:cursor-not-allowed disabled:opacity-50 dark:border-dark-700 dark:text-slate-400"
                                             disabled={isPending(user.id, 'reset')}
                                             onclick={() => handleResetPassword(user)}
                                         >

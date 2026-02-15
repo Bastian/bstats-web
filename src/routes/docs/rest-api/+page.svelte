@@ -34,23 +34,28 @@
     <section class="doc-container mt-12 space-y-12">
         <article class="doc-card space-y-4">
             <h2 class="doc-card-title">Getting started</h2>
-            <p class="max-w-prose text-sm leading-relaxed text-slate-600">
-                Requests are simple <code class="font-mono text-slate-700">GET</code> calls. No authentication
-                is required for public data.
+            <p class="max-w-prose text-sm leading-relaxed text-slate-600 dark:text-slate-400">
+                Requests are simple <code class="font-mono text-slate-700 dark:text-slate-300"
+                    >GET</code
+                > calls. No authentication is required for public data.
             </p>
             <div class="doc-callout doc-callout-note">
-                These examples assume the API is reachable at <code class="font-mono text-slate-700"
-                    >https://bstats.org</code
+                These examples assume the API is reachable at <code
+                    class="font-mono text-slate-700 dark:text-slate-300">https://bstats.org</code
                 >.
             </div>
         </article>
 
         <article class="doc-card space-y-4">
-            <h3 class="text-sm font-semibold tracking-[0.2em] text-slate-500 uppercase">
+            <h3
+                class="text-sm font-semibold tracking-[0.2em] text-slate-500 uppercase dark:text-slate-400"
+            >
                 List plugins
             </h3>
             <CodeBlock code="GET /api/v1/plugins" lang="http" />
-            <p class="text-sm text-slate-600">Returns all plugins registered on bStats.</p>
+            <p class="text-sm text-slate-600 dark:text-slate-400">
+                Returns all plugins registered on bStats.
+            </p>
             <CodeBlock
                 code={`[
   {
@@ -67,11 +72,13 @@
         </article>
 
         <article class="doc-card space-y-4">
-            <h3 class="text-sm font-semibold tracking-[0.2em] text-slate-500 uppercase">
+            <h3
+                class="text-sm font-semibold tracking-[0.2em] text-slate-500 uppercase dark:text-slate-400"
+            >
                 Plugin details
             </h3>
             <CodeBlock code={'GET /api/v1/plugins/{pluginId}'} lang="http" />
-            <p class="text-sm text-slate-600">
+            <p class="text-sm text-slate-600 dark:text-slate-400">
                 Returns metadata plus chart definitions for a specific plugin.
             </p>
             <CodeBlock
@@ -98,11 +105,15 @@
         </article>
 
         <article class="doc-card space-y-4">
-            <h3 class="text-sm font-semibold tracking-[0.2em] text-slate-500 uppercase">
+            <h3
+                class="text-sm font-semibold tracking-[0.2em] text-slate-500 uppercase dark:text-slate-400"
+            >
                 Charts for a plugin
             </h3>
             <CodeBlock code={'GET /api/v1/plugins/{pluginId}/charts'} lang="http" />
-            <p class="text-sm text-slate-600">Returns the chart registry for a plugin.</p>
+            <p class="text-sm text-slate-600 dark:text-slate-400">
+                Returns the chart registry for a plugin.
+            </p>
             <CodeBlock
                 code={`{
   "players": {
@@ -122,7 +133,9 @@
         </article>
 
         <article class="doc-card space-y-4">
-            <h3 class="text-sm font-semibold tracking-[0.2em] text-slate-500 uppercase">
+            <h3
+                class="text-sm font-semibold tracking-[0.2em] text-slate-500 uppercase dark:text-slate-400"
+            >
                 Chart metadata
             </h3>
             <CodeBlock code={'GET /api/v1/plugins/{pluginId}/charts/{chartId}'} lang="http" />
@@ -143,13 +156,15 @@
         </article>
 
         <article class="doc-card space-y-4">
-            <h3 class="text-sm font-semibold tracking-[0.2em] text-slate-500 uppercase">
+            <h3
+                class="text-sm font-semibold tracking-[0.2em] text-slate-500 uppercase dark:text-slate-400"
+            >
                 Chart data
             </h3>
             <CodeBlock code={'GET /api/v1/plugins/{pluginId}/charts/{chartId}/data'} lang="http" />
-            <p class="text-sm text-slate-600">
+            <p class="text-sm text-slate-600 dark:text-slate-400">
                 Returns raw chart data. For line charts each entry is <code
-                    class="font-mono text-slate-700">[timestamp, value]</code
+                    class="font-mono text-slate-700 dark:text-slate-300">[timestamp, value]</code
                 >.
             </p>
             <CodeBlock
@@ -162,13 +177,17 @@
                 lang="json"
             />
             <div class="doc-callout doc-callout-note">
-                Append <code class="font-mono text-slate-700">?maxElements=&#123;amount&#125;</code>
+                Append <code class="font-mono text-slate-700 dark:text-slate-300"
+                    >?maxElements=&#123;amount&#125;</code
+                >
                 to limit the number of entries (line charts only).
             </div>
         </article>
 
         <article class="doc-card space-y-4">
-            <h3 class="text-sm font-semibold tracking-[0.2em] text-slate-500 uppercase">
+            <h3
+                class="text-sm font-semibold tracking-[0.2em] text-slate-500 uppercase dark:text-slate-400"
+            >
                 Supported software
             </h3>
             <CodeBlock code="GET /api/v1/software" lang="http" />

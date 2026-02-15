@@ -22,16 +22,16 @@
     bind:checked
     class={[
         // Base: match other inputs (border, bg, radius, shadow, transition)
-        'peer inline-flex size-5 items-center justify-center rounded-md border border-slate-200',
-        'bg-white text-white shadow-sm transition-colors',
+        'peer inline-flex size-5 items-center justify-center rounded-md border border-slate-200 dark:border-dark-600',
+        'bg-white text-white shadow-sm transition-colors dark:bg-dark-700',
         // Hover
-        'hover:border-slate-300',
+        'hover:border-slate-300 dark:hover:border-dark-400',
         // Focus
-        'outline-none focus-visible:border-brand-300 focus-visible:ring-2 focus-visible:ring-brand-200',
+        'outline-none focus-visible:border-brand-300 focus-visible:ring-2 focus-visible:ring-brand-200 dark:focus-visible:border-brand-600 dark:focus-visible:ring-brand-900',
         // Disabled
         'disabled:cursor-not-allowed disabled:opacity-50',
         // States from Bits (data-state = unchecked | checked | indeterminate)
-        'data-[state=unchecked]:border-slate-200 data-[state=unchecked]:bg-white',
+        'data-[state=unchecked]:border-slate-200 data-[state=unchecked]:bg-white dark:data-[state=unchecked]:border-dark-600 dark:data-[state=unchecked]:bg-dark-700',
         // Checked: brand bg + border, white icon
         'data-[state=checked]:border-brand-600 data-[state=checked]:bg-brand-600',
         'data-[state=checked]:hover:bg-brand-500',

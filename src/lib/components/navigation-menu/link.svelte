@@ -14,9 +14,9 @@
 <BitsNavigationMenu.Link
     {href}
     class={[
-        'flex items-center justify-between rounded-lg px-3 py-2 text-sm text-slate-600 transition',
-        'hover:bg-brand-50 hover:text-slate-900',
-        'focus-visible:bg-brand-50 focus-visible:text-slate-900 focus-visible:outline-none',
+        'flex items-center justify-between rounded-lg px-3 py-2 text-sm text-slate-600 transition dark:text-slate-400',
+        'hover:bg-brand-50 hover:text-slate-900 dark:hover:bg-dark-700 dark:hover:text-slate-100',
+        'focus-visible:bg-brand-50 focus-visible:text-slate-900 focus-visible:outline-none dark:focus-visible:bg-dark-700 dark:focus-visible:text-slate-100',
         className
     ]}
     {...restProps}

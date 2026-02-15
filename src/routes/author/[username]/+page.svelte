@@ -69,14 +69,19 @@
                 <Table.Body>
                     {#if filteredPlugins.length === 0}
                         <Table.Row>
-                            <Table.Cell colspan={2} class="py-6 text-center text-slate-500">
+                            <Table.Cell
+                                colspan={2}
+                                class="py-6 text-center text-slate-500 dark:text-slate-400"
+                            >
                                 No plugins {searchValue ? 'match your search' : 'yet'}.
                             </Table.Cell>
                         </Table.Row>
                     {:else}
                         {#each filteredPlugins as plugin (plugin.id)}
                             <Table.Row>
-                                <Table.Cell class="font-semibold text-slate-900">
+                                <Table.Cell
+                                    class="font-semibold text-slate-900 dark:text-slate-100"
+                                >
                                     <a
                                         class="hover:text-brand-600"
                                         href={resolve(
@@ -86,7 +91,7 @@
                                         {plugin.name}
                                     </a>
                                 </Table.Cell>
-                                <Table.Cell class="text-slate-600">
+                                <Table.Cell class="text-slate-600 dark:text-slate-400">
                                     {#if plugin.software.globalPlugin}
                                         <a
                                             class="hover:text-brand-600"

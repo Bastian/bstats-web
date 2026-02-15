@@ -13,7 +13,7 @@
 
 <BitsNavigationMenu.Content
     class={[
-        'absolute top-full z-20 mt-1 w-max max-w-sm min-w-48 rounded-xl border border-slate-200 bg-white p-3 shadow-2xl',
+        'absolute top-full z-20 mt-1 w-max max-w-sm min-w-48 rounded-xl border border-slate-200 bg-white p-3 shadow-2xl dark:border-dark-700 dark:bg-dark-800',
         {
             'left-1/2 -translate-x-1/2': align === 'center',
             'left-0': align === 'start',

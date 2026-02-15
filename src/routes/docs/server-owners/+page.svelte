@@ -53,10 +53,12 @@
                     />
                 </svg>
                 <div>
-                    <h2 class="text-sm font-semibold text-slate-800">
+                    <h2 class="text-sm font-semibold text-slate-800 dark:text-slate-200">
                         bStats is a free, open source hobby project
                     </h2>
-                    <p class="mt-2 max-w-prose text-sm leading-relaxed text-slate-600">
+                    <p
+                        class="mt-2 max-w-prose text-sm leading-relaxed text-slate-600 dark:text-slate-400"
+                    >
                         bStats is run as a passion project. It's completely
                         <a
                             class="font-semibold text-brand-600 hover:text-brand-700"
@@ -75,12 +77,12 @@
 
         <article class="doc-card space-y-4">
             <h2 class="doc-card-title">What is bStats?</h2>
-            <p class="max-w-prose text-sm leading-relaxed text-slate-600">
+            <p class="max-w-prose text-sm leading-relaxed text-slate-600 dark:text-slate-400">
                 bStats is a free metrics service for Minecraft server plugins. When plugin authors
                 integrate bStats into their plugins, they can see how many servers use their work,
                 which Minecraft versions are popular, and how their plugins are configured.
             </p>
-            <p class="max-w-prose text-sm leading-relaxed text-slate-600">
+            <p class="max-w-prose text-sm leading-relaxed text-slate-600 dark:text-slate-400">
                 As a server owner, your server automatically shares basic usage statistics with
                 plugin authors when you install plugins that use bStats. This happens in the
                 background and doesn't affect your server's performance. The data collected is
@@ -90,15 +92,21 @@
 
         <article class="doc-card space-y-4">
             <h2 class="doc-card-title">What data is collected?</h2>
-            <p class="max-w-prose text-sm leading-relaxed text-slate-600">
+            <p class="max-w-prose text-sm leading-relaxed text-slate-600 dark:text-slate-400">
                 bStats collects only non-personal data and shows them as aggregated metrics. We
                 never collect player names, chat logs, world data, or any personally identifiable
                 information.
             </p>
             <div class="mt-4 space-y-3">
-                <div class="rounded-2xl border border-slate-200 bg-slate-50 p-4 sm:p-5">
-                    <h3 class="text-sm font-semibold text-slate-700">Example of collected data</h3>
-                    <ul class="mt-2 max-w-prose space-y-1 text-sm text-slate-600">
+                <div
+                    class="rounded-2xl border border-slate-200 bg-slate-50 p-4 sm:p-5 dark:border-dark-700 dark:bg-dark-800"
+                >
+                    <h3 class="text-sm font-semibold text-slate-700 dark:text-slate-300">
+                        Example of collected data
+                    </h3>
+                    <ul
+                        class="mt-2 max-w-prose space-y-1 text-sm text-slate-600 dark:text-slate-400"
+                    >
                         <li class="flex gap-2">
                             <span class="text-brand-600">•</span>
                             <span>Number of players currently online</span>
@@ -121,9 +129,13 @@
                         </li>
                     </ul>
                 </div>
-                <div class="rounded-2xl border border-slate-200 bg-slate-50 p-4 sm:p-5">
-                    <h3 class="text-sm font-semibold text-slate-700">Plugin-specific data</h3>
-                    <p class="mt-2 max-w-prose text-sm text-slate-600">
+                <div
+                    class="rounded-2xl border border-slate-200 bg-slate-50 p-4 sm:p-5 dark:border-dark-700 dark:bg-dark-800"
+                >
+                    <h3 class="text-sm font-semibold text-slate-700 dark:text-slate-300">
+                        Plugin-specific data
+                    </h3>
+                    <p class="mt-2 max-w-prose text-sm text-slate-600 dark:text-slate-400">
                         Some plugins collect custom metrics about how you use their features. For
                         example, a plugin might track which configuration options are most popular.
                         This helps authors understand which features to prioritize.
@@ -131,7 +143,7 @@
                 </div>
             </div>
             <div class="doc-callout doc-callout-info mt-4">
-                <p class="max-w-prose text-sm text-slate-600">
+                <p class="max-w-prose text-sm text-slate-600 dark:text-slate-400">
                     All collected data is public and can be viewed on each plugin's dashboard.
                 </p>
             </div>
@@ -139,49 +151,65 @@
 
         <article class="doc-card space-y-4">
             <h2 class="doc-card-title">Why keep metrics enabled?</h2>
-            <p class="max-w-prose text-sm leading-relaxed text-slate-600">
+            <p class="max-w-prose text-sm leading-relaxed text-slate-600 dark:text-slate-400">
                 bStats helps the Minecraft server community in several ways:
             </p>
             <div class="mt-4 grid gap-4 md:grid-cols-2">
-                <div class="rounded-2xl border border-slate-200 bg-slate-50 p-4 sm:p-5">
-                    <h3 class="flex items-center gap-2 text-sm font-semibold text-slate-700">
+                <div
+                    class="rounded-2xl border border-slate-200 bg-slate-50 p-4 sm:p-5 dark:border-dark-700 dark:bg-dark-800"
+                >
+                    <h3
+                        class="flex items-center gap-2 text-sm font-semibold text-slate-700 dark:text-slate-300"
+                    >
                         <UsersGroup size={24} class="text-brand-600" />
                         Supports the community
                     </h3>
-                    <p class="mt-2 max-w-prose text-sm text-slate-600">
+                    <p class="mt-2 max-w-prose text-sm text-slate-600 dark:text-slate-400">
                         Many plugin authors maintain their plugins for free. Metrics provide a
                         tangible way to show appreciation and validate the time they invest in the
                         community.
                     </p>
                 </div>
-                <div class="rounded-2xl border border-slate-200 bg-slate-50 p-4 sm:p-5">
-                    <h3 class="flex items-center gap-2 text-sm font-semibold text-slate-700">
+                <div
+                    class="rounded-2xl border border-slate-200 bg-slate-50 p-4 sm:p-5 dark:border-dark-700 dark:bg-dark-800"
+                >
+                    <h3
+                        class="flex items-center gap-2 text-sm font-semibold text-slate-700 dark:text-slate-300"
+                    >
                         <IconLabelImportant size={24} class="text-brand-600" />
                         Guides development priorities
                     </h3>
-                    <p class="mt-2 max-w-prose text-sm text-slate-600">
+                    <p class="mt-2 max-w-prose text-sm text-slate-600 dark:text-slate-400">
                         Authors can see which Minecraft versions are most popular, which features
                         are heavily used, and where to focus their development efforts. This leads
                         to better plugins for everyone.
                     </p>
                 </div>
-                <div class="rounded-2xl border border-slate-200 bg-slate-50 p-4 sm:p-5">
-                    <h3 class="flex items-center gap-2 text-sm font-semibold text-slate-700">
+                <div
+                    class="rounded-2xl border border-slate-200 bg-slate-50 p-4 sm:p-5 dark:border-dark-700 dark:bg-dark-800"
+                >
+                    <h3
+                        class="flex items-center gap-2 text-sm font-semibold text-slate-700 dark:text-slate-300"
+                    >
                         <IconFreeRights size={24} class="text-brand-600" />
                         Privacy-first and community-run
                     </h3>
-                    <p class="mt-2 max-w-prose text-sm text-slate-600">
+                    <p class="mt-2 max-w-prose text-sm text-slate-600 dark:text-slate-400">
                         bStats is open source and run by volunteers, not a company. It collects only
                         minimal, anonymous data, and the code is public so you can verify exactly
                         what's shared.
                     </p>
                 </div>
-                <div class="rounded-2xl border border-slate-200 bg-slate-50 p-4 sm:p-5">
-                    <h3 class="flex items-center gap-2 text-sm font-semibold text-slate-700">
+                <div
+                    class="rounded-2xl border border-slate-200 bg-slate-50 p-4 sm:p-5 dark:border-dark-700 dark:bg-dark-800"
+                >
+                    <h3
+                        class="flex items-center gap-2 text-sm font-semibold text-slate-700 dark:text-slate-300"
+                    >
                         <IconBattery4 size={24} class="text-brand-600" />
                         Motivates developers
                     </h3>
-                    <p class="mt-2 max-w-prose text-sm text-slate-600">
+                    <p class="mt-2 max-w-prose text-sm text-slate-600 dark:text-slate-400">
                         Seeing real usage statistics encourages plugin authors to continue
                         maintaining and improving their plugins. It's incredibly motivating to see
                         other people actually using your work.
@@ -192,16 +220,18 @@
 
         <article class="doc-card space-y-4">
             <h2 class="doc-card-title">How to disable bStats</h2>
-            <p class="max-w-prose text-sm leading-relaxed text-slate-600">
+            <p class="max-w-prose text-sm leading-relaxed text-slate-600 dark:text-slate-400">
                 We respect your choice if you prefer not to share metrics. You can disable bStats
                 globally for all plugins on your server:
             </p>
             <div class="mt-4 space-y-4">
-                <div class="rounded-2xl border border-slate-200 bg-slate-50 p-4 sm:p-5">
-                    <h3 class="text-sm font-semibold text-slate-700">
+                <div
+                    class="rounded-2xl border border-slate-200 bg-slate-50 p-4 sm:p-5 dark:border-dark-700 dark:bg-dark-800"
+                >
+                    <h3 class="text-sm font-semibold text-slate-700 dark:text-slate-300">
                         Step 1: Locate the config file
                     </h3>
-                    <p class="mt-2 max-w-prose text-sm text-slate-600">
+                    <p class="mt-2 max-w-prose text-sm text-slate-600 dark:text-slate-400">
                         Navigate to your server directory and find the bStats configuration file
                         usually at:
                     </p>
@@ -210,16 +240,20 @@
                     >
                         /plugins/bStats/config.yml
                     </code>
-                    <span class="text-xs text-slate-500">
+                    <span class="text-xs text-slate-500 dark:text-slate-400">
                         Location might differ depending on server platform.
                     </span>
                 </div>
-                <div class="rounded-2xl border border-slate-200 bg-slate-50 p-4 sm:p-5">
-                    <h3 class="text-sm font-semibold text-slate-700">Step 2: Edit the config</h3>
-                    <p class="mt-2 max-w-prose text-sm text-slate-600">
+                <div
+                    class="rounded-2xl border border-slate-200 bg-slate-50 p-4 sm:p-5 dark:border-dark-700 dark:bg-dark-800"
+                >
+                    <h3 class="text-sm font-semibold text-slate-700 dark:text-slate-300">
+                        Step 2: Edit the config
+                    </h3>
+                    <p class="mt-2 max-w-prose text-sm text-slate-600 dark:text-slate-400">
                         Open the file with any text editor and change
-                        <code class="font-mono text-slate-700">enabled</code>
-                        to <code class="font-mono text-slate-700">false</code>:
+                        <code class="font-mono text-slate-700 dark:text-slate-300">enabled</code>
+                        to <code class="font-mono text-slate-700 dark:text-slate-300">false</code>:
                     </p>
                     <pre
                         class="mt-2 overflow-x-auto rounded-lg bg-slate-900 px-4 py-3 font-mono text-sm text-slate-100"><code
@@ -273,16 +307,17 @@
                     title="Why do I see a bStats folder in my plugins directory?"
                     contentClass="max-w-prose"
                 >
-                    The <code class="font-mono text-slate-700">/plugins/bStats/</code> folder contains
-                    the shared configuration file used by all plugins. This allows you to enable or disable
-                    metrics globally instead of configuring each plugin individually.
+                    The <code class="font-mono text-slate-700 dark:text-slate-300"
+                        >/plugins/bStats/</code
+                    > folder contains the shared configuration file used by all plugins. This allows
+                    you to enable or disable metrics globally instead of configuring each plugin individually.
                 </Accordion.Item>
             </Accordion.Root>
         </article>
 
         <article class="doc-card space-y-4">
             <h2 class="doc-card-title">Learn more</h2>
-            <p class="max-w-prose text-sm leading-relaxed text-slate-600">
+            <p class="max-w-prose text-sm leading-relaxed text-slate-600 dark:text-slate-400">
                 If you have questions or concerns about bStats, we're here to help:
             </p>
             <div class="mt-4 flex flex-wrap gap-4">

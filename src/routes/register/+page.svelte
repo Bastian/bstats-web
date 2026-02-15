@@ -11,6 +11,7 @@
     import { TextInput } from '$lib/components/input/text';
     import { MetaTags } from 'svelte-meta-tags';
     import { getCanonicalUrl } from '$lib/utils/url';
+    import { isDark } from '$lib/stores/theme.svelte';
 
     let error = $state('');
     let sentVerificationEmail = $state(false);
@@ -66,7 +67,9 @@
         {:else}
             <div class="form-card space-y-6">
                 {#if error}
-                    <div class="doc-callout border-rose-200 bg-rose-50 text-rose-700">
+                    <div
+                        class="doc-callout border-rose-200 bg-rose-50 text-rose-700 dark:border-rose-900/50 dark:bg-rose-950/30 dark:text-rose-300"
+                    >
                         {error}
                     </div>
                 {/if}
@@ -173,7 +176,7 @@
                             bind:this={captcha}
                             sitekey={env.PUBLIC_HCAPTCHA_SITE_KEY!}
                             size="normal"
-                            theme="light"
+                            theme={isDark.current ? 'dark' : 'light'}
                             bind:token
                             onError={(err) => {
                                 console.error('hCaptcha error', err);
@@ -194,7 +197,7 @@
                     </Button>
                 </form>
 
-                <p class="text-center text-sm text-slate-500">
+                <p class="text-center text-sm text-slate-500 dark:text-slate-400">
                     Already have an account?
                     <a
                         class="font-semibold text-brand-600 hover:text-brand-700"

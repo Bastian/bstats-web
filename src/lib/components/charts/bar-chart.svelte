@@ -3,6 +3,7 @@
     import { onMount, onDestroy } from 'svelte';
     import { getEChartsTheme } from '$lib/charts/echarts-theme';
     import { accessibilityPreferences } from '$lib/stores/accessibility';
+    import { isDark } from '$lib/stores/theme.svelte';
 
     interface Props {
         data: { name: string; data: number[] }[];
@@ -48,8 +49,9 @@
         }
     });
 
-    // Update chart when data or accessibility preferences change
+    // Update chart when data, accessibility preferences, or theme change
     $effect(() => {
+        void isDark.current;
         if (chartInstance && data) {
             updateChart(accessibilityPreferences.current.showChartPatterns);
         }
@@ -58,7 +60,8 @@
     function updateChart(showPatterns: boolean) {
         if (!chartInstance || !data || !categories) return;
 
-        const theme = getEChartsTheme();
+        const dark = isDark.current;
+        const theme = getEChartsTheme(dark);
 
         // Build a descriptive summary for screen readers
         const seriesNames = data.map((s) => s.name).join(', ');
@@ -134,7 +137,8 @@
                     show: true,
                     position: 'right',
                     formatter: '{c}',
-                    fontSize: 11
+                    fontSize: 11,
+                    color: dark ? '#cbd5e1' : undefined // slate-300 for dark mode
                 },
                 barMaxWidth: 25
             }))

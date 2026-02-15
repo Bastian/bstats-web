@@ -23,7 +23,9 @@
         <Field {form} name="chartType">
             <Control>
                 {#snippet children({ props })}
-                    <Label class="text-sm font-semibold tracking-wide text-slate-700">
+                    <Label
+                        class="text-sm font-semibold tracking-wide text-slate-700 dark:text-slate-300"
+                    >
                         Chart type
                     </Label>
                     <select class="input-control" {...props} bind:value={$formData.chartType}>
@@ -39,11 +41,13 @@
                     </select>
                 {/snippet}
             </Control>
-            <FieldErrors class="text-xs text-red-700" />
+            <FieldErrors class="text-xs text-red-700 dark:text-red-400" />
         </Field>
     </div>
 
-    <div class="space-y-5 rounded-xl border border-slate-200 bg-slate-50 p-4">
+    <div
+        class="space-y-5 rounded-xl border border-slate-200 bg-slate-50 p-4 dark:border-dark-700 dark:bg-dark-800/50"
+    >
         <TextInput.Formsnap
             {form}
             name="chartTitle"
@@ -73,7 +77,9 @@
             />
         {/if}
     </div>
-    <div class="space-y-5 rounded-xl border border-slate-200 bg-slate-50 p-4">
+    <div
+        class="space-y-5 rounded-xl border border-slate-200 bg-slate-50 p-4 dark:border-dark-700 dark:bg-dark-800/50"
+    >
         <Checkbox.Formsnap
             {form}
             label="Enable filters"
@@ -120,7 +126,7 @@
                             {$formData.blacklistEnabled ? 'Blocklist' : 'Allowlist'}
                         </Label>
 
-                        <Description class="text-xs text-slate-500">
+                        <Description class="text-xs text-slate-500 dark:text-slate-400">
                             {#if $formData.blacklistEnabled}
                                 Entries in this list will be blocked.
                             {:else}
@@ -155,7 +161,7 @@
                                         Remove
                                     </button>
                                 </div>
-                                <FieldErrors class="text-xs text-red-700" />
+                                <FieldErrors class="text-xs text-red-700 dark:text-red-400" />
                             </ElementField>
                         {/each}
 
@@ -173,7 +179,7 @@
                             + Add Entry
                         </button>
                     </Control>
-                    <FieldErrors class="text-xs text-red-700" />
+                    <FieldErrors class="text-xs text-red-700 dark:text-red-400" />
                 </Field>
 
                 <Checkbox.Formsnap

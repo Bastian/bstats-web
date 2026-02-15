@@ -14,7 +14,7 @@
 
 <section
     class={[
-        'relative overflow-hidden border-b border-slate-200 bg-gradient-to-br from-brand-50 via-white to-sky-100'
+        'relative overflow-hidden border-b border-slate-200 bg-gradient-to-br from-brand-50 via-white to-sky-100 dark:border-dark-700 dark:bg-dark-800 dark:bg-none'
     ]}
 >
     <div class={['mx-auto w-full max-w-6xl px-4 py-16 sm:px-6 sm:py-20']}>
@@ -22,7 +22,7 @@
             {@render badge()}
             <div class="flex items-center gap-4">
                 <h1
-                    class="font-display text-4xl font-semibold tracking-tight text-slate-900 sm:text-5xl"
+                    class="font-display text-4xl font-semibold tracking-tight text-slate-900 sm:text-5xl dark:text-slate-100"
                 >
                     {@render title()}
                 </h1>
@@ -30,7 +30,7 @@
                     {@render titleExtra()}
                 {/if}
             </div>
-            <p class="max-w-prose text-base leading-relaxed text-slate-600">
+            <p class="max-w-prose text-base leading-relaxed text-slate-600 dark:text-slate-400">
                 {@render content()}
             </p>
             {#if extra}
