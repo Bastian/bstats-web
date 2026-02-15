@@ -3,7 +3,7 @@
     import { page } from '$app/state';
     import Badge from '$lib/components/badge.svelte';
     import PageHero from '$lib/components/page-hero.svelte';
-    import { Table } from '$lib/components/table';
+    import { Table, createTableSort } from '$lib/components/table';
     import Pagination from '$lib/components/pagination.svelte';
     import { onMount } from 'svelte';
     import { TextInput } from '$lib/components/input/text';
@@ -22,7 +22,6 @@
 
     let searchValue = $state('');
     let plugins = $state<PluginListItem[]>([]);
-    let filteredPlugins = $state<PluginListItem[]>([]);
     let isLoading = $state(true);
     let hasError = $state(false);
     let paginationPage = $state(1);
@@ -30,46 +29,57 @@
     const perPage = 10;
     const formatter = new Intl.NumberFormat();
 
+    const sort = createTableSort({
+        column: 'servers',
+        direction: 'desc',
+        columns: {
+            name: (p: PluginListItem) => p.name,
+            software: (p: PluginListItem) => p.softwareName,
+            owner: (p: PluginListItem) => p.ownerName,
+            servers: (p: PluginListItem) => p.servers ?? 0,
+            players: (p: PluginListItem) => p.players ?? 0
+        }
+    });
+
+    let sortedPlugins = $derived.by(() => {
+        const query = searchValue.trim().toLowerCase();
+        const filtered = query
+            ? plugins.filter(
+                  (plugin) =>
+                      plugin.name.toLowerCase().includes(query) ||
+                      plugin.softwareName.toLowerCase().includes(query) ||
+                      plugin.ownerName.toLowerCase().includes(query)
+              )
+            : plugins;
+        return sort.apply(filtered);
+    });
+
     let paginatedPlugins = $derived.by(() => {
         const start = (paginationPage - 1) * perPage;
         const end = start + perPage;
-        return filteredPlugins.slice(start, end);
+        return sortedPlugins.slice(start, end);
     });
 
-    function filterPlugins() {
-        const query = searchValue.trim().toLowerCase();
-        if (!query) {
-            filteredPlugins = plugins;
-            paginationPage = 1;
-            return;
-        }
-        filteredPlugins = plugins.filter((plugin) => {
-            return (
-                plugin.name.toLowerCase().includes(query) ||
-                plugin.softwareName.toLowerCase().includes(query) ||
-                plugin.ownerName.toLowerCase().includes(query)
-            );
-        });
+    // Reset to page 1 when search or sort changes
+    $effect(() => {
+        // Track dependencies
+        searchValue;
+        sort.column;
+        sort.direction;
         paginationPage = 1;
-    }
+    });
 
     onMount(() => {
         fetch('/api/v1/datatable')
             .then((response) => response.json())
             .then((data) => {
                 plugins = data || [];
-                plugins.sort((a, b) => (b.servers || 0) - (a.servers || 0));
-                filteredPlugins = plugins;
                 isLoading = false;
             })
             .catch(() => {
                 hasError = true;
                 isLoading = false;
             });
-    });
-
-    $effect(() => {
-        filterPlugins();
     });
 </script>
 
@@ -115,22 +125,22 @@
                     {#if isLoading}
                         &nbsp;
                     {:else}
-                        {filteredPlugins.length}
-                        {filteredPlugins.length === 1 ? 'plugin' : 'plugins'}
+                        {sortedPlugins.length}
+                        {sortedPlugins.length === 1 ? 'plugin' : 'plugins'}
                     {/if}
                 </span>
             </div>
         </div>
 
         <div class="overflow-x-auto">
-            <Table.Root>
+            <Table.Root {sort}>
                 <Table.Header>
                     <Table.Row>
-                        <Table.HeaderCell>Name</Table.HeaderCell>
-                        <Table.HeaderCell>Software</Table.HeaderCell>
-                        <Table.HeaderCell>Owner</Table.HeaderCell>
-                        <Table.HeaderCell align="right">Servers</Table.HeaderCell>
-                        <Table.HeaderCell align="right">Players</Table.HeaderCell>
+                        <Table.HeaderCell sortKey="name">Name</Table.HeaderCell>
+                        <Table.HeaderCell sortKey="software">Software</Table.HeaderCell>
+                        <Table.HeaderCell sortKey="owner">Owner</Table.HeaderCell>
+                        <Table.HeaderCell sortKey="servers" align="right">Servers</Table.HeaderCell>
+                        <Table.HeaderCell sortKey="players" align="right">Players</Table.HeaderCell>
                     </Table.Row>
                 </Table.Header>
                 <Table.Body>
@@ -152,7 +162,7 @@
                                 Failed to load plugins. Please try again later.
                             </Table.Cell>
                         </Table.Row>
-                    {:else if filteredPlugins.length === 0}
+                    {:else if sortedPlugins.length === 0}
                         <Table.Row>
                             <Table.Cell
                                 colspan={5}
@@ -204,9 +214,9 @@
             </Table.Root>
         </div>
 
-        {#if !isLoading && !hasError && filteredPlugins.length > 0}
+        {#if !isLoading && !hasError && sortedPlugins.length > 0}
             <div class="mt-6">
-                <Pagination count={filteredPlugins.length} {perPage} bind:page={paginationPage} />
+                <Pagination count={sortedPlugins.length} {perPage} bind:page={paginationPage} />
             </div>
         {/if}
     </section>

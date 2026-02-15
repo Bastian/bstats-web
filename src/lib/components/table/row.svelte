@@ -10,7 +10,7 @@
 </script>
 
 <tr
-    class={['transition-colors hover:bg-slate-50 dark:hover:bg-dark-700/50', className]}
+    class={['hover:bg-slate-50 hover:transition-colors dark:hover:bg-dark-700/50', className]}
     {...restProps}
 >
     {@render children()}

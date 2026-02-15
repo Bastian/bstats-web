@@ -1,13 +1,20 @@
 <script lang="ts">
     import type { Snippet } from 'svelte';
     import type { HTMLAttributes } from 'svelte/elements';
+    import { setContext } from 'svelte';
+    import type { TableSortState } from './sort.svelte.js';
 
     interface Props extends HTMLAttributes<HTMLDivElement> {
         children: Snippet;
         tableClass?: string;
+        sort?: TableSortState;
     }
 
-    let { children, tableClass, class: className, ...restProps }: Props = $props();
+    let { children, tableClass, sort, class: className, ...restProps }: Props = $props();
+
+    if (sort) {
+        setContext('table-sort', sort);
+    }
 </script>
 
 <div

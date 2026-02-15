@@ -65,9 +65,6 @@ export const load: PageServerLoad = async ({ params }) => {
         })
     );
 
-    // Sort by server count (highest first)
-    plugins.sort((a, b) => b.servers - a.servers);
-
     return {
         username,
         plugins

@@ -5,6 +5,8 @@ import Row from './row.svelte';
 import HeaderCell from './header-cell.svelte';
 import Cell from './cell.svelte';
 
+export { createTableSort } from './sort.svelte.js';
+
 export const Table = {
     Root,
     Header,

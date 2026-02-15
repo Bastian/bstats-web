@@ -3,7 +3,7 @@
     import Badge from '$lib/components/badge.svelte';
     import { TextInput } from '$lib/components/input/text';
     import PageHero from '$lib/components/page-hero.svelte';
-    import { Table } from '$lib/components/table';
+    import { Table, createTableSort } from '$lib/components/table';
     import { MetaTags } from 'svelte-meta-tags';
     import type { PageData } from './$types';
     import { page } from '$app/state';
@@ -13,16 +13,29 @@
 
     const formatter = new Intl.NumberFormat();
 
+    const sort = createTableSort({
+        column: 'servers',
+        direction: 'desc',
+        columns: {
+            name: (p) => p.name,
+            software: (p) => p.software.name,
+            servers: (p) => p.servers ?? 0,
+            players: (p) => p.players ?? 0
+        }
+    });
+
     let searchValue = $state('');
-    let filteredPlugins = $derived(
-        data.plugins.filter((plugin) => {
-            const query = searchValue.trim().toLowerCase();
-            if (!query) return true;
-            return (
-                plugin.name.toLowerCase().includes(query) ||
-                plugin.software.name.toLowerCase().includes(query)
-            );
-        })
+    let sortedPlugins = $derived(
+        sort.apply(
+            data.plugins.filter((plugin) => {
+                const query = searchValue.trim().toLowerCase();
+                if (!query) return true;
+                return (
+                    plugin.name.toLowerCase().includes(query) ||
+                    plugin.software.name.toLowerCase().includes(query)
+                );
+            })
+        )
     );
 </script>
 
@@ -61,17 +74,17 @@
             />
         </TextInput.Root>
         <div class="overflow-x-auto">
-            <Table.Root>
+            <Table.Root {sort}>
                 <Table.Header>
                     <Table.Row>
-                        <Table.HeaderCell>Name</Table.HeaderCell>
-                        <Table.HeaderCell>Software</Table.HeaderCell>
-                        <Table.HeaderCell align="right">Servers</Table.HeaderCell>
-                        <Table.HeaderCell align="right">Players</Table.HeaderCell>
+                        <Table.HeaderCell sortKey="name">Name</Table.HeaderCell>
+                        <Table.HeaderCell sortKey="software">Software</Table.HeaderCell>
+                        <Table.HeaderCell sortKey="servers" align="right">Servers</Table.HeaderCell>
+                        <Table.HeaderCell sortKey="players" align="right">Players</Table.HeaderCell>
                     </Table.Row>
                 </Table.Header>
                 <Table.Body>
-                    {#if filteredPlugins.length === 0}
+                    {#if sortedPlugins.length === 0}
                         <Table.Row>
                             <Table.Cell
                                 colspan={4}
@@ -81,7 +94,7 @@
                             </Table.Cell>
                         </Table.Row>
                     {:else}
-                        {#each filteredPlugins as plugin (plugin.id)}
+                        {#each sortedPlugins as plugin (plugin.id)}
                             <Table.Row>
                                 <Table.Cell
                                     class="font-semibold text-slate-900 dark:text-slate-100"

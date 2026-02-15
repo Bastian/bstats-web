@@ -5,23 +5,35 @@
     import Button from '$lib/components/button.svelte';
     import { TextInput } from '$lib/components/input/text';
     import PageHero from '$lib/components/page-hero.svelte';
-    import { Table } from '$lib/components/table';
+    import { Table, createTableSort } from '$lib/components/table';
     import { MetaTags } from 'svelte-meta-tags';
     import { getCanonicalUrl } from '$lib/utils/url';
     import type { PageData } from './$types';
 
     let { data }: { data: PageData } = $props();
 
+    const sort = createTableSort({
+        column: 'name',
+        direction: 'asc',
+        columns: {
+            name: (p) => p.name,
+            software: (p) => p.software.name,
+            pluginId: (p) => p.id
+        }
+    });
+
     let searchValue = $state('');
-    let filteredPlugins = $derived(
-        data.myPlugins.filter((plugin) => {
-            const query = searchValue.trim().toLowerCase();
-            if (!query) return true;
-            return (
-                plugin.name.toLowerCase().includes(query) ||
-                plugin.software.name.toLowerCase().includes(query)
-            );
-        })
+    let sortedPlugins = $derived(
+        sort.apply(
+            data.myPlugins.filter((plugin) => {
+                const query = searchValue.trim().toLowerCase();
+                if (!query) return true;
+                return (
+                    plugin.name.toLowerCase().includes(query) ||
+                    plugin.software.name.toLowerCase().includes(query)
+                );
+            })
+        )
     );
 
     async function copyToClipboard(pluginId: number, event: MouseEvent) {
@@ -104,17 +116,17 @@
                 />
             </TextInput.Root>
             <div class="overflow-x-auto">
-                <Table.Root>
+                <Table.Root {sort}>
                     <Table.Header>
                         <Table.Row>
-                            <Table.HeaderCell>Plugin</Table.HeaderCell>
-                            <Table.HeaderCell>Software</Table.HeaderCell>
-                            <Table.HeaderCell>Plugin ID</Table.HeaderCell>
+                            <Table.HeaderCell sortKey="name">Plugin</Table.HeaderCell>
+                            <Table.HeaderCell sortKey="software">Software</Table.HeaderCell>
+                            <Table.HeaderCell sortKey="pluginId">Plugin ID</Table.HeaderCell>
                             <Table.HeaderCell align="right">Action</Table.HeaderCell>
                         </Table.Row>
                     </Table.Header>
                     <Table.Body>
-                        {#each filteredPlugins as plugin (plugin.id)}
+                        {#each sortedPlugins as plugin (plugin.id)}
                             <Table.Row>
                                 <Table.Cell class="font-semibold text-slate-900 dark:text-slate-100"
                                     >{plugin.name}</Table.Cell
