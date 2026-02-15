@@ -65,7 +65,7 @@
     </div>
     <div class="px-5 pt-4 pb-6">
         <div
-            class="min-w-0 overflow-hidden rounded-xl border border-slate-100 bg-slate-50 p-1 dark:border-dark-700 dark:bg-dark-800/50"
+            class="min-w-0 overflow-hidden rounded-xl border border-slate-100 bg-slate-50 p-1 dark:border-dark-700 dark:bg-dark-900"
         >
             {@render children()}
         </div>

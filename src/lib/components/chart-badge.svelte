@@ -12,7 +12,7 @@
 </script>
 
 <article
-    class="min-w-0 rounded-2xl border border-slate-200 bg-white px-5 py-4 text-sm text-slate-600 shadow-sm dark:border-dark-700 dark:bg-dark-800 dark:text-slate-400"
+    class="min-w-0 rounded-2xl border border-slate-200 bg-white px-5 py-4 text-sm text-slate-600 shadow-sm dark:border-dark-700 dark:bg-dark-900 dark:text-slate-400"
 >
     <div
         class="flex items-center gap-2 text-xs tracking-[0.25em] text-slate-500 uppercase dark:text-slate-400"
