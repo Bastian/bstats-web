@@ -11,6 +11,8 @@
 
     let { data }: { data: PageData } = $props();
 
+    const formatter = new Intl.NumberFormat();
+
     let searchValue = $state('');
     let filteredPlugins = $derived(
         data.plugins.filter((plugin) => {
@@ -64,13 +66,15 @@
                     <Table.Row>
                         <Table.HeaderCell>Name</Table.HeaderCell>
                         <Table.HeaderCell>Software</Table.HeaderCell>
+                        <Table.HeaderCell align="right">Servers</Table.HeaderCell>
+                        <Table.HeaderCell align="right">Players</Table.HeaderCell>
                     </Table.Row>
                 </Table.Header>
                 <Table.Body>
                     {#if filteredPlugins.length === 0}
                         <Table.Row>
                             <Table.Cell
-                                colspan={2}
+                                colspan={4}
                                 class="py-6 text-center text-slate-500 dark:text-slate-400"
                             >
                                 No plugins {searchValue ? 'match your search' : 'yet'}.
@@ -102,6 +106,18 @@
                                     {:else}
                                         {plugin.software.name}
                                     {/if}
+                                </Table.Cell>
+                                <Table.Cell
+                                    align="right"
+                                    class="font-semibold text-slate-900 dark:text-slate-100"
+                                >
+                                    {formatter.format(plugin.servers || 0)}
+                                </Table.Cell>
+                                <Table.Cell
+                                    align="right"
+                                    class="font-semibold text-slate-900 dark:text-slate-100"
+                                >
+                                    {formatter.format(plugin.players || 0)}
                                 </Table.Cell>
                             </Table.Row>
                         {/each}
