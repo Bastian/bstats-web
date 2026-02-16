@@ -1,0 +1,5 @@
+$metrics->addCustomChart(new SingleLineChart("players", function(): int {
+    // There is already a player count chart by
+    // default. This is just an example.
+    return count($this->getServer()->getOnlinePlayers());
+}));

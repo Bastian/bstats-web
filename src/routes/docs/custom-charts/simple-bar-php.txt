@@ -1,0 +1,4 @@
+$metrics->addCustomChart(new SimpleBarChart("features", function(): array {
+    // Format: ["Category" => value]
+    return ["Feature A" => 1];
+}));

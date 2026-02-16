@@ -5,6 +5,7 @@
     import instantiateBungeeCord from './_instantiate-bungeecord.txt?raw';
     import instantiateSponge from './_instantiate-sponge.txt?raw';
     import instantiateVelocity from './_instantiate-velocity.txt?raw';
+    import instantiatePocketmine from './_instantiate-pocketmine.txt?raw';
 
     export type InstantiateMetricsStepProps = {
         platform: Platform | null;
@@ -123,6 +124,19 @@
                 <CodeBlock
                     code={processCode(instantiateVelocity)}
                     lang="java"
+                    transformers={codeTransformers}
+                />
+            </div>
+        {:else if platform === 'pocketmine'}
+            <div class="space-y-4">
+                <p class="max-w-prose">
+                    Instantiate the Metrics class in your plugin's
+                    <code class="font-mono text-slate-700 dark:text-slate-300">onEnable()</code>
+                    method.
+                </p>
+                <CodeBlock
+                    code={processCode(instantiatePocketmine)}
+                    lang="php"
                     transformers={codeTransformers}
                 />
             </div>

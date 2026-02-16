@@ -1,0 +1,10 @@
+$metrics->addCustomChart(new AdvancedPie("player_gamemodes", function(): array {
+    $gamemodeMap = [];
+
+    foreach ($this->getServer()->getOnlinePlayers() as $player) {
+        $gamemode = $player->getGamemode()->getEnglishName();
+        $gamemodeMap[$gamemode] = ($gamemodeMap[$gamemode] ?? 0) + 1;
+    }
+
+    return $gamemodeMap;
+}));

@@ -1,0 +1,7 @@
+$metrics->addCustomChart(new DrilldownPie("php_version", function(): array {
+    // Format: ["Category" => ["Subcategory" => count]]
+    $phpVersion = PHP_VERSION;
+    $major = PHP_MAJOR_VERSION . "." . PHP_MINOR_VERSION;
+
+    return [$major => [$phpVersion => 1]];
+}));

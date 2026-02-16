@@ -1,0 +1,21 @@
+<?php
+
+use pocketmine\plugin\PluginBase;
+use bStats\PocketmineMp\Metrics;
+use bStats\PocketmineMp\charts\SimplePie;
+
+class ExamplePlugin extends PluginBase {
+
+    public function onEnable(): void {
+        // You can find the plugin id of your plugins on
+        // the page https://bstats.org/what-is-my-plugin-id
+        $pluginId = {{pluginId}};
+        $metrics = new Metrics($this, $pluginId);
+
+        // Optional: Add custom charts
+        $metrics->addCustomChart(new SimplePie(
+            "chart_id",
+            fn() => "My value"
+        ));
+    }
+}

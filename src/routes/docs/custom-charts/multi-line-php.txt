@@ -1,0 +1,6 @@
+$metrics->addCustomChart(new MultiLineChart("players_and_servers", function(): array {
+    return [
+        "servers" => 1,
+        "players" => count($this->getServer()->getOnlinePlayers()),
+    ];
+}));

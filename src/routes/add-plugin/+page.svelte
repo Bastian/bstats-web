@@ -32,6 +32,16 @@
     let selectedBuildTool = $state<BuildTool | null>(null);
     let metricsIncluded = $state<boolean>(false);
     let metricsInstantiated = $state<boolean>(false);
+
+    $effect(() => {
+        if (selectedPlatform === 'pocketmine') {
+            selectedBuildTool = 'composer';
+        } else if (selectedBuildTool === 'composer') {
+            selectedBuildTool = null;
+            metricsIncluded = false;
+            metricsInstantiated = false;
+        }
+    });
 </script>
 
 <MetaTags
@@ -76,7 +86,8 @@
 
             <BuildToolSelectStep
                 bind:selectedBuildTool
-                status={selectedBuildTool
+                platform={selectedPlatform}
+                status={selectedBuildTool && (plugin || pluginCreationSkipped)
                     ? 'done'
                     : plugin || pluginCreationSkipped
                       ? 'active'
@@ -87,7 +98,11 @@
                 platform={selectedPlatform}
                 buildTool={selectedBuildTool}
                 bind:metricsIncluded
-                status={metricsIncluded ? 'done' : selectedBuildTool ? 'active' : 'locked'}
+                status={metricsIncluded
+                    ? 'done'
+                    : selectedBuildTool && (plugin || pluginCreationSkipped)
+                      ? 'active'
+                      : 'locked'}
             />
 
             <InstantiateMetricsStep

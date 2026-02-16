@@ -1,0 +1,3 @@
+$metrics->addCustomChart(new SimplePie("used_language", function(): string {
+    return $this->getConfig()->get("language", "English");
+}));

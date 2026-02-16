@@ -15,7 +15,7 @@ interface DefaultChart {
     data?: Record<string, unknown>;
 }
 
-const ALLOWED_PLATFORMS = ['bukkit', 'bungeecord', 'sponge', 'velocity', 'server-implementation'];
+const ALLOWED_PLATFORMS = ['bukkit', 'bungeecord', 'sponge', 'velocity', 'pocketmine', 'server-implementation'];
 
 export const load: PageServerLoad = async ({ url }) => {
     // Check if user just added a plugin (from query params)

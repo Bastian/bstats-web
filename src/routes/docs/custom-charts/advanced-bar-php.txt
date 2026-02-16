@@ -1,0 +1,7 @@
+$metrics->addCustomChart(new AdvancedBarChart("features", function(): array {
+    // Format: ["Category" => [bar1Value, bar2Value, ...]]
+    return [
+        "Feature A" => [0, 1],
+        "Feature B" => [1, 0],
+    ];
+}));

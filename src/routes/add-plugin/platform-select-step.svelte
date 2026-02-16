@@ -3,12 +3,14 @@
     import imgBungeeCord from '$lib/assets/images/logos/bungeecord.png';
     import imgSponge from '$lib/assets/images/logos/spongie-mark.svg';
     import imgVelocity from '$lib/assets/images/logos/velocity.png';
+    import imgPocketMine from '$lib/assets/images/logos/pocketmine.png';
 
     export type Platform =
         | 'bukkit'
         | 'bungeecord'
         | 'sponge'
         | 'velocity'
+        | 'pocketmine'
         | 'server-implementation';
 
     export const platformOptions = [
@@ -31,6 +33,11 @@
             id: 'velocity',
             label: 'Velocity',
             iconUrl: imgVelocity
+        },
+        {
+            id: 'pocketmine',
+            label: 'PocketMine-MP',
+            iconUrl: imgPocketMine
         },
         {
             id: 'server-implementation',

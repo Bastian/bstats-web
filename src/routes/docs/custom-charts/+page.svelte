@@ -1,7 +1,7 @@
 <script lang="ts">
     import { page } from '$app/state';
     import Badge from '$lib/components/badge.svelte';
-    import CodeBlock from '$lib/components/code-block.svelte';
+    import TabbedCodeBlock from '$lib/components/tabbed-code-block.svelte';
     import PageHero from '$lib/components/page-hero.svelte';
     import { MetaTags } from 'svelte-meta-tags';
     import { getCanonicalUrl } from '$lib/utils/url';
@@ -16,6 +16,15 @@
     import codeSimpleBarChart from './simple-bar.txt?raw';
     import codeSimplePie from './simple-pie.txt?raw';
     import codeSingleLine from './single-line.txt?raw';
+    import codeAdvancedBarChartPhp from './advanced-bar-php.txt?raw';
+    import codeAdvancedPiePhp from './advanced-pie-php.txt?raw';
+    import codeDrilldownPiePhp from './drilldown-pie-php.txt?raw';
+    import codeMultiLinePhp from './multi-line-php.txt?raw';
+    import codeSimpleBarChartPhp from './simple-bar-php.txt?raw';
+    import codeSimplePiePhp from './simple-pie-php.txt?raw';
+    import codeSingleLinePhp from './single-line-php.txt?raw';
+
+    let selectedLang = $state('java');
 
     // Static example data for charts
     const pieData = [
@@ -114,13 +123,19 @@
     }}
 />
 
-{#snippet Example(title: string, code: string)}
+{#snippet Example(title: string, javaCode: string, phpCode: string)}
     <h3
         class="mb-1.5 text-sm font-semibold tracking-[0.2em] text-slate-500 uppercase dark:text-slate-400"
     >
         {title}
     </h3>
-    <CodeBlock lang="java" {code} />
+    <TabbedCodeBlock
+        bind:selectedLang
+        variants={[
+            { lang: 'java', label: 'Java', code: javaCode },
+            { lang: 'php', label: 'PHP', code: phpCode }
+        ]}
+    />
 {/snippet}
 
 <main class="pb-24">
@@ -159,8 +174,8 @@
                 <PieChart data={pieData} />
             </div>
             <div class="space-y-4">
-                {@render Example('Simple pie', codeSimplePie)}
-                {@render Example('Advanced pie', codeAdvancedPie)}
+                {@render Example('Simple pie', codeSimplePie, codeSimplePiePhp)}
+                {@render Example('Advanced pie', codeAdvancedPie, codeAdvancedPiePhp)}
             </div>
         </article>
 
@@ -176,7 +191,7 @@
             >
                 <DrilldownPieChart data={drilldownPieData} />
             </div>
-            {@render Example('Drilldown pie', codeDrilldownPie)}
+            {@render Example('Drilldown pie', codeDrilldownPie, codeDrilldownPiePhp)}
         </article>
 
         <article class="doc-card space-y-6">
@@ -194,8 +209,8 @@
                 <LineChart data={lineData} lineName="Players" />
             </div>
             <div class="space-y-4">
-                {@render Example('Single line chart', codeSingleLine)}
-                {@render Example('Multi line chart', codeMultiLine)}
+                {@render Example('Single line chart', codeSingleLine, codeSingleLinePhp)}
+                {@render Example('Multi line chart', codeMultiLine, codeMultiLinePhp)}
                 <p class="text-sm text-slate-500 italic dark:text-slate-400">
                     (Note: Multi line charts are still in development)
                 </p>
@@ -215,8 +230,8 @@
             >
                 <BarChart data={barData} categories={barCategories} valueName="Servers" />
             </div>
-            {@render Example('Simple bar chart', codeSimpleBarChart)}
-            {@render Example('Advanced bar chart', codeAdvancedBarChart)}
+            {@render Example('Simple bar chart', codeSimpleBarChart, codeSimpleBarChartPhp)}
+            {@render Example('Advanced bar chart', codeAdvancedBarChart, codeAdvancedBarChartPhp)}
         </article>
     </section>
 </main>

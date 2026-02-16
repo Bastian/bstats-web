@@ -135,6 +135,34 @@
                     > to build a jar with Metrics included.
                 </p>
             </div>
+        {:else if buildTool === 'composer'}
+            <div class="space-y-4">
+                <p class="max-w-prose">
+                    Add the bStats PocketMine-MP package via Composer:
+                </p>
+                <CodeBlock code="composer require bstats/pocketmine-mp" lang="bash" />
+                <p class="max-w-prose text-sm text-slate-600 dark:text-slate-400">
+                    Make sure to use a build tool or compiler that supports
+                    <a
+                        href="https://poggit.github.io/support/virion.html"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        class="font-medium text-brand-600 underline hover:text-brand-800"
+                    >Virion</a>, like
+                    <a
+                        href="https://poggit.github.io/support/faq"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        class="font-medium text-brand-600 underline hover:text-brand-800"
+                    >Poggit CI</a> or
+                    <a
+                        href="https://github.com/SOF3/pharynx"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        class="font-medium text-brand-600 underline hover:text-brand-800"
+                    >pharynx</a>.
+                </p>
+            </div>
         {:else}
             <p class="text-sm text-red-600">
                 Error: No instructions for selected build tool. This is a bug, please report it.

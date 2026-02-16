@@ -18,7 +18,8 @@ async function getHighlighter() {
                 'json',
                 'bash',
                 'shell',
-                'http'
+                'http',
+                'php'
             ]
         });
     }

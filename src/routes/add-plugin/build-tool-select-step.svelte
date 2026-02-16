@@ -2,8 +2,10 @@
     import imgMaven from '$lib/assets/images/logos/maven-feather.png';
     import imgGradle from '$lib/assets/images/logos/gradle-elephant-icon-dark-green.svg';
     import IconCopy from '@tabler/icons-svelte/icons/copy';
+    import imgComposer from '$lib/assets/images/logos/composer.png';
+    import type { Platform } from './platform-select-step.svelte';
 
-    export type BuildTool = 'copy-and-paste' | 'maven' | 'gradle';
+    export type BuildTool = 'copy-and-paste' | 'maven' | 'gradle' | 'composer';
 
     const buildToolOptions = [
         {
@@ -23,6 +25,12 @@
             label: 'Gradle',
             description: 'Bundle bStats via the Gradle Shadow plugin.',
             iconUrl: imgGradle
+        },
+        {
+            id: 'composer',
+            label: 'Composer',
+            description: 'Add bStats as a Composer dependency.',
+            iconUrl: imgComposer
         }
     ] as const;
 </script>
@@ -33,20 +41,34 @@
 
     let {
         selectedBuildTool = $bindable(),
+        platform,
         status
     }: {
         selectedBuildTool?: BuildTool | null;
+        platform: Platform | null;
         status: StepStatus;
     } = $props();
+
+    let filteredOptions = $derived(
+        platform === 'pocketmine'
+            ? buildToolOptions.filter((o) => o.id === 'composer')
+            : buildToolOptions.filter((o) => o.id !== 'composer')
+    );
 </script>
 
 <WizardStep index={3} title="Pick your build workflow" {status}>
-    <p class="max-w-prose">
-        Choose how you want to include Metrics. Using a build tool is recommended, but you can also
-        copy & paste the Metrics class manually.
-    </p>
+    {#if filteredOptions.length === 1}
+        <p class="max-w-prose">
+            {filteredOptions[0].label} is the only supported build workflow for this platform.
+        </p>
+    {:else}
+        <p class="max-w-prose">
+            Choose how you want to include Metrics. Using a build tool is recommended, but you can
+            also copy & paste the Metrics class manually.
+        </p>
+    {/if}
     <div class="mt-4 grid gap-4 md:grid-cols-3">
-        {#each buildToolOptions as option (option.id)}
+        {#each filteredOptions as option (option.id)}
             <OptionCard
                 label={option.label}
                 active={selectedBuildTool === option.id}
