@@ -78,9 +78,9 @@
         <article class="doc-card space-y-4">
             <h2 class="doc-card-title">What is bStats?</h2>
             <p class="max-w-prose text-sm leading-relaxed text-slate-600 dark:text-slate-400">
-                bStats is a free metrics service for Minecraft server plugins. When plugin authors
+                bStats is a free metrics service for Minecraft and Hytale server plugins. When plugin authors
                 integrate bStats into their plugins, they can see how many servers use their work,
-                which Minecraft versions are popular, and how their plugins are configured.
+                which server versions are popular, and how their plugins are configured.
             </p>
             <p class="max-w-prose text-sm leading-relaxed text-slate-600 dark:text-slate-400">
                 As a server owner, your server automatically shares basic usage statistics with
@@ -152,7 +152,7 @@
         <article class="doc-card space-y-4">
             <h2 class="doc-card-title">Why keep metrics enabled?</h2>
             <p class="max-w-prose text-sm leading-relaxed text-slate-600 dark:text-slate-400">
-                bStats helps the Minecraft server community in several ways:
+                bStats helps the Minecraft and Hytale server community in several ways:
             </p>
             <div class="mt-4 grid gap-4 md:grid-cols-2">
                 <div
@@ -180,7 +180,7 @@
                         Guides development priorities
                     </h3>
                     <p class="mt-2 max-w-prose text-sm text-slate-600 dark:text-slate-400">
-                        Authors can see which Minecraft versions are most popular, which features
+                        Authors can see which server versions are most popular, which features
                         are heavily used, and where to focus their development efforts. This leads
                         to better plugins for everyone.
                     </p>

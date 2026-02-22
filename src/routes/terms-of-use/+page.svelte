@@ -73,7 +73,7 @@
                 </li>
                 <li>
                     <strong>Server Operator</strong>: A person or entity operating a game server
-                    (e.g., a Minecraft server) running a plugin that includes the Metrics Class.
+                    (e.g., a Minecraft or Hytale server) running a plugin that includes the Metrics Class.
                 </li>
                 <li>
                     <strong>User</strong>: Any individual or entity that accesses the Site or

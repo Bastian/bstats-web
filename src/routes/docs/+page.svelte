@@ -27,7 +27,7 @@
         {#snippet badge()}<Badge>Documentation</Badge>{/snippet}
         {#snippet title()}Documentation{/snippet}
         {#snippet content()}
-            bStats collects plugin metrics across all major Minecraft server platforms. Track server
+            bStats collects plugin metrics across all major Minecraft and Hytale server platforms. Track server
             counts, version adoption, and custom metrics. Free to use, respects privacy, and
             integrates in minutes.
         {/snippet}
@@ -123,7 +123,7 @@
                 <p
                     class="mt-3 max-w-prose text-sm leading-relaxed text-slate-600 dark:text-slate-400"
                 >
-                    Running a Minecraft server? Learn what bStats collects, why it matters, and how
+                    Running a Minecraft or Hytale server? Learn what bStats collects, why it matters, and how
                     to manage your privacy preferences.
                 </p>
                 <a

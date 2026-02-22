@@ -4,6 +4,7 @@
     import imgSponge from '$lib/assets/images/logos/spongie-mark.svg';
     import imgVelocity from '$lib/assets/images/logos/velocity.png';
     import imgPocketMine from '$lib/assets/images/logos/pocketmine.png';
+    import imgHytale from '$lib/assets/images/logos/hytale.png';
 
     export type Platform =
         | 'bukkit'
@@ -11,6 +12,7 @@
         | 'sponge'
         | 'velocity'
         | 'pocketmine'
+        | 'hytale'
         | 'server-implementation';
 
     export const platformOptions = [
@@ -38,6 +40,11 @@
             id: 'pocketmine',
             label: 'PocketMine-MP',
             iconUrl: imgPocketMine
+        },
+        {
+            id: 'hytale',
+            label: 'Hytale',
+            iconUrl: imgHytale
         },
         {
             id: 'server-implementation',

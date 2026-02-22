@@ -119,7 +119,7 @@
                     <ul>
                         <li>
                             <strong>Examples</strong>: Operating System (OS), Java version, CPU
-                            architecture, server version (e.g., Minecraft version), plugin/mod
+                            architecture, server version (e.g., Minecraft or Hytale version), plugin/mod
                             version, and a pseudonymous server identifier for deduplication and
                             anti-abuse.
                         </li>

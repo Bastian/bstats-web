@@ -19,11 +19,11 @@
 
 <MetaTags
     title="bStats"
-    description="bStats collects metrics for Minecraft server plugins. Free to use, respects privacy, and integrates in minutes."
+    description="bStats collects metrics for Minecraft and Hytale server plugins. Free to use, respects privacy, and integrates in minutes."
     openGraph={{
         title: 'bStats',
         description:
-            'bStats collects metrics for Minecraft server plugins. Free to use, respects privacy, and integrates in minutes.',
+            'bStats collects metrics for Minecraft and Hytale server plugins. Free to use, respects privacy, and integrates in minutes.',
         type: 'website',
         url: getCanonicalUrl(page.url),
         siteName: 'bStats',
@@ -54,7 +54,7 @@
                 </h1>
                 <p class="mt-6 text-lg leading-relaxed text-slate-600 dark:text-slate-400">
                     bStats shows you exactly that. See server counts, version adoption, and custom
-                    metrics across every major Minecraft server platform. Free to use, respects
+                    metrics across every major Minecraft and Hytale server platform. Free to use, respects
                     privacy, and integrates in minutes.
                 </p>
                 <div class="mt-10 flex flex-wrap gap-4">
@@ -271,7 +271,7 @@
                             {@html data.highlightedCode}
                         </div>
                         <p class="mt-3 text-xs text-slate-400">
-                            Works across Bukkit, Spigot, Paper, Velocity and more.
+                            Works across Bukkit, Spigot, Paper, Velocity, Hytale, and more.
                         </p>
                     </div>
                 </div>

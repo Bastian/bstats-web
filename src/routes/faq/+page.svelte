@@ -57,7 +57,7 @@
                     title="Why isn't there a &quot;Universal&quot; category?"
                     contentClass="max-w-prose"
                 >
-                    Mixing Bukkit, BungeeCord, and more in a single bucket would double-count
+                    Mixing Bukkit, BungeeCord, Hytale, and more in a single bucket would double-count
                     players and break comparisons. Separate categories keep charts accurate and easy
                     to read.
                 </Accordion.Item>
