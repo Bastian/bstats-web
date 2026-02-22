@@ -146,10 +146,6 @@
                 <p class="max-w-prose">
                     Instantiate the Metrics class in your plugin's
                     <code class="font-mono text-slate-700 dark:text-slate-300">setup()</code>
-                    method. Make sure to call
-                    <code class="font-mono text-slate-700 dark:text-slate-300">metrics.shutdown()</code>
-                    in the
-                    <code class="font-mono text-slate-700 dark:text-slate-300">shutdown()</code>
                     method.
                 </p>
                 <CodeBlock
