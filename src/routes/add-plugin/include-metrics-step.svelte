@@ -61,7 +61,7 @@
         {#if buildTool === 'copy-and-paste'}
             <p class="max-w-prose">
                 Copy the <a
-                    href="https://github.com/Bastian/bStats-Metrics/blob/single-file/bukkit/Metrics.java"
+                    href="https://github.com/Bastian/bStats-Metrics/blob/single-file/{platform}/Metrics.java"
                     target="_blank"
                     rel="noopener noreferrer"
                     class="font-bold text-brand-600 underline hover:text-brand-800"
