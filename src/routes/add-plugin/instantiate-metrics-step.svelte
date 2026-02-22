@@ -157,6 +157,15 @@
                     lang="java"
                     transformers={codeTransformers}
                 />
+                <div class="doc-callout doc-callout-info mt-4">
+                    <p class="text-sm font-semibold text-slate-800 dark:text-slate-200">
+                        Singleplayer mods
+                    </p>
+                    <p class="mt-2 max-w-prose text-sm text-slate-600 dark:text-slate-400">
+                        If your mod can also run in singleplayer, the Metrics class will
+                        automatically detect singleplayer mode and disable itself.
+                    </p>
+                </div>
             </div>
         {:else if platform === 'server-implementation'}
             <div class="max-w-prose space-y-4">
