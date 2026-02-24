@@ -11,7 +11,7 @@
     import gradleShadowTask from './_gradle-shadow-task.kts?raw';
 
     // TODO Load from environment variable (or maybe directly from Maven Central?)
-    export const METRICS_VERSION = '3.2.0';
+    export const METRICS_VERSION = '3.2.1';
 
     export type IncludeMetricsStepProps = {
         platform: Platform | null;
