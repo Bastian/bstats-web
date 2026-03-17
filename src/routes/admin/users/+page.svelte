@@ -13,6 +13,7 @@
     import type { User } from 'better-auth';
     import { SvelteURLSearchParams } from 'svelte/reactivity';
     import { TextInput } from '$lib/components/input/text';
+    import { deserialize } from '$app/forms';
 
     const PAGE_SIZE = 15;
 
@@ -40,7 +41,7 @@
     let currentPage = $state(Math.max(1, data.page ?? 1));
     let searchInput = $state(data.search ?? '');
     let activeSearch = $state(data.search ?? '');
-    let pendingAction = $state<{ userId: string; type: 'ban' | 'unban' | 'reset' } | null>(null);
+    let pendingAction = $state<{ userId: string; type: 'ban' | 'unban' | 'reset' | 'delete' } | null>(null);
     let watchersReady = $state(false);
     let lastParams = $state<{ page: number; search: string }>({
         page: data.page ?? 1,
@@ -225,6 +226,47 @@
         }
     }
 
+    async function handleDelete(user: AdminUser) {
+        const name = displayNameFor(user);
+        if (
+            !window.confirm(
+                `Are you sure you want to permanently delete "${name}"? This cannot be undone.`
+            )
+        ) {
+            return;
+        }
+
+        pendingAction = { userId: user.id, type: 'delete' };
+        successMessage = null;
+        overallError = null;
+
+        try {
+            const body = new FormData();
+            body.set('userId', user.id);
+
+            const response = await fetch('?/deleteUser', { method: 'POST', body });
+            const result = deserialize(await response.text());
+
+            if (result.type === 'failure') {
+                const data = result.data as Record<string, unknown> | undefined;
+                throw new Error((data?.error as string) ?? 'Failed to delete user.');
+            }
+
+            if (result.type === 'error') {
+                throw new Error(result.error?.message ?? 'Failed to delete user.');
+            }
+
+            await fetchUsers();
+            successMessage = `${name} has been deleted.`;
+        } catch (cause) {
+            console.error(`Failed to delete user ${user.id}`, cause);
+            overallError =
+                cause instanceof Error ? cause.message : 'Failed to delete user. Please try again.';
+        } finally {
+            pendingAction = null;
+        }
+    }
+
     function handleSearchSubmit(event: SubmitEvent) {
         event.preventDefault();
         const nextSearch = searchInput.trim();
@@ -240,7 +282,7 @@
         currentPage = 1;
     }
 
-    function isPending(userId: string, type: 'ban' | 'unban' | 'reset') {
+    function isPending(userId: string, type: 'ban' | 'unban' | 'reset' | 'delete') {
         return pendingAction?.userId === userId && pendingAction?.type === type;
     }
 
@@ -496,6 +538,16 @@
                                             {isPending(user.id, 'reset')
                                                 ? 'Resetting…'
                                                 : 'Reset password'}
+                                        </button>
+                                        <button
+                                            type="button"
+                                            class="inline-flex items-center gap-2 rounded-full border border-rose-200 bg-rose-50 px-3 py-1.5 text-xs font-semibold text-rose-700 transition hover:border-rose-400 hover:bg-rose-100 disabled:cursor-not-allowed disabled:opacity-50 dark:border-rose-900 dark:bg-rose-950/40 dark:text-rose-300 dark:hover:border-rose-700 dark:hover:bg-rose-950/60"
+                                            disabled={isPending(user.id, 'delete')}
+                                            onclick={() => handleDelete(user)}
+                                        >
+                                            {isPending(user.id, 'delete')
+                                                ? 'Deleting…'
+                                                : 'Delete'}
                                         </button>
                                     </div>
                                 </Table.Cell>
