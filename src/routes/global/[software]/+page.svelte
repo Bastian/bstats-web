@@ -15,6 +15,9 @@
 
     let { data }: { data: PageData } = $props();
 
+    // Disabled due to recurring border-dispute complaints.
+    const DISABLED_CHART_TYPES = new Set(['simple_map', 'advanced_map']);
+
     const formatter = new Intl.NumberFormat();
 
     let serversCurrent = $state('--');
@@ -136,7 +139,7 @@
             </p>
         </div>
         <div class="mt-8 grid gap-8 md:grid-cols-2">
-            {#each data.chartMetadata ?? [] as chart (chart.id)}
+            {#each (data.chartMetadata ?? []).filter((c) => !DISABLED_CHART_TYPES.has(c.type)) as chart (chart.id)}
                 {#await data.chartDataPromises?.[chart.uid]}
                     <!-- Loading state - just show empty card structure -->
                     <ChartCard

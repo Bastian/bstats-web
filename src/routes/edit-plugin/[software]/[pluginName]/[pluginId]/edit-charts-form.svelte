@@ -7,8 +7,12 @@
     import { dndzone } from 'svelte-dnd-action';
     import { flip } from 'svelte/animate';
     import type { PageData } from './$types';
+    import Badge from '$lib/components/badge.svelte';
 
     let { data }: { data: PageData } = $props();
+
+    // Disabled due to recurring border-dispute complaints.
+    const DISABLED_CHART_TYPES = new Set(['simple_map', 'advanced_map']);
 
     let sortedCharts = $state(
         Object.keys(data.charts || {})
@@ -165,6 +169,9 @@
                     {data.charts[chartId].title}
                 </a>
                 <span class="text-sm text-slate-500 dark:text-slate-400">(id: {chartId})</span>
+                {#if data.charts[chartId].type && DISABLED_CHART_TYPES.has(data.charts[chartId].type)}
+                    <Badge type="gray" size="small" class="ml-2 align-middle">Disabled</Badge>
+                {/if}
             </div>
             {#if !data.charts[chartId].isDefault}
                 <button

@@ -77,20 +77,11 @@
             <h2 class="doc-card-title">Map charts</h2>
             <Accordion.Root class="space-y-3">
                 <Accordion.Item
-                    title="Why are certain borders displayed this way?"
+                    title="Why are map charts no longer shown?"
                     contentClass="max-w-prose"
                 >
-                    Map data is provided by Natural Earth, and we follow <a
-                        class="font-semibold text-brand-600 hover:text-brand-700"
-                        href="https://www.naturalearthdata.com/about/disputed-boundaries-policy/"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                    >
-                        their policy on disputed boundaries
-                    </a>
-                    to provide a neutral, de facto representation. While we recognize that all borders
-                    are inherently political, our goal is to provide geographic context, not to take
-                    a stance on territorial claims.
+                    There is no world map that doesn't upset someone, and I've had this argument
+                    enough times to stop having it.
                 </Accordion.Item>
             </Accordion.Root>
         </article>
