@@ -29,23 +29,26 @@
     let nextLabelId = 0;
 
     // Mirror the reorderable label list into the form data so it's submitted.
-    $effect(() => {
+    // Done from event handlers (not an $effect) to avoid a store update loop.
+    function syncBarLabels() {
         if ($formData.chartType === 'advanced_bar') {
             $formData.barLabels = labelItems.map((l) => l.name);
         }
-    });
-
+    }
     function addLabel() {
         labelItems = [...labelItems, { id: nextLabelId++, name: '' }];
+        syncBarLabels();
     }
     function removeLabel(id: number) {
         labelItems = labelItems.filter((l) => l.id !== id);
+        syncBarLabels();
     }
     function handleLabelConsider(e: CustomEvent) {
         labelItems = e.detail.items;
     }
     function handleLabelFinalize(e: CustomEvent) {
         labelItems = e.detail.items;
+        syncBarLabels();
     }
 </script>
 
@@ -151,7 +154,11 @@
                                 type="text"
                                 maxlength="50"
                                 placeholder={`Series ${i + 1}`}
-                                bind:value={item.name}
+                                value={item.name}
+                                oninput={(e) => {
+                                    item.name = e.currentTarget.value;
+                                    syncBarLabels();
+                                }}
                             />
                             <button
                                 type="button"
