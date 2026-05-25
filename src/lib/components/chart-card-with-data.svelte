@@ -153,11 +153,17 @@
                 lineName={chart.data?.lineName as string | undefined}
             />
         {:else if chart.type === 'simple_bar' || chart.type === 'advanced_bar'}
-            <BarChart
-                data={chartData as BarChartData[]}
-                categories={(chartData as BarChartData[])?.map((d: BarChartData) => d.name) || []}
-                valueName={chart.data?.valueName as string | undefined}
-            />
+            {#if (chartData as BarChartData[]).length === 0}
+                <div class="flex h-72 items-center justify-center text-slate-500">
+                    No data available yet
+                </div>
+            {:else}
+                <BarChart
+                    data={chartData as BarChartData[]}
+                    categories={(chartData as BarChartData[]).map((d: BarChartData) => d.name)}
+                    valueName={chart.data?.valueName as string | undefined}
+                />
+            {/if}
         {:else if chart.type === 'simple_map' || chart.type === 'advanced_map'}
             <MapChart
                 data={chartData as MapChartData[]}
