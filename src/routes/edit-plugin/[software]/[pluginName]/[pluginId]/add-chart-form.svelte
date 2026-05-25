@@ -13,6 +13,9 @@
     let { schema }: { schema: PageData['addChartSchema'] } = $props();
 
     const form = superForm(schema, {
+        // 'json' so complex fields (e.g. the reorderable barLabels array, which
+        // isn't backed by named inputs) are submitted from $formData directly.
+        dataType: 'json',
         validators: zod4Client(addChartSchema)
     });
 
@@ -25,25 +28,24 @@
     let labelItems = $state<{ id: number; name: string }[]>([]);
     let nextLabelId = 0;
 
-    function syncBarLabels() {
+    // Mirror the reorderable label list into the form data so it's submitted.
+    $effect(() => {
         if ($formData.chartType === 'advanced_bar') {
             $formData.barLabels = labelItems.map((l) => l.name);
         }
-    }
+    });
+
     function addLabel() {
         labelItems = [...labelItems, { id: nextLabelId++, name: '' }];
-        syncBarLabels();
     }
     function removeLabel(id: number) {
         labelItems = labelItems.filter((l) => l.id !== id);
-        syncBarLabels();
     }
     function handleLabelConsider(e: CustomEvent) {
         labelItems = e.detail.items;
     }
     function handleLabelFinalize(e: CustomEvent) {
         labelItems = e.detail.items;
-        syncBarLabels();
     }
 </script>
 
@@ -150,7 +152,6 @@
                                 maxlength="50"
                                 placeholder={`Series ${i + 1}`}
                                 bind:value={item.name}
-                                oninput={syncBarLabels}
                             />
                             <button
                                 type="button"
