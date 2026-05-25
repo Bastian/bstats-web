@@ -79,6 +79,20 @@
         }
     }
 
+    // The backend returns bar data as one entry per category
+    // (`{ name: category, data: [valuePerBar] }`), but the chart component
+    // expects series spanning all categories. Transpose: categories are the
+    // map keys, and each bar index becomes a series.
+    function toBarChart(data: BarChartData[], valueName?: string) {
+        const categories = data.map((d) => d.name);
+        const barCount = data.reduce((max, d) => Math.max(max, d.data.length), 0);
+        const series = Array.from({ length: barCount }, (_, barIndex) => ({
+            name: barCount === 1 ? (valueName ?? 'Value') : `Series ${barIndex + 1}`,
+            data: data.map((d) => d.data[barIndex] ?? 0)
+        }));
+        return { categories, series };
+    }
+
     function getColSpan(chartType: string): 'single' | 'double' {
         switch (chartType) {
             case 'single_linechart':
@@ -158,9 +172,13 @@
                     No data available yet
                 </div>
             {:else}
+                {@const bars = toBarChart(
+                    chartData as BarChartData[],
+                    chart.data?.valueName as string | undefined
+                )}
                 <BarChart
-                    data={chartData as BarChartData[]}
-                    categories={(chartData as BarChartData[]).map((d: BarChartData) => d.name)}
+                    data={bars.series}
+                    categories={bars.categories}
                     valueName={chart.data?.valueName as string | undefined}
                 />
             {/if}
