@@ -80,8 +80,10 @@ export const addChart = (async ({ request, locals, params }) => {
             };
             break;
         case 'simple_bar':
-        case 'advanced_bar':
             chartData.data = {};
+            break;
+        case 'advanced_bar':
+            chartData.data = { barLabels: form.data.barLabels };
             break;
         default:
             return fail(400, { form, error: 'Invalid chart type' });

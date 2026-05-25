@@ -83,11 +83,11 @@
     // (`{ name: category, data: [valuePerBar] }`), but the chart component
     // expects series spanning all categories. Transpose: categories are the
     // map keys, and each bar index becomes a series.
-    function toBarChart(data: BarChartData[], valueName?: string) {
+    function toBarChart(data: BarChartData[], barLabels: string[] = []) {
         const categories = data.map((d) => d.name);
         const barCount = data.reduce((max, d) => Math.max(max, d.data.length), 0);
         const series = Array.from({ length: barCount }, (_, barIndex) => ({
-            name: barCount === 1 ? (valueName ?? 'Value') : `Series ${barIndex + 1}`,
+            name: barLabels[barIndex]?.trim() || `Series ${barIndex + 1}`,
             data: data.map((d) => d.data[barIndex] ?? 0)
         }));
         return { categories, series };
@@ -174,13 +174,9 @@
             {:else}
                 {@const bars = toBarChart(
                     chartData as BarChartData[],
-                    chart.data?.valueName as string | undefined
+                    (chart.data?.barLabels as string[] | undefined) ?? []
                 )}
-                <BarChart
-                    data={bars.series}
-                    categories={bars.categories}
-                    valueName={chart.data?.valueName as string | undefined}
-                />
+                <BarChart data={bars.series} categories={bars.categories} />
             {/if}
         {:else if chart.type === 'simple_map' || chart.type === 'advanced_map'}
             <MapChart
