@@ -38,6 +38,10 @@
                         <optgroup label="Line charts">
                             <option value="single_linechart">Single line chart</option>
                         </optgroup>
+                        <optgroup label="Bar charts">
+                            <option value="simple_bar">Simple bar</option>
+                            <option value="advanced_bar">Advanced bar</option>
+                        </optgroup>
                     </select>
                 {/snippet}
             </Control>
@@ -77,6 +81,7 @@
             />
         {/if}
     </div>
+    {#if $formData.chartType !== 'simple_bar' && $formData.chartType !== 'advanced_bar'}
     <div
         class="space-y-5 rounded-xl border border-slate-200 bg-slate-50 p-4 dark:border-dark-700 dark:bg-dark-800/50"
     >
@@ -202,6 +207,7 @@
             {/if}
         {/if}
     </div>
+    {/if}
 
     <Button type="submit" fullWidth>Save chart</Button>
 </form>

@@ -43,6 +43,14 @@ export const addChartSchema = z.discriminatedUnion('chartType', [
         filter: z.array(z.string()).default([])
     }),
     z.object({
+        chartType: z.literal('simple_bar'),
+        ...common
+    }),
+    z.object({
+        chartType: z.literal('advanced_bar'),
+        ...common
+    }),
+    z.object({
         chartType: z.literal('single_linechart'),
         ...common,
         lineName: z

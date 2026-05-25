@@ -79,6 +79,10 @@ export const addChart = (async ({ request, locals, params }) => {
                 maxValue: form.data.maxValue
             };
             break;
+        case 'simple_bar':
+        case 'advanced_bar':
+            chartData.data = {};
+            break;
         default:
             return fail(400, { form, error: 'Invalid chart type' });
     }
