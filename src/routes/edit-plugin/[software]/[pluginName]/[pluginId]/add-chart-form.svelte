@@ -116,6 +116,17 @@
             />
         {/if}
 
+        {#if $formData.chartType === 'simple_bar' || $formData.chartType === 'advanced_bar'}
+            <TextInput.Formsnap
+                {form}
+                name="valueName"
+                label="Value axis label"
+                description="Shown along the value axis (e.g. Total, Servers)."
+                inputProps={{ placeholder: 'Total' }}
+                bind:value={$formData.valueName}
+            />
+        {/if}
+
         {#if $formData.chartType === 'advanced_bar'}
             <div>
                 <span class="input-label">Bar labels</span>

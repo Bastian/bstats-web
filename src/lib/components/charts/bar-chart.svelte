@@ -8,10 +8,10 @@
     interface Props {
         data: { name: string; data: number[] }[];
         categories: string[];
+        valueName?: string;
     }
 
-    let { data, categories }: Props = $props();
-    const valueName = 'Servers';
+    let { data, categories, valueName = '' }: Props = $props();
 
     let chartContainer: HTMLDivElement;
     let chartInstance: echarts.ECharts | null = null;
@@ -80,7 +80,7 @@
             dataDescription += ` And ${categories.length - maxCategoriesToDescribe} more categories.`;
         }
 
-        const description = `Bar chart comparing ${valueName} across ${categories.length} categories${hasMore ? ` (${categoryList}, and ${categories.length - 3} more)` : `: ${categoryList}`}. Shows ${data.length} data series: ${seriesNames}.${dataDescription}`;
+        const description = `Bar chart comparing ${valueName || 'values'} across ${categories.length} categories${hasMore ? ` (${categoryList}, and ${categories.length - 3} more)` : `: ${categoryList}`}. Shows ${data.length} data series: ${seriesNames}.${dataDescription}`;
 
         const option: echarts.EChartsOption = {
             ...theme,

@@ -176,7 +176,11 @@
                     chartData as BarChartData[],
                     (chart.data?.barLabels as string[] | undefined) ?? []
                 )}
-                <BarChart data={bars.series} categories={bars.categories} />
+                <BarChart
+                    data={bars.series}
+                    categories={bars.categories}
+                    valueName={chart.data?.valueName as string | undefined}
+                />
             {/if}
         {:else if chart.type === 'simple_map' || chart.type === 'advanced_map'}
             <MapChart

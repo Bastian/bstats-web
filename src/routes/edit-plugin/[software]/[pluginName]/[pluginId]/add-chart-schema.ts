@@ -44,10 +44,14 @@ export const addChartSchema = z.discriminatedUnion('chartType', [
     }),
     z.object({
         chartType: z.literal('simple_bar'),
-        ...common
+        ...common,
+        valueName: z.string().trim().max(50).default('')
     }),
     z.object({
         chartType: z.literal('advanced_bar'),
+        ...common,
+        valueName: z.string().trim().max(50).default(''),
+        // Display labels for each bar, by index (bar 1 = barLabels[0], ...).
         barLabels: z.array(z.string().trim().max(50)).default([])
     }),
     z.object({
