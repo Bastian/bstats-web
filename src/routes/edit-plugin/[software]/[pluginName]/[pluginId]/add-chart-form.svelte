@@ -130,7 +130,7 @@
         {#if $formData.chartType === 'advanced_bar'}
             <div>
                 <span class="input-label">Bar labels</span>
-                <p class="text-xs text-slate-500">
+                <p class="text-xs text-slate-500 dark:text-slate-400">
                     One label per bar, in order (1st label = 1st value your plugin sends). Drag to
                     reorder. Missing labels fall back to "Series N", extra labels are ignored.
                 </p>
@@ -143,9 +143,9 @@
                     {#each labelItems as item, i (item.id)}
                         <li
                             animate:flip={{ duration: flipDurationMs }}
-                            class="flex items-center gap-2 rounded-lg border border-slate-200 bg-white px-3 py-2"
+                            class="flex items-center gap-2 rounded-lg border border-slate-200 bg-white px-3 py-2 dark:border-dark-700 dark:bg-dark-800"
                         >
-                            <span class="cursor-move text-slate-400" title="Drag to reorder">
+                            <span class="cursor-move text-slate-400 dark:text-slate-500" title="Drag to reorder">
                                 <svg
                                     class="h-5 w-5"
                                     fill="none"
