@@ -7,11 +7,11 @@ import {
     admin,
     createAuthMiddleware
 } from 'better-auth/plugins';
-import { Pool } from 'pg';
 import { sveltekitCookies } from 'better-auth/svelte-kit';
 import { getRequestEvent } from '$app/server';
 import bcrypt from 'bcryptjs';
 import { building, dev } from '$app/environment';
+import { getAuthDbPool } from '$lib/server/auth-db.js';
 
 import { env } from '$env/dynamic/private';
 import { env as publicEnv } from '$env/dynamic/public';
@@ -37,10 +37,8 @@ function createAuth() {
     if (!env.HCAPTCHA_SECRET_KEY) throw new Error('HCAPTCHA_SECRET_KEY is not set');
     if (!publicEnv.PUBLIC_HCAPTCHA_SITE_KEY) throw new Error('PUBLIC_HCAPTCHA_SITE_KEY is not set');
 
-    const pool = new Pool({ connectionString: env.BETTER_AUTH_DATABASE_URL });
-
     return betterAuth({
-        database: pool,
+        database: getAuthDbPool(),
         appName: 'bStats',
         baseURL: dev ? undefined : publicEnv.PUBLIC_BASE_URL,
         trustedOrigins: dev || !publicEnv.PUBLIC_BASE_URL ? undefined : [publicEnv.PUBLIC_BASE_URL],

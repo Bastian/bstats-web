@@ -97,33 +97,44 @@
         loading = true;
         overallError = null;
         try {
-            const response = await authClient.admin.listUsers({
-                query: {
-                    limit: PAGE_SIZE,
-                    offset: (pageArg - 1) * PAGE_SIZE,
-                    ...(searchArg
-                        ? {
-                              searchValue: searchArg,
-                              searchField: 'name' as const,
-                              searchOperator: 'contains' as const
-                          }
-                        : {})
+            let payload: { users?: AdminUser[]; total?: number };
+
+            if (searchArg) {
+                // Better Auth's admin search is case-sensitive (its `contains`
+                // operator emits a plain LIKE). Use our own case-insensitive
+                // endpoint for searches instead. See /admin/users/search.
+                const params = new SvelteURLSearchParams({
+                    q: searchArg,
+                    limit: String(PAGE_SIZE),
+                    offset: String((pageArg - 1) * PAGE_SIZE)
+                });
+                const response = await fetch(`/admin/users/search?${params.toString()}`);
+                if (!response.ok) {
+                    throw new Error('Failed to load users.');
                 }
-            });
+                payload = (await response.json()) as { users?: AdminUser[]; total?: number };
+            } else {
+                const response = await authClient.admin.listUsers({
+                    query: {
+                        limit: PAGE_SIZE,
+                        offset: (pageArg - 1) * PAGE_SIZE
+                    }
+                });
 
-            if (response?.error) {
-                throw new Error(response.error.message ?? 'Failed to load users.');
+                if (response?.error) {
+                    throw new Error(response.error.message ?? 'Failed to load users.');
+                }
+
+                const basePayload =
+                    response && typeof response === 'object' && 'data' in response && response.data
+                        ? response.data
+                        : response;
+
+                payload = (basePayload ?? {}) as {
+                    users?: AdminUser[];
+                    total?: number;
+                };
             }
-
-            const basePayload =
-                response && typeof response === 'object' && 'data' in response && response.data
-                    ? response.data
-                    : response;
-
-            const payload = (basePayload ?? {}) as {
-                users?: AdminUser[];
-                total?: number;
-            };
 
             users = (payload.users ?? []) as AdminUser[];
             total = payload.total ?? users.length;
