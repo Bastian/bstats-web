@@ -45,14 +45,36 @@ export const addChartSchema = z.discriminatedUnion('chartType', [
     z.object({
         chartType: z.literal('simple_bar'),
         ...common,
-        valueName: z.string().trim().max(50).default('')
+        valueName: z
+            .string()
+            .trim()
+            .max(50)
+            .regex(/^[-_a-zA-Z0-9 ]*$/, 'Can only contain letters, numbers, dashes and underscores')
+            .default('')
     }),
     z.object({
         chartType: z.literal('advanced_bar'),
         ...common,
-        valueName: z.string().trim().max(50).default(''),
+        valueName: z
+            .string()
+            .trim()
+            .max(50)
+            .regex(/^[-_a-zA-Z0-9 ]*$/, 'Can only contain letters, numbers, dashes and underscores')
+            .default(''),
         // Display labels for each bar, by index (bar 1 = barLabels[0], ...).
-        barLabels: z.array(z.string().trim().max(50)).default([])
+        barLabels: z
+            .array(
+                z
+                    .string()
+                    .trim()
+                    .max(50)
+                    .regex(
+                        /^[-_a-zA-Z0-9 ]*$/,
+                        'Can only contain letters, numbers, dashes and underscores'
+                    )
+            )
+            .max(25)
+            .default([])
     }),
     z.object({
         chartType: z.literal('single_linechart'),

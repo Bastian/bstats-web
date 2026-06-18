@@ -19,7 +19,13 @@
         validators: zod4Client(addChartSchema)
     });
 
-    const { form: formData, enhance } = form;
+    const { form: formData, enhance, errors } = form;
+
+    // superforms types array errors as a SuperStructArray that can't be indexed by
+    // a number; narrow to a per-index lookup (`_errors` holds array-level errors).
+    const barLabelErrors = $derived(
+        $errors.barLabels as ({ _errors?: string[] } & Record<number, string[]>) | undefined
+    );
 
     const flipDurationMs = 150;
 
@@ -143,57 +149,72 @@
                     {#each labelItems as item, i (item.id)}
                         <li
                             animate:flip={{ duration: flipDurationMs }}
-                            class="flex items-center gap-2 rounded-lg border border-slate-200 bg-white px-3 py-2 dark:border-dark-700 dark:bg-dark-800"
+                            class="rounded-lg border border-slate-200 bg-white px-3 py-2 dark:border-dark-700 dark:bg-dark-800"
                         >
-                            <span class="cursor-move text-slate-400 dark:text-slate-500" title="Drag to reorder">
-                                <svg
-                                    class="h-5 w-5"
-                                    fill="none"
-                                    viewBox="0 0 24 24"
-                                    stroke="currentColor"
+                            <div class="flex items-center gap-2">
+                                <span
+                                    class="cursor-move text-slate-400 dark:text-slate-500"
+                                    title="Drag to reorder"
                                 >
-                                    <path
-                                        stroke-linecap="round"
-                                        stroke-linejoin="round"
-                                        stroke-width="2"
-                                        d="M4 8h16M4 16h16"
-                                    />
-                                </svg>
-                            </span>
-                            <input
-                                class="input-control flex-1"
-                                type="text"
-                                maxlength="50"
-                                placeholder={`Series ${i + 1}`}
-                                value={item.name}
-                                oninput={(e) => {
-                                    item.name = e.currentTarget.value;
-                                    syncBarLabels();
-                                }}
-                            />
-                            <button
-                                type="button"
-                                class="text-rose-600 hover:text-rose-700"
-                                title="Remove label"
-                                onclick={() => removeLabel(item.id)}
-                            >
-                                <svg
-                                    class="h-5 w-5"
-                                    fill="none"
-                                    viewBox="0 0 24 24"
-                                    stroke="currentColor"
+                                    <svg
+                                        class="h-5 w-5"
+                                        fill="none"
+                                        viewBox="0 0 24 24"
+                                        stroke="currentColor"
+                                    >
+                                        <path
+                                            stroke-linecap="round"
+                                            stroke-linejoin="round"
+                                            stroke-width="2"
+                                            d="M4 8h16M4 16h16"
+                                        />
+                                    </svg>
+                                </span>
+                                <input
+                                    class="input-control flex-1"
+                                    type="text"
+                                    maxlength="50"
+                                    placeholder={`Series ${i + 1}`}
+                                    value={item.name}
+                                    oninput={(e) => {
+                                        item.name = e.currentTarget.value;
+                                        syncBarLabels();
+                                    }}
+                                />
+                                <button
+                                    type="button"
+                                    class="text-rose-600 hover:text-rose-700"
+                                    title="Remove label"
+                                    onclick={() => removeLabel(item.id)}
                                 >
-                                    <path
-                                        stroke-linecap="round"
-                                        stroke-linejoin="round"
-                                        stroke-width="2"
-                                        d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
-                                    />
-                                </svg>
-                            </button>
+                                    <svg
+                                        class="h-5 w-5"
+                                        fill="none"
+                                        viewBox="0 0 24 24"
+                                        stroke="currentColor"
+                                    >
+                                        <path
+                                            stroke-linecap="round"
+                                            stroke-linejoin="round"
+                                            stroke-width="2"
+                                            d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+                                        />
+                                    </svg>
+                                </button>
+                            </div>
+                            {#if barLabelErrors?.[i]}
+                                <p class="mt-1 text-xs text-red-700 dark:text-red-400">
+                                    {barLabelErrors[i].join(', ')}
+                                </p>
+                            {/if}
                         </li>
                     {/each}
                 </ul>
+                {#if barLabelErrors?._errors}
+                    <p class="mt-1 text-xs text-red-700 dark:text-red-400">
+                        {barLabelErrors._errors.join(', ')}
+                    </p>
+                {/if}
                 <button
                     type="button"
                     class="mt-2 text-sm font-semibold text-brand-600 hover:text-brand-700"
@@ -205,131 +226,131 @@
         {/if}
     </div>
     {#if $formData.chartType !== 'simple_bar' && $formData.chartType !== 'advanced_bar'}
-    <div
-        class="space-y-5 rounded-xl border border-slate-200 bg-slate-50 p-4 dark:border-dark-700 dark:bg-dark-800/50"
-    >
-        <Checkbox.Formsnap
-            {form}
-            label="Enable filters"
-            name="filterEnabled"
-            bind:checked={$formData.filterEnabled}
-            description="Reduce spam and abuse by enforcing input rules."
-        />
+        <div
+            class="space-y-5 rounded-xl border border-slate-200 bg-slate-50 p-4 dark:border-dark-700 dark:bg-dark-800/50"
+        >
+            <Checkbox.Formsnap
+                {form}
+                label="Enable filters"
+                name="filterEnabled"
+                bind:checked={$formData.filterEnabled}
+                description="Reduce spam and abuse by enforcing input rules."
+            />
 
-        {#if $formData.filterEnabled}
-            {#if $formData.chartType === 'single_linechart'}
-                <TextInput.Formsnap
-                    {form}
-                    name="minValue"
-                    label="Min value"
-                    description="The minimum value per data submission. Lower values will be clamped to this value."
-                    inputProps={{ type: 'number', placeholder: '0' }}
-                    bind:value={$formData.minValue}
-                />
+            {#if $formData.filterEnabled}
+                {#if $formData.chartType === 'single_linechart'}
+                    <TextInput.Formsnap
+                        {form}
+                        name="minValue"
+                        label="Min value"
+                        description="The minimum value per data submission. Lower values will be clamped to this value."
+                        inputProps={{ type: 'number', placeholder: '0' }}
+                        bind:value={$formData.minValue}
+                    />
 
-                <TextInput.Formsnap
-                    {form}
-                    name="maxValue"
-                    label="Max value"
-                    description="The maximum value per data submission. Higher values will be clamped to this value."
-                    inputProps={{ type: 'number', placeholder: '100' }}
-                    bind:value={$formData.maxValue}
-                />
-            {/if}
-            {#if $formData.chartType === 'advanced_pie' || $formData.chartType === 'drilldown_pie'}
-                <TextInput.Formsnap
-                    {form}
-                    name="maxValue"
-                    label="Max value"
-                    description="The maximum value per data submission. Higher values will be clamped to this value."
-                    inputProps={{ type: 'number', placeholder: '100' }}
-                    bind:value={$formData.maxValue}
-                />
-            {/if}
-            {#if $formData.chartType === 'simple_pie' || $formData.chartType === 'advanced_pie' || $formData.chartType === 'drilldown_pie'}
-                <!-- TODO Extract in component and check https://formsnap.dev/docs/recipes/dynamic-fields for how to do this properly and accessible -->
-                <Field {form} name="filter">
-                    <Control>
-                        <Label class="input-label">
-                            {$formData.blacklistEnabled ? 'Blocklist' : 'Allowlist'}
-                        </Label>
+                    <TextInput.Formsnap
+                        {form}
+                        name="maxValue"
+                        label="Max value"
+                        description="The maximum value per data submission. Higher values will be clamped to this value."
+                        inputProps={{ type: 'number', placeholder: '100' }}
+                        bind:value={$formData.maxValue}
+                    />
+                {/if}
+                {#if $formData.chartType === 'advanced_pie' || $formData.chartType === 'drilldown_pie'}
+                    <TextInput.Formsnap
+                        {form}
+                        name="maxValue"
+                        label="Max value"
+                        description="The maximum value per data submission. Higher values will be clamped to this value."
+                        inputProps={{ type: 'number', placeholder: '100' }}
+                        bind:value={$formData.maxValue}
+                    />
+                {/if}
+                {#if $formData.chartType === 'simple_pie' || $formData.chartType === 'advanced_pie' || $formData.chartType === 'drilldown_pie'}
+                    <!-- TODO Extract in component and check https://formsnap.dev/docs/recipes/dynamic-fields for how to do this properly and accessible -->
+                    <Field {form} name="filter">
+                        <Control>
+                            <Label class="input-label">
+                                {$formData.blacklistEnabled ? 'Blocklist' : 'Allowlist'}
+                            </Label>
 
-                        <Description class="text-xs text-slate-500 dark:text-slate-400">
-                            {#if $formData.blacklistEnabled}
-                                Entries in this list will be blocked.
-                            {:else}
-                                Everything <b>not</b> in this list will be blocked.
-                            {/if}
-                        </Description>
+                            <Description class="text-xs text-slate-500 dark:text-slate-400">
+                                {#if $formData.blacklistEnabled}
+                                    Entries in this list will be blocked.
+                                {:else}
+                                    Everything <b>not</b> in this list will be blocked.
+                                {/if}
+                            </Description>
 
-                        {#each $formData.filter ?? [], i (i)}
-                            <ElementField {form} name={`filter[${i}]`}>
-                                <div class="flex items-center gap-2">
-                                    <Control>
-                                        {#snippet children({ props })}
-                                            <input
-                                                class="input-control"
-                                                type="text"
-                                                {...props}
-                                                bind:value={$formData.filter[i]}
-                                            />
-                                        {/snippet}
-                                    </Control>
-                                    <button
-                                        type="button"
-                                        onclick={() =>
-                                            form.form.update((f) => {
-                                                if (!('filter' in f)) {
+                            {#each $formData.filter ?? [], i (i)}
+                                <ElementField {form} name={`filter[${i}]`}>
+                                    <div class="flex items-center gap-2">
+                                        <Control>
+                                            {#snippet children({ props })}
+                                                <input
+                                                    class="input-control"
+                                                    type="text"
+                                                    {...props}
+                                                    bind:value={$formData.filter[i]}
+                                                />
+                                            {/snippet}
+                                        </Control>
+                                        <button
+                                            type="button"
+                                            onclick={() =>
+                                                form.form.update((f) => {
+                                                    if (!('filter' in f)) {
+                                                        return f;
+                                                    }
+                                                    f.filter.splice(i, 1);
                                                     return f;
-                                                }
-                                                f.filter.splice(i, 1);
-                                                return f;
-                                            })}
-                                    >
-                                        Remove
-                                    </button>
-                                </div>
-                                <FieldErrors class="text-xs text-red-700 dark:text-red-400" />
-                            </ElementField>
-                        {/each}
+                                                })}
+                                        >
+                                            Remove
+                                        </button>
+                                    </div>
+                                    <FieldErrors class="text-xs text-red-700 dark:text-red-400" />
+                                </ElementField>
+                            {/each}
 
-                        <button
-                            type="button"
-                            onclick={() =>
-                                form.form.update((f) => {
-                                    if (!('filter' in f)) {
+                            <button
+                                type="button"
+                                onclick={() =>
+                                    form.form.update((f) => {
+                                        if (!('filter' in f)) {
+                                            return f;
+                                        }
+                                        (f.filter ??= []).push('');
                                         return f;
-                                    }
-                                    (f.filter ??= []).push('');
-                                    return f;
-                                })}
-                        >
-                            + Add Entry
-                        </button>
-                    </Control>
-                    <FieldErrors class="text-xs text-red-700 dark:text-red-400" />
-                </Field>
+                                    })}
+                            >
+                                + Add Entry
+                            </button>
+                        </Control>
+                        <FieldErrors class="text-xs text-red-700 dark:text-red-400" />
+                    </Field>
 
-                <Checkbox.Formsnap
-                    {form}
-                    label="Use blocklist mode"
-                    name="blacklistEnabled"
-                    bind:checked={$formData.blacklistEnabled}
-                    description="Switch between allowlist and blocklist behavior."
-                />
+                    <Checkbox.Formsnap
+                        {form}
+                        label="Use blocklist mode"
+                        name="blacklistEnabled"
+                        bind:checked={$formData.blacklistEnabled}
+                        description="Switch between allowlist and blocklist behavior."
+                    />
 
-                <!--  Currently not supported by the backend for performance reasons
-                <Checkbox.Formsnap
-                    {form}
-                    label="Use regex"
-                    name="regexEnabled"
-                    bind:checked={$formData.regexEnabled}
-                    description="Enable regex for filter entries."
-                />
-                -->
+                    <!--  Currently not supported by the backend for performance reasons
+                    <Checkbox.Formsnap
+                        {form}
+                        label="Use regex"
+                        name="regexEnabled"
+                        bind:checked={$formData.regexEnabled}
+                        description="Enable regex for filter entries."
+                    />
+                    -->
+                {/if}
             {/if}
-        {/if}
-    </div>
+        </div>
     {/if}
 
     <Button type="submit" fullWidth>Save chart</Button>
