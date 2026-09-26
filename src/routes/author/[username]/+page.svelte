@@ -75,21 +75,16 @@
                         </Table.Row>
                     {:else}
                         {#each filteredPlugins as plugin (plugin.id)}
-                            <Table.Row>
-                                <Table.Cell class="font-semibold text-slate-900">
-                                    <a
-                                        class="hover:text-brand-600"
-                                        href={resolve(
-                                            `/plugin/${plugin.software.url}/${plugin.name}/${plugin.id}`
-                                        )}
-                                    >
-                                        {plugin.name}
-                                    </a>
-                                </Table.Cell>
+                            <Table.ClickableRow
+                                href={resolve(
+                                    `/plugin/${plugin.software.url}/${plugin.name}/${plugin.id}`
+                                )}
+                                label={plugin.name}
+                            >
                                 <Table.Cell class="text-slate-600">
                                     {#if plugin.software.globalPlugin}
                                         <a
-                                            class="hover:text-brand-600"
+                                            class="relative z-10 hover:text-brand-600"
                                             href={resolve(`/global/${plugin.software.url}`)}
                                         >
                                             {plugin.software.name}
@@ -98,7 +93,7 @@
                                         {plugin.software.name}
                                     {/if}
                                 </Table.Cell>
-                            </Table.Row>
+                            </Table.ClickableRow>
                         {/each}
                     {/if}
                 </Table.Body>

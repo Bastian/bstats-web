@@ -152,23 +152,18 @@
                         </Table.Row>
                     {:else}
                         {#each paginatedPlugins as plugin (plugin.pluginId)}
-                            <Table.Row>
-                                <Table.Cell>
-                                    <a
-                                        href={resolve(
-                                            `/plugin/${plugin.softwareUrl}/${plugin.name}/${plugin.pluginId}`
-                                        )}
-                                        class="font-semibold text-slate-900 hover:text-brand-600"
-                                    >
-                                        {plugin.name}
-                                    </a>
-                                </Table.Cell>
+                            <Table.ClickableRow
+                                href={resolve(
+                                    `/plugin/${plugin.softwareUrl}/${plugin.name}/${plugin.pluginId}`
+                                )}
+                                label={plugin.name}
+                            >
                                 <Table.Cell class="text-slate-600">{plugin.softwareName}</Table.Cell
                                 >
                                 <Table.Cell>
                                     <a
                                         href={resolve(`/author/${plugin.ownerName}`)}
-                                        class="text-slate-600 hover:text-brand-600"
+                                        class="relative z-10 text-slate-600 hover:text-brand-600"
                                     >
                                         {plugin.ownerName}
                                     </a>
@@ -179,7 +174,7 @@
                                 <Table.Cell align="right" class="font-semibold text-slate-900">
                                     {formatter.format(plugin.players || 0)}
                                 </Table.Cell>
-                            </Table.Row>
+                            </Table.ClickableRow>
                         {/each}
                     {/if}
                 </Table.Body>
