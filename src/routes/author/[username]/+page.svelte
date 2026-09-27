@@ -95,23 +95,16 @@
                         </Table.Row>
                     {:else}
                         {#each sortedPlugins as plugin (plugin.id)}
-                            <Table.Row>
-                                <Table.Cell
-                                    class="font-semibold text-slate-900 dark:text-slate-100"
-                                >
-                                    <a
-                                        class="hover:text-brand-600"
-                                        href={resolve(
-                                            `/plugin/${plugin.software.url}/${plugin.name}/${plugin.id}`
-                                        )}
-                                    >
-                                        {plugin.name}
-                                    </a>
-                                </Table.Cell>
+                            <Table.ClickableRow
+                                href={resolve(
+                                    `/plugin/${plugin.software.url}/${plugin.name}/${plugin.id}`
+                                )}
+                                label={plugin.name}
+                            >
                                 <Table.Cell class="text-slate-600 dark:text-slate-400">
                                     {#if plugin.software.globalPlugin}
                                         <a
-                                            class="hover:text-brand-600"
+                                            class="relative z-10 hover:text-brand-600"
                                             href={resolve(`/global/${plugin.software.url}`)}
                                         >
                                             {plugin.software.name}
@@ -132,7 +125,7 @@
                                 >
                                     {formatter.format(plugin.players || 0)}
                                 </Table.Cell>
-                            </Table.Row>
+                            </Table.ClickableRow>
                         {/each}
                     {/if}
                 </Table.Body>
