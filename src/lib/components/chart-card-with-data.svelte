@@ -87,7 +87,7 @@
         // The backend returns categories in Redis hash order, which is
         // effectively random. Sort them so ordered data (e.g. "00h".."23h")
         // is displayed in a meaningful order.
-        const sorted = [...data].sort((a, b) => a.name.localeCompare(b.name));
+        const sorted = [...data].sort((a, b) => a.name.localeCompare(b.name, undefined, { numeric: true }));
         const categories = sorted.map((d) => d.name);
         const barCount = sorted.reduce((max, d) => Math.max(max, d.data.length), 0);
         const series = Array.from({ length: barCount }, (_, barIndex) => ({
