@@ -84,11 +84,15 @@
     // expects series spanning all categories. Transpose: categories are the
     // map keys, and each bar index becomes a series.
     function toBarChart(data: BarChartData[], barLabels: string[] = []) {
-        const categories = data.map((d) => d.name);
-        const barCount = data.reduce((max, d) => Math.max(max, d.data.length), 0);
+        // The backend returns categories in Redis hash order, which is
+        // effectively random. Sort them so ordered data (e.g. "00h".."23h")
+        // is displayed in a meaningful order.
+        const sorted = [...data].sort((a, b) => a.name.localeCompare(b.name, undefined, { numeric: true }));
+        const categories = sorted.map((d) => d.name);
+        const barCount = sorted.reduce((max, d) => Math.max(max, d.data.length), 0);
         const series = Array.from({ length: barCount }, (_, barIndex) => ({
             name: barLabels[barIndex]?.trim() || `Series ${barIndex + 1}`,
-            data: data.map((d) => d.data[barIndex] ?? 0)
+            data: sorted.map((d) => d.data[barIndex] ?? 0)
         }));
         return { categories, series };
     }
