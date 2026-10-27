@@ -50,7 +50,8 @@ export const addChartSchema = z.discriminatedUnion('chartType', [
             .trim()
             .max(50)
             .regex(/^[-_a-zA-Z0-9 ]*$/, 'Can only contain letters, numbers, dashes and underscores')
-            .default('')
+            .default(''),
+        orientation: z.enum(['horizontal', 'vertical']).default('horizontal')
     }),
     z.object({
         chartType: z.literal('advanced_bar'),
@@ -61,6 +62,7 @@ export const addChartSchema = z.discriminatedUnion('chartType', [
             .max(50)
             .regex(/^[-_a-zA-Z0-9 ]*$/, 'Can only contain letters, numbers, dashes and underscores')
             .default(''),
+        orientation: z.enum(['horizontal', 'vertical']).default('horizontal'),
         // Display labels for each bar, by index (bar 1 = barLabels[0], ...).
         barLabels: z
             .array(

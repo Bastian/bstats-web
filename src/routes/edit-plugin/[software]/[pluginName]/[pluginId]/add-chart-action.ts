@@ -80,12 +80,16 @@ export const addChart = (async ({ request, locals, params }) => {
             };
             break;
         case 'simple_bar':
-            chartData.data = { valueName: form.data.valueName };
+            chartData.data = {
+                valueName: form.data.valueName,
+                orientation: form.data.orientation
+            };
             break;
         case 'advanced_bar':
             chartData.data = {
                 valueName: form.data.valueName,
-                barLabels: form.data.barLabels
+                barLabels: form.data.barLabels,
+                orientation: form.data.orientation
             };
             break;
         default:

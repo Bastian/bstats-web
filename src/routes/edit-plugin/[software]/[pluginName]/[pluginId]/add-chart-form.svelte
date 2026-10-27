@@ -29,6 +29,12 @@
 
     const flipDurationMs = 150;
 
+    // Bar direction: horizontal is the historical default and also what old
+    // charts without a stored orientation use.
+    const orientationIsVertical = $derived(
+        ($formData as { orientation?: 'horizontal' | 'vertical' }).orientation === 'vertical'
+    );
+
     // Reorderable bar labels (advanced bar). Local { id, name } list with stable
     // ids for drag & drop; names are mirrored into $formData.barLabels.
     let labelItems = $state<{ id: number; name: string }[]>([]);
@@ -131,6 +137,74 @@
                 inputProps={{ placeholder: 'Total' }}
                 bind:value={$formData.valueName}
             />
+
+            <div>
+                <span class="input-label" id="bar-orientation-label">Bar direction</span>
+                <p
+                    class="text-xs text-slate-500 dark:text-slate-400"
+                    id="bar-orientation-description"
+                >
+                    Horizontal grows bars to the right and fits long category names. Vertical grows
+                    them upwards and suits a few short categories.
+                </p>
+                <div
+                    class="mt-2 grid grid-cols-2 gap-2"
+                    role="radiogroup"
+                    aria-labelledby="bar-orientation-label"
+                    aria-describedby="bar-orientation-description"
+                >
+                    <label
+                        class="flex cursor-pointer items-center gap-2 rounded-lg border px-3 py-2 text-sm font-medium transition select-none focus-within:ring-2 focus-within:ring-brand-500 {orientationIsVertical
+                            ? 'border-slate-200 bg-white text-slate-600 dark:border-dark-700 dark:bg-dark-800 dark:text-slate-300'
+                            : 'border-brand-500 bg-brand-50 text-brand-700 dark:border-brand-600 dark:bg-brand-950/50 dark:text-brand-300'}"
+                    >
+                        <input
+                            class="sr-only"
+                            type="radio"
+                            name="orientation"
+                            value="horizontal"
+                            checked={!orientationIsVertical}
+                            onchange={() => ($formData.orientation = 'horizontal')}
+                        />
+                        <svg
+                            class="h-6 w-6 shrink-0"
+                            viewBox="0 0 24 24"
+                            fill="currentColor"
+                            aria-hidden="true"
+                        >
+                            <rect x="3" y="5" width="16" height="3" rx="1" />
+                            <rect x="3" y="10.5" width="11" height="3" rx="1" />
+                            <rect x="3" y="16" width="7" height="3" rx="1" />
+                        </svg>
+                        Horizontal
+                    </label>
+                    <label
+                        class="flex cursor-pointer items-center gap-2 rounded-lg border px-3 py-2 text-sm font-medium transition select-none focus-within:ring-2 focus-within:ring-brand-500 {orientationIsVertical
+                            ? 'border-brand-500 bg-brand-50 text-brand-700 dark:border-brand-600 dark:bg-brand-950/50 dark:text-brand-300'
+                            : 'border-slate-200 bg-white text-slate-600 dark:border-dark-700 dark:bg-dark-800 dark:text-slate-300'}"
+                    >
+                        <input
+                            class="sr-only"
+                            type="radio"
+                            name="orientation"
+                            value="vertical"
+                            checked={orientationIsVertical}
+                            onchange={() => ($formData.orientation = 'vertical')}
+                        />
+                        <svg
+                            class="h-6 w-6 shrink-0"
+                            viewBox="0 0 24 24"
+                            fill="currentColor"
+                            aria-hidden="true"
+                        >
+                            <rect x="5" y="10" width="3" height="10" rx="1" />
+                            <rect x="10.5" y="6" width="3" height="14" rx="1" />
+                            <rect x="16" y="13" width="3" height="7" rx="1" />
+                        </svg>
+                        Vertical
+                    </label>
+                </div>
+            </div>
         {/if}
 
         {#if $formData.chartType === 'advanced_bar'}
