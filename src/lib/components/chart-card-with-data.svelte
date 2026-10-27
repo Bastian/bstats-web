@@ -186,6 +186,7 @@
                     data={bars.series}
                     categories={bars.categories}
                     valueName={chart.data?.valueName as string | undefined}
+                    orientation={chart.data?.orientation as 'horizontal' | 'vertical' | undefined}
                 />
             {/if}
         {:else if chart.type === 'simple_map' || chart.type === 'advanced_map'}
