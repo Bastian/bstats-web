@@ -141,6 +141,50 @@ export async function updateChartPosition(chartUid: number, position: number): P
     await databaseManager.getRedisCluster().hset(`charts:${chartUid}`, 'position', position);
 }
 
+/**
+ * Updates the editable chart fields. The UID (and therefore all historical
+ * data) stays the same; only the metadata stored in the chart hash changes.
+ */
+export async function updateChart(
+    chartUid: number,
+    chart: {
+        id: string;
+        type: string;
+        title: string;
+        data: unknown;
+    }
+): Promise<void> {
+    await databaseManager.getRedisCluster().hmset(`charts:${chartUid}`, {
+        id: chart.id,
+        type: chart.type,
+        title: chart.title,
+        data: JSON.stringify(chart.data)
+    });
+}
+
+/**
+ * Moves the plugin ID + chart ID lookup key to a new chart ID.
+ *
+ * The new key is written before the old one is deleted so lookups keep
+ * working if one of the commands fails halfway.
+ */
+export async function updateChartIdIndex(
+    pluginId: number,
+    oldChartId: string,
+    newChartId: string,
+    chartUid: number
+): Promise<void> {
+    if (oldChartId === newChartId) {
+        return;
+    }
+
+    const redis = databaseManager.getRedisCluster();
+    const base = `charts.index.uid.pluginId+chartId:${pluginId}`;
+
+    await redis.set(`${base}.${newChartId}`, chartUid);
+    await redis.del(`${base}.${oldChartId}`);
+}
+
 export async function deleteChartIndex(pluginId: number, chartId: string): Promise<void> {
     await databaseManager
         .getRedisCluster()

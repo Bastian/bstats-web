@@ -5,6 +5,7 @@ import { message, setError, superValidate } from 'sveltekit-superforms';
 import { zod4 } from 'sveltekit-superforms/adapters';
 import type { Action } from './$types';
 import { addChartSchema } from './add-chart-schema';
+import { buildChartData } from './chart-data';
 
 interface ChartData {
     type: string;
@@ -49,52 +50,8 @@ export const addChart = (async ({ request, locals, params }) => {
         position: plugin.charts.length,
         isDefault: false,
         title: form.data.chartTitle,
-        data: {}
+        data: buildChartData(form.data)
     };
-
-    switch (form.data.chartType) {
-        case 'simple_pie':
-            chartData.data = {
-                enabled: form.data.filterEnabled,
-                useRegex: form.data.regexEnabled,
-                blacklist: form.data.blacklistEnabled,
-                filter: form.data.filter
-            };
-            break;
-        case 'advanced_pie':
-        case 'drilldown_pie':
-            chartData.data = {
-                enabled: form.data.filterEnabled,
-                maxValue: form.data.maxValue,
-                useRegex: form.data.regexEnabled,
-                blacklist: form.data.blacklistEnabled,
-                filter: form.data.filter
-            };
-            break;
-        case 'single_linechart':
-            chartData.data = {
-                lineName: form.data.lineName,
-                enabled: form.data.filterEnabled,
-                minValue: form.data.minValue,
-                maxValue: form.data.maxValue
-            };
-            break;
-        case 'simple_bar':
-            chartData.data = {
-                valueName: form.data.valueName,
-                orientation: form.data.orientation
-            };
-            break;
-        case 'advanced_bar':
-            chartData.data = {
-                valueName: form.data.valueName,
-                barLabels: form.data.barLabels,
-                orientation: form.data.orientation
-            };
-            break;
-        default:
-            return fail(400, { form, error: 'Invalid chart type' });
-    }
 
     try {
         await saveChart(plugin, chartData);

@@ -1,0 +1,489 @@
+<script lang="ts">
+    import { Checkbox } from '$lib/components/input/checkbox';
+    import { TextInput } from '$lib/components/input/text';
+    import { Control, Description, ElementField, Field, FieldErrors, Label } from 'formsnap';
+    import { superForm } from 'sveltekit-superforms';
+    import { zod4Client } from 'sveltekit-superforms/adapters';
+    import type { PageData } from './$types';
+    import { editChartSchema } from './edit-chart-schema';
+    import { chartToFormData } from './chart-form-data';
+    import Button from '$lib/components/button.svelte';
+    import { dndzone } from 'svelte-dnd-action';
+    import { flip } from 'svelte/animate';
+
+    type ChartInfo = PageData['charts'][string];
+
+    let {
+        chart,
+        onCancel,
+        onSaved
+    }: {
+        chart: ChartInfo;
+        onCancel: () => void;
+        onSaved: () => void;
+    } = $props();
+
+    const initialData = chartToFormData(chart);
+
+    const form = superForm(initialData, {
+        // 'json' so complex fields (e.g. the reorderable barLabels array, which
+        // isn't backed by named inputs) are submitted from $formData directly.
+        dataType: 'json',
+        validators: zod4Client(editChartSchema),
+        onUpdated: ({ form }) => {
+            // Only refresh the page when the action actually succeeded; a 500
+            // can still return a valid form without a success message.
+            if (form.valid && form.message) {
+                onSaved();
+            }
+        }
+    });
+
+    const { form: formData, enhance, errors, message } = form;
+
+    // superforms types array errors as a SuperStructArray that can't be indexed by
+    // a number; narrow to a per-index lookup (`_errors` holds array-level errors).
+    const barLabelErrors = $derived(
+        $errors.barLabels as ({ _errors?: string[] } & Record<number, string[]>) | undefined
+    );
+
+    const flipDurationMs = 150;
+
+    // The add-chart form is on the same page, so these ids must not collide
+    // with its fixed "bar-orientation-*" ids.
+    const orientationLabelId = `bar-orientation-label-${chart.uid ?? 'edit'}`;
+    const orientationDescriptionId = `bar-orientation-description-${chart.uid ?? 'edit'}`;
+
+    // Bar direction: horizontal is the historical default and also what old
+    // charts without a stored orientation use.
+    const orientationIsVertical = $derived(
+        ($formData as { orientation?: 'horizontal' | 'vertical' }).orientation === 'vertical'
+    );
+
+    // Reorderable bar labels (advanced bar). Local { id, name } list with stable
+    // ids for drag & drop; names are mirrored into $formData.barLabels.
+    let labelItems = $state<{ id: number; name: string }[]>(
+        initialData.chartType === 'advanced_bar'
+            ? initialData.barLabels.map((name, index) => ({ id: index, name }))
+            : []
+    );
+    let nextLabelId = initialData.chartType === 'advanced_bar' ? initialData.barLabels.length : 0;
+
+    // Mirror the reorderable label list into the form data so it's submitted.
+    // Done from event handlers (not an $effect) to avoid a store update loop.
+    function syncBarLabels() {
+        if ($formData.chartType === 'advanced_bar') {
+            $formData.barLabels = labelItems.map((l) => l.name);
+        }
+    }
+    function addLabel() {
+        labelItems = [...labelItems, { id: nextLabelId++, name: '' }];
+        syncBarLabels();
+    }
+    function removeLabel(id: number) {
+        labelItems = labelItems.filter((l) => l.id !== id);
+        syncBarLabels();
+    }
+    function handleLabelConsider(e: CustomEvent) {
+        labelItems = e.detail.items;
+    }
+    function handleLabelFinalize(e: CustomEvent) {
+        labelItems = e.detail.items;
+        syncBarLabels();
+    }
+</script>
+
+<form class="space-y-5" method="POST" action="?/editChart" use:enhance>
+    <input type="hidden" name="chartUid" value={chart.uid ?? 0} />
+    <div>
+        <Field {form} name="chartType">
+            <Control>
+                {#snippet children({ props })}
+                    <Label
+                        class="text-sm font-semibold tracking-wide text-slate-700 dark:text-slate-300"
+                    >
+                        Chart type
+                    </Label>
+                    <select
+                        class="input-control"
+                        {...props}
+                        bind:value={$formData.chartType}
+                        disabled={chart.isDefault}
+                    >
+                        <option value="" disabled>Choose a chart type</option>
+                        <optgroup label="Pies">
+                            <option value="simple_pie">Simple pie</option>
+                            <option value="advanced_pie">Advanced pie</option>
+                            <option value="drilldown_pie">Drilldown pie</option>
+                        </optgroup>
+                        <optgroup label="Line charts">
+                            <option value="single_linechart">Single line chart</option>
+                        </optgroup>
+                        <optgroup label="Bar charts">
+                            <option value="simple_bar">Simple bar</option>
+                            <option value="advanced_bar">Advanced bar</option>
+                        </optgroup>
+                    </select>
+                {/snippet}
+            </Control>
+            <FieldErrors class="text-xs text-red-700 dark:text-red-400" />
+            {#if chart.isDefault}
+                <p class="mt-1 text-xs text-slate-500 dark:text-slate-400">
+                    Default charts keep their chart type.
+                </p>
+            {:else if $formData.chartType !== chart.type}
+                <p
+                    class="mt-2 rounded-lg border border-amber-200 bg-amber-50 px-3 py-2 text-xs text-amber-800 dark:border-amber-900/50 dark:bg-amber-950/40 dark:text-amber-200"
+                >
+                    Changing the type keeps the existing data, but historical values may not render
+                    correctly until new data in the new format arrives.
+                </p>
+            {/if}
+        </Field>
+    </div>
+
+    <div
+        class="space-y-5 rounded-xl border border-slate-200 bg-slate-50 p-4 dark:border-dark-700 dark:bg-dark-800/50"
+    >
+        <TextInput.Formsnap
+            {form}
+            name="chartTitle"
+            label="Chart title"
+            description="The display name for the chart (shown above the chart)."
+            inputProps={{ placeholder: 'My chart' }}
+            bind:value={$formData.chartTitle}
+        />
+
+        <div>
+            <TextInput.Formsnap
+                {form}
+                name="chartId"
+                label="Chart ID"
+                description={chart.isDefault
+                    ? 'The chart ID of default charts is fixed.'
+                    : 'Technical ID used by your plugin and in URLs. Changing it requires updating your plugin.'}
+                inputProps={{ placeholder: 'myChart', disabled: chart.isDefault }}
+                bind:value={$formData.chartId}
+            />
+            {#if !chart.isDefault && $formData.chartId !== chart.id}
+                <p
+                    class="mt-2 rounded-lg border border-amber-200 bg-amber-50 px-3 py-2 text-xs text-amber-800 dark:border-amber-900/50 dark:bg-amber-950/40 dark:text-amber-200"
+                >
+                    Your plugin must be updated to send data under the new ID. Data already
+                    collected stays attached to this chart, but versions still using
+                    <span class="font-mono">{chart.id}</span> will no longer send data.
+                </p>
+            {/if}
+        </div>
+
+        {#if $formData.chartType === 'single_linechart'}
+            <TextInput.Formsnap
+                {form}
+                name="lineName"
+                label="Line name"
+                description="Shown in the legend and tooltips."
+                inputProps={{ placeholder: 'My line' }}
+                bind:value={$formData.lineName}
+            />
+        {/if}
+
+        {#if $formData.chartType === 'simple_bar' || $formData.chartType === 'advanced_bar'}
+            <TextInput.Formsnap
+                {form}
+                name="valueName"
+                label="Value axis label"
+                description="Shown along the value axis (e.g. Total, Servers)."
+                inputProps={{ placeholder: 'Total' }}
+                bind:value={$formData.valueName}
+            />
+
+            <div>
+                <span class="input-label" id={orientationLabelId}>Bar direction</span>
+                <p class="text-xs text-slate-500 dark:text-slate-400" id={orientationDescriptionId}>
+                    Horizontal grows bars to the right and fits long category names. Vertical grows
+                    them upwards and suits a few short categories.
+                </p>
+                <div
+                    class="mt-2 grid grid-cols-2 gap-2"
+                    role="radiogroup"
+                    aria-labelledby={orientationLabelId}
+                    aria-describedby={orientationDescriptionId}
+                >
+                    <label
+                        class="flex cursor-pointer items-center gap-2 rounded-lg border px-3 py-2 text-sm font-medium transition select-none focus-within:ring-2 focus-within:ring-brand-500 {orientationIsVertical
+                            ? 'border-slate-200 bg-white text-slate-600 dark:border-dark-700 dark:bg-dark-800 dark:text-slate-300'
+                            : 'border-brand-500 bg-brand-50 text-brand-700 dark:border-brand-600 dark:bg-brand-950/50 dark:text-brand-300'}"
+                    >
+                        <input
+                            class="sr-only"
+                            type="radio"
+                            name="orientation"
+                            value="horizontal"
+                            checked={!orientationIsVertical}
+                            onchange={() => ($formData.orientation = 'horizontal')}
+                        />
+                        <svg
+                            class="h-6 w-6 shrink-0"
+                            viewBox="0 0 24 24"
+                            fill="currentColor"
+                            aria-hidden="true"
+                        >
+                            <rect x="3" y="5" width="16" height="3" rx="1" />
+                            <rect x="3" y="10.5" width="11" height="3" rx="1" />
+                            <rect x="3" y="16" width="7" height="3" rx="1" />
+                        </svg>
+                        Horizontal
+                    </label>
+                    <label
+                        class="flex cursor-pointer items-center gap-2 rounded-lg border px-3 py-2 text-sm font-medium transition select-none focus-within:ring-2 focus-within:ring-brand-500 {orientationIsVertical
+                            ? 'border-brand-500 bg-brand-50 text-brand-700 dark:border-brand-600 dark:bg-brand-950/50 dark:text-brand-300'
+                            : 'border-slate-200 bg-white text-slate-600 dark:border-dark-700 dark:bg-dark-800 dark:text-slate-300'}"
+                    >
+                        <input
+                            class="sr-only"
+                            type="radio"
+                            name="orientation"
+                            value="vertical"
+                            checked={orientationIsVertical}
+                            onchange={() => ($formData.orientation = 'vertical')}
+                        />
+                        <svg
+                            class="h-6 w-6 shrink-0"
+                            viewBox="0 0 24 24"
+                            fill="currentColor"
+                            aria-hidden="true"
+                        >
+                            <rect x="5" y="10" width="3" height="10" rx="1" />
+                            <rect x="10.5" y="6" width="3" height="14" rx="1" />
+                            <rect x="16" y="13" width="3" height="7" rx="1" />
+                        </svg>
+                        Vertical
+                    </label>
+                </div>
+            </div>
+        {/if}
+
+        {#if $formData.chartType === 'advanced_bar'}
+            <div>
+                <span class="input-label">Bar labels</span>
+                <p class="text-xs text-slate-500 dark:text-slate-400">
+                    One label per bar, in order (1st label = 1st value your plugin sends). Drag to
+                    reorder. Missing labels fall back to "Series N", extra labels are ignored.
+                </p>
+                <ul
+                    class="mt-2 space-y-2"
+                    use:dndzone={{ items: labelItems, flipDurationMs, dropTargetStyle: {} }}
+                    onconsider={handleLabelConsider}
+                    onfinalize={handleLabelFinalize}
+                >
+                    {#each labelItems as item, i (item.id)}
+                        <li
+                            animate:flip={{ duration: flipDurationMs }}
+                            class="rounded-lg border border-slate-200 bg-white px-3 py-2 dark:border-dark-700 dark:bg-dark-800"
+                        >
+                            <div class="flex items-center gap-2">
+                                <span
+                                    class="cursor-move text-slate-400 dark:text-slate-500"
+                                    title="Drag to reorder"
+                                >
+                                    <svg
+                                        class="h-5 w-5"
+                                        fill="none"
+                                        viewBox="0 0 24 24"
+                                        stroke="currentColor"
+                                    >
+                                        <path
+                                            stroke-linecap="round"
+                                            stroke-linejoin="round"
+                                            stroke-width="2"
+                                            d="M4 8h16M4 16h16"
+                                        />
+                                    </svg>
+                                </span>
+                                <input
+                                    class="input-control flex-1"
+                                    type="text"
+                                    maxlength="50"
+                                    placeholder={`Series ${i + 1}`}
+                                    value={item.name}
+                                    oninput={(e) => {
+                                        item.name = e.currentTarget.value;
+                                        syncBarLabels();
+                                    }}
+                                />
+                                <button
+                                    type="button"
+                                    class="text-rose-600 hover:text-rose-700"
+                                    title="Remove label"
+                                    onclick={() => removeLabel(item.id)}
+                                >
+                                    <svg
+                                        class="h-5 w-5"
+                                        fill="none"
+                                        viewBox="0 0 24 24"
+                                        stroke="currentColor"
+                                    >
+                                        <path
+                                            stroke-linecap="round"
+                                            stroke-linejoin="round"
+                                            stroke-width="2"
+                                            d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+                                        />
+                                    </svg>
+                                </button>
+                            </div>
+                            {#if barLabelErrors?.[i]}
+                                <p class="mt-1 text-xs text-red-700 dark:text-red-400">
+                                    {barLabelErrors[i].join(', ')}
+                                </p>
+                            {/if}
+                        </li>
+                    {/each}
+                </ul>
+                {#if barLabelErrors?._errors}
+                    <p class="mt-1 text-xs text-red-700 dark:text-red-400">
+                        {barLabelErrors._errors.join(', ')}
+                    </p>
+                {/if}
+                <button
+                    type="button"
+                    class="mt-2 text-sm font-semibold text-brand-600 hover:text-brand-700"
+                    onclick={addLabel}
+                >
+                    + Add label
+                </button>
+            </div>
+        {/if}
+    </div>
+    {#if $formData.chartType !== 'simple_bar' && $formData.chartType !== 'advanced_bar'}
+        <div
+            class="space-y-5 rounded-xl border border-slate-200 bg-slate-50 p-4 dark:border-dark-700 dark:bg-dark-800/50"
+        >
+            <Checkbox.Formsnap
+                {form}
+                label="Enable filters"
+                name="filterEnabled"
+                bind:checked={$formData.filterEnabled}
+                description="Reduce spam and abuse by enforcing input rules."
+            />
+
+            {#if $formData.filterEnabled}
+                {#if $formData.chartType === 'single_linechart'}
+                    <TextInput.Formsnap
+                        {form}
+                        name="minValue"
+                        label="Min value"
+                        description="The minimum value per data submission. Lower values will be clamped to this value."
+                        inputProps={{ type: 'number', placeholder: '0' }}
+                        bind:value={$formData.minValue}
+                    />
+
+                    <TextInput.Formsnap
+                        {form}
+                        name="maxValue"
+                        label="Max value"
+                        description="The maximum value per data submission. Higher values will be clamped to this value."
+                        inputProps={{ type: 'number', placeholder: '100' }}
+                        bind:value={$formData.maxValue}
+                    />
+                {/if}
+                {#if $formData.chartType === 'advanced_pie' || $formData.chartType === 'drilldown_pie'}
+                    <TextInput.Formsnap
+                        {form}
+                        name="maxValue"
+                        label="Max value"
+                        description="The maximum value per data submission. Higher values will be clamped to this value."
+                        inputProps={{ type: 'number', placeholder: '100' }}
+                        bind:value={$formData.maxValue}
+                    />
+                {/if}
+                {#if $formData.chartType === 'simple_pie' || $formData.chartType === 'advanced_pie' || $formData.chartType === 'drilldown_pie'}
+                    <Field {form} name="filter">
+                        <Control>
+                            <Label class="input-label">
+                                {$formData.blacklistEnabled ? 'Blocklist' : 'Allowlist'}
+                            </Label>
+
+                            <Description class="text-xs text-slate-500 dark:text-slate-400">
+                                {#if $formData.blacklistEnabled}
+                                    Entries in this list will be blocked.
+                                {:else}
+                                    Everything <b>not</b> in this list will be blocked.
+                                {/if}
+                            </Description>
+
+                            {#each $formData.filter ?? [], i (i)}
+                                <ElementField {form} name={`filter[${i}]`}>
+                                    <div class="flex items-center gap-2">
+                                        <Control>
+                                            {#snippet children({ props })}
+                                                <input
+                                                    class="input-control"
+                                                    type="text"
+                                                    {...props}
+                                                    bind:value={$formData.filter[i]}
+                                                />
+                                            {/snippet}
+                                        </Control>
+                                        <button
+                                            type="button"
+                                            onclick={() =>
+                                                form.form.update((f) => {
+                                                    if (!('filter' in f)) {
+                                                        return f;
+                                                    }
+                                                    f.filter.splice(i, 1);
+                                                    return f;
+                                                })}
+                                        >
+                                            Remove
+                                        </button>
+                                    </div>
+                                    <FieldErrors class="text-xs text-red-700 dark:text-red-400" />
+                                </ElementField>
+                            {/each}
+
+                            <button
+                                type="button"
+                                onclick={() =>
+                                    form.form.update((f) => {
+                                        if (!('filter' in f)) {
+                                            return f;
+                                        }
+                                        (f.filter ??= []).push('');
+                                        return f;
+                                    })}
+                            >
+                                + Add Entry
+                            </button>
+                        </Control>
+                        <FieldErrors class="text-xs text-red-700 dark:text-red-400" />
+                    </Field>
+
+                    <Checkbox.Formsnap
+                        {form}
+                        label="Use blocklist mode"
+                        name="blacklistEnabled"
+                        bind:checked={$formData.blacklistEnabled}
+                        description="Switch between allowlist and blocklist behavior."
+                    />
+                {/if}
+            {/if}
+        </div>
+    {/if}
+
+    {#if $message}
+        <p class="text-sm font-semibold text-emerald-600 dark:text-emerald-400">{$message}</p>
+    {/if}
+
+    <div class="flex flex-col gap-2 sm:flex-row">
+        <Button type="submit" fullWidth>Save changes</Button>
+        <button
+            type="button"
+            class="inline-flex w-full cursor-pointer items-center justify-center rounded-full border border-slate-300 bg-white px-5 py-2 text-sm font-semibold text-slate-700 transition hover:bg-slate-50 dark:border-dark-600 dark:bg-dark-800 dark:text-slate-200 dark:hover:bg-dark-700"
+            onclick={onCancel}
+        >
+            Cancel
+        </button>
+    </div>
+</form>
