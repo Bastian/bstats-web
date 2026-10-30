@@ -77,6 +77,7 @@ export const load: PageServerLoad = async ({ params, locals }) => {
     for (const chart of chartsArray) {
         if (chart.id) {
             charts[chart.id] = {
+                id: chart.id,
                 uid: chart.uid,
                 type: chart.type,
                 position: chart.position,

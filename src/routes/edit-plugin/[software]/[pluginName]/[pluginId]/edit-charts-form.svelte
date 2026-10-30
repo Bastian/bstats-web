@@ -51,6 +51,10 @@
     });
 
     let editingUid = $state<number | null>(null);
+    // Incremented after a successful save so the editor is re-created with the
+    // freshly loaded chart data instead of keeping the values it opened with.
+    let editorVersion = $state(0);
+    let savedNotice = $state(false);
 
     const editingChart = $derived(
         editingUid === null
@@ -60,6 +64,8 @@
 
     async function handleSaved() {
         await invalidateAll();
+        editorVersion += 1;
+        savedNotice = true;
     }
 
     const flipDurationMs = 200;
@@ -206,7 +212,10 @@
             {#if item.uid >= 0 && chart?.type && EDITABLE_CHART_TYPES.has(chart.type)}
                 <button
                     type="button"
-                    onclick={() => (editingUid = item.uid)}
+                    onclick={() => {
+                        savedNotice = false;
+                        editingUid = item.uid;
+                    }}
                     class="text-slate-500 hover:text-brand-600 dark:text-slate-400 dark:hover:text-brand-400"
                     title="Edit chart"
                     aria-label="Edit chart {chart.title}"
@@ -266,11 +275,19 @@
                 {editingChart.title}
                 <span class="font-mono">(id: {editingChart.id})</span>
             </p>
+            {#if savedNotice}
+                <p class="mt-2 text-sm font-semibold text-emerald-600 dark:text-emerald-400">
+                    Chart updated successfully.
+                </p>
+            {/if}
         </div>
-        {#key editingChart.uid}
+        {#key `${editingChart.uid}-${editorVersion}`}
             <EditChartForm
                 chart={editingChart}
-                onCancel={() => (editingUid = null)}
+                onCancel={() => {
+                    savedNotice = false;
+                    editingUid = null;
+                }}
                 onSaved={handleSaved}
             />
         {/key}
