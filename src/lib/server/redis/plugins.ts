@@ -120,6 +120,32 @@ export async function updatePluginCharts(pluginId: number, charts: number[]): Pr
         .hset(`plugins:${pluginId}`, 'charts', JSON.stringify(charts));
 }
 
+/**
+ * Renames a plugin and moves its URL+name lookup key.
+ *
+ * The new index is written before the old one is removed so the plugin can
+ * always be looked up, even if one of the commands fails halfway.
+ */
+export async function updatePluginName(
+    pluginId: number,
+    softwareUrl: string,
+    oldName: string,
+    newName: string
+): Promise<void> {
+    const redis = databaseManager.getRedisCluster();
+    const base = `plugins.index.id.url+name:${softwareUrl.toLowerCase()}`;
+    const oldKey = `${base}.${oldName.toLowerCase()}`;
+    const newKey = `${base}.${newName.toLowerCase()}`;
+
+    await redis.set(newKey, pluginId);
+    await redis.hset(`plugins:${pluginId}`, 'name', newName);
+
+    // A case-only rename keeps the same (lowercased) index key.
+    if (oldKey !== newKey) {
+        await redis.del(oldKey);
+    }
+}
+
 export async function deletePlugin(pluginId: number): Promise<void> {
     await databaseManager.getRedisCluster().del(`plugins:${pluginId}`);
 }
