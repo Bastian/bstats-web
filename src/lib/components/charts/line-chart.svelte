@@ -27,6 +27,7 @@
     let isMobile = $state(false);
 
     const DEFAULT_ZOOM = '1m';
+    const MIN_ZOOM_SPAN_MS = 24 * 60 * 60 * 1000;
 
     let zoom = $state<string | null>(DEFAULT_ZOOM);
     let zoomEnd = 100;
@@ -296,6 +297,7 @@
                     type: 'slider',
                     start: 0,
                     end: 100,
+                    minValueSpan: MIN_ZOOM_SPAN_MS,
                     height: 30,
                     bottom: 40,
                     textStyle: {
@@ -316,7 +318,8 @@
                 {
                     type: 'inside',
                     start: 0,
-                    end: 100
+                    end: 100,
+                    minValueSpan: MIN_ZOOM_SPAN_MS
                 }
             ],
             series: [
