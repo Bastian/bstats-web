@@ -140,10 +140,13 @@
                         </p>
                     </div>
 
-                    <RenamePluginForm
-                        schema={data.updatePluginNameSchema}
-                        currentName={data.plugin.name}
-                    />
+                    <!-- Recreate the form after a rename so it picks up the new name -->
+                    {#key data.plugin.name}
+                        <RenamePluginForm
+                            schema={data.updatePluginNameSchema}
+                            currentName={data.plugin.name}
+                        />
+                    {/key}
                 </article>
 
                 <!-- Delete Plugin Card -->
@@ -159,7 +162,10 @@
                         </p>
                     </div>
 
-                    <DeletePluginForm schema={data.deletePluginSchema} plugin={data.plugin} />
+                    <!-- The delete validator is built from the name, so recreate it after a rename -->
+                    {#key data.plugin.name}
+                        <DeletePluginForm schema={data.deletePluginSchema} plugin={data.plugin} />
+                    {/key}
                 </article>
 
                 <!-- Transfer Ownership Card (Admin Only) -->
