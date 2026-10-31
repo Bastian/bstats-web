@@ -49,11 +49,16 @@ export const updatePluginName = (async ({ request, locals, params }) => {
         return setError(form, 'name', 'A plugin with this name already exists');
     }
 
+    let renamed: boolean;
     try {
-        await renamePlugin(plugin.id, software.url, plugin.name, newName);
+        renamed = await renamePlugin(plugin.id, software.url, plugin.name, newName);
     } catch (err) {
         console.error('Error renaming plugin:', err);
         return setError(form, 'name', 'Unknown error', { status: 500 });
+    }
+
+    if (!renamed) {
+        return setError(form, 'name', 'A plugin with this name already exists');
     }
 
     throw redirect(303, `/edit-plugin/${software.url}/${encodeURIComponent(newName)}/${plugin.id}`);

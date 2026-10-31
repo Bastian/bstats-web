@@ -122,6 +122,7 @@ export async function updatePluginCharts(pluginId: number, charts: number[]): Pr
 
 /**
  * Renames a plugin and moves its URL+name lookup key.
+ * Returns false without changing anything if another plugin owns the new name.
  *
  * The new index is written before the old one is removed so the plugin can
  * always be looked up, even if one of the commands fails halfway.
@@ -131,19 +132,26 @@ export async function updatePluginName(
     softwareUrl: string,
     oldName: string,
     newName: string
-): Promise<void> {
+): Promise<boolean> {
     const redis = databaseManager.getRedisCluster();
     const base = `plugins.index.id.url+name:${softwareUrl.toLowerCase()}`;
     const oldKey = `${base}.${oldName.toLowerCase()}`;
     const newKey = `${base}.${newName.toLowerCase()}`;
 
-    await redis.set(newKey, pluginId);
+    // NX closes the race with a concurrent add or rename; a case-only rename finds its own key.
+    const created = await redis.set(newKey, pluginId, 'NX');
+    if (created === null && (await redis.get(newKey)) !== String(pluginId)) {
+        return false;
+    }
+
     await redis.hset(`plugins:${pluginId}`, 'name', newName);
 
     // A case-only rename keeps the same (lowercased) index key.
     if (oldKey !== newKey) {
         await redis.del(oldKey);
     }
+
+    return true;
 }
 
 export async function deletePlugin(pluginId: number): Promise<void> {
