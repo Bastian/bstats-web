@@ -11,11 +11,12 @@ import type { Action } from './$types';
 import { updatePluginNameSchema } from './update-plugin-name-schema';
 
 export const updatePluginName = (async ({ request, locals, params }) => {
-    if (!locals.user) {
-        return fail(401, { error: 'Not authenticated' });
-    }
-
     const form = await superValidate(request, zod4(updatePluginNameSchema));
+
+    // Errors go on the name field, since the form doesn't render anything else.
+    if (!locals.user) {
+        return setError(form, 'name', 'Not authenticated', { status: 401 });
+    }
 
     if (!form.valid) {
         return fail(400, { form });
@@ -24,11 +25,11 @@ export const updatePluginName = (async ({ request, locals, params }) => {
     const plugin = await getPluginById(parseInt(params.pluginId));
 
     if (!plugin) {
-        return fail(404, { form, error: 'Plugin not found' });
+        return setError(form, 'name', 'Plugin not found', { status: 404 });
     }
 
     if (plugin.owner?.toLowerCase() !== locals.user.username && locals.user.role !== 'admin') {
-        return fail(401, { form, error: 'You are not allowed to edit this plugin' });
+        return setError(form, 'name', 'You are not allowed to edit this plugin', { status: 401 });
     }
 
     // Use the canonical software URL from Redis instead of trusting the URL
@@ -52,7 +53,7 @@ export const updatePluginName = (async ({ request, locals, params }) => {
         await renamePlugin(plugin.id, software.url, plugin.name, newName);
     } catch (err) {
         console.error('Error renaming plugin:', err);
-        return fail(500, { form, error: 'Unknown error' });
+        return setError(form, 'name', 'Unknown error', { status: 500 });
     }
 
     throw redirect(303, `/edit-plugin/${software.url}/${encodeURIComponent(newName)}/${plugin.id}`);
