@@ -2,6 +2,7 @@
     import * as echarts from 'echarts';
     import { onMount, onDestroy } from 'svelte';
     import { getEChartsTheme } from '$lib/charts/echarts-theme';
+    import { NARROW_CHART_WIDTH } from '$lib/charts/chart-layout';
     import { Button } from 'bits-ui';
     import { accessibilityPreferences } from '$lib/stores/accessibility';
     import { isDark } from '$lib/stores/theme.svelte';
@@ -15,24 +16,25 @@
 
     let chartContainer: HTMLDivElement;
     let chartInstance: echarts.ECharts | null = null;
-    let isMobile = $state(false);
+    let containerWidth = $state(0);
+    let containerHeight = $state(0);
+
+    // Based on the space the chart actually has (not the window), so it also
+    // adapts inside narrow containers such as the add-chart preview.
+    const isMobile = $derived(containerWidth > 0 && containerWidth < NARROW_CHART_WIDTH);
 
     const DEFAULT_ZOOM = '1m';
 
     let zoom = $state<string | null>(DEFAULT_ZOOM);
 
+    // Keep the canvas in sync with the container, not just with the window.
+    $effect(() => {
+        void containerWidth;
+        void containerHeight;
+        chartInstance?.resize();
+    });
+
     onMount(() => {
-        isMobile = window.innerWidth <= 600;
-
-        const handleResize = () => {
-            isMobile = window.innerWidth <= 600;
-            if (chartInstance) {
-                chartInstance.resize();
-            }
-        };
-
-        window.addEventListener('resize', handleResize);
-
         // Initialize chart
         chartInstance = echarts.init(chartContainer);
         updateChart(accessibilityPreferences.current.showChartPatterns);
@@ -52,10 +54,6 @@
                 zoom = null;
             }
         });
-
-        return () => {
-            window.removeEventListener('resize', handleResize);
-        };
     });
 
     onDestroy(() => {
@@ -303,6 +301,12 @@
                     end: 100,
                     height: 30,
                     bottom: 40,
+                    // Short dates (e.g. 10/31/26) plus enough margin that the
+                    // labels shown beside the handles stay inside narrow charts.
+                    labelFormatter: (value: number) =>
+                        new Date(value).toLocaleDateString(undefined, { dateStyle: 'short' }),
+                    left: 64,
+                    right: 64,
                     textStyle: {
                         color: dark ? '#94a3b8' : '#64748b'
                     },
@@ -355,16 +359,17 @@
     }
 </script>
 
-{#snippet ChartButton(label: string, props?: Button.RootProps)}
+{#snippet ChartButton(label: string, onclick: () => void)}
     <Button.Root
-        {...props}
+        type="button"
+        {onclick}
         class={[
             'rounded border border-slate-200 bg-white px-2 py-1 text-xs font-medium text-slate-600 transition hover:border-brand-300 hover:bg-brand-50 hover:text-brand-700 focus-visible:ring-2 focus-visible:ring-brand-500 focus-visible:outline-none dark:border-dark-600 dark:bg-dark-700 dark:text-slate-400 dark:hover:border-brand-700 dark:hover:bg-brand-950/50 dark:hover:text-brand-400',
             {
                 'bg-brand-50! font-medium! text-brand-700! dark:bg-brand-950/50! dark:text-brand-400!':
-                    zoom === label
-            },
-            props?.class
+                    // Ranges are stored lowercase ('all'), labels are not ('All').
+                    zoom === label.toLowerCase()
+            }
         ]}
     >
         {label}
@@ -373,12 +378,17 @@
 
 <div class="p-1 sm:p-2">
     <div class="mb-2 flex flex-wrap justify-center gap-1">
-        {@render ChartButton('1d', { onclick: () => setTimeRange('1d') })}
-        {@render ChartButton('1w', { onclick: () => setTimeRange('1w') })}
-        {@render ChartButton('1m', { onclick: () => setTimeRange('1m') })}
-        {@render ChartButton('3m', { onclick: () => setTimeRange('3m') })}
-        {@render ChartButton('1y', { onclick: () => setTimeRange('1y') })}
-        {@render ChartButton('All', { onclick: () => setTimeRange('all') })}
+        {@render ChartButton('1d', () => setTimeRange('1d'))}
+        {@render ChartButton('1w', () => setTimeRange('1w'))}
+        {@render ChartButton('1m', () => setTimeRange('1m'))}
+        {@render ChartButton('3m', () => setTimeRange('3m'))}
+        {@render ChartButton('1y', () => setTimeRange('1y'))}
+        {@render ChartButton('All', () => setTimeRange('all'))}
     </div>
-    <div bind:this={chartContainer} class="-mb-8 h-96 w-full sm:-mx-4 sm:w-[calc(100%+2rem)]"></div>
+    <div
+        bind:this={chartContainer}
+        bind:clientWidth={containerWidth}
+        bind:clientHeight={containerHeight}
+        class="-mb-8 h-96 w-full"
+    ></div>
 </div>
