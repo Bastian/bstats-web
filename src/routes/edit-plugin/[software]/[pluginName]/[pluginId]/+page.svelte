@@ -6,10 +6,11 @@
     import { MetaTags } from 'svelte-meta-tags';
     import { getCanonicalUrl } from '$lib/utils/url';
     import PageHero from '$lib/components/page-hero.svelte';
+    import IconHelpCircle from '@tabler/icons-svelte/icons/help-circle';
     import type { PageData } from './$types';
     import AddChartForm from './add-chart-form.svelte';
+    import ChartList from './chart-list.svelte';
     import DeletePluginForm from './delete-plugin-form.svelte';
-    import EditChartsForm from './edit-charts-form.svelte';
     import TransferOwnershipForm from './transfer-ownership-form.svelte';
 
     let { data }: { data: PageData } = $props();
@@ -46,7 +47,7 @@
             {#snippet badge()}<Badge>Plugin</Badge>{/snippet}
             {#snippet title()}{data.plugin.name}{/snippet}
             {#snippet content()}
-                Add custom charts, reorder existing ones, or delete this plugin.
+                Rename, hide and reorder the charts on your plugin page, or add your own.
             {/snippet}
             {#snippet extra()}
                 <div class="flex flex-wrap gap-3 text-sm text-slate-500 dark:text-slate-400">
@@ -73,93 +74,65 @@
         </PageHero>
 
         <section class="doc-container mt-12 space-y-8">
-            <div class="grid gap-8 lg:grid-cols-2">
-                <!-- Add Chart Card -->
-                <article class="doc-card space-y-6">
-                    <div class="flex items-start justify-between gap-4">
-                        <div>
-                            <h2
-                                class="font-display text-xl font-semibold text-slate-900 dark:text-slate-100"
+            <div
+                class="grid grid-cols-1 items-start gap-8 lg:grid-cols-[minmax(0,5fr)_minmax(0,7fr)]"
+            >
+                <div class="space-y-8">
+                    <article class="doc-card space-y-6">
+                        <div class="flex items-start justify-between gap-4">
+                            <div>
+                                <h2 class="doc-card-title">Add custom chart</h2>
+                                <p class="mt-1 text-sm text-slate-500 dark:text-slate-400">
+                                    Show your own data, sent from your plugin's code.
+                                </p>
+                            </div>
+                            <a
+                                href={resolve('/docs/custom-charts')}
+                                class="inline-flex size-8 shrink-0 items-center justify-center rounded-full text-slate-400 transition-colors hover:bg-slate-100 hover:text-brand-700 focus-visible:ring-2 focus-visible:ring-brand-500/70 focus-visible:outline-none dark:hover:bg-dark-700 dark:hover:text-brand-400"
+                                aria-label="How custom charts work"
+                                title="How custom charts work"
                             >
-                                Add custom chart
-                            </h2>
-                            <p class="mt-1 text-sm text-slate-500 dark:text-slate-400">
-                                Create a new chart to display on your plugin page
-                            </p>
-                        </div>
-                        <a
-                            href={resolve('/docs/custom-charts')}
-                            class="inline-flex h-8 w-8 items-center justify-center rounded-full bg-blue-100 text-blue-600 transition hover:bg-blue-200 dark:bg-blue-900 dark:text-blue-400 dark:hover:bg-blue-800"
-                            title="Help with custom charts"
-                        >
-                            <svg
-                                class="h-4 w-4"
-                                fill="none"
-                                viewBox="0 0 24 24"
-                                stroke="currentColor"
-                            >
-                                <path
-                                    stroke-linecap="round"
-                                    stroke-linejoin="round"
-                                    stroke-width="2"
-                                    d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-                                />
-                            </svg>
-                        </a>
-                    </div>
-
-                    <AddChartForm schema={data.addChartSchema} />
-                </article>
-
-                <!-- Edit Charts Card -->
-                <article class="doc-card space-y-4">
-                    <div>
-                        <h2
-                            class="font-display text-xl font-semibold text-slate-900 dark:text-slate-100"
-                        >
-                            Edit charts
-                        </h2>
-                        <p class="mt-1 text-sm text-slate-500 dark:text-slate-400">
-                            Drag to reorder, click to delete
-                        </p>
-                    </div>
-                    <EditChartsForm {data} />
-                </article>
-
-                <!-- Delete Plugin Card -->
-                <article class="doc-card space-y-4">
-                    <div>
-                        <h2
-                            class="font-display text-xl font-semibold text-red-900 dark:text-red-400"
-                        >
-                            Delete plugin
-                        </h2>
-                        <p class="mt-1 text-sm text-red-600 dark:text-red-400">
-                            This action cannot be undone. All data will be permanently deleted.
-                        </p>
-                    </div>
-
-                    <DeletePluginForm schema={data.deletePluginSchema} plugin={data.plugin} />
-                </article>
-
-                <!-- Transfer Ownership Card (Admin Only) -->
-                {#if data.user?.role === 'admin'}
-                    <article class="doc-card space-y-4">
-                        <div>
-                            <h2
-                                class="font-display text-xl font-semibold text-slate-900 dark:text-slate-100"
-                            >
-                                Transfer ownership
-                            </h2>
-                            <p class="mt-1 text-sm text-slate-500 dark:text-slate-400">
-                                Move this plugin to a different user account
-                            </p>
+                                <IconHelpCircle size={20} />
+                            </a>
                         </div>
 
-                        <TransferOwnershipForm schema={data.transferOwnershipSchema} />
+                        <AddChartForm schema={data.addChartSchema} />
                     </article>
-                {/if}
+
+                    {#if data.user?.role === 'admin'}
+                        <article class="doc-card space-y-4">
+                            <div>
+                                <h2 class="doc-card-title">Transfer ownership</h2>
+                                <p class="mt-1 text-sm text-slate-500 dark:text-slate-400">
+                                    Move this plugin to a different user account
+                                </p>
+                            </div>
+
+                            <TransferOwnershipForm schema={data.transferOwnershipSchema} />
+                        </article>
+                    {/if}
+                </div>
+
+                <article class="doc-card">
+                    <ChartList {data} />
+                </article>
             </div>
+
+            <article
+                class="doc-card grid grid-cols-1 items-center gap-6 border-red-200 lg:grid-cols-[minmax(0,5fr)_minmax(0,7fr)] lg:gap-8 dark:border-red-900/60"
+            >
+                <div>
+                    <h2 class="font-display text-xl font-semibold text-red-700 dark:text-red-400">
+                        Delete plugin
+                    </h2>
+                    <p class="mt-1 max-w-prose text-sm text-slate-600 dark:text-slate-400">
+                        Permanently deletes {data.plugin.name}, its charts and all collected data.
+                        This can't be undone. To stop showing a single chart, hide it instead.
+                    </p>
+                </div>
+
+                <DeletePluginForm schema={data.deletePluginSchema} plugin={data.plugin} />
+            </article>
         </section>
     {/if}
 </main>

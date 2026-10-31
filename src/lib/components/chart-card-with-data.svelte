@@ -1,20 +1,8 @@
 <script lang="ts">
+    import ChartBody from './charts/chart-body.svelte';
     import ChartCard from './charts/chart-card.svelte';
-    import LineChart from './charts/line-chart.svelte';
-    import PieChart from './charts/pie-chart.svelte';
-    import DrilldownPieChart from './charts/drilldown-pie-chart.svelte';
-    import BarChart from './charts/bar-chart.svelte';
-    import MapChart from './charts/map-chart.svelte';
     import { fetchChartData } from '$lib/charts/chart-data';
-    import type {
-        ChartMetadata,
-        ChartData,
-        LineChartData,
-        SimplePieChartData,
-        DrilldownPieChartData,
-        BarChartData,
-        MapChartData
-    } from '$lib/charts/chart-data';
+    import type { ChartMetadata, ChartData } from '$lib/charts/chart-data';
     import IconLoader2 from '@tabler/icons-svelte/icons/loader-2';
     import IconDatabase from '@tabler/icons-svelte/icons/database';
     import IconAlertCircle from '@tabler/icons-svelte/icons/alert-circle';
@@ -77,26 +65,6 @@
         } finally {
             fullDataLoading = false;
         }
-    }
-
-    // The backend returns bar data as one entry per category
-    // (`{ name: category, data: [valuePerBar] }`), but the chart component
-    // expects series spanning all categories. Transpose: categories are the
-    // map keys, and each bar index becomes a series.
-    function toBarChart(data: BarChartData[], barLabels: string[] = []) {
-        // The backend returns categories in Redis hash order, which is
-        // effectively random. Sort them so ordered data (e.g. "00h".."23h")
-        // is displayed in a meaningful order.
-        const sorted = [...data].sort((a, b) =>
-            a.name.localeCompare(b.name, undefined, { numeric: true })
-        );
-        const categories = sorted.map((d) => d.name);
-        const barCount = sorted.reduce((max, d) => Math.max(max, d.data.length), 0);
-        const series = Array.from({ length: barCount }, (_, barIndex) => ({
-            name: barLabels[barIndex]?.trim() || `Series ${barIndex + 1}`,
-            data: sorted.map((d) => d.data[barIndex] ?? 0)
-        }));
-        return { categories, series };
     }
 
     function getColSpan(chartType: string): 'single' | 'double' {
@@ -163,37 +131,6 @@
             Loading chart data...
         </div>
     {:else if chartData}
-        {#if chart.type === 'simple_pie' || chart.type === 'advanced_pie'}
-            <PieChart data={chartData as SimplePieChartData[]} />
-        {:else if chart.type === 'drilldown_pie'}
-            <DrilldownPieChart data={chartData as DrilldownPieChartData} />
-        {:else if chart.type === 'single_linechart'}
-            <LineChart
-                data={chartData as LineChartData}
-                lineName={chart.data?.lineName as string | undefined}
-            />
-        {:else if chart.type === 'simple_bar' || chart.type === 'advanced_bar'}
-            {#if (chartData as BarChartData[]).length === 0}
-                <div class="flex h-72 items-center justify-center text-slate-500">
-                    No data available yet
-                </div>
-            {:else}
-                {@const bars = toBarChart(
-                    chartData as BarChartData[],
-                    (chart.data?.barLabels as string[] | undefined) ?? []
-                )}
-                <BarChart
-                    data={bars.series}
-                    categories={bars.categories}
-                    valueName={chart.data?.valueName as string | undefined}
-                    orientation={chart.data?.orientation as 'horizontal' | 'vertical' | undefined}
-                />
-            {/if}
-        {:else if chart.type === 'simple_map' || chart.type === 'advanced_map'}
-            <MapChart
-                data={chartData as MapChartData[]}
-                valueName={chart.data?.valueName as string | undefined}
-            />
-        {/if}
+        <ChartBody {chart} data={chartData} />
     {/if}
 </ChartCard>

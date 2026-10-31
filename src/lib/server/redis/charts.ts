@@ -8,6 +8,8 @@ export interface Chart {
     position: number;
     title: string;
     default: boolean;
+    /** Hidden charts keep collecting data but are not shown on the plugin page. */
+    hidden: boolean;
     data: unknown;
 }
 
@@ -18,7 +20,7 @@ export interface DrilldownPieData {
 
 type ChartField = keyof Omit<Chart, 'uid'>;
 
-const CHART_FIELDS: ChartField[] = ['id', 'type', 'position', 'title', 'default', 'data'];
+const CHART_FIELDS: ChartField[] = ['id', 'type', 'position', 'title', 'default', 'hidden', 'data'];
 
 export async function getChartByUid(uid: number): Promise<Chart | null> {
     const res = await databaseManager.getRedisCluster().hmget(`charts:${uid}`, ...CHART_FIELDS);
@@ -38,6 +40,7 @@ export async function getChartByUid(uid: number): Promise<Chart | null> {
                 result[field] = value ? JSON.parse(value) : null;
                 break;
             case 'default':
+            case 'hidden':
                 result[field] = value !== null;
                 break;
             case 'position':
@@ -139,6 +142,47 @@ export async function deleteChart(chartUid: number): Promise<void> {
 
 export async function updateChartPosition(chartUid: number, position: number): Promise<void> {
     await databaseManager.getRedisCluster().hset(`charts:${chartUid}`, 'position', position);
+}
+
+export async function updateChartTitle(chartUid: number, title: string): Promise<void> {
+    await databaseManager.getRedisCluster().hset(`charts:${chartUid}`, 'title', title);
+}
+
+/**
+ * Changes the id a chart is addressed by. Data is stored by uid, so history is
+ * kept. Returns false if another chart of the plugin already uses `newId`.
+ */
+export async function updateChartId(
+    pluginId: number,
+    chartUid: number,
+    oldId: string,
+    newId: string
+): Promise<boolean> {
+    const redis = databaseManager.getRedisCluster();
+
+    // Claim the new id first (NX), so two charts can never end up sharing it.
+    const claimed = await redis.set(
+        `charts.index.uid.pluginId+chartId:${pluginId}.${newId}`,
+        chartUid,
+        'NX'
+    );
+    if (claimed === null) {
+        return false;
+    }
+
+    await redis.hset(`charts:${chartUid}`, 'id', newId);
+    await redis.del(`charts.index.uid.pluginId+chartId:${pluginId}.${oldId}`);
+    return true;
+}
+
+// Stored like the "default" flag: the field exists only when the chart is hidden.
+export async function setChartHidden(chartUid: number, hidden: boolean): Promise<void> {
+    const redis = databaseManager.getRedisCluster();
+    if (hidden) {
+        await redis.hset(`charts:${chartUid}`, 'hidden', '1');
+    } else {
+        await redis.hdel(`charts:${chartUid}`, 'hidden');
+    }
 }
 
 export async function deleteChartIndex(pluginId: number, chartId: string): Promise<void> {

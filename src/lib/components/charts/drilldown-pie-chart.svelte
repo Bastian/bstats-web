@@ -2,6 +2,7 @@
     import * as echarts from 'echarts';
     import { onMount, onDestroy } from 'svelte';
     import { getEChartsTheme } from '$lib/charts/echarts-theme';
+    import { NARROW_CHART_WIDTH } from '$lib/charts/chart-layout';
     import {
         groupSmallItemsIntoOther,
         groupSmallDrilldownItemsIntoOther
@@ -20,21 +21,22 @@
 
     let chartContainer: HTMLDivElement;
     let chartInstance: echarts.ECharts | null = null;
-    let isMobile = $state(false);
     let currentDrilldown = $state<string | null>(null);
+    let containerWidth = $state(0);
+    let containerHeight = $state(0);
+
+    // Based on the space the chart actually has (not the window), so it also
+    // adapts inside narrow containers such as the add-chart preview.
+    const isMobile = $derived(containerWidth > 0 && containerWidth < NARROW_CHART_WIDTH);
+
+    // Keep the canvas in sync with the container, not just with the window.
+    $effect(() => {
+        void containerWidth;
+        void containerHeight;
+        chartInstance?.resize();
+    });
 
     onMount(() => {
-        isMobile = window.innerWidth <= 600;
-
-        const handleResize = () => {
-            isMobile = window.innerWidth <= 600;
-            if (chartInstance) {
-                chartInstance.resize();
-            }
-        };
-
-        window.addEventListener('resize', handleResize);
-
         // Initialize chart
         chartInstance = echarts.init(chartContainer);
         updateChart(accessibilityPreferences.current.showChartPatterns);
@@ -54,10 +56,6 @@
                 updateChart(accessibilityPreferences.current.showChartPatterns);
             }
         });
-
-        return () => {
-            window.removeEventListener('resize', handleResize);
-        };
     });
 
     onDestroy(() => {
@@ -223,10 +221,16 @@
     }
 </script>
 
-<div class="relative -mx-[1rem] h-80 w-[calc(100%+2rem)] sm:h-72">
-    <div bind:this={chartContainer} class="h-full w-full"></div>
+<div class="relative h-80 w-full sm:h-72">
+    <div
+        bind:this={chartContainer}
+        bind:clientWidth={containerWidth}
+        bind:clientHeight={containerHeight}
+        class="h-full w-full"
+    ></div>
     {#if currentDrilldown}
         <button
+            type="button"
             onclick={goBack}
             class="absolute top-2 left-6 rounded-lg border border-slate-200 bg-white px-3 py-1.5 text-sm font-semibold text-slate-600 shadow-sm transition hover:border-brand-300 hover:text-brand-700 dark:border-dark-600 dark:bg-dark-700 dark:text-slate-400 dark:hover:border-dark-500 dark:hover:text-slate-200"
         >

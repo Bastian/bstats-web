@@ -40,6 +40,7 @@
             {@render additionalButtons?.()}
             {#if supportsPatterns}
                 <button
+                    type="button"
                     onclick={() => {
                         accessibilityPreferences.current = {
                             ...accessibilityPreferences.current,

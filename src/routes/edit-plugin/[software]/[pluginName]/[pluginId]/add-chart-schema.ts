@@ -1,20 +1,26 @@
 import { z } from 'zod';
 
+// Shared by the add-chart form and inline chart renaming.
+export const chartTitleSchema = z
+    .string()
+    .trim()
+    .nonempty('Must not be empty')
+    .max(50)
+    .regex(/^(?!.*\s{2,})/, 'Must not contain double spaces')
+    .regex(/^[-_a-zA-Z0-9 ]*$/, 'Can only contain letters, numbers, dashes and underscores');
+
+// Shared by the add-chart form and changing a custom chart's id.
+export const chartIdSchema = z
+    .string()
+    .trim()
+    .nonempty('Must not be empty')
+    .max(50)
+    .regex(/^\S*$/, 'Must not contain spaces')
+    .regex(/^[a-zA-Z0-9_ ]*$/, 'Can only contain letters, numbers, and underscores');
+
 const common = {
-    chartId: z
-        .string()
-        .trim()
-        .nonempty('Must not be empty')
-        .max(50)
-        .regex(/^\S*$/, 'Must not contain spaces')
-        .regex(/^[a-zA-Z0-9_ ]*$/, 'Can only contain letters, numbers, and underscores'),
-    chartTitle: z
-        .string()
-        .trim()
-        .nonempty('Must not be empty')
-        .max(50)
-        .regex(/^(?!.*\s{2,})/, 'Must not contain double spaces')
-        .regex(/^[-_a-zA-Z0-9 ]*$/, 'Can only contain letters, numbers, dashes and underscores'),
+    chartId: chartIdSchema,
+    chartTitle: chartTitleSchema,
     filterEnabled: z.boolean().default(false)
 };
 

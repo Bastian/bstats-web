@@ -26,5 +26,5 @@
         bind:value={$formData.pluginName}
     />
 
-    <Button type="submit" fullWidth>Delete plugin</Button>
+    <Button type="submit" variant="danger" fullWidth>Delete plugin</Button>
 </form>

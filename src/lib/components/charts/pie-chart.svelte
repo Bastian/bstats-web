@@ -2,6 +2,7 @@
     import * as echarts from 'echarts';
     import { onMount, onDestroy } from 'svelte';
     import { getEChartsTheme } from '$lib/charts/echarts-theme';
+    import { NARROW_CHART_WIDTH } from '$lib/charts/chart-layout';
     import { groupSmallItemsIntoOther } from '$lib/charts/chart-data';
     import { accessibilityPreferences } from '$lib/stores/accessibility';
     import { isDark } from '$lib/stores/theme.svelte';
@@ -14,28 +15,23 @@
 
     let chartContainer: HTMLDivElement;
     let chartInstance: echarts.ECharts | null = null;
-    let isMobile = $state(false);
+    let containerWidth = $state(0);
+    let containerHeight = $state(0);
 
-    // Detect mobile on mount and window resize
+    // Based on the space the chart actually has (not the window), so it also
+    // adapts inside narrow containers such as the add-chart preview.
+    const isMobile = $derived(containerWidth > 0 && containerWidth < NARROW_CHART_WIDTH);
+
     onMount(() => {
-        isMobile = window.innerWidth <= 600;
-
-        const handleResize = () => {
-            isMobile = window.innerWidth <= 600;
-            if (chartInstance) {
-                chartInstance.resize();
-            }
-        };
-
-        window.addEventListener('resize', handleResize);
-
-        // Initialize chart
         chartInstance = echarts.init(chartContainer);
         updateChart(accessibilityPreferences.current.showChartPatterns);
+    });
 
-        return () => {
-            window.removeEventListener('resize', handleResize);
-        };
+    // Keep the canvas in sync with the container, not just with the window.
+    $effect(() => {
+        void containerWidth;
+        void containerHeight;
+        chartInstance?.resize();
     });
 
     onDestroy(() => {
@@ -161,4 +157,9 @@
     }
 </script>
 
-<div bind:this={chartContainer} class="-mx-[1rem] h-80 w-[calc(100%+2rem)] sm:h-72"></div>
+<div
+    bind:this={chartContainer}
+    bind:clientWidth={containerWidth}
+    bind:clientHeight={containerHeight}
+    class="h-80 w-full sm:h-72"
+></div>

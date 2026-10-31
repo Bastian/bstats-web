@@ -55,6 +55,8 @@ export function getEChartsTheme(dark = false) {
 
         // Tooltip (dark palette for surface)
         tooltip: {
+            // Keep tooltips inside the chart; chart cards clip overflowing content.
+            confine: true,
             backgroundColor: dark ? 'rgba(15, 17, 26, 0.96)' : 'rgba(255, 255, 255, 0.96)', // dark-900
             borderWidth: 0,
             textStyle: {
