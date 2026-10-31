@@ -17,6 +17,7 @@ import { addChart } from './add-chart-action';
 import { addChartSchema } from './add-chart-schema';
 import { deletePlugin } from './delete-plugin-action';
 import { deletePluginSchema } from './delete-plugin-schema';
+import { editChart } from './edit-chart-action';
 import { transferOwnership } from './transfer-ownership-action';
 import { transferOwnershipSchema } from './transfer-ownership-schema';
 
@@ -74,6 +75,7 @@ export const load: PageServerLoad = async ({ params, locals }) => {
     for (const chart of chartsArray) {
         if (chart.id) {
             charts[chart.id] = {
+                id: chart.id,
                 uid: chart.uid,
                 type: chart.type,
                 position: chart.position,
@@ -98,6 +100,7 @@ export const load: PageServerLoad = async ({ params, locals }) => {
 
 export const actions = {
     addChart,
+    editChart,
 
     deleteChart: async ({ request, locals, params }) => {
         if (!locals.user) {

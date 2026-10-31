@@ -46,7 +46,7 @@
             {#snippet badge()}<Badge>Plugin</Badge>{/snippet}
             {#snippet title()}{data.plugin.name}{/snippet}
             {#snippet content()}
-                Add custom charts, reorder existing ones, or delete this plugin.
+                Add or edit charts, reorder existing ones, or delete this plugin.
             {/snippet}
             {#snippet extra()}
                 <div class="flex flex-wrap gap-3 text-sm text-slate-500 dark:text-slate-400">
@@ -120,7 +120,7 @@
                             Edit charts
                         </h2>
                         <p class="mt-1 text-sm text-slate-500 dark:text-slate-400">
-                            Drag to reorder, click to delete
+                            Drag to reorder, click the pencil to edit, or click the bin to delete
                         </p>
                     </div>
                     <EditChartsForm {data} />
