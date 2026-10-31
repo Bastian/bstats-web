@@ -1,6 +1,6 @@
 <script lang="ts">
     import * as echarts from 'echarts';
-    import { onMount, onDestroy } from 'svelte';
+    import { onMount, onDestroy, untrack } from 'svelte';
     import { getEChartsTheme } from '$lib/charts/echarts-theme';
     import { Button } from 'bits-ui';
     import { accessibilityPreferences } from '$lib/stores/accessibility';
@@ -9,6 +9,7 @@
     interface Props {
         data: [number, number][]; // [timestamp, value][]
         lineName?: string;
+        onShowAll?: () => void;
     }
 
     interface DataZoomRange {
@@ -20,7 +21,7 @@
         batch?: DataZoomRange[];
     }
 
-    let { data, lineName = 'Value' }: Props = $props();
+    let { data, lineName = 'Value', onShowAll }: Props = $props();
 
     let chartContainer: HTMLDivElement;
     let chartInstance: echarts.ECharts | null = null;
@@ -74,7 +75,8 @@
         void isDark.current;
         if (chartInstance && data) {
             updateChart(accessibilityPreferences.current.showChartPatterns);
-            setTimeRange(DEFAULT_ZOOM);
+            // Stay on "All" when the full history arrives
+            setTimeRange(untrack(() => zoom) === 'all' ? 'all' : DEFAULT_ZOOM);
         }
     });
 
@@ -361,7 +363,7 @@
             'rounded border border-slate-200 bg-white px-2 py-1 text-xs font-medium text-slate-600 transition hover:border-brand-300 hover:bg-brand-50 hover:text-brand-700 focus-visible:ring-2 focus-visible:ring-brand-500 focus-visible:outline-none dark:border-dark-600 dark:bg-dark-700 dark:text-slate-400 dark:hover:border-brand-700 dark:hover:bg-brand-950/50 dark:hover:text-brand-400',
             {
                 'bg-brand-50! font-medium! text-brand-700! dark:bg-brand-950/50! dark:text-brand-400!':
-                    zoom === label
+                    zoom === label.toLowerCase()
             },
             props?.class
         ]}
@@ -377,7 +379,12 @@
         {@render ChartButton('1m', { onclick: () => setTimeRange('1m') })}
         {@render ChartButton('3m', { onclick: () => setTimeRange('3m') })}
         {@render ChartButton('1y', { onclick: () => setTimeRange('1y') })}
-        {@render ChartButton('All', { onclick: () => setTimeRange('all') })}
+        {@render ChartButton('All', {
+            onclick: () => {
+                setTimeRange('all');
+                onShowAll?.();
+            }
+        })}
     </div>
     <div bind:this={chartContainer} class="-mb-8 h-96 w-full sm:-mx-4 sm:w-[calc(100%+2rem)]"></div>
 </div>
