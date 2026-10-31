@@ -69,7 +69,8 @@ export const load: PageServerLoad = async ({ params, locals, fetch }) => {
     const charts = await getChartsByPluginId(plugin.id);
     const chartMetadata =
         charts
-            ?.map((chart) => ({
+            ?.filter((chart) => !chart.hidden)
+            .map((chart) => ({
                 uid: chart.uid,
                 id: chart.id,
                 type: chart.type,

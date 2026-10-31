@@ -6,6 +6,7 @@
     import { zod4Client } from 'sveltekit-superforms/adapters';
     import type { PageData } from './$types';
     import { addChartSchema } from './add-chart-schema';
+    import ChartPreview from './chart-preview.svelte';
     import Button from '$lib/components/button.svelte';
     import { dndzone } from 'svelte-dnd-action';
     import { flip } from 'svelte/animate';
@@ -25,6 +26,16 @@
     // a number; narrow to a per-index lookup (`_errors` holds array-level errors).
     const barLabelErrors = $derived(
         $errors.barLabels as ({ _errors?: string[] } & Record<number, string[]>) | undefined
+    );
+
+    // Type-specific fields only exist on some variants of the chart type union.
+    const previewFields = $derived(
+        $formData as {
+            lineName?: string;
+            valueName?: string;
+            orientation?: 'horizontal' | 'vertical';
+            barLabels?: string[];
+        }
     );
 
     const flipDurationMs = 150;
@@ -65,6 +76,14 @@
 </script>
 
 <form class="space-y-5" method="POST" action="?/addChart" use:enhance>
+    <ChartPreview
+        chartType={$formData.chartType}
+        chartTitle={$formData.chartTitle}
+        lineName={previewFields.lineName}
+        valueName={previewFields.valueName}
+        orientation={previewFields.orientation}
+        barLabels={previewFields.barLabels}
+    />
     <div>
         <!-- TODO Extract in component and check https://formsnap.dev/docs/recipes/bits-ui-select for how to do this properly and accessible -->
         <Field {form} name="chartType">

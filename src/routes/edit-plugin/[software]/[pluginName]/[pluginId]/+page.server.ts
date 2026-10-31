@@ -6,15 +6,18 @@ import {
     getChartByUid,
     getChartsByPluginId,
     removeChartFromUids,
-    updateChartPosition
+    setChartHidden,
+    updateChartId,
+    updateChartPosition,
+    updateChartTitle
 } from '$lib/server/redis/charts.js';
-import { getPluginById, updatePluginCharts } from '$lib/server/redis/plugins.js';
-import { error, fail, redirect } from '@sveltejs/kit';
+import { getPluginById, updatePluginCharts, type Plugin } from '$lib/server/redis/plugins.js';
+import { error, fail, redirect, type ActionFailure } from '@sveltejs/kit';
 import { superValidate } from 'sveltekit-superforms';
 import { zod4 } from 'sveltekit-superforms/adapters';
 import type { Actions, PageServerLoad } from './$types';
 import { addChart } from './add-chart-action';
-import { addChartSchema } from './add-chart-schema';
+import { addChartSchema, chartIdSchema, chartTitleSchema } from './add-chart-schema';
 import { deletePlugin } from './delete-plugin-action';
 import { deletePluginSchema } from './delete-plugin-schema';
 import { transferOwnership } from './transfer-ownership-action';
@@ -27,7 +30,30 @@ interface ChartInfo {
     position?: number;
     title?: string;
     isDefault?: boolean;
+    hidden?: boolean;
     data?: Record<string, unknown>;
+}
+
+type EditablePlugin =
+    | { plugin: Plugin; failure?: never }
+    | { plugin?: never; failure: ActionFailure<{ error: string }> };
+
+async function loadEditablePlugin(locals: App.Locals, pluginId: string): Promise<EditablePlugin> {
+    if (!locals.user) {
+        return { failure: fail(401, { error: 'Not authenticated' }) };
+    }
+
+    const plugin = await getPluginById(parseInt(pluginId));
+
+    if (!plugin) {
+        return { failure: fail(404, { error: 'Plugin not found' }) };
+    }
+
+    if (plugin.owner?.toLowerCase() !== locals.user.username && locals.user.role !== 'admin') {
+        return { failure: fail(401, { error: 'You are not allowed to edit this plugin' }) };
+    }
+
+    return { plugin };
 }
 
 export const load: PageServerLoad = async ({ params, locals }) => {
@@ -64,6 +90,7 @@ export const load: PageServerLoad = async ({ params, locals }) => {
                 position: chart?.position,
                 title: chart?.title,
                 isDefault: chart?.default,
+                hidden: chart?.hidden,
                 data: chart?.data
             };
         })
@@ -79,6 +106,7 @@ export const load: PageServerLoad = async ({ params, locals }) => {
                 position: chart.position,
                 title: chart.title,
                 isDefault: chart.isDefault,
+                hidden: chart.hidden,
                 data: chart.data as Record<string, unknown> | undefined
             };
         }
@@ -100,26 +128,15 @@ export const actions = {
     addChart,
 
     deleteChart: async ({ request, locals, params }) => {
-        if (!locals.user) {
-            return fail(401, { error: 'Not authenticated' });
-        }
-
         const { pluginId } = params;
+        const { plugin, failure } = await loadEditablePlugin(locals, pluginId);
+        if (failure) return failure;
+
         const formData = await request.formData();
         const chartId = formData.get('chartId')?.toString();
 
         if (!chartId) {
             return fail(400, { error: 'Missing or invalid chart id' });
-        }
-
-        const plugin = await getPluginById(parseInt(pluginId));
-
-        if (!plugin) {
-            return fail(404, { error: 'Plugin not found' });
-        }
-
-        if (plugin.owner?.toLowerCase() !== locals.user.username && locals.user.role !== 'admin') {
-            return fail(401, { error: 'You are not allowed to edit this plugin' });
         }
 
         const chart = await getChartByPluginIdAndChartId(parseInt(pluginId), chartId);
@@ -164,27 +181,16 @@ export const actions = {
     },
 
     reorderCharts: async ({ request, locals, params }) => {
-        if (!locals.user) {
-            return fail(401, { error: 'Not authenticated' });
-        }
-
         const { pluginId } = params;
+        const { failure } = await loadEditablePlugin(locals, pluginId);
+        if (failure) return failure;
+
         const formData = await request.formData();
         const oldIndex = parseInt(formData.get('oldIndex')?.toString() || '');
         const newIndex = parseInt(formData.get('newIndex')?.toString() || '');
 
         if (isNaN(oldIndex) || isNaN(newIndex)) {
             return fail(400, { error: 'Invalid arguments' });
-        }
-
-        const plugin = await getPluginById(parseInt(pluginId));
-
-        if (!plugin) {
-            return fail(404, { error: 'Plugin not found' });
-        }
-
-        if (plugin.owner?.toLowerCase() !== locals.user.username && locals.user.role !== 'admin') {
-            return fail(401, { error: 'You are not allowed to edit this plugin' });
         }
 
         const charts = (await getChartsByPluginId(parseInt(pluginId))) || [];
@@ -204,6 +210,100 @@ export const actions = {
                 await updateChartPosition(chart.uid!, newIndex);
             }
         }
+
+        return { success: true };
+    },
+
+    // Only the display title changes; the chart id used by the Metrics class stays fixed.
+    renameChart: async ({ request, locals, params }) => {
+        const { pluginId } = params;
+        const { failure } = await loadEditablePlugin(locals, pluginId);
+        if (failure) return failure;
+
+        const formData = await request.formData();
+        const chartId = formData.get('chartId')?.toString();
+        const title = chartTitleSchema.safeParse(formData.get('title')?.toString() ?? '');
+
+        if (!chartId) {
+            return fail(400, { error: 'Missing or invalid chart id' });
+        }
+
+        if (!title.success) {
+            return fail(400, { error: title.error.issues[0].message });
+        }
+
+        const chart = await getChartByPluginIdAndChartId(parseInt(pluginId), chartId);
+
+        if (!chart) {
+            return fail(404, { error: 'Unknown chart!' });
+        }
+
+        await updateChartTitle(chart.uid, title.data);
+
+        return { success: true, title: title.data };
+    },
+
+    // Custom charts only: default chart ids are fixed by the software's Metrics class.
+    changeChartId: async ({ request, locals, params }) => {
+        const { pluginId } = params;
+        const { failure } = await loadEditablePlugin(locals, pluginId);
+        if (failure) return failure;
+
+        const formData = await request.formData();
+        const chartId = formData.get('chartId')?.toString();
+        const newId = chartIdSchema.safeParse(formData.get('newId')?.toString() ?? '');
+
+        if (!chartId) {
+            return fail(400, { error: 'Missing or invalid chart id' });
+        }
+
+        if (!newId.success) {
+            return fail(400, { error: newId.error.issues[0].message });
+        }
+
+        const chart = await getChartByPluginIdAndChartId(parseInt(pluginId), chartId);
+
+        if (!chart) {
+            return fail(404, { error: 'Unknown chart!' });
+        }
+
+        if (chart.default) {
+            return fail(403, { error: "Default chart IDs can't be changed" });
+        }
+
+        if (newId.data === chart.id) {
+            return { success: true, id: chart.id };
+        }
+
+        const changed = await updateChartId(parseInt(pluginId), chart.uid, chart.id, newId.data);
+
+        if (!changed) {
+            return fail(400, { error: 'Another chart already uses this ID' });
+        }
+
+        return { success: true, id: newId.data };
+    },
+
+    setChartVisibility: async ({ request, locals, params }) => {
+        const { pluginId } = params;
+        const { failure } = await loadEditablePlugin(locals, pluginId);
+        if (failure) return failure;
+
+        const formData = await request.formData();
+        const chartId = formData.get('chartId')?.toString();
+        const hidden = formData.get('hidden')?.toString();
+
+        if (!chartId || (hidden !== 'true' && hidden !== 'false')) {
+            return fail(400, { error: 'Invalid arguments' });
+        }
+
+        const chart = await getChartByPluginIdAndChartId(parseInt(pluginId), chartId);
+
+        if (!chart) {
+            return fail(404, { error: 'Unknown chart!' });
+        }
+
+        await setChartHidden(chart.uid, hidden === 'true');
 
         return { success: true };
     },
