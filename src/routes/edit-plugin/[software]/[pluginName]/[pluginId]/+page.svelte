@@ -10,6 +10,7 @@
     import AddChartForm from './add-chart-form.svelte';
     import DeletePluginForm from './delete-plugin-form.svelte';
     import EditChartsForm from './edit-charts-form.svelte';
+    import RenamePluginForm from './rename-plugin-form.svelte';
     import TransferOwnershipForm from './transfer-ownership-form.svelte';
 
     let { data }: { data: PageData } = $props();
@@ -46,7 +47,7 @@
             {#snippet badge()}<Badge>Plugin</Badge>{/snippet}
             {#snippet title()}{data.plugin.name}{/snippet}
             {#snippet content()}
-                Add custom charts, reorder existing ones, or delete this plugin.
+                Add custom charts, reorder existing ones, rename your plugin, or delete it.
             {/snippet}
             {#snippet extra()}
                 <div class="flex flex-wrap gap-3 text-sm text-slate-500 dark:text-slate-400">
@@ -126,6 +127,28 @@
                     <EditChartsForm {data} />
                 </article>
 
+                <!-- Rename Plugin Card -->
+                <article class="doc-card space-y-4">
+                    <div>
+                        <h2
+                            class="font-display text-xl font-semibold text-slate-900 dark:text-slate-100"
+                        >
+                            Rename plugin
+                        </h2>
+                        <p class="mt-1 text-sm text-slate-500 dark:text-slate-400">
+                            Change the name shown on bStats and in the public URL
+                        </p>
+                    </div>
+
+                    <!-- Recreate the form after a rename so it picks up the new name -->
+                    {#key data.plugin.name}
+                        <RenamePluginForm
+                            schema={data.updatePluginNameSchema}
+                            currentName={data.plugin.name}
+                        />
+                    {/key}
+                </article>
+
                 <!-- Delete Plugin Card -->
                 <article class="doc-card space-y-4">
                     <div>
@@ -139,7 +162,10 @@
                         </p>
                     </div>
 
-                    <DeletePluginForm schema={data.deletePluginSchema} plugin={data.plugin} />
+                    <!-- The delete validator is built from the name, so recreate it after a rename -->
+                    {#key data.plugin.name}
+                        <DeletePluginForm schema={data.deletePluginSchema} plugin={data.plugin} />
+                    {/key}
                 </article>
 
                 <!-- Transfer Ownership Card (Admin Only) -->
