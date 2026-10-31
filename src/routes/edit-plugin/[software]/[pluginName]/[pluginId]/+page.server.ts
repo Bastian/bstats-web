@@ -93,7 +93,11 @@ export const load: PageServerLoad = async ({ params, locals }) => {
         charts,
         softwareUrl,
         addChartSchema: await superValidate(zod4(addChartSchema)),
-        updatePluginNameSchema: await superValidate(zod4(updatePluginNameSchema)),
+        updatePluginNameSchema: await superValidate(
+            { name: plugin.name },
+            zod4(updatePluginNameSchema),
+            { errors: false }
+        ),
         deletePluginSchema: await superValidate(zod4(deletePluginSchema(plugin.name))),
         transferOwnershipSchema: await superValidate(zod4(transferOwnershipSchema))
     };

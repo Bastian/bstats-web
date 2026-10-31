@@ -11,12 +11,9 @@
         currentName
     }: { schema: PageData['updatePluginNameSchema']; currentName: string } = $props();
 
-    const form = superForm(
-        { ...schema, data: { ...schema.data, name: currentName } },
-        {
-            validators: zod4Client(updatePluginNameSchema)
-        }
-    );
+    const form = superForm(schema, {
+        validators: zod4Client(updatePluginNameSchema)
+    });
 
     const { form: formData, enhance, message } = form;
 </script>
