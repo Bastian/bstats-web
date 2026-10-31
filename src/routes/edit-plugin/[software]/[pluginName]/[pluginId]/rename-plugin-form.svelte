@@ -34,8 +34,8 @@
     <p
         class="rounded-lg border border-amber-200 bg-amber-50 px-3 py-2 text-xs text-amber-800 dark:border-amber-900/50 dark:bg-amber-950/40 dark:text-amber-200"
     >
-        Renaming changes the public URL. Links that include the plugin ID redirect automatically,
-        but older links without the ID may stop working.
+        Plugins with a Metrics class older than 1.7 (2020) send the old name, so their data will no
+        longer be recorded.
     </p>
 
     {#if $message}
