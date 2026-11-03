@@ -1,38 +1,42 @@
-import type { z } from 'zod';
-import type { addChartSchema } from './add-chart-schema';
-
-type ChartFormData = z.infer<typeof addChartSchema>;
+import type { ChartFormData } from './add-chart-schema';
 
 /**
  * Converts validated form fields into the `data` object stored on a chart.
  *
  * Used by both chart creation and chart editing so the two flows always write
- * the same shape to Redis.
+ * the same shape to Redis. Filters live in a nested `filter` object, the format
+ * of the default charts and the only one the data processor reads.
  */
 export function buildChartData(data: ChartFormData): Record<string, unknown> {
     switch (data.chartType) {
         case 'simple_pie':
             return {
-                enabled: data.filterEnabled,
-                useRegex: data.regexEnabled,
-                blacklist: data.blacklistEnabled,
-                filter: data.filter
+                filter: {
+                    enabled: data.filterEnabled,
+                    useRegex: data.regexEnabled,
+                    blacklist: data.blacklistEnabled,
+                    filter: data.filter
+                }
             };
         case 'advanced_pie':
         case 'drilldown_pie':
             return {
-                enabled: data.filterEnabled,
-                maxValue: data.maxValue,
-                useRegex: data.regexEnabled,
-                blacklist: data.blacklistEnabled,
-                filter: data.filter
+                filter: {
+                    enabled: data.filterEnabled,
+                    useRegex: data.regexEnabled,
+                    blacklist: data.blacklistEnabled,
+                    filter: data.filter,
+                    maxValue: data.maxValue
+                }
             };
         case 'single_linechart':
             return {
                 lineName: data.lineName,
-                enabled: data.filterEnabled,
-                minValue: data.minValue,
-                maxValue: data.maxValue
+                filter: {
+                    enabled: data.filterEnabled,
+                    minValue: data.minValue,
+                    maxValue: data.maxValue
+                }
             };
         case 'simple_bar':
             return {

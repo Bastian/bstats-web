@@ -5,13 +5,17 @@ export interface EditableChart {
     id?: string;
     type?: string;
     title?: string;
-    data?: Record<string, unknown>;
+    data?: unknown;
 }
 
 function asStringArray(value: unknown): string[] {
     return Array.isArray(value)
         ? value.filter((entry): entry is string => typeof entry === 'string')
         : [];
+}
+
+function isRecord(value: unknown): value is Record<string, unknown> {
+    return typeof value === 'object' && value !== null && !Array.isArray(value);
 }
 
 /**
@@ -21,12 +25,14 @@ function asStringArray(value: unknown): string[] {
  * form uses, so old charts can be opened and saved without losing data.
  */
 export function chartToFormData(chart: EditableChart): EditChartData {
-    const data = chart.data ?? {};
+    const data = isRecord(chart.data) ? chart.data : {};
+    // Filters are nested in `filter`, but older versions of the add form stored them flat
+    const filter = isRecord(data.filter) ? data.filter : data;
     const common = {
         chartUid: chart.uid ?? 0,
         chartId: chart.id ?? '',
         chartTitle: chart.title ?? '',
-        filterEnabled: Boolean(data.enabled)
+        filterEnabled: Boolean(filter.enabled)
     };
     const orientation = data.orientation === 'vertical' ? 'vertical' : 'horizontal';
     const valueName = typeof data.valueName === 'string' ? data.valueName : '';
@@ -36,35 +42,35 @@ export function chartToFormData(chart: EditableChart): EditChartData {
             return {
                 ...common,
                 chartType: 'simple_pie',
-                blacklistEnabled: Boolean(data.blacklist),
-                regexEnabled: Boolean(data.useRegex),
-                filter: asStringArray(data.filter)
+                blacklistEnabled: Boolean(filter.blacklist),
+                regexEnabled: Boolean(filter.useRegex),
+                filter: asStringArray(filter.filter)
             };
         case 'advanced_pie':
             return {
                 ...common,
                 chartType: 'advanced_pie',
-                blacklistEnabled: Boolean(data.blacklist),
-                regexEnabled: Boolean(data.useRegex),
-                maxValue: typeof data.maxValue === 'number' ? data.maxValue : undefined,
-                filter: asStringArray(data.filter)
+                blacklistEnabled: Boolean(filter.blacklist),
+                regexEnabled: Boolean(filter.useRegex),
+                maxValue: typeof filter.maxValue === 'number' ? filter.maxValue : undefined,
+                filter: asStringArray(filter.filter)
             };
         case 'drilldown_pie':
             return {
                 ...common,
                 chartType: 'drilldown_pie',
-                blacklistEnabled: Boolean(data.blacklist),
-                regexEnabled: Boolean(data.useRegex),
-                maxValue: typeof data.maxValue === 'number' ? data.maxValue : undefined,
-                filter: asStringArray(data.filter)
+                blacklistEnabled: Boolean(filter.blacklist),
+                regexEnabled: Boolean(filter.useRegex),
+                maxValue: typeof filter.maxValue === 'number' ? filter.maxValue : undefined,
+                filter: asStringArray(filter.filter)
             };
         case 'single_linechart':
             return {
                 ...common,
                 chartType: 'single_linechart',
                 lineName: typeof data.lineName === 'string' ? data.lineName : (chart.title ?? ''),
-                minValue: typeof data.minValue === 'number' ? data.minValue : 0,
-                maxValue: typeof data.maxValue === 'number' ? data.maxValue : 1000
+                minValue: typeof filter.minValue === 'number' ? filter.minValue : 0,
+                maxValue: typeof filter.maxValue === 'number' ? filter.maxValue : 1000
             };
         case 'simple_bar':
             return {
