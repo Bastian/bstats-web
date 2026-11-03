@@ -18,6 +18,11 @@ function isRecord(value: unknown): value is Record<string, unknown> {
     return typeof value === 'object' && value !== null && !Array.isArray(value);
 }
 
+// A stored null means "no bound" to the data processor, so it must survive
+function asBound(value: unknown, fallback: number): number | null {
+    return typeof value === 'number' || value === null ? value : fallback;
+}
+
 /**
  * Converts a stored chart into the values the edit form expects.
  *
@@ -69,8 +74,8 @@ export function chartToFormData(chart: EditableChart): EditChartData {
                 ...common,
                 chartType: 'single_linechart',
                 lineName: typeof data.lineName === 'string' ? data.lineName : (chart.title ?? ''),
-                minValue: typeof filter.minValue === 'number' ? filter.minValue : 0,
-                maxValue: typeof filter.maxValue === 'number' ? filter.maxValue : 1000
+                minValue: asBound(filter.minValue, 0),
+                maxValue: asBound(filter.maxValue, 1000)
             };
         case 'simple_bar':
             return {

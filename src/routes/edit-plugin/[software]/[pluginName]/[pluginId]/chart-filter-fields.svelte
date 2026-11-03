@@ -29,8 +29,8 @@
                     {form}
                     name="minValue"
                     label="Min value"
-                    description="The minimum value per data submission. Lower values will be clamped to this value."
-                    inputProps={{ type: 'number', placeholder: '0' }}
+                    description="The minimum value per data submission. Lower values will be clamped to this value. Leave empty for no limit."
+                    inputProps={{ type: 'number', placeholder: 'No limit' }}
                     bind:value={$formData.minValue}
                 />
 
@@ -38,8 +38,8 @@
                     {form}
                     name="maxValue"
                     label="Max value"
-                    description="The maximum value per data submission. Higher values will be clamped to this value."
-                    inputProps={{ type: 'number', placeholder: '100' }}
+                    description="The maximum value per data submission. Higher values will be clamped to this value. Leave empty for no limit."
+                    inputProps={{ type: 'number', placeholder: 'No limit' }}
                     bind:value={$formData.maxValue}
                 />
             {/if}

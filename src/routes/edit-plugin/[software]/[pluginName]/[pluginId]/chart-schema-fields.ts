@@ -100,8 +100,8 @@ export const chartTypeOptions = {
                 /^[-_a-zA-Z0-9 ]*$/,
                 'Can only contain letters, numbers, dashes and underscores'
             ),
-        // i32 like the data processor
-        maxValue: z.int32().default(1_000),
-        minValue: z.int32().default(0)
+        // i32 like the data processor; null (empty field) means no bound
+        maxValue: z.int32().nullable().default(1_000),
+        minValue: z.int32().nullable().default(0)
     })
 };
