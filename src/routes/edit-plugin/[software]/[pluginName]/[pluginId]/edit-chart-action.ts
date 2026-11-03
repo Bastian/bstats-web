@@ -1,8 +1,8 @@
 import {
-    getChartByPluginIdAndChartId,
+    claimChartId,
+    deleteChartIndex,
     getChartByUid,
-    updateChart,
-    updateChartIdIndex
+    updateChart
 } from '$lib/server/redis/charts.js';
 import { getPluginById } from '$lib/server/redis/plugins.js';
 import { fail } from '@sveltejs/kit';
@@ -65,22 +65,25 @@ export const editChart = (async ({ request, locals, params }) => {
         return setError(form, invalidText.field, invalidText.message);
     }
 
-    if (form.data.chartId !== chart.id) {
-        const existing = await getChartByPluginIdAndChartId(plugin.id, form.data.chartId);
-
-        if (existing && existing.uid !== chart.uid) {
-            return setError(form, 'chartId', 'Chart with this id already exists');
-        }
-    }
+    const renamed = form.data.chartId !== chart.id;
 
     try {
-        await updateChartIdIndex(plugin.id, chart.id, form.data.chartId, chart.uid);
+        // Claim the new ID first and release the old one last, so a failure
+        // halfway never leaves the chart without an index entry
+        if (renamed && !(await claimChartId(plugin.id, form.data.chartId, chart.uid))) {
+            return setError(form, 'chartId', 'Chart with this id already exists');
+        }
+
         await updateChart(chart.uid, {
             id: form.data.chartId,
             type: form.data.chartType,
             title: form.data.chartTitle,
             data: buildChartData(form.data)
         });
+
+        if (renamed) {
+            await deleteChartIndex(plugin.id, chart.id);
+        }
     } catch (err) {
         console.error('Error updating chart:', err);
         return fail(500, { form, error: 'Unknown error' });

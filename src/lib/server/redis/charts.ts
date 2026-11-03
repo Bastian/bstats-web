@@ -163,26 +163,22 @@ export async function updateChart(
 }
 
 /**
- * Moves the plugin ID + chart ID lookup key to a new chart ID.
- *
- * The new key is written before the old one is deleted so lookups keep
- * working if one of the commands fails halfway.
+ * Points the plugin ID + chart ID lookup key at the chart. Returns false if the
+ * chart ID already belongs to another chart of the plugin.
  */
-export async function updateChartIdIndex(
+export async function claimChartId(
     pluginId: number,
-    oldChartId: string,
-    newChartId: string,
+    chartId: string,
     chartUid: number
-): Promise<void> {
-    if (oldChartId === newChartId) {
-        return;
-    }
-
+): Promise<boolean> {
     const redis = databaseManager.getRedisCluster();
-    const base = `charts.index.uid.pluginId+chartId:${pluginId}`;
+    const key = `charts.index.uid.pluginId+chartId:${pluginId}.${chartId}`;
 
-    await redis.set(`${base}.${newChartId}`, chartUid);
-    await redis.del(`${base}.${oldChartId}`);
+    if ((await redis.set(key, chartUid, 'NX')) === 'OK') {
+        return true;
+    }
+    // Still claimed by this chart, e.g. after a rename that failed halfway
+    return Number(await redis.get(key)) === chartUid;
 }
 
 export async function deleteChartIndex(pluginId: number, chartId: string): Promise<void> {
