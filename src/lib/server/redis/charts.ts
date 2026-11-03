@@ -141,6 +141,46 @@ export async function updateChartPosition(chartUid: number, position: number): P
     await databaseManager.getRedisCluster().hset(`charts:${chartUid}`, 'position', position);
 }
 
+/**
+ * Updates the editable chart fields. The UID (and therefore all historical
+ * data) stays the same; only the metadata stored in the chart hash changes.
+ */
+export async function updateChart(
+    chartUid: number,
+    chart: {
+        id: string;
+        type: string;
+        title: string;
+        data: unknown;
+    }
+): Promise<void> {
+    await databaseManager.getRedisCluster().hmset(`charts:${chartUid}`, {
+        id: chart.id,
+        type: chart.type,
+        title: chart.title,
+        data: JSON.stringify(chart.data)
+    });
+}
+
+/**
+ * Points the plugin ID + chart ID lookup key at the chart. Returns false if the
+ * chart ID already belongs to another chart of the plugin.
+ */
+export async function claimChartId(
+    pluginId: number,
+    chartId: string,
+    chartUid: number
+): Promise<boolean> {
+    const redis = databaseManager.getRedisCluster();
+    const key = `charts.index.uid.pluginId+chartId:${pluginId}.${chartId}`;
+
+    if ((await redis.set(key, chartUid, 'NX')) === 'OK') {
+        return true;
+    }
+    // Still claimed by this chart, e.g. after a rename that failed halfway
+    return Number(await redis.get(key)) === chartUid;
+}
+
 export async function deleteChartIndex(pluginId: number, chartId: string): Promise<void> {
     await databaseManager
         .getRedisCluster()

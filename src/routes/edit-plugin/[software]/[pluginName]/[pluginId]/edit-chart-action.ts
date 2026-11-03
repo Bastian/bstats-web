@@ -1,0 +1,93 @@
+import {
+    claimChartId,
+    deleteChartIndex,
+    getChartByUid,
+    updateChart
+} from '$lib/server/redis/charts.js';
+import { getPluginById } from '$lib/server/redis/plugins.js';
+import { fail } from '@sveltejs/kit';
+import { message, setError, superValidate } from 'sveltekit-superforms';
+import { zod4 } from 'sveltekit-superforms/adapters';
+import type { Action } from './$types';
+import { buildChartData } from './chart-data';
+import { chartToFormData } from './chart-form-data';
+import { compatibleChartTypes } from './chart-schema-fields';
+import { editChartSchema, findInvalidChangedText } from './edit-chart-schema';
+
+export const editChart = (async ({ request, locals, params }) => {
+    if (!locals.user) {
+        return fail(401, { error: 'Not authenticated' });
+    }
+
+    const form = await superValidate(request, zod4(editChartSchema));
+
+    if (!form.valid) {
+        return fail(400, { form });
+    }
+
+    const plugin = await getPluginById(parseInt(params.pluginId));
+
+    if (!plugin) {
+        return fail(404, { form, error: 'Plugin not found' });
+    }
+
+    if (plugin.owner?.toLowerCase() !== locals.user.username && locals.user.role !== 'admin') {
+        return fail(401, { form, error: 'You are not allowed to edit this plugin' });
+    }
+
+    const chart = await getChartByUid(form.data.chartUid);
+
+    // Only charts that belong to this plugin may be edited.
+    if (!chart || !plugin.charts.includes(chart.uid)) {
+        return fail(404, { form, error: 'Chart not found' });
+    }
+
+    // Default charts are wired up by the bStats backend, so their identity is
+    // fixed even though their title and settings can be changed.
+    if (chart.default && form.data.chartType !== chart.type) {
+        return setError(form, 'chartType', 'The chart type of default charts cannot be changed');
+    }
+
+    if (chart.default && form.data.chartId !== chart.id) {
+        return setError(form, 'chartId', 'The chart ID of default charts cannot be changed');
+    }
+
+    if (!compatibleChartTypes(chart.type).includes(form.data.chartType)) {
+        return setError(
+            form,
+            'chartType',
+            'Pies can only be changed to other pies, and bar charts to other bar charts'
+        );
+    }
+
+    const invalidText = findInvalidChangedText(form.data, chartToFormData(chart));
+    if (invalidText) {
+        return setError(form, invalidText.field, invalidText.message);
+    }
+
+    const renamed = form.data.chartId !== chart.id;
+
+    try {
+        // Claim the new ID first and release the old one last, so a failure
+        // halfway never leaves the chart without an index entry
+        if (renamed && !(await claimChartId(plugin.id, form.data.chartId, chart.uid))) {
+            return setError(form, 'chartId', 'Chart with this id already exists');
+        }
+
+        await updateChart(chart.uid, {
+            id: form.data.chartId,
+            type: form.data.chartType,
+            title: form.data.chartTitle,
+            data: buildChartData(form.data)
+        });
+
+        if (renamed) {
+            await deleteChartIndex(plugin.id, chart.id);
+        }
+    } catch (err) {
+        console.error('Error updating chart:', err);
+        return fail(500, { form, error: 'Unknown error' });
+    }
+
+    return message(form, 'Chart updated successfully.');
+}) satisfies Action;
