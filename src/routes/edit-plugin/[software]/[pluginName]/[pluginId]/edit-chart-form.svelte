@@ -7,6 +7,7 @@
     import type { ChartFormData } from './add-chart-schema';
     import { editChartSchema } from './edit-chart-schema';
     import { chartToFormData } from './chart-form-data';
+    import { compatibleChartTypes } from './chart-schema-fields';
     import Button from '$lib/components/button.svelte';
     import BarChartFields from './bar-chart-fields.svelte';
     import ChartFilterFields from './chart-filter-fields.svelte';
@@ -22,6 +23,17 @@
         onCancel: () => void;
         onSaved: () => void;
     } = $props();
+
+    const CHART_TYPE_LABELS: Record<string, string> = {
+        simple_pie: 'Simple pie',
+        advanced_pie: 'Advanced pie',
+        drilldown_pie: 'Drilldown pie',
+        single_linechart: 'Single line chart',
+        simple_bar: 'Simple bar',
+        advanced_bar: 'Advanced bar'
+    };
+
+    const chartTypes = compatibleChartTypes(chart.type ?? '');
 
     const form = superForm(chartToFormData(chart), {
         // 'json' so complex fields (e.g. the reorderable barLabels array, which
@@ -58,21 +70,11 @@
                         class="input-control"
                         {...props}
                         bind:value={$formData.chartType}
-                        disabled={chart.isDefault}
+                        disabled={chart.isDefault || chartTypes.length === 1}
                     >
-                        <option value="" disabled>Choose a chart type</option>
-                        <optgroup label="Pies">
-                            <option value="simple_pie">Simple pie</option>
-                            <option value="advanced_pie">Advanced pie</option>
-                            <option value="drilldown_pie">Drilldown pie</option>
-                        </optgroup>
-                        <optgroup label="Line charts">
-                            <option value="single_linechart">Single line chart</option>
-                        </optgroup>
-                        <optgroup label="Bar charts">
-                            <option value="simple_bar">Simple bar</option>
-                            <option value="advanced_bar">Advanced bar</option>
-                        </optgroup>
+                        {#each chartTypes as type (type)}
+                            <option value={type}>{CHART_TYPE_LABELS[type] ?? type}</option>
+                        {/each}
                     </select>
                 {/snippet}
             </Control>
@@ -80,6 +82,10 @@
             {#if chart.isDefault}
                 <p class="mt-1 text-xs text-slate-500 dark:text-slate-400">
                     Default charts keep their chart type.
+                </p>
+            {:else if chartTypes.length === 1}
+                <p class="mt-1 text-xs text-slate-500 dark:text-slate-400">
+                    Line charts keep their chart type.
                 </p>
             {:else if $formData.chartType !== chart.type}
                 <p

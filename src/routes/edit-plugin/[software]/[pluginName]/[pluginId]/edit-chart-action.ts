@@ -11,6 +11,7 @@ import { zod4 } from 'sveltekit-superforms/adapters';
 import type { Action } from './$types';
 import { buildChartData } from './chart-data';
 import { chartToFormData } from './chart-form-data';
+import { compatibleChartTypes } from './chart-schema-fields';
 import { editChartSchema, findInvalidChangedText } from './edit-chart-schema';
 
 export const editChart = (async ({ request, locals, params }) => {
@@ -49,6 +50,14 @@ export const editChart = (async ({ request, locals, params }) => {
 
     if (chart.default && form.data.chartId !== chart.id) {
         return setError(form, 'chartId', 'The chart ID of default charts cannot be changed');
+    }
+
+    if (!compatibleChartTypes(chart.type).includes(form.data.chartType)) {
+        return setError(
+            form,
+            'chartType',
+            'Pies can only be changed to other pies, and bar charts to other bar charts'
+        );
     }
 
     const invalidText = findInvalidChangedText(form.data, chartToFormData(chart));

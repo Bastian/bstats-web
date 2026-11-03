@@ -106,3 +106,15 @@ export const chartTypeOptions = {
         minValue: z.int32().nullable().default(0)
     })
 };
+
+// Pies store their data as sorted sets and bars as hashes under the same Redis
+// key, and line charts use different keys, so a chart can't leave its group.
+const CHART_TYPE_GROUPS: string[][] = [
+    ['simple_pie', 'advanced_pie', 'drilldown_pie'],
+    ['simple_bar', 'advanced_bar'],
+    ['single_linechart']
+];
+
+export function compatibleChartTypes(type: string): string[] {
+    return CHART_TYPE_GROUPS.find((group) => group.includes(type)) ?? [type];
+}
