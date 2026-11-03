@@ -9,3 +9,5 @@ export const addChartSchema = z.discriminatedUnion('chartType', [
     chartTypeOptions.advanced_bar,
     chartTypeOptions.single_linechart
 ]);
+
+export type ChartFormData = z.infer<typeof addChartSchema>;
