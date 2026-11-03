@@ -10,7 +10,8 @@ import { message, setError, superValidate } from 'sveltekit-superforms';
 import { zod4 } from 'sveltekit-superforms/adapters';
 import type { Action } from './$types';
 import { buildChartData } from './chart-data';
-import { editChartSchema } from './edit-chart-schema';
+import { chartToFormData } from './chart-form-data';
+import { editChartSchema, findInvalidChangedText } from './edit-chart-schema';
 
 export const editChart = (async ({ request, locals, params }) => {
     if (!locals.user) {
@@ -48,6 +49,11 @@ export const editChart = (async ({ request, locals, params }) => {
 
     if (chart.default && form.data.chartId !== chart.id) {
         return setError(form, 'chartId', 'The chart ID of default charts cannot be changed');
+    }
+
+    const invalidText = findInvalidChangedText(form.data, chartToFormData(chart));
+    if (invalidText) {
+        return setError(form, invalidText.field, invalidText.message);
     }
 
     if (form.data.chartId !== chart.id) {

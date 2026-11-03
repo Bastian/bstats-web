@@ -1,51 +1,62 @@
 import { z } from 'zod';
-import { chartTypeOptions } from './chart-schema-fields';
+import {
+    chartIdField,
+    chartTitleField,
+    chartTypeOptions,
+    lineNameField
+} from './chart-schema-fields';
 
 /*
- * Editing is intentionally more lenient with text than creation: charts made
- * before the edit form existed may contain punctuation or other characters
- * that the creation form rejects. Everything else is validated the same way,
- * so old charts stay editable without weakening creation.
+ * Existing charts may break the creation rules, e.g. legacy characters or
+ * default titles that grew past 50 characters with a long plugin name. The
+ * schema accepts them so these charts stay editable, and
+ * findInvalidChangedText applies the creation rules to values that changed.
  */
-const editChartId = z
-    .string()
-    .trim()
-    .nonempty('Must not be empty')
-    .max(50)
-    .regex(/^[a-zA-Z0-9_.-]+$/, 'Can only contain letters, numbers, dots, dashes and underscores');
-
-const editChartTitle = z.string().trim().nonempty('Must not be empty').max(50);
-
-const editLineName = z.string().trim().nonempty('Must not be empty').max(50);
-
-const editValueName = z.string().trim().max(50).default('');
-
-const editBarLabels = z.array(z.string().trim().max(50)).max(25).default([]);
+const legacyText = z.string().trim().nonempty('Must not be empty');
 
 const editFields = {
     // The chart UID never changes, even when the chart ID does.
     chartUid: z.number().int().nonnegative(),
-    chartId: editChartId,
-    chartTitle: editChartTitle
+    chartId: legacyText,
+    chartTitle: legacyText
 };
 
 export const editChartSchema = z.discriminatedUnion('chartType', [
     chartTypeOptions.simple_pie.extend(editFields),
     chartTypeOptions.advanced_pie.extend(editFields),
     chartTypeOptions.drilldown_pie.extend(editFields),
-    chartTypeOptions.simple_bar.extend({
-        ...editFields,
-        valueName: editValueName
-    }),
-    chartTypeOptions.advanced_bar.extend({
-        ...editFields,
-        valueName: editValueName,
-        barLabels: editBarLabels
-    }),
+    chartTypeOptions.simple_bar.extend(editFields),
+    chartTypeOptions.advanced_bar.extend(editFields),
     chartTypeOptions.single_linechart.extend({
         ...editFields,
-        lineName: editLineName
+        lineName: legacyText
     })
 ]);
 
 export type EditChartData = z.infer<typeof editChartSchema>;
+
+const strictTextFields = {
+    chartId: chartIdField,
+    chartTitle: chartTitleField,
+    lineName: lineNameField
+};
+
+type StrictTextField = keyof typeof strictTextFields;
+
+/** Returns the first changed text field that breaks the creation rules. */
+export function findInvalidChangedText(
+    data: EditChartData,
+    stored: EditChartData
+): { field: StrictTextField; message: string } | undefined {
+    for (const field of Object.keys(strictTextFields) as StrictTextField[]) {
+        const value = (data as Record<string, unknown>)[field];
+        if (value === undefined || value === (stored as Record<string, unknown>)[field]) {
+            continue;
+        }
+
+        const result = strictTextFields[field].safeParse(value);
+        if (!result.success) {
+            return { field, message: result.error.issues[0].message };
+        }
+    }
+}

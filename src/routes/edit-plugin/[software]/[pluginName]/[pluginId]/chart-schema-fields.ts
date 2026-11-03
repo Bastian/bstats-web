@@ -3,27 +3,37 @@ import { z } from 'zod';
 /*
  * Shared field definitions for chart creation and editing.
  *
- * The per-type objects are kept separate so both flows validate the same
- * fields in the same way. Editing only loosens the text validation, because
- * charts created before this form existed may contain characters that the
- * creation form does not allow (see edit-chart-schema.ts).
+ * Editing accepts unchanged legacy values that break these rules, but checks
+ * changed values against them (see edit-chart-schema.ts).
  */
 
+export const chartIdField = z
+    .string()
+    .trim()
+    .nonempty('Must not be empty')
+    .max(50)
+    .regex(/^\S*$/, 'Must not contain spaces')
+    .regex(/^[a-zA-Z0-9_ ]*$/, 'Can only contain letters, numbers, and underscores');
+
+export const chartTitleField = z
+    .string()
+    .trim()
+    .nonempty('Must not be empty')
+    .max(50)
+    .regex(/^(?!.*\s{2,})/, 'Must not contain double spaces')
+    .regex(/^[-_a-zA-Z0-9 ]*$/, 'Can only contain letters, numbers, dashes and underscores');
+
+export const lineNameField = z
+    .string()
+    .trim()
+    .nonempty('Must not be empty')
+    .max(50)
+    .regex(/^(?!.*\s{2,})/, 'Must not contain double spaces')
+    .regex(/^[-_a-zA-Z0-9 ]*$/, 'Can only contain letters, numbers, dashes and underscores');
+
 const common = {
-    chartId: z
-        .string()
-        .trim()
-        .nonempty('Must not be empty')
-        .max(50)
-        .regex(/^\S*$/, 'Must not contain spaces')
-        .regex(/^[a-zA-Z0-9_ ]*$/, 'Can only contain letters, numbers, and underscores'),
-    chartTitle: z
-        .string()
-        .trim()
-        .nonempty('Must not be empty')
-        .max(50)
-        .regex(/^(?!.*\s{2,})/, 'Must not contain double spaces')
-        .regex(/^[-_a-zA-Z0-9 ]*$/, 'Can only contain letters, numbers, dashes and underscores'),
+    chartId: chartIdField,
+    chartTitle: chartTitleField,
     filterEnabled: z.boolean().default(false)
 };
 
@@ -90,16 +100,7 @@ export const chartTypeOptions = {
     single_linechart: z.object({
         chartType: z.literal('single_linechart'),
         ...common,
-        lineName: z
-            .string()
-            .trim()
-            .nonempty('Must not be empty')
-            .max(50)
-            .regex(/^(?!.*\s{2,})/, 'Must not contain double spaces')
-            .regex(
-                /^[-_a-zA-Z0-9 ]*$/,
-                'Can only contain letters, numbers, dashes and underscores'
-            ),
+        lineName: lineNameField,
         // i32 like the data processor; null (empty field) means no bound
         maxValue: z.int32().nullable().default(1_000),
         minValue: z.int32().nullable().default(0)
