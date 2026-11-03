@@ -57,7 +57,7 @@ export const actions: Actions = {
         if (
             trimmedName.length === 0 ||
             trimmedName.length > 48 ||
-            !/^[-_a-zA-Z0-9 ]+(\s[-_a-zA-Z0-9 ]+)*$/.test(trimmedName)
+            !/^[-_a-zA-Z0-9]+( [-_a-zA-Z0-9]+)*$/.test(trimmedName)
         ) {
             return fail(400, { error: 'invalidName' });
         }

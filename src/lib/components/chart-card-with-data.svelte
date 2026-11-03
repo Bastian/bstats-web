@@ -36,7 +36,8 @@
         onDataLoaded
     }: Props = $props();
 
-    let chartData = $state<ChartData | null>(initialData);
+    // Line charts hold 100k+ points, so don't wrap them in a deep reactive proxy
+    let chartData = $state.raw<ChartData | null>(initialData);
     let isLoading = $state(!initialData);
     let fullDataLoading = $state(false);
     let fullDataLoaded = $state(false);

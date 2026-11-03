@@ -11,6 +11,15 @@
         lineName?: string;
     }
 
+    interface DataZoomRange {
+        start?: number;
+        end?: number;
+    }
+
+    interface DataZoomEvent extends DataZoomRange {
+        batch?: DataZoomRange[];
+    }
+
     let { data, lineName = 'Value' }: Props = $props();
 
     let chartContainer: HTMLDivElement;
@@ -18,8 +27,10 @@
     let isMobile = $state(false);
 
     const DEFAULT_ZOOM = '1m';
+    const MIN_ZOOM_SPAN_MS = 24 * 60 * 60 * 1000;
 
     let zoom = $state<string | null>(DEFAULT_ZOOM);
+    let zoomEnd = 100;
 
     onMount(() => {
         isMobile = window.innerWidth <= 600;
@@ -35,22 +46,15 @@
 
         // Initialize chart
         chartInstance = echarts.init(chartContainer);
-        updateChart(accessibilityPreferences.current.showChartPatterns);
-        setTimeRange(DEFAULT_ZOOM);
 
-        chartInstance.on('dataZoom', () => {
-            const option = chartInstance?.getOption();
-            const dataZoom = option?.dataZoom as echarts.DataZoomComponentOption[];
-            if (dataZoom && dataZoom.length > 0 && data) {
-                const start = dataZoom[0].start ?? 0;
-                const end = dataZoom[0].end ?? 100;
+        // Read the range from the event: getOption() would copy the whole series on every event
+        chartInstance.on('dataZoom', (event) => {
+            const { start = 0, end = 100 } =
+                (event as DataZoomEvent).batch?.[0] ?? (event as DataZoomEvent);
+            zoomEnd = end;
 
-                // Detect which preset range this corresponds to
-                const detectedRange = detectZoomRange(data, start, end);
-                zoom = detectedRange;
-            } else {
-                zoom = null;
-            }
+            // Detect which preset range this corresponds to
+            zoom = detectZoomRange(data, start, end);
         });
 
         return () => {
@@ -101,8 +105,8 @@
             // E.g., if expected is 10% and displayed is 11%, that's a 10% relative difference
             const relativeDiff = Math.abs(expectedRange - displayedRange) / expectedRange;
 
-            // Allow 10% relative tolerance
-            const tolerance = 0.1;
+            // Allow 1% relative tolerance
+            const tolerance = 0.01;
 
             if (relativeDiff <= tolerance) {
                 return preset;
@@ -165,22 +169,13 @@
     function setTimeRange(range: string) {
         if (!chartInstance || !data) return;
 
-        // Get current zoom state
-        const option = chartInstance.getOption();
-        const currentDataZoom = option?.dataZoom as echarts.DataZoomComponentOption[];
-        let currentEnd = 100;
-
-        if (currentDataZoom && currentDataZoom.length > 0) {
-            currentEnd = currentDataZoom[0].end ?? 100;
-        }
-
         // Get the new range size
         const rangeMs = getRangeMilliseconds(range);
         const expectedPercentages = calculateZoomPercentages(data, rangeMs);
         const newRangeSize = expectedPercentages.end - expectedPercentages.start;
 
         // Try to preserve the right edge position
-        let newEnd = currentEnd;
+        let newEnd = zoomEnd;
         let newStart = newEnd - newRangeSize;
 
         if (newStart < 0) {
@@ -203,6 +198,7 @@
         });
 
         zoom = range;
+        zoomEnd = newEnd;
     }
 
     function updateChart(showPatterns: boolean) {
@@ -301,6 +297,7 @@
                     type: 'slider',
                     start: 0,
                     end: 100,
+                    minValueSpan: MIN_ZOOM_SPAN_MS,
                     height: 30,
                     bottom: 40,
                     textStyle: {
@@ -321,7 +318,8 @@
                 {
                     type: 'inside',
                     start: 0,
-                    end: 100
+                    end: 100,
+                    minValueSpan: MIN_ZOOM_SPAN_MS
                 }
             ],
             series: [
@@ -352,6 +350,7 @@
         };
 
         chartInstance.setOption(option, true);
+        zoomEnd = 100;
     }
 </script>
 

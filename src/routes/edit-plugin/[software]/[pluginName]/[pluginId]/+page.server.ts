@@ -20,6 +20,8 @@ import { deletePluginSchema } from './delete-plugin-schema';
 import { editChart } from './edit-chart-action';
 import { transferOwnership } from './transfer-ownership-action';
 import { transferOwnershipSchema } from './transfer-ownership-schema';
+import { updatePluginName } from './update-plugin-name-action';
+import { updatePluginNameSchema } from './update-plugin-name-schema';
 
 interface ChartInfo {
     uid?: number;
@@ -93,6 +95,11 @@ export const load: PageServerLoad = async ({ params, locals }) => {
         charts,
         softwareUrl,
         addChartSchema: await superValidate(zod4(addChartSchema)),
+        updatePluginNameSchema: await superValidate(
+            { name: plugin.name },
+            zod4(updatePluginNameSchema),
+            { errors: false }
+        ),
         deletePluginSchema: await superValidate(zod4(deletePluginSchema(plugin.name))),
         transferOwnershipSchema: await superValidate(zod4(transferOwnershipSchema))
     };
@@ -101,6 +108,7 @@ export const load: PageServerLoad = async ({ params, locals }) => {
 export const actions = {
     addChart,
     editChart,
+    updatePluginName,
 
     deleteChart: async ({ request, locals, params }) => {
         if (!locals.user) {

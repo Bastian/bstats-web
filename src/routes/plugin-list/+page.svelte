@@ -9,6 +9,7 @@
     import { TextInput } from '$lib/components/input/text';
     import { MetaTags } from 'svelte-meta-tags';
     import { getCanonicalUrl } from '$lib/utils/url';
+    import type { Snapshot } from './$types';
 
     interface PluginListItem {
         pluginId: number;
@@ -25,6 +26,11 @@
     let isLoading = $state(true);
     let hasError = $state(false);
     let paginationPage = $state(1);
+
+    export const snapshot: Snapshot<string> = {
+        capture: () => searchValue,
+        restore: (value) => (searchValue = value)
+    };
 
     const perPage = 10;
     const formatter = new Intl.NumberFormat();
