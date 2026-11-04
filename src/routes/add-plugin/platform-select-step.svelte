@@ -18,7 +18,7 @@
     export const platformOptions = [
         {
             id: 'bukkit',
-            label: 'Bukkit / Spigot / Paper',
+            label: 'Bukkit / Spigot / Paper / Folia',
             iconUrl: imgSpigot
         },
         {
