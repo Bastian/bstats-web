@@ -64,6 +64,8 @@
     }
 
     async function loadFullData() {
+        if (fullDataLoading || fullDataLoaded) return;
+
         fullDataLoading = true;
         fullDataError = null;
 
@@ -172,6 +174,7 @@
             <LineChart
                 data={chartData as LineChartData}
                 lineName={chart.data?.lineName as string | undefined}
+                onShowAll={loadFullData}
             />
         {:else if chart.type === 'simple_bar' || chart.type === 'advanced_bar'}
             {#if (chartData as BarChartData[]).length === 0}
